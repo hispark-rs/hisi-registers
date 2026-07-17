@@ -1,18 +1,25 @@
 # SSI v151 evidence ledger
 
-Status: experimental tracer bullet.
+Status: shared register IP confirmed from both SDKs.
 
 | Fact | WS63 evidence | BS2X evidence | Confidence |
 |---|---|---|---|
-| SPI0/IP prefix layout `0x00..0x18` | Current WS63 SVD, SDK-derived SVD, semi-official SVD | Current BS2X SVD | cross-chip-consistent |
+| Full register block `0x00..0xF8` | `hal_spi_v151_regs_def.h` | Byte-identical `hal_spi_v151_regs_def.h` | licensed-sdk |
+| Register operation helpers | `hal_spi_v151_regs_op.h/.c` | Byte-identical `hal_spi_v151_regs_op.h/.c` | licensed-sdk |
 | WS63 SPI0 base `0x44020000` | Current PAC input and SDK-derived material | n/a | vendor-document |
 | BS2X SPI0 base `0x52087000` | n/a | Current PAC input | vendor-document |
-| Controller family is SSI v151 | Current WS63 SVD description and SDK path naming | Register layout match only | inferred |
+| Controller family is v151 | Build config selects `CONFIG_SPI_USING_V151` | Build config selects `CONFIG_SPI_USING_V151` | licensed-sdk |
 
-Before this block becomes authoritative:
+Conclusion:
 
-- Reconcile the complete register list and access semantics.
-- Resolve WS63/BS2X variant registers rather than forcing false identity.
+- WS63 and BS2X instantiate one shared `spi_v151_regs` register block.
+- Base addresses, instance counts, IRQs, clocks, resets, DMA routing and pinmux
+  remain chip integration facts.
+- Different `hal_spi_v151.c` and porting behavior does not fork the register map.
+
+Before either block becomes authoritative:
+
+- Reconcile field access/reset/side-effect details against the common SDK header.
 - Add source revision identifiers and permitted quotations.
 - Compare generated SVD structure and generated PAC API against current releases.
 - Validate destructive/read-clear/write-only semantics on silicon where possible.

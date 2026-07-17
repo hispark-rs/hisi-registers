@@ -8,7 +8,7 @@ This repository explores a SystemRDL-first flow:
 manuals / SDK headers / silicon observations / imported SVDs
                          |
                          v
-               shared SystemRDL IP blocks
+          reviewed per-chip SystemRDL blocks
                          |
                          v
                   per-chip address maps
@@ -22,19 +22,28 @@ manuals / SDK headers / silicon observations / imported SVDs
 
 ## Status
 
-Experimental. The first tracer bullet models the common SSI v151 controller used
-by WS63 and BS2X. Generated files are not yet authoritative inputs for released
-PACs.
+Experimental. Complete split baselines have been bootstrapped from the current
+WS63 and BS2X PAC SVD inputs. They cover every peripheral, expanded register,
+field and interrupt represented by those snapshots. Generated files are not yet
+authoritative inputs for released PACs.
 
-PeakRDL currently provides a CMSIS-SVD importer, not an exporter. This repository
+The WS63 baseline is being reconciled against `fbb_ws63` and the semi-official
+SVD. The BS2X baseline is explicitly provisional: `fbb_bs2x` is its behavioral
+source of truth because the existing BS2X SVD has substantially lower maturity.
+Names such as "v151" are not sufficient proof by themselves. SPI is shared only
+because the two SDKs contain byte-identical v151 register definitions and
+register-operation sources. Chip-specific SPI integration remains in each chip map.
+
+PeakRDL currently provides a CMSIS-SVD importer, not a maintained SVD exporter.
 therefore owns a deliberately small fail-closed exporter in
 `scripts/export_svd.py`. Expanding that exporter is part of the experiment and
 must be backed by golden SVD and `svd2rust` compatibility tests.
 
 ## Layout
 
-- `rdl/ip/`: reusable, versioned peripheral IP definitions.
-- `rdl/chips/`: chip integration maps (instances and base addresses).
+- `rdl/ip/`: reusable IP definitions only after cross-chip equivalence is proven.
+- `rdl/chips/<chip>/peripherals/`: split chip-specific peripheral definitions.
+- `rdl/chips/<chip>.rdl`: chip integration maps, instances and interrupts.
 - `evidence/`: source and confidence records; no restricted vendor material.
 - `generated/`: reproducible generated artifacts.
 - `scripts/`: generation and drift checks.
@@ -48,7 +57,13 @@ Install `uv`, then run:
 ./scripts/check.sh
 ```
 
-`check.sh` also asks an installed `svd2rust` to parse both generated files.
+`check.sh` validates full-chip counts and semantic features, then asks an
+installed `svd2rust` to parse both generated files.
+
+Known bootstrap limitation: the SVD importer expands register arrays. Addresses
+and field behavior are retained, but the original PAC array API shape is not.
+The checker reports the 39 WS63 and 10 BS2X source arrays that still require a
+controlled compaction pass. No PAC may migrate until that API-shape gate closes.
 
 ## Truth and provenance
 

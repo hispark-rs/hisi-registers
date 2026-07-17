@@ -13,3 +13,8 @@ Allowed evidence classes, from strongest to weakest:
 An imported or semi-official SVD is evidence, not automatically canonical truth.
 Conflicts are recorded explicitly; weak evidence must not silently overwrite a
 silicon-confirmed fact.
+
+Chip source inventories:
+
+- [`ws63-source-matrix.md`](ws63-source-matrix.md)
+- [`bs2x-source-matrix.md`](bs2x-source-matrix.md)
