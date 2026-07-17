@@ -1,7 +1,7 @@
-// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
-// Imported once; this RDL is now reviewed canonical source.
+// Active UART v151 basic layout shared by WS53, WS63 and BS2X. All audited
+// product configurations leave CONFIG_UART_IP_VERSION_V151_PRO disabled.
 
-addrmap bs2x_uart0_regs {
+addrmap uart_v151_basic_regs {
     reg {
         regwidth = 0x10;
         field {

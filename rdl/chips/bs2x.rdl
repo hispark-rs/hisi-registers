@@ -1,15 +1,17 @@
 `include "../properties.rdl"
 `include "../ip/spi-v151.rdl"
+`include "../ip/watchdog-v151.rdl"
+`include "../ip/sfc-v150.rdl"
+`include "../ip/pwm-v151.rdl"
+`include "../ip/i2c-v151-ws53-bs2x.rdl"
+`include "../ip/rtc-v150-ws53-bs2x.rdl"
+`include "../ip/uart-v151-basic.rdl"
+`include "../ip/sio-v151.rdl"
+`include "../ip/timer-v150.rdl"
+`include "../ip/tcxo-v150-data16.rdl"
+`include "../ip/gpio-v150-basic.rdl"
 `include "bs2x/peripherals/glb_ctl_m.rdl"
-`include "bs2x/peripherals/gpio0.rdl"
-`include "bs2x/peripherals/uart0.rdl"
-`include "bs2x/peripherals/timer.rdl"
-`include "bs2x/peripherals/wdt.rdl"
-`include "bs2x/peripherals/tcxo.rdl"
-`include "bs2x/peripherals/pwm.rdl"
 `include "bs2x/peripherals/dma.rdl"
-`include "bs2x/peripherals/i2c0.rdl"
-`include "bs2x/peripherals/rtc.rdl"
 `include "bs2x/peripherals/trng.rdl"
 `include "bs2x/peripherals/gadc.rdl"
 `include "bs2x/peripherals/keyscan.rdl"
@@ -21,25 +23,25 @@
 
 addrmap bs2x {
     bs2x_glb_ctl_m_regs glb_ctl_m @ 0x57000000;
-    bs2x_gpio0_regs gpio0 @ 0x57010000;
-    bs2x_uart0_regs uart0 @ 0x52081000;
-    bs2x_timer_regs timer @ 0x52002000;
-    bs2x_wdt_regs wdt @ 0x52003000;
-    bs2x_tcxo_regs tcxo @ 0x57000200;
+    gpio_v150_basic_regs gpio0 @ 0x57010000;
+    uart_v151_basic_regs uart0 @ 0x52081000;
+    timer_v150_regs timer @ 0x52002000;
+    watchdog_v151_regs wdt @ 0x52003000;
+    tcxo_v150_data16_regs tcxo @ 0x57000200;
     spi_v151_regs spi0 @ 0x52087000;
-    bs2x_pwm_regs pwm @ 0x52090000;
+    pwm_v151_regs pwm @ 0x52090000;
     bs2x_dma_regs dma @ 0x52070000;
-    bs2x_i2c0_regs i2c0 @ 0x52083000;
-    bs2x_rtc_regs rtc @ 0x57024100;
+    i2c_v151_ws53_bs2x_regs i2c0 @ 0x52083000;
+    rtc_v150_ws53_bs2x_regs rtc @ 0x57024100;
     bs2x_trng_regs trng @ 0x52009000;
-    bs2x_gpio0_regs gpio1 @ 0x57014000;
-    bs2x_gpio0_regs gpio2 @ 0x57018000;
-    bs2x_gpio0_regs gpio3 @ 0x5701C000;
-    bs2x_gpio0_regs gpio4 @ 0x57020000;
-    bs2x_gpio0_regs ulp_gpio @ 0x57030000;
-    bs2x_uart0_regs uart1 @ 0x52080000;
-    bs2x_uart0_regs uart2 @ 0x52082000;
-    bs2x_i2c0_regs i2c1 @ 0x52084000;
+    gpio_v150_basic_regs gpio1 @ 0x57014000;
+    gpio_v150_basic_regs gpio2 @ 0x57018000;
+    gpio_v150_basic_regs gpio3 @ 0x5701C000;
+    gpio_v150_basic_regs gpio4 @ 0x57020000;
+    gpio_v150_basic_regs ulp_gpio @ 0x57030000;
+    uart_v151_basic_regs uart1 @ 0x52080000;
+    uart_v151_basic_regs uart2 @ 0x52082000;
+    i2c_v151_ws53_bs2x_regs i2c1 @ 0x52084000;
     spi_v151_regs spi1 @ 0x52088000;
     spi_v151_regs spi2 @ 0x52089000;
     bs2x_dma_regs sdma @ 0x520A0000;
@@ -50,6 +52,8 @@ addrmap bs2x {
     bs2x_adc_pmu_afe_regs adc_pmu_afe @ 0x57008700;
     bs2x_aon_afe_regs aon_afe @ 0x5702C000;
     bs2x_usb_regs usb @ 0x58000000;
+    sfc_v150_regs sfc_cfg @ 0x90000000;
+    sio_v151_regs i2s @ 0x52030000;
 
     signal {
         hisi_irq_number = 26;

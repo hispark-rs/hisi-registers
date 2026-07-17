@@ -2,8 +2,8 @@ chip = bs2x
 source = PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
 sha256 = f6678478f591ee626ef7704e4a5d46a7b21e6e457764c2e4bc0d08e09c076a6a
 peripherals = 30
-definitions = 18
-shared_definitions = 1
+definitions = 16
+shared_definitions = 4
 interrupts = 52
 normalization_notes:
   - GLB_CTL_M: merged AON_SOFT_RST_CTL into CHIP_RESET at 0x110; model an alias after review

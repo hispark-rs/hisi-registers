@@ -1,7 +1,7 @@
-// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
-// Imported once; this RDL is now reviewed canonical source.
+// Active GPIO v150 basic layout shared by WS53, WS63 and BS2X. None of the
+// audited product configurations enables CONFIG_GPIO_SUPPORT_MULTISYSTEM.
 
-addrmap ws63_gpio0_regs {
+addrmap gpio_v150_basic_regs {
     reg {
         field {
             sw = rw;

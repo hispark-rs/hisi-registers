@@ -1,7 +1,8 @@
-// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
-// Imported once; this RDL is now reviewed canonical source.
+// Active TCXO v150 layout shared by WS53, WS63 and BS2X. Current product
+// configurations use four 16-bit data chunks; the optional data32 form is not
+// instantiated here.
 
-addrmap ws63_tcxo_regs {
+addrmap tcxo_v150_data16_regs {
     reg {
         field {
             sw = rw;

@@ -1,7 +1,8 @@
-// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
-// Imported once; this RDL is now reviewed canonical source.
+// Shared HiSilicon SFC v150 register block.
+// Confirmed by byte-identical register definition and operation sources in
+// fbb_ws53, fbb_ws63 and fbb_bs2x.
 
-addrmap ws63_sfc_cfg_regs {
+addrmap sfc_v150_regs {
     reg {
         field {
             enum SFC_CFG_GLOBAL_CONFIG_mode_e1 {

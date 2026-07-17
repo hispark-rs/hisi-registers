@@ -1,7 +1,7 @@
-// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
-// Imported once; this RDL is now reviewed canonical source.
+// Shared by WS53 and BS2X. Their fbb SDK v150 register definitions are
+// semantically identical; chip maps retain instance addresses and IRQs.
 
-addrmap bs2x_rtc_regs {
+addrmap rtc_v150_ws53_bs2x_regs {
     reg {
         field {
             sw = rw;

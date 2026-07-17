@@ -1,7 +1,8 @@
-// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
-// Imported once; this RDL is now reviewed canonical source.
+// SIO v151 register layout shared by WS53, WS63 and BS2X. SDK descriptions
+// contain one stale WS63 register comment; the shared HAL enum consistently
+// defines 0 as falling edge and 1 as rising edge.
 
-addrmap ws63_i2s_regs {
+addrmap sio_v151_regs {
     reg {
         field {
             sw = r;
@@ -23,7 +24,16 @@ addrmap ws63_i2s_regs {
         field {
             sw = rw;
             hw = r;
-            desc = "Clock edge: 0=rising; 1=falling";
+            enum sio_v151_clk_edge_e {
+                Falling = 0 {
+                    desc = "Falling edge";
+                };
+                Rising = 1 {
+                    desc = "Rising edge";
+                };
+            } ;
+            encode = sio_v151_clk_edge_e;
+            desc = "Clock edge: 0=falling; 1=rising";
         } clk_edge[2:2] = 0x0;
         field {
             sw = rw;

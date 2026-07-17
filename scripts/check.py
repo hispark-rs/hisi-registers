@@ -17,7 +17,7 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "BS2X.experimental.svd": {
-        "peripherals": 30,
+        "peripherals": 32,
         "interrupts": 52,
         "addresses": {
             "SPI0": 0x52087000,
@@ -25,9 +25,32 @@ EXPECTED = {
             "SPI2": 0x52089000,
         },
         "source_arrays": 11,
-        "registers_expanded": 961,
-        "fields_expanded": 2041,
+        "registers_expanded": 1017,
+        "fields_expanded": 2154,
         "write_constraints": 6,
+    },
+    "WS53.experimental.svd": {
+        "peripherals": 13,
+        "interrupts": 0,
+        "addresses": {
+            "WDT": 0x5702B000,
+            "SFC_CFG": 0x53000000,
+            "PWM": 0x52082000,
+            "UART0": 0x52081000,
+            "I2C0": 0x52083000,
+            "I2C1": 0x52084000,
+            "RTC0": 0x57029100,
+            "I2S": 0x52030000,
+            "TIMER": 0x52002000,
+            "TCXO": 0x57000200,
+            "GPIO0": 0x5700C000,
+            "GPIO1": 0x57028000,
+            "GPIO2": 0x57010000,
+        },
+        "source_arrays": 0,
+        "registers_expanded": 349,
+        "fields_expanded": 664,
+        "write_constraints": 2,
     },
 }
 
@@ -45,6 +68,47 @@ for chip, instances in {"ws63": 2, "bs2x": 3}.items():
     private_spi = ROOT / "rdl" / "chips" / chip / "peripherals" / "spi0.rdl"
     if private_spi.exists():
         print(f"{chip}: private SPI definition would fork the shared IP truth")
+        failed = True
+
+shared_contracts = {
+    "watchdog_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "sfc_v150_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "pwm_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "sio_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "uart_v151_basic_regs": {"ws53": 1, "ws63": 3, "bs2x": 3},
+    "timer_v150_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "tcxo_v150_data16_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "gpio_v150_basic_regs": {"ws53": 3, "ws63": 4, "bs2x": 6},
+    "i2c_v151_ws53_bs2x_regs": {"ws53": 2, "bs2x": 2},
+    "rtc_v150_ws53_bs2x_regs": {"ws53": 1, "bs2x": 1},
+}
+for type_name, chips in shared_contracts.items():
+    for chip, instances in chips.items():
+        chip_map = (ROOT / "rdl" / "chips" / f"{chip}.rdl").read_text()
+        if chip_map.count(f"{type_name} ") != instances:
+            print(f"{chip}: expected {instances} {type_name} instance(s)")
+            failed = True
+
+for chip in ("ws63", "bs2x"):
+    for filename in (
+        "wdt.rdl",
+        "sfc_cfg.rdl",
+        "pwm.rdl",
+        "i2s.rdl",
+        "timer.rdl",
+        "tcxo.rdl",
+        "gpio0.rdl",
+        "uart0.rdl",
+    ):
+        private_ip = ROOT / "rdl" / "chips" / chip / "peripherals" / filename
+        if private_ip.exists():
+            print(f"{chip}: {filename} would fork a confirmed three-chip shared IP")
+            failed = True
+
+for filename in ("uart0.rdl", "i2c0.rdl", "rtc.rdl"):
+    private_ip = ROOT / "rdl" / "chips" / "bs2x" / "peripherals" / filename
+    if private_ip.exists():
+        print(f"bs2x: {filename} would fork a confirmed shared family variant")
         failed = True
 
 summary = {}

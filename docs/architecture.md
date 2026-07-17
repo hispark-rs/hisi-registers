@@ -19,6 +19,12 @@ register definitions and register-operation sources. Their porting and high-leve
 HAL files differ, so instance integration and behavioral policy are not part of
 the shared register block.
 
+The same evidence rule promotes watchdog v151, SFC v150, PWM v151, SIO v151,
+Timer v150, TCXO v150 data16, GPIO v150 basic and UART v151 basic across
+WS53/WS63/BS2X. Timer is modeled as write-one-to-clear because all three SDK
+operation layers write EOI and WS63 silicon independently confirms the behavior;
+the imported read-to-clear baseline was rejected.
+
 ## Export boundary
 
 SystemRDL becomes canonical after source reconciliation. CMSIS-SVD is a generated

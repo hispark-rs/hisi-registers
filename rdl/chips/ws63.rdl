@@ -1,18 +1,19 @@
 `include "../properties.rdl"
 `include "../ip/spi-v151.rdl"
+`include "../ip/watchdog-v151.rdl"
+`include "../ip/sfc-v150.rdl"
+`include "../ip/pwm-v151.rdl"
+`include "../ip/sio-v151.rdl"
+`include "../ip/timer-v150.rdl"
+`include "../ip/tcxo-v150-data16.rdl"
+`include "../ip/gpio-v150-basic.rdl"
+`include "../ip/uart-v151-basic.rdl"
 `include "ws63/peripherals/sys_ctl1.rdl"
 `include "ws63/peripherals/io_config.rdl"
-`include "ws63/peripherals/gpio0.rdl"
-`include "ws63/peripherals/uart0.rdl"
 `include "ws63/peripherals/i2c0.rdl"
-`include "ws63/peripherals/pwm.rdl"
 `include "ws63/peripherals/dma.rdl"
-`include "ws63/peripherals/sfc_cfg.rdl"
-`include "ws63/peripherals/i2s.rdl"
 `include "ws63/peripherals/lsadc.rdl"
 `include "ws63/peripherals/tsensor.rdl"
-`include "ws63/peripherals/timer.rdl"
-`include "ws63/peripherals/wdt.rdl"
 `include "ws63/peripherals/rtc.rdl"
 `include "ws63/peripherals/efuse.rdl"
 `include "ws63/peripherals/sys_ctl0.rdl"
@@ -22,7 +23,6 @@
 `include "ws63/peripherals/pke.rdl"
 `include "ws63/peripherals/km.rdl"
 `include "ws63/peripherals/trng.rdl"
-`include "ws63/peripherals/tcxo.rdl"
 `include "ws63/peripherals/cldo_crg.rdl"
 `include "ws63/peripherals/rf_wb_ctl.rdl"
 `include "ws63/peripherals/share_mem_ctl.rdl"
@@ -33,24 +33,24 @@
 addrmap ws63 {
     ws63_sys_ctl1_regs sys_ctl1 @ 0x44000000;
     ws63_io_config_regs io_config @ 0x4400D000;
-    ws63_gpio0_regs gpio0 @ 0x44028000;
-    ws63_gpio0_regs gpio1 @ 0x44029000;
-    ws63_gpio0_regs gpio2 @ 0x4402A000;
-    ws63_uart0_regs uart0 @ 0x44010000;
-    ws63_uart0_regs uart1 @ 0x44011000;
-    ws63_uart0_regs uart2 @ 0x44012000;
+    gpio_v150_basic_regs gpio0 @ 0x44028000;
+    gpio_v150_basic_regs gpio1 @ 0x44029000;
+    gpio_v150_basic_regs gpio2 @ 0x4402A000;
+    uart_v151_basic_regs uart0 @ 0x44010000;
+    uart_v151_basic_regs uart1 @ 0x44011000;
+    uart_v151_basic_regs uart2 @ 0x44012000;
     ws63_i2c0_regs i2c0 @ 0x44018000;
     ws63_i2c0_regs i2c1 @ 0x44018100;
-    ws63_pwm_regs pwm @ 0x44024000;
+    pwm_v151_regs pwm @ 0x44024000;
     ws63_dma_regs dma @ 0x4A000000;
-    ws63_sfc_cfg_regs sfc_cfg @ 0x48000000;
+    sfc_v150_regs sfc_cfg @ 0x48000000;
     spi_v151_regs spi0 @ 0x44020000;
     spi_v151_regs spi1 @ 0x44021000;
-    ws63_i2s_regs i2s @ 0x44025000;
+    sio_v151_regs i2s @ 0x44025000;
     ws63_lsadc_regs lsadc @ 0x4400C000;
     ws63_tsensor_regs tsensor @ 0x4400E000;
-    ws63_timer_regs timer @ 0x44002000;
-    ws63_wdt_regs wdt @ 0x40006000;
+    timer_v150_regs timer @ 0x44002000;
+    watchdog_v151_regs wdt @ 0x40006000;
     ws63_rtc_regs rtc @ 0x57024000;
     ws63_efuse_regs efuse @ 0x44008000;
     ws63_sys_ctl0_regs sys_ctl0 @ 0x40000000;
@@ -60,10 +60,10 @@ addrmap ws63 {
     ws63_pke_regs pke @ 0x44110000;
     ws63_km_regs km @ 0x44112000;
     ws63_trng_regs trng @ 0x44114000;
-    ws63_tcxo_regs tcxo @ 0x440004C0;
+    tcxo_v150_data16_regs tcxo @ 0x440004C0;
     ws63_cldo_crg_regs cldo_crg @ 0x44001100;
     ws63_dma_regs sdma @ 0x520A0000;
-    ws63_gpio0_regs ulp_gpio @ 0x57030000;
+    gpio_v150_basic_regs ulp_gpio @ 0x57030000;
     ws63_rf_wb_ctl_regs rf_wb_ctl @ 0x44004000;
     ws63_share_mem_ctl_regs share_mem_ctl @ 0x44006C00;
     ws63_fama_remap_regs fama_remap @ 0x44007800;

@@ -18,3 +18,6 @@ Chip source inventories:
 
 - [`ws63-source-matrix.md`](ws63-source-matrix.md)
 - [`bs2x-source-matrix.md`](bs2x-source-matrix.md)
+- [`ws53-source-matrix.md`](ws53-source-matrix.md)
+- [`shared-ip-matrix.md`](shared-ip-matrix.md)
+- [`configured-ip-variants.md`](configured-ip-variants.md)

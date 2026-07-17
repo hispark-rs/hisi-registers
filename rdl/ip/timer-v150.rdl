@@ -1,7 +1,7 @@
-// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
-// Imported once; this RDL is now reviewed canonical source.
+// Timer v150 layout shared by WS53, WS63 and BS2X. All three SDK operation
+// layers clear EOI by writing one; the read-to-clear SDK comment is stale.
 
-addrmap bs2x_timer_regs {
+addrmap timer_v150_regs {
     reg {
         field {
             sw = r;
@@ -25,9 +25,10 @@ addrmap bs2x_timer_regs {
     } ABNOR_INTR_STAT @ 0x68;
     reg {
         field {
-            sw = r;
+            sw = w;
             hw = r;
-            desc = "Clear interrupts for all timers (read to clear)";
+            onwrite = woclr;
+            desc = "Write one bit per channel to clear timer interrupts; reads return zero";
         } eoi[2:0] = 0x0;
     } EOI_REN @ 0x78;
     reg {
@@ -104,9 +105,10 @@ addrmap bs2x_timer_regs {
     } TIMER_CONTROL0 @ 0x110;
     reg {
         field {
-            sw = r;
+            sw = w;
             hw = r;
-            desc = "Read to clear timer 0 interrupt";
+            onwrite = woclr;
+            desc = "Write 1 to clear this timer interrupt; reads return zero";
         } eoi[0:0] = 0x0;
     } TIMER_EOI0 @ 0x114;
     reg {
@@ -176,9 +178,10 @@ addrmap bs2x_timer_regs {
     } TIMER_CONTROL1 @ 0x210;
     reg {
         field {
-            sw = r;
+            sw = w;
             hw = r;
-            desc = "Read to clear timer 0 interrupt";
+            onwrite = woclr;
+            desc = "Write 1 to clear this timer interrupt; reads return zero";
         } eoi[0:0] = 0x0;
     } TIMER_EOI1 @ 0x214;
     reg {
@@ -248,9 +251,10 @@ addrmap bs2x_timer_regs {
     } TIMER_CONTROL2 @ 0x310;
     reg {
         field {
-            sw = r;
+            sw = w;
             hw = r;
-            desc = "Read to clear timer 0 interrupt";
+            onwrite = woclr;
+            desc = "Write 1 to clear this timer interrupt; reads return zero";
         } eoi[0:0] = 0x0;
     } TIMER_EOI2 @ 0x314;
     reg {

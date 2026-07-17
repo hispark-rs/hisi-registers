@@ -1,7 +1,8 @@
-// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
-// Imported once; this RDL is now reviewed canonical source.
+// Shared HiSilicon PWM v151 register block.
+// Confirmed by semantically identical register headers in fbb_ws53, fbb_ws63
+// and fbb_bs2x, plus matching WS63/BS2X register models.
 
-addrmap bs2x_pwm_regs {
+addrmap pwm_v151_regs {
     reg {
         field {
             sw = rw;

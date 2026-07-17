@@ -22,6 +22,31 @@ import xml.etree.ElementTree as ET
 # after the initial WS63 bootstrap; chip imports must never fork it again.
 SHARED_PERIPHERALS = {
     "SPI0": ("../ip/spi-v151.rdl", "spi_v151_regs"),
+    "WDT": ("../ip/watchdog-v151.rdl", "watchdog_v151_regs"),
+    "SFC_CFG": ("../ip/sfc-v150.rdl", "sfc_v150_regs"),
+    "PWM": ("../ip/pwm-v151.rdl", "pwm_v151_regs"),
+    "I2S": ("../ip/sio-v151.rdl", "sio_v151_regs"),
+    "TIMER": ("../ip/timer-v150.rdl", "timer_v150_regs"),
+    "TCXO": ("../ip/tcxo-v150-data16.rdl", "tcxo_v150_data16_regs"),
+    "GPIO0": ("../ip/gpio-v150-basic.rdl", "gpio_v150_basic_regs"),
+    "UART0": ("../ip/uart-v151-basic.rdl", "uart_v151_basic_regs"),
+}
+
+# Family variants whose version name is shared only by a subset of chips.
+# Keeping these out of SHARED_PERIPHERALS prevents a WS63 re-import from
+# silently selecting the WS53/BS2X I2C/RTC layouts.
+CHIP_SHARED_PERIPHERALS = {
+    "bs2x": {
+        "I2C0": ("../ip/i2c-v151-ws53-bs2x.rdl", "i2c_v151_ws53_bs2x_regs"),
+        "RTC": ("../ip/rtc-v150-ws53-bs2x.rdl", "rtc_v150_ws53_bs2x_regs"),
+    },
+}
+
+CHIP_EXTRA_INSTANCES = {
+    "bs2x": [
+        ("sfc_v150_regs", "sfc_cfg", "0x90000000"),
+        ("sio_v151_regs", "i2s", "0x52030000"),
+    ],
 }
 
 
@@ -138,10 +163,14 @@ def main() -> int:
     notes = normalize_svd(tree)
     peripherals = root.findall("./peripherals/peripheral")
     by_name = {text(p, "name"): p for p in peripherals}
+    shared_peripherals = {
+        **SHARED_PERIPHERALS,
+        **CHIP_SHARED_PERIPHERALS.get(args.chip, {}),
+    }
     definitions = [
         p
         for p in peripherals
-        if "derivedFrom" not in p.attrib and text(p, "name") not in SHARED_PERIPHERALS
+        if "derivedFrom" not in p.attrib and text(p, "name") not in shared_peripherals
     ]
 
     peripheral_dir = args.output / "peripherals"
@@ -179,7 +208,7 @@ def main() -> int:
 
     include_lines = ["`include \"../properties.rdl\""]
     include_lines.extend(
-        f'`include "{path}"' for path, _ in SHARED_PERIPHERALS.values()
+        f'`include "{path}"' for path, _ in shared_peripherals.values()
     )
     include_lines.extend(
         f"`include \"{args.chip}/peripherals/{text(p, 'name').lower()}.rdl\""
@@ -192,13 +221,15 @@ def main() -> int:
         base_name = peripheral.attrib.get("derivedFrom", name)
         if base_name not in by_name:
             raise RuntimeError(f"{name} derives from missing {base_name}")
-        if base_name in SHARED_PERIPHERALS:
-            _, type_name = SHARED_PERIPHERALS[base_name]
+        if base_name in shared_peripherals:
+            _, type_name = shared_peripherals[base_name]
         else:
             type_name = f"{args.chip}_{base_name.lower()}_regs"
         map_lines.append(
             f"    {type_name} {name.lower()} @ {text(peripheral, 'baseAddress')};"
         )
+    for type_name, name, address in CHIP_EXTRA_INSTANCES.get(args.chip, []):
+        map_lines.append(f"    {type_name} {name} @ {address};")
 
     for peripheral in peripherals:
         owner = text(peripheral, "name")
@@ -225,7 +256,7 @@ def main() -> int:
         f"sha256 = {digest}",
         f"peripherals = {len(peripherals)}",
         f"definitions = {len(definitions)}",
-        f"shared_definitions = {len(SHARED_PERIPHERALS)}",
+        f"shared_definitions = {len(shared_peripherals)}",
         f"interrupts = {sum(len(p.findall('interrupt')) for p in peripherals)}",
         "normalization_notes:",
     ]

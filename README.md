@@ -30,12 +30,20 @@ authoritative inputs for released PACs.
 The WS63 baseline is being reconciled against `fbb_ws63` and the semi-official
 SVD. The BS2X baseline is explicitly provisional: `fbb_bs2x` is its behavioral
 source of truth because the existing BS2X SVD has substantially lower maturity.
+An SDK-first WS53 map starts with confirmed shared IP and expands only after each
+variant and core owner is established from `fbb_ws53`.
 Names such as "v151" are not sufficient proof by themselves. SPI is shared only
 because the two SDKs contain byte-identical v151 register definitions and
 register-operation sources. Chip-specific SPI integration remains in each chip map.
+Watchdog v151 and SFC v150 are confirmed across all three SDKs. PWM v151 is also
+shared after a semantic comparison that ignores comment-only formatting changes.
+Timer v150, TCXO v150 data16, GPIO v150 basic, UART v151 basic and SIO v151 are
+also shared by all three chips. I2C/RTC retain narrower family variants.
+Configuration-selected alternatives are tracked in
+`evidence/configured-ip-variants.md`.
 
 PeakRDL currently provides a CMSIS-SVD importer, not a maintained SVD exporter.
-therefore owns a deliberately small fail-closed exporter in
+This repository therefore owns a deliberately small fail-closed exporter in
 `scripts/export_svd.py`. Expanding that exporter is part of the experiment and
 must be backed by golden SVD and `svd2rust` compatibility tests.
 

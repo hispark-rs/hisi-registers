@@ -1,0 +1,29 @@
+`include "../properties.rdl"
+`include "../ip/watchdog-v151.rdl"
+`include "../ip/sfc-v150.rdl"
+`include "../ip/pwm-v151.rdl"
+`include "../ip/i2c-v151-ws53-bs2x.rdl"
+`include "../ip/rtc-v150-ws53-bs2x.rdl"
+`include "../ip/uart-v151-basic.rdl"
+`include "../ip/sio-v151.rdl"
+`include "../ip/timer-v150.rdl"
+`include "../ip/tcxo-v150-data16.rdl"
+`include "../ip/gpio-v150-basic.rdl"
+
+// Minimal SDK-first WS53 integration map. Additional peripherals are added only
+// after their concrete variant and acore/control-core ownership are reconciled.
+addrmap ws53 {
+    watchdog_v151_regs wdt @ 0x5702B000;
+    sfc_v150_regs sfc_cfg @ 0x53000000;
+    pwm_v151_regs pwm @ 0x52082000;
+    uart_v151_basic_regs uart0 @ 0x52081000;
+    i2c_v151_ws53_bs2x_regs i2c0 @ 0x52083000;
+    i2c_v151_ws53_bs2x_regs i2c1 @ 0x52084000;
+    rtc_v150_ws53_bs2x_regs rtc0 @ 0x57029100;
+    sio_v151_regs i2s @ 0x52030000;
+    timer_v150_regs timer @ 0x52002000;
+    tcxo_v150_data16_regs tcxo @ 0x57000200;
+    gpio_v150_basic_regs gpio0 @ 0x5700C000;
+    gpio_v150_basic_regs gpio1 @ 0x57028000;
+    gpio_v150_basic_regs gpio2 @ 0x57010000;
+};
