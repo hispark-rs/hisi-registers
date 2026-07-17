@@ -1,0 +1,26 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_fama_remap_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } REMAP_SRC_BASE @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } REMAP_LEN @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } REMAP_DST_BASE @ 0x40;
+};

@@ -1,0 +1,1397 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_riscv_patch_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable instruction patch matching";
+        } enable[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Protect the comparison registers from writes";
+        } write_protect[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Select long-jump remap entries whose destinations may be outside the source 1 MiB region";
+        } outside_1m[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable load-address comparison register 0";
+        } load_compare0_enable[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable load-address comparison register 1";
+        } load_compare1_enable[4:4] = 0x0;
+    } FLPCTRL @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPRMP @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPLACMP0 @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPLACMP1 @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP0 @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP1 @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP2 @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP3 @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP4 @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP5 @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP6 @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP7 @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP8 @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP9 @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP10 @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP11 @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP12 @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP13 @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP14 @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP15 @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP16 @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP17 @ 0x54;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP18 @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP19 @ 0x5C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP20 @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP21 @ 0x64;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP22 @ 0x68;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP23 @ 0x6C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP24 @ 0x70;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP25 @ 0x74;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP26 @ 0x78;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP27 @ 0x7C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP28 @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP29 @ 0x84;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP30 @ 0x88;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP31 @ 0x8C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP32 @ 0x90;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP33 @ 0x94;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP34 @ 0x98;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP35 @ 0x9C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP36 @ 0xA0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP37 @ 0xA4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP38 @ 0xA8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP39 @ 0xAC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP40 @ 0xB0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP41 @ 0xB4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP42 @ 0xB8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP43 @ 0xBC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP44 @ 0xC0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP45 @ 0xC4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP46 @ 0xC8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP47 @ 0xCC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP48 @ 0xD0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP49 @ 0xD4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP50 @ 0xD8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP51 @ 0xDC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP52 @ 0xE0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP53 @ 0xE4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP54 @ 0xE8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP55 @ 0xEC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP56 @ 0xF0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP57 @ 0xF4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP58 @ 0xF8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP59 @ 0xFC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP60 @ 0x100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP61 @ 0x104;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP62 @ 0x108;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP63 @ 0x10C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP64 @ 0x110;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP65 @ 0x114;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP66 @ 0x118;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP67 @ 0x11C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP68 @ 0x120;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP69 @ 0x124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP70 @ 0x128;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP71 @ 0x12C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP72 @ 0x130;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP73 @ 0x134;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP74 @ 0x138;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP75 @ 0x13C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP76 @ 0x140;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP77 @ 0x144;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP78 @ 0x148;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP79 @ 0x14C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP80 @ 0x150;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP81 @ 0x154;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP82 @ 0x158;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP83 @ 0x15C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP84 @ 0x160;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP85 @ 0x164;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP86 @ 0x168;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP87 @ 0x16C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP88 @ 0x170;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP89 @ 0x174;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP90 @ 0x178;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP91 @ 0x17C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP92 @ 0x180;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP93 @ 0x184;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP94 @ 0x188;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP95 @ 0x18C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP96 @ 0x190;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP97 @ 0x194;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP98 @ 0x198;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP99 @ 0x19C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP100 @ 0x1A0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP101 @ 0x1A4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP102 @ 0x1A8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP103 @ 0x1AC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP104 @ 0x1B0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP105 @ 0x1B4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP106 @ 0x1B8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP107 @ 0x1BC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP108 @ 0x1C0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP109 @ 0x1C4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP110 @ 0x1C8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP111 @ 0x1CC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP112 @ 0x1D0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP113 @ 0x1D4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP114 @ 0x1D8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP115 @ 0x1DC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP116 @ 0x1E0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP117 @ 0x1E4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP118 @ 0x1E8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP119 @ 0x1EC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP120 @ 0x1F0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP121 @ 0x1F4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP122 @ 0x1F8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP123 @ 0x1FC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP124 @ 0x200;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP125 @ 0x204;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP126 @ 0x208;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP127 @ 0x20C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP128 @ 0x210;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP129 @ 0x214;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP130 @ 0x218;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP131 @ 0x21C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP132 @ 0x220;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP133 @ 0x224;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP134 @ 0x228;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP135 @ 0x22C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP136 @ 0x230;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP137 @ 0x234;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP138 @ 0x238;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP139 @ 0x23C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP140 @ 0x240;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP141 @ 0x244;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP142 @ 0x248;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP143 @ 0x24C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP144 @ 0x250;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP145 @ 0x254;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP146 @ 0x258;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP147 @ 0x25C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP148 @ 0x260;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP149 @ 0x264;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP150 @ 0x268;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP151 @ 0x26C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP152 @ 0x270;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP153 @ 0x274;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP154 @ 0x278;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP155 @ 0x27C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP156 @ 0x280;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP157 @ 0x284;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP158 @ 0x288;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP159 @ 0x28C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP160 @ 0x290;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP161 @ 0x294;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP162 @ 0x298;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP163 @ 0x29C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP164 @ 0x2A0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP165 @ 0x2A4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP166 @ 0x2A8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP167 @ 0x2AC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP168 @ 0x2B0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP169 @ 0x2B4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP170 @ 0x2B8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP171 @ 0x2BC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP172 @ 0x2C0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP173 @ 0x2C4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP174 @ 0x2C8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP175 @ 0x2CC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP176 @ 0x2D0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP177 @ 0x2D4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP178 @ 0x2D8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP179 @ 0x2DC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP180 @ 0x2E0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP181 @ 0x2E4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP182 @ 0x2E8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP183 @ 0x2EC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP184 @ 0x2F0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP185 @ 0x2F4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP186 @ 0x2F8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP187 @ 0x2FC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP188 @ 0x300;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP189 @ 0x304;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP190 @ 0x308;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } FLPIACMP191 @ 0x30C;
+};

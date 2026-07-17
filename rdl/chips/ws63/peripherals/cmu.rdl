@@ -1,0 +1,136 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_cmu_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF RX LDO control value";
+        } control[15:0] = 0x0;
+    } RF_RX_LDO @ 0x134;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF LNA LDO control value";
+        } control[15:0] = 0x0;
+    } RF_LNA_LDO @ 0x138;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF VCO LDO control value";
+        } control[15:0] = 0x0;
+    } RF_VCO_LDO @ 0x140;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF analog-baseband LDO control value";
+        } control[15:0] = 0x0;
+    } RF_ABB_LDO @ 0x144;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF PLL LDO control value";
+        } control[15:0] = 0x0;
+    } RF_PLL_LDO @ 0x148;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF TX LDO control value";
+        } control[15:0] = 0x0;
+    } RF_TX_LDO @ 0x168;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "FNPLL lock status queried by the vendor cmu_is_fnpll_locked path";
+        } fnpll_lock_grm[12:12] = 0x0;
+    } EXCEP_RO_RG @ 0x19C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RF ADC/DAC isolation control value";
+        } control[1:0] = 0x0;
+    } RF_ADDA_ISO @ 0x230;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Complete vendor-defined RF PLL reference control value";
+        } control[2:0] = 0x0;
+    } RF_PLL_REFERENCE @ 0x400;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Crystal oscillator fine trim code";
+        } trim_fine[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Crystal oscillator coarse trim code";
+        } trim_coarse[11:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Crystal oscillator reverse trim code";
+        } trim_reverse[15:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Use the programmed fine trim code";
+        } trim_fine_select[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Use the programmed coarse trim code";
+        } trim_coarse_select[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Use the programmed reverse trim code";
+        } trim_reverse_select[18:18] = 0x0;
+    } XO_SIGNAL @ 0x404;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FNPLL power-down control used by the vendor PM path";
+        } fnpll_pwr_down[14:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FNPLL reset/control bit used by the vendor PM path";
+        } fnpll_reset[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FNPLL enable bit used by the vendor PM path";
+        } fnpll_en[17:17] = 0x0;
+    } CMU_FNPLL_SIG @ 0x42C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "I2S/SIO divider reset-sync release bit used by sio_porting_clock_enable";
+        } cmu_div_ad_rstn_sync[0:0] = 0x0;
+    } CMU_NEW_CFG0 @ 0x4A0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Flash divider reset-sync bit written before switching flash clock to PLL";
+        } cpu_div_flash_rstn_sync[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Flash divider reset release bit written before switching flash clock to PLL";
+        } cpu_div_flash_rstn[1:1] = 0x0;
+    } CMU_NEW_CFG1 @ 0x4A4;
+};

@@ -1,0 +1,600 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_i2c0_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } master_mode[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } speed[2:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ic_10bitaddr_slave[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ic_10bitaddr_master[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ic_restart_en[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ic_slave_disable[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } stop_det_ifaddressed[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tx_empty_ctrl[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rx_fifo_full_hld_ctrl[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } stop_det_if_master_active[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } bus_clear_feature_ctrl[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } optional_sar_ctrl[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_slave_quick_en[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_arp_en[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_persistent_slv_addr_en[19:19] = 0x0;
+    } IC_CON @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } enable[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } abort[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tx_cmd_block[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } sda_stuck_recovery_enable[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_clk_reset[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_suspend_en[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_alert_en[18:18] = 0x0;
+    } IC_ENABLE @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_tar[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } gc_or_start[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } special[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } master_10bitaddr[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } device_id[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_quick_cmd[16:16] = 0x0;
+    } IC_TAR @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_sar[9:0] = 0x0;
+    } IC_SAR @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_hs_mar[2:0] = 0x0;
+    } IC_HS_MADDR @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } dat[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } cmd[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } stop[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } restart[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } first_data_byte[11:11] = 0x0;
+    } IC_DATA_CMD @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_ss_scl_hcnt[15:0] = 0x0;
+    } IC_SS_SCL_HCNT @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_ss_scl_lcnt[15:0] = 0x0;
+    } IC_SS_SCL_LCNT @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_fs_scl_hcnt[15:0] = 0x0;
+    } IC_FS_SCL_HCNT @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_fs_scl_lcnt[15:0] = 0x0;
+    } IC_FS_SCL_LCNT @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_hs_scl_hcnt[15:0] = 0x0;
+    } IC_HS_SCL_HCNT @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_hs_scl_lcnt[15:0] = 0x0;
+    } IC_HS_SCL_LCNT @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rx_tl[7:0] = 0x0;
+    } IC_RX_TL @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tx_tl[7:0] = 0x0;
+    } IC_TX_TL @ 0x54;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_SLAVE_DATA_NACK_ONLY @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } activity[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tfnf[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tfe[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rfne[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rff[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } mst_activity[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slv_activity[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } mst_hold_tx_fifo_empty[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } mst_hold_rx_fifo_full[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slv_hold_tx_fifo_empty[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slv_hold_rx_fifo_full[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } sda_stuck_not_recovered[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_quick_cmd_bit[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_slave_addr_valid[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_slave_addr_resolved[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_suspend_status[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } smbus_alert_status[20:20] = 0x0;
+    } IC_STATUS @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_TXFLR @ 0x64;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_RXFLR @ 0x68;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } sda_rx_hold[7:0] = 0x0;
+    } IC_SDA_RX_HOLD @ 0x6C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } sda_tx_hold[15:0] = 0x0;
+    } IC_SDA_TX_HOLD @ 0x70;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tx_flush_cnt[8:0] = 0x0;
+    } IC_TX_FLUSH_CNT @ 0x74;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } user_abrt[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } sda_stuck_at_low[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } device_noack[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } device_slvaddr_noack[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } abrt_device_write[4:4] = 0x0;
+    } IC_TX_ABRT_SOURCE @ 0x78;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_TX_ABRT_SLV_INTX @ 0x7C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_ACK_GENERAL_CALL @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ic_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slv_disable_whlle_busy[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slv_rx_data_lost[2:2] = 0x0;
+    } IC_ENABLE_STATUS @ 0x84;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rdmae[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tdmae[1:1] = 0x0;
+    } IC_DMA_CR @ 0xA0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_DMA_TDLR @ 0xA4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_DMA_RDLR @ 0xA8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } sda_setup[7:0] = 0x0;
+    } IC_SDA_SETUP @ 0xAC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } m_rx_under[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_rx_over[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_rx_full[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_tx_over[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_tx_empty[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_rd_req[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_tx_abrt[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_rx_done[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_activity[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_stop_det[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_start_det[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_gen_call[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_restart_det[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_master_on_hold[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } m_scl_stuck_at_low[14:14] = 0x0;
+    } IC_INTR_MASK @ 0xB0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } r_rx_under[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_rx_over[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_rx_full[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_tx_over[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_tx_empty[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_rd_req[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_tx_abrt[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_rx_done[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_activity[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_stop_det[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_start_det[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_gen_call[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_restart_det[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_master_on_hold[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } r_scl_stuck_at_low[14:14] = 0x0;
+    } IC_INTR_STAT @ 0xB4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rx_under[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rx_over[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rx_full[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tx_over[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tx_empty[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rd_req[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tx_abrt[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rx_done[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } activity[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } stop_det[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } start_det[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } gen_call[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } restart_det[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } master_on_hold[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } scl_stuck_at_low[14:14] = 0x0;
+    } IC_RAW_INTR_STAT @ 0xB8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_INTR_STAT_ALL @ 0xBC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } IC_CLR_INTR @ 0xC0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } clr_int[0:0] = 0x0;
+    } IC_CLR_INT @ 0xC4;
+};

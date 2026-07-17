@@ -1,0 +1,50 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_rtc_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Load count value (threshold for interrupt)";
+        } load_count[31:0] = 0x0;
+    } RTC_LOAD_COUNT @ 0x0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current counter value";
+        } current_value[31:0] = 0x0;
+    } RTC_CURRENT_VALUE @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RTC enable";
+        } enable[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Mode: 0=free running; 1=periodic";
+        } mode[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Interrupt mask: 0=unmasked; 1=masked";
+        } int_mask[2:2] = 0x0;
+    } RTC_CONTROL @ 0x8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Read to clear RTC interrupt";
+        } eoi[0:0] = 0x0;
+    } RTC_EOI @ 0xC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Interrupt status";
+        } int_status[0:0] = 0x0;
+    } RTC_INT_STATUS @ 0x10;
+};

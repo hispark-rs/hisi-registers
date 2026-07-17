@@ -1,0 +1,192 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_lsadc_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Per-channel enable bitmask (bit n enables channel n, 0-5)";
+        } channel[5:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Averaging mode: 0=1x, 1=2x, 2=4x, 3=8x samples";
+        } equ_model_sel[7:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Sample count (5-bit)";
+        } sample_cnt[12:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start count (8-bit; SDK field name satrt_cnt)";
+        } start_cnt[20:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Cast count (7-bit)";
+        } cast_cnt[27:21] = 0x0;
+    } LSADC_CTRL_0 @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO interrupt waterline (3-bit)";
+        } rxintsize[2:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO not empty";
+        } rne[3:3] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO full";
+        } rff[4:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "ADC busy";
+        } bsy[5:5] = 0x0;
+    } LSADC_CTRL_1 @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX overflow interrupt mask";
+        } rorim[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO interrupt mask";
+        } rxim[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX overflow masked interrupt status";
+        } rormis[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO masked interrupt status";
+        } rxmis[3:3] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX overflow raw interrupt status";
+        } rorris[4:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO raw interrupt status";
+        } rxris[5:5] = 0x0;
+    } LSADC_CTRL_2 @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Raw register value";
+        } val[31:0] = 0x0;
+    } LSADC_CTRL_3 @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Raw register value";
+        } val[31:0] = 0x0;
+    } LSADC_CTRL_4 @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Raw register value";
+        } val[31:0] = 0x0;
+    } LSADC_CTRL_6 @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Raw register value";
+        } val[31:0] = 0x0;
+    } LSADC_CTRL_7 @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write 1 to start a scan";
+        } lsadc_start[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write 1 to stop a scan";
+        } lsadc_stop[1:1] = 0x0;
+    } LSADC_CTRL_8 @ 0x1C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "14-bit conversion code";
+        } data[13:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Source channel (0-5)";
+        } channel[16:14] = 0x0;
+    } LSADC_CTRL_9 @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Analog block enable bits (16-bit; SDK ORs 0x7000/0xE7F/0x100/0x80 during power-up)";
+        } da_lsadc_en[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Analog reset, active low: 1=release reset";
+        } da_lsadc_rstn[16:16] = 0x0;
+    } LSADC_CTRL_11 @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Raw register value";
+        } val[31:0] = 0x0;
+    } LSADC_CTRL_12 @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "0=raw ADC data, 1=post-processed";
+        } data_sel[0:0] = 0x0;
+    } CFG_DATA_SEL @ 0xDC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "ADC offset correction";
+        } offset[15:0] = 0x0;
+    } CFG_OFFSET @ 0xE0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "ADC gain correction";
+        } gain[15:0] = 0x0;
+    } CFG_GAIN @ 0xE4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CIC filter enable";
+        } cic_filter_en[0:0] = 0x0;
+    } CFG_CIC_FILTER_EN @ 0xE8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CIC oversampling ratio";
+        } cic_osr[7:0] = 0x0;
+    } CFG_CIC_OSR @ 0xEC;
+};

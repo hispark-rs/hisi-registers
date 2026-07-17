@@ -1,0 +1,936 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_pwm_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Group 0 PWM select, each bit corresponds to one PWM channel";
+        } pwm_sel_0[15:0] = 0x0;
+    } PWM_SEL0 @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start clear counter enable for group 0";
+        } pwm_startclrcnt_en_0[0:0] = 0x0;
+    } PWM_STARTCLRCNT_EN0 @ 0x4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Start group 0 (self-clearing)";
+        } pwm_start_0[0:0] = 0x0;
+    } PWM_START0 @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Group 1 PWM select";
+        } pwm_sel_1[15:0] = 0x0;
+    } PWM_SEL1 @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start clear counter enable for group 1";
+        } pwm_startclrcnt_en_1[0:0] = 0x0;
+    } PWM_STARTCLRCNT_EN1 @ 0x14;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Start group 1 (self-clearing)";
+        } pwm_start_1[0:0] = 0x0;
+    } PWM_START1 @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Group 2 PWM select";
+        } pwm_sel_2[15:0] = 0x0;
+    } PWM_SEL2 @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start clear counter enable for group 2";
+        } pwm_startclrcnt_en_2[0:0] = 0x0;
+    } PWM_STARTCLRCNT_EN2 @ 0x24;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Start group 2 (self-clearing)";
+        } pwm_start_2[0:0] = 0x0;
+    } PWM_START2 @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Group 3 PWM select";
+        } pwm_sel_3[15:0] = 0x0;
+    } PWM_SEL3 @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start clear counter enable for group 3";
+        } pwm_startclrcnt_en_3[0:0] = 0x0;
+    } PWM_STARTCLRCNT_EN3 @ 0x34;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Start group 3 (self-clearing)";
+        } pwm_start_3[0:0] = 0x0;
+    } PWM_START3 @ 0x38;
+    reg {
+        field {
+            enum PWM_PWM_EN0_pwm_en_0_e1 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN0_pwm_en_0_e1;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_0[0:0] = 0x0;
+    } PWM_EN0 @ 0x100;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY0_pwm_poarity_0_e2 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY0_pwm_poarity_0_e2;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_0[0:0] = 0x0;
+    } PWM_PORTITY0 @ 0x104;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_0[0:0] = 0x0;
+    } PWM_OEN_CFG0 @ 0x108;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_0[15:0] = 0x0;
+    } PWM_OFFSET_L0 @ 0x10C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_0[15:0] = 0x0;
+    } PWM_OFFSET_H0 @ 0x110;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_0[15:0] = 0x0;
+    } PWM_FREQ_L0 @ 0x114;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_0[15:0] = 0x0;
+    } PWM_FREQ_H0 @ 0x118;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_0[15:0] = 0x0;
+    } PWM_DUTY_L0 @ 0x11C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_0[15:0] = 0x0;
+    } PWM_DUTY_H0 @ 0x120;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_0[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG0 @ 0x124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_0[15:0] = 0x0;
+    } PWM_PERIOD_VAL0 @ 0x128;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_0[15:0] = 0x0;
+    } PWM_PERIODCNT0 @ 0x12C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 enable";
+        } pwm_en_1[0:0] = 0x0;
+    } PWM_EN1 @ 0x140;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 polarity";
+        } pwm_poarity_1[0:0] = 0x0;
+    } PWM_PORTITY1 @ 0x144;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 high-Z enable";
+        } pwm_oen_cfg_1[0:0] = 0x0;
+    } PWM_OEN_CFG1 @ 0x148;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 phase offset low 16 bits";
+        } pwm_offset_l_1[15:0] = 0x0;
+    } PWM_OFFSET_L1 @ 0x14C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 phase offset high 16 bits";
+        } pwm_offset_h_1[15:0] = 0x0;
+    } PWM_OFFSET_H1 @ 0x150;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 clock divider low 16 bits";
+        } pwm_freq_l_1[15:0] = 0x0;
+    } PWM_FREQ_L1 @ 0x154;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 clock divider high 16 bits";
+        } pwm_freq_h_1[15:0] = 0x0;
+    } PWM_FREQ_H1 @ 0x158;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 duty low 16 bits";
+        } pwm_duty_l_1[15:0] = 0x0;
+    } PWM_DUTY_L1 @ 0x15C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 duty high 16 bits";
+        } pwm_duty_h_1[15:0] = 0x0;
+    } PWM_DUTY_H1 @ 0x160;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load flag";
+        } pwm_periodload_flag_1[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG1 @ 0x164;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count";
+        } pwm_period_val_1[15:0] = 0x0;
+    } PWM_PERIOD_VAL1 @ 0x168;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_1[15:0] = 0x0;
+    } PWM_PERIODCNT1 @ 0x16C;
+    reg {
+        field {
+            enum PWM_PWM_EN2_pwm_en_2_e3 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN2_pwm_en_2_e3;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_2[0:0] = 0x0;
+    } PWM_EN2 @ 0x180;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY2_pwm_poarity_2_e4 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY2_pwm_poarity_2_e4;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_2[0:0] = 0x0;
+    } PWM_PORTITY2 @ 0x184;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_2[0:0] = 0x0;
+    } PWM_OEN_CFG2 @ 0x188;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_2[15:0] = 0x0;
+    } PWM_OFFSET_L2 @ 0x18C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_2[15:0] = 0x0;
+    } PWM_OFFSET_H2 @ 0x190;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_2[15:0] = 0x0;
+    } PWM_FREQ_L2 @ 0x194;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_2[15:0] = 0x0;
+    } PWM_FREQ_H2 @ 0x198;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_2[15:0] = 0x0;
+    } PWM_DUTY_L2 @ 0x19C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_2[15:0] = 0x0;
+    } PWM_DUTY_H2 @ 0x1A0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_2[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG2 @ 0x1A4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_2[15:0] = 0x0;
+    } PWM_PERIOD_VAL2 @ 0x1A8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_2[15:0] = 0x0;
+    } PWM_PERIODCNT2 @ 0x1AC;
+    reg {
+        field {
+            enum PWM_PWM_EN3_pwm_en_3_e5 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN3_pwm_en_3_e5;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_3[0:0] = 0x0;
+    } PWM_EN3 @ 0x1C0;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY3_pwm_poarity_3_e6 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY3_pwm_poarity_3_e6;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_3[0:0] = 0x0;
+    } PWM_PORTITY3 @ 0x1C4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_3[0:0] = 0x0;
+    } PWM_OEN_CFG3 @ 0x1C8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_3[15:0] = 0x0;
+    } PWM_OFFSET_L3 @ 0x1CC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_3[15:0] = 0x0;
+    } PWM_OFFSET_H3 @ 0x1D0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_3[15:0] = 0x0;
+    } PWM_FREQ_L3 @ 0x1D4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_3[15:0] = 0x0;
+    } PWM_FREQ_H3 @ 0x1D8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_3[15:0] = 0x0;
+    } PWM_DUTY_L3 @ 0x1DC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_3[15:0] = 0x0;
+    } PWM_DUTY_H3 @ 0x1E0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_3[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG3 @ 0x1E4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_3[15:0] = 0x0;
+    } PWM_PERIOD_VAL3 @ 0x1E8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_3[15:0] = 0x0;
+    } PWM_PERIODCNT3 @ 0x1EC;
+    reg {
+        field {
+            enum PWM_PWM_EN4_pwm_en_4_e7 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN4_pwm_en_4_e7;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_4[0:0] = 0x0;
+    } PWM_EN4 @ 0x200;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY4_pwm_poarity_4_e8 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY4_pwm_poarity_4_e8;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_4[0:0] = 0x0;
+    } PWM_PORTITY4 @ 0x204;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_4[0:0] = 0x0;
+    } PWM_OEN_CFG4 @ 0x208;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_4[15:0] = 0x0;
+    } PWM_OFFSET_L4 @ 0x20C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_4[15:0] = 0x0;
+    } PWM_OFFSET_H4 @ 0x210;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_4[15:0] = 0x0;
+    } PWM_FREQ_L4 @ 0x214;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_4[15:0] = 0x0;
+    } PWM_FREQ_H4 @ 0x218;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_4[15:0] = 0x0;
+    } PWM_DUTY_L4 @ 0x21C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_4[15:0] = 0x0;
+    } PWM_DUTY_H4 @ 0x220;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_4[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG4 @ 0x224;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_4[15:0] = 0x0;
+    } PWM_PERIOD_VAL4 @ 0x228;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_4[15:0] = 0x0;
+    } PWM_PERIODCNT4 @ 0x22C;
+    reg {
+        field {
+            enum PWM_PWM_EN5_pwm_en_5_e9 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN5_pwm_en_5_e9;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_5[0:0] = 0x0;
+    } PWM_EN5 @ 0x240;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY5_pwm_poarity_5_e10 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY5_pwm_poarity_5_e10;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_5[0:0] = 0x0;
+    } PWM_PORTITY5 @ 0x244;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_5[0:0] = 0x0;
+    } PWM_OEN_CFG5 @ 0x248;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_5[15:0] = 0x0;
+    } PWM_OFFSET_L5 @ 0x24C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_5[15:0] = 0x0;
+    } PWM_OFFSET_H5 @ 0x250;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_5[15:0] = 0x0;
+    } PWM_FREQ_L5 @ 0x254;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_5[15:0] = 0x0;
+    } PWM_FREQ_H5 @ 0x258;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_5[15:0] = 0x0;
+    } PWM_DUTY_L5 @ 0x25C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_5[15:0] = 0x0;
+    } PWM_DUTY_H5 @ 0x260;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_5[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG5 @ 0x264;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_5[15:0] = 0x0;
+    } PWM_PERIOD_VAL5 @ 0x268;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_5[15:0] = 0x0;
+    } PWM_PERIODCNT5 @ 0x26C;
+    reg {
+        field {
+            enum PWM_PWM_EN6_pwm_en_6_e11 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN6_pwm_en_6_e11;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_6[0:0] = 0x0;
+    } PWM_EN6 @ 0x280;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY6_pwm_poarity_6_e12 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY6_pwm_poarity_6_e12;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_6[0:0] = 0x0;
+    } PWM_PORTITY6 @ 0x284;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_6[0:0] = 0x0;
+    } PWM_OEN_CFG6 @ 0x288;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_6[15:0] = 0x0;
+    } PWM_OFFSET_L6 @ 0x28C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_6[15:0] = 0x0;
+    } PWM_OFFSET_H6 @ 0x290;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_6[15:0] = 0x0;
+    } PWM_FREQ_L6 @ 0x294;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_6[15:0] = 0x0;
+    } PWM_FREQ_H6 @ 0x298;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_6[15:0] = 0x0;
+    } PWM_DUTY_L6 @ 0x29C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_6[15:0] = 0x0;
+    } PWM_DUTY_H6 @ 0x2A0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_6[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG6 @ 0x2A4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_6[15:0] = 0x0;
+    } PWM_PERIOD_VAL6 @ 0x2A8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_6[15:0] = 0x0;
+    } PWM_PERIODCNT6 @ 0x2AC;
+    reg {
+        field {
+            enum PWM_PWM_EN7_pwm_en_7_e13 {
+                Off = 0 {
+                    desc = "PWM disabled, output low";
+                };
+                On = 1 {
+                    desc = "PWM enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_EN7_pwm_en_7_e13;
+            desc = "PWM0 enable: 0=off; 1=on";
+        } pwm_en_7[0:0] = 0x0;
+    } PWM_EN7 @ 0x2C0;
+    reg {
+        field {
+            enum PWM_PWM_PORTITY7_pwm_poarity_7_e14 {
+                Normal = 0 {
+                    desc = "Normal polarity";
+                };
+                Inverted = 1 {
+                    desc = "Inverted polarity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PWM_PWM_PORTITY7_pwm_poarity_7_e14;
+            desc = "PWM0 polarity: 0=normal; 1=inverted";
+        } pwm_poarity_7[0:0] = 0x0;
+    } PWM_PORTITY7 @ 0x2C4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 high-Z enable: 0=follow polarity; 1=high-Z when inactive";
+        } pwm_oen_cfg_7[0:0] = 0x0;
+    } PWM_OEN_CFG7 @ 0x2C8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset low 16 bits";
+        } pwm_offset_l_7[15:0] = 0x0;
+    } PWM_OFFSET_L7 @ 0x2CC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 phase offset high 16 bits";
+        } pwm_offset_h_7[15:0] = 0x0;
+    } PWM_OFFSET_H7 @ 0x2D0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider low 16 bits";
+        } pwm_freq_l_7[15:0] = 0x0;
+    } PWM_FREQ_L7 @ 0x2D4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 clock divider high 16 bits";
+        } pwm_freq_h_7[15:0] = 0x0;
+    } PWM_FREQ_H7 @ 0x2D8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle low 16 bits";
+        } pwm_duty_l_7[15:0] = 0x0;
+    } PWM_DUTY_L7 @ 0x2DC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 duty cycle high 16 bits";
+        } pwm_duty_h_7[15:0] = 0x0;
+    } PWM_DUTY_H7 @ 0x2E0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Period load complete flag";
+        } pwm_periodload_flag_7[0:0] = 0x0;
+    } PWM_PERIODLOAD_FLAG7 @ 0x2E4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pulse count for stepping mode";
+        } pwm_period_val_7[15:0] = 0x0;
+    } PWM_PERIOD_VAL7 @ 0x2E8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current pulse count";
+        } pwm_periodcnt_7[15:0] = 0x0;
+    } PWM_PERIODCNT7 @ 0x2EC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Multi-channel config abnormal state, each bit per PWM";
+        } pwm_abnor_state0[15:0] = 0x0;
+    } PWM_ABNOR_STATE0 @ 0x500;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Counter config abnormal state, each bit per PWM";
+        } pwm_abnor_state1[15:0] = 0x0;
+    } PWM_ABNOR_STATE1 @ 0x504;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear abnormal state 0 (self-clearing)";
+        } pwm_abnor_state_clr0[15:0] = 0x0;
+    } PWM_ABNOR_STATE_CLR0 @ 0x508;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear abnormal state 1 (self-clearing)";
+        } pwm_abnor_state_clr1[15:0] = 0x0;
+    } PWM_ABNOR_STATE_CLR1 @ 0x50C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Interrupt mask: bit[0]=abnormal; bit[1]=stepping cycle end";
+        } pwm_int_mask[1:0] = 0x0;
+    } PWM_INT_MASK @ 0x510;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA enable: 0=disabled; 1=enabled";
+        } pwm_dma_en[0:0] = 0x0;
+    } PWM_DMA_EN @ 0x514;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Stepping cycle end interrupt clear (self-clearing)";
+        } pwm_cfg_int_clr0[15:0] = 0x0;
+    } PWM_CFG_INT_CLR0 @ 0x518;
+};

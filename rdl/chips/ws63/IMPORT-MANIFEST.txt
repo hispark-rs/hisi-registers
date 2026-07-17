@@ -1,0 +1,9 @@
+chip = ws63
+source = ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+sha256 = 1a39a927358aa25338fe48a7267f89ff078a3cc3752ff2b4c584cdda10535aea
+peripherals = 38
+definitions = 29
+shared_definitions = 1
+interrupts = 46
+normalization_notes:
+  - GLB_CTL_M: merged AON_SOFT_RST_CTL into CHIP_RESET at 0x110; model an alias after review

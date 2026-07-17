@@ -1,0 +1,114 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_sys_ctl1_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Software NMI interrupt configuration. 0: pull low CPU NMI soft interrupt;
+                            1: pull high CPU NMI soft interrupt";
+        } tee_nmi_int[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Watchdog interrupt query. 0: WDT interrupt invalid; 1: WDT interrupt
+                            valid";
+        } wdt_int[1:1] = 0x0;
+    } NMI_INT @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CPU soft interrupt 0 enable. 0: disabled; 1: enabled";
+        } soft_int0_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CPU soft interrupt 1 enable. 0: disabled; 1: enabled";
+        } soft_int1_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CPU soft interrupt 2 enable. 0: disabled; 1: enabled";
+        } soft_int2_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CPU soft interrupt 3 enable. 0: disabled; 1: enabled";
+        } soft_int3_en[3:3] = 0x0;
+    } SOFT_INT_EN @ 0x150;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 0 set. 0: no effect; 1: set effective";
+        } soft_int0_set[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 1 set. 0: no effect; 1: set effective";
+        } soft_int1_set[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 2 set. 0: no effect; 1: set effective";
+        } soft_int2_set[2:2] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 3 set. 0: no effect; 1: set effective";
+        } soft_int3_set[3:3] = 0x0;
+    } SOFT_INT_SET @ 0x154;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 0 clear. 0: no effect; 1: clear effective";
+        } soft_int0_clr[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 1 clear. 0: no effect; 1: clear effective";
+        } soft_int1_clr[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 2 clear. 0: no effect; 1: clear effective";
+        } soft_int2_clr[2:2] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "CPU soft interrupt 3 clear. 0: no effect; 1: clear effective";
+        } soft_int3_clr[3:3] = 0x0;
+    } SOFT_INT_CLR @ 0x158;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "CPU soft interrupt 0 status. 0: no interrupt; 1: interrupt active";
+        } soft_int0_sts[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "CPU soft interrupt 1 status. 0: no interrupt; 1: interrupt active";
+        } soft_int1_sts[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "CPU soft interrupt 2 status. 0: no interrupt; 1: interrupt active";
+        } soft_int2_sts[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "CPU soft interrupt 3 status. 0: no interrupt; 1: interrupt active";
+        } soft_int3_sts[3:3] = 0x0;
+    } SOFT_INT_STS @ 0x15C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA clock-on bypass bit used by DMA_CLK_AUTO_CTRL_REG/DMA_CLK_ON_MASK in the vendor SDK.";
+        } dma_clk_on[19:19] = 0x0;
+    } IP_AUTO_CG_BYPASS @ 0x244;
+};

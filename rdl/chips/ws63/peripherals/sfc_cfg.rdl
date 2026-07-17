@@ -1,0 +1,417 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_sfc_cfg_regs {
+    reg {
+        field {
+            enum SFC_CFG_GLOBAL_CONFIG_mode_e1 {
+                Mode0 = 0 {
+                    desc = "SPI Mode 0 (CPOL=0, CPHA=0)";
+                };
+                Mode3 = 1 {
+                    desc = "SPI Mode 3 (CPOL=1, CPHA=1)";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SFC_CFG_GLOBAL_CONFIG_mode_e1;
+            desc = "SPI mode: 0=Mode0; 1=Mode3";
+        } mode[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Hardware write protect: 0=disabled; 1=enabled";
+        } wp_en[1:1] = 0x0;
+        field {
+            enum SFC_CFG_GLOBAL_CONFIG_flash_addr_mode_e2 {
+                Addr3Byte = 0 {
+                    desc = "3-byte addressing";
+                };
+                Addr4Byte = 1 {
+                    desc = "4-byte addressing";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SFC_CFG_GLOBAL_CONFIG_flash_addr_mode_e2;
+            desc = "Address mode: 0=3byte; 1=4byte. NOTE: write has no effect when CMD_CONFIG[start]=1";
+        } flash_addr_mode[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI read data delay: 000=0.5~1clk; 001=1~1.5clk; etc.";
+        } rd_delay[5:3] = 0x0;
+    } GLOBAL_CONFIG @ 0x100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Inter-operation delay: (n+2) clock cycles";
+        } tshsl[3:0] = 0xF;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CS setup time: (n+1) clock cycles";
+        } tcss[10:8] = 0x6;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CS hold time: (n+1) clock cycles";
+        } tcsh[14:12] = 0x6;
+    } TIMING @ 0x110;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Command operation end raw status";
+        } cmd_op_end_raw_status[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "DMA done raw status";
+        } dma_done_int_raw_status[1:1] = 0x0;
+    } INT_RAW_STATUS @ 0x120;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Command operation end status";
+        } cmd_op_end_status[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "DMA done status";
+        } dma_done_int_status[1:1] = 0x0;
+    } INT_STATUS @ 0x124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command end mask: 0=masked; 1=unmasked";
+        } cmd_op_end_int_mask[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA done mask";
+        } dma_done_int_mask[1:1] = 0x0;
+    } INT_MASK @ 0x128;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Command end interrupt clear (self-clearing)";
+        } cmd_op_end_int_clr[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "DMA done interrupt clear (self-clearing)";
+        } dma_done_int_clr[1:1] = 0x0;
+    } INT_CLEAR @ 0x12C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SFC bus soft reset mask: 0=reset active; 1=reset masked";
+        } sfc_bus_soft_rst_mask[0:0] = 0x1;
+    } SOFT_RST_MASK @ 0x130;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Read SPI interface type: 000=Standard; 001=Dual I/O; 010=Dual-IO;
+                            101=Quad-Input; 110=Quad-IO";
+        } rd_mem_if_type[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Read dummy bytes: 000=0; 001=1; etc.";
+        } rd_dummy_bytes[5:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Read prefetch count: 00=none; 01=1clk; 10=2clk; 11=3clk";
+        } rd_prefetch_cnt[7:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Read instruction code";
+        } rd_ins[15:8] = 0x3;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write SPI interface type";
+        } wr_mem_if_type[18:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write dummy bytes";
+        } wr_dummy_bytes[21:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write instruction code";
+        } wr_ins[29:22] = 0x2;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus write enable";
+        } wr_enable[30:30] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus read enable";
+        } rd_enable[31:31] = 0x1;
+    } BUS_CONFIG1 @ 0x200;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WIP bit position in Flash status register: 000=bit0; etc.";
+        } wip_locate[2:0] = 0x0;
+    } BUS_CONFIG2 @ 0x204;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA transfer enable (auto-clears)";
+        } dma_start[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA direction: 0=write; 1=read";
+        } dma_rw[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA chip select: 0=CS0; 1=CS1";
+        } dma_sel_cs[4:4] = 0x0;
+    } BUS_DMA_CTRL @ 0x240;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA memory start address (0x00100000~0x00BFFFFF)";
+        } dma_mem_saddr[31:0] = 0x0;
+    } BUS_DMA_MEM_SADDR @ 0x244;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA Flash start address";
+        } dma_flash_saddr[31:0] = 0x0;
+    } BUS_DMA_FLASH_SADDR @ 0x248;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA length (n+1 bytes)";
+        } dma_len[29:0] = 0x0;
+    } BUS_DMA_LEN @ 0x24C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "INCR4 burst enable";
+        } incr4_en[0:0] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "INCR8 burst enable";
+        } incr8_en[1:1] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "INCR16 burst enable";
+        } incr16_en[2:2] = 0x1;
+    } BUS_DMA_AHB_CTRL @ 0x250;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command start (auto-clears)";
+        } start[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Chip select: 0=CS0; 1=CS1";
+        } sel_cs[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address present: 0=no; 1=yes";
+        } addr_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Dummy bytes: 000=0; 001=1; etc.";
+        } dummy_byte_cnt[6:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data present: 0=no; 1=yes";
+        } data_en[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data direction: 0=write; 1=read";
+        } \rw[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data length (n+1 bytes)";
+        } data_cnt[14:9] = 0x3F;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI interface type: 000=Standard; 001=Dual; 010=Dual-IO; 101=Quad-Input;
+                            110=Quad-IO";
+        } mem_if_type[19:17] = 0x0;
+    } CMD_CONFIG @ 0x300;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Instruction code";
+        } reg_ins[7:0] = 0x0;
+    } CMD_INS @ 0x308;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Operation address";
+        } cmd_addr[29:0] = 0x0;
+    } CMD_ADDR @ 0x30C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data buffer 0";
+        } cmd_databuf_0[31:0] = 0x0;
+    } CMD_DATABUF_0 @ 0x400;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 1";
+        } cmd_databuf_1[31:0] = 0x0;
+    } CMD_DATABUF_1 @ 0x404;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 2";
+        } cmd_databuf_2[31:0] = 0x0;
+    } CMD_DATABUF_2 @ 0x408;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 3";
+        } cmd_databuf_3[31:0] = 0x0;
+    } CMD_DATABUF_3 @ 0x40C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 4";
+        } cmd_databuf_4[31:0] = 0x0;
+    } CMD_DATABUF_4 @ 0x410;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 5";
+        } cmd_databuf_5[31:0] = 0x0;
+    } CMD_DATABUF_5 @ 0x414;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 6";
+        } cmd_databuf_6[31:0] = 0x0;
+    } CMD_DATABUF_6 @ 0x418;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 7";
+        } cmd_databuf_7[31:0] = 0x0;
+    } CMD_DATABUF_7 @ 0x41C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 8";
+        } cmd_databuf_8[31:0] = 0x0;
+    } CMD_DATABUF_8 @ 0x420;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 9";
+        } cmd_databuf_9[31:0] = 0x0;
+    } CMD_DATABUF_9 @ 0x424;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 10";
+        } cmd_databuf_10[31:0] = 0x0;
+    } CMD_DATABUF_10 @ 0x428;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 11";
+        } cmd_databuf_11[31:0] = 0x0;
+    } CMD_DATABUF_11 @ 0x42C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 12";
+        } cmd_databuf_12[31:0] = 0x0;
+    } CMD_DATABUF_12 @ 0x430;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 13";
+        } cmd_databuf_13[31:0] = 0x0;
+    } CMD_DATABUF_13 @ 0x434;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 14";
+        } cmd_databuf_14[31:0] = 0x0;
+    } CMD_DATABUF_14 @ 0x438;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Command data buffer 15";
+        } cmd_databuf_15[31:0] = 0x0;
+    } CMD_DATABUF_15 @ 0x43C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "AES low power: 0=disabled; 1=enabled";
+        } lea_lp_en[0:0] = 0x1;
+    } LEA_LP_EN @ 0x1300;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "AES DFX observation";
+        } lea_dfx_info[31:0] = 0x0;
+    } LEA_DFX_INFO @ 0x1304;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "AES IV value valid (auto-clears after sync)";
+        } lea_iv_vld[0:0] = 0x0;
+    } LEA_IV_VLD @ 0x1600;
+};

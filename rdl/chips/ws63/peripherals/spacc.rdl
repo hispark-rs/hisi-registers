@@ -1,0 +1,734 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_spacc_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "REE interrupt enable";
+        } spacc_ie_ree[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TEE interrupt enable";
+        } spacc_ie_tee[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "HPP interrupt enable";
+        } spacc_ie_hpp[8:8] = 0x0;
+    } SPACC_IE @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Raw interrupt for sym clear finish; write one to clear";
+        } raw_sym_clr_finish_int[15:0] = 0x0;
+    } SPACC_INT_RAW_SYM_CLR_FINISH @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Hash channel-clear completion bits";
+        } raw_hash_clear_finish[15:0] = 0x0;
+    } SPACC_INT_RAW_HASH_CLEAR_FINISH @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Symmetric channel lock status";
+        } sym_chn_lock[31:0] = 0x0;
+    } SPACC_SYM_CHN_LOCK @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Hash channel lock status";
+        } hash_chn_lock[31:0] = 0x0;
+    } SPACC_HASH_CHN_LOCK @ 0x40;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear request for symmetric channels";
+        } sym_chn_clear_req[31:0] = 0x0;
+    } SPACC_SYM_CHN_CLEAR_REQ @ 0x60;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear request for hash channels";
+        } hash_chn_clear_req[31:0] = 0x0;
+    } SPACC_HASH_CHN_CLEAR_REQ @ 0x68;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Bus error status";
+        } bus_err[31:0] = 0x0;
+    } SPACC_BUS_ERR @ 0x200;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Channel 0 start request";
+        } sym_chn0_req[31:31] = 0x0;
+    } IN_SYM_CHN0_CTRL @ 0x4000;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Odd/even control for TDES";
+        } sym_chn0_odd_even[0:0] = 0x0;
+    } IN_SYM_CHN0_SPECIAL_CTRL @ 0x4004;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key channel ID";
+        } key_chn_id[8:0] = 0x0;
+        field {
+            enum SPACC_IN_SYM_CHN0_KEY_CTRL_alg_sel_e1 {
+                AES = 2 {
+                    desc = "AES algorithm";
+                };
+                LEA = 4 {
+                    desc = "LEA (Lightweight Encryption Algorithm)";
+                };
+                SM4 = 5 {
+                    desc = "SM4 (Chinese national standard)";
+                };
+                GHASH = 6 {
+                    desc = "GHASH (GCM authentication)";
+                };
+                TDES = 7 {
+                    desc = "Triple DES";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPACC_IN_SYM_CHN0_KEY_CTRL_alg_sel_e1;
+            desc = "Algorithm: 2=AES; 4=LEA; 5=SM4; 6=GHASH; 7=TDES";
+        } alg_sel[19:16] = 0x0;
+        field {
+            enum SPACC_IN_SYM_CHN0_KEY_CTRL_alg_mode_e2 {
+                ECB = 1 {
+                    desc = "Electronic Codebook";
+                };
+                CBC = 3 {
+                    desc = "Cipher Block Chaining";
+                };
+                CTR = 6 {
+                    desc = "Counter mode";
+                };
+                OFB = 7 {
+                    desc = "Output Feedback";
+                };
+                CFB = 8 {
+                    desc = "Cipher Feedback";
+                };
+                CCM = 9 {
+                    desc = "CCM authenticated encryption";
+                };
+                GCM = 10 {
+                    desc = "Galois/Counter Mode";
+                };
+                GCTR = 11 {
+                    desc = "GCM CTR only";
+                };
+                CMAC = 12 {
+                    desc = "Cipher-based MAC";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPACC_IN_SYM_CHN0_KEY_CTRL_alg_mode_e2;
+            desc = "Mode: 1=ECB; 3=CBC; 6=CTR; 0xA=GCM; 0xC=CMAC";
+        } alg_mode[23:20] = 0x0;
+        field {
+            enum SPACC_IN_SYM_CHN0_KEY_CTRL_key_len_e3 {
+                Key128 = 1 {
+                    desc = "128-bit key";
+                };
+                Key192 = 2 {
+                    desc = "192-bit key";
+                };
+                Key256 = 3 {
+                    desc = "256-bit key";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPACC_IN_SYM_CHN0_KEY_CTRL_key_len_e3;
+            desc = "Key length: 1=128bit; 2=192bit; 3=256bit";
+        } key_len[25:24] = 0x0;
+        field {
+            enum SPACC_IN_SYM_CHN0_KEY_CTRL_data_width_e4 {
+                Width128 = 0 {
+                    desc = "128-bit data path";
+                };
+                Width64 = 1 {
+                    desc = "64-bit data path";
+                };
+                Width32 = 2 {
+                    desc = "32-bit data path";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPACC_IN_SYM_CHN0_KEY_CTRL_data_width_e4;
+            desc = "Data width: 0=128bit; 1=64bit; 2=32bit";
+        } data_width[27:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Decrypt: 0=encrypt; 1=decrypt";
+        } decrypt[28:28] = 0x0;
+    } IN_SYM_CHN0_KEY_CTRL @ 0x4010;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "First block flag";
+        } first_block[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Last block flag";
+        } last_block[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Block length (in bytes)";
+        } block_len[20:16] = 0x0;
+    } IN_SYM_CHN0_IV_DATA_CTRL @ 0x4030;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "IV[31:0]";
+        } iv0[31:0] = 0x0;
+    } IN_SYM_CHN0_IV0 @ 0x4040;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "IV[63:32]";
+        } iv1[31:0] = 0x0;
+    } IN_SYM_CHN0_IV1 @ 0x4044;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "IV[95:64]";
+        } iv2[31:0] = 0x0;
+    } IN_SYM_CHN0_IV2 @ 0x4048;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "IV[127:96]";
+        } iv3[31:0] = 0x0;
+    } IN_SYM_CHN0_IV3 @ 0x404C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input data[31:0]";
+        } data0[31:0] = 0x0;
+    } IN_SYM_CHN0_DATA0 @ 0x4050;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source security selector; 0xA selects non-secure REE";
+        } sym_chn_ss[11:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination security selector; 0xA selects non-secure REE";
+        } sym_chn_ds[15:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable the symmetric channel";
+        } sym_chn_en[31:31] = 0x0;
+    } IN_SYM_CHN_CTRL0 @ 0x4100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable DMA copy mode";
+        } dma_copy[0:0] = 0x0;
+    } IN_SYM_OUT_CTRL0 @ 0x4104;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "MCipher keyslot ID";
+        } key_chn_id[8:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Algorithm: 2=AES; 5=SM4";
+        } alg_sel[19:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Mode: 1=ECB; 3=CBC; 6=CTR; 0xC=CMAC";
+        } alg_mode[23:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key length: 1=128bit; 2=192bit; 3=256bit";
+        } key_len[25:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data width: 0=128bit; 1=64bit; 2=32bit";
+        } data_width[27:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Decrypt when set";
+        } decrypt[28:28] = 0x0;
+    } IN_SYM_CHN_KEY_CTRL0 @ 0x4110;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 35:32";
+        } address_high[3:0] = 0x0;
+    } IN_SYM_CHN_NODE_START_ADDR_H0 @ 0x4120;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 31:0";
+        } address_low[31:0] = 0x0;
+    } IN_SYM_CHN_NODE_START_ADDR_L0 @ 0x4124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor count";
+        } node_length[7:0] = 0x0;
+    } IN_SYM_CHN_NODE_LENGTH0 @ 0x412C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Producer index";
+        } write_pointer[7:0] = 0x0;
+    } IN_SYM_CHN_NODE_WR_POINT0 @ 0x4130;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Consumer index";
+        } read_pointer[7:0] = 0x0;
+    } IN_SYM_CHN_NODE_RD_POINT0 @ 0x4134;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source security selector; 0xA selects non-secure REE";
+        } sym_chn_ss[11:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination security selector; 0xA selects non-secure REE";
+        } sym_chn_ds[15:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable the symmetric channel";
+        } sym_chn_en[31:31] = 0x0;
+    } IN_SYM_CHN_CTRL1 @ 0x4200;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable DMA copy mode";
+        } dma_copy[0:0] = 0x0;
+    } IN_SYM_OUT_CTRL1 @ 0x4204;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "MCipher keyslot ID";
+        } key_chn_id[8:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Algorithm: 2=AES; 5=SM4";
+        } alg_sel[19:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Mode: 1=ECB; 3=CBC; 6=CTR; 0xC=CMAC";
+        } alg_mode[23:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key length: 1=128bit; 2=192bit; 3=256bit";
+        } key_len[25:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data width: 0=128bit; 1=64bit; 2=32bit";
+        } data_width[27:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Decrypt when set";
+        } decrypt[28:28] = 0x0;
+    } IN_SYM_CHN_KEY_CTRL1 @ 0x4210;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 35:32";
+        } address_high[3:0] = 0x0;
+    } IN_SYM_CHN_NODE_START_ADDR_H1 @ 0x4220;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 31:0";
+        } address_low[31:0] = 0x0;
+    } IN_SYM_CHN_NODE_START_ADDR_L1 @ 0x4224;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor count";
+        } node_length[7:0] = 0x0;
+    } IN_SYM_CHN_NODE_LENGTH1 @ 0x422C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Producer index";
+        } write_pointer[7:0] = 0x0;
+    } IN_SYM_CHN_NODE_WR_POINT1 @ 0x4230;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Consumer index";
+        } read_pointer[7:0] = 0x0;
+    } IN_SYM_CHN_NODE_RD_POINT1 @ 0x4234;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Security-source selector; 0xA selects non-secure REE";
+        } hash_chn_ss[11:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable the hash channel";
+        } hash_chn_en[31:31] = 0x0;
+    } IN_HASH_CHN_CTRL0 @ 0x5100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "HMAC keyslot channel ID";
+        } hash_key_chn_id[3:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Use the selected HMAC keyslot";
+        } hmac_vld[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Hash family: 0xA=SHA-1; 0xB=SHA-2; 0xC=SM3";
+        } hash_chn_alg_sel[19:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SHA-2 mode: 0=224; 1=256; 2=384; 3=512";
+        } hash_chn_alg_mode[23:20] = 0x0;
+    } IN_HASH_CHN_KEY_CTRL0 @ 0x5110;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor-list address bits 35:32";
+        } address_high[3:0] = 0x0;
+    } IN_HASH_CHN_NODE_START_ADDR_H0 @ 0x5120;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor-list address bits 31:0";
+        } address_low[31:0] = 0x0;
+    } IN_HASH_CHN_NODE_START_ADDR_L0 @ 0x5124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Number of descriptors in the ring";
+        } node_length[7:0] = 0x0;
+    } IN_HASH_CHN_NODE_LENGTH0 @ 0x512C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor producer index";
+        } write_pointer[7:0] = 0x0;
+    } IN_HASH_CHN_NODE_WR_POINT0 @ 0x5130;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Descriptor consumer index";
+        } read_pointer[7:0] = 0x0;
+    } IN_HASH_CHN_NODE_RD_POINT0 @ 0x5134;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Bytes not yet consumed by the engine";
+        } data_len[31:0] = 0x0;
+    } IN_HASH_CHN_DATA_LEN0 @ 0x51C0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Security-source selector; 0xA selects non-secure REE";
+        } hash_chn_ss[11:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable the hash channel";
+        } hash_chn_en[31:31] = 0x0;
+    } IN_HASH_CHN_CTRL1 @ 0x5200;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "HMAC keyslot channel ID";
+        } hash_key_chn_id[3:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Use the selected HMAC keyslot";
+        } hmac_vld[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Hash family: 0xA=SHA-1; 0xB=SHA-2; 0xC=SM3";
+        } hash_chn_alg_sel[19:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SHA-2 mode: 0=224; 1=256; 2=384; 3=512";
+        } hash_chn_alg_mode[23:20] = 0x0;
+    } IN_HASH_CHN_KEY_CTRL1 @ 0x5210;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor-list address bits 35:32";
+        } address_high[3:0] = 0x0;
+    } IN_HASH_CHN_NODE_START_ADDR_H1 @ 0x5220;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor-list address bits 31:0";
+        } address_low[31:0] = 0x0;
+    } IN_HASH_CHN_NODE_START_ADDR_L1 @ 0x5224;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Number of descriptors in the ring";
+        } node_length[7:0] = 0x0;
+    } IN_HASH_CHN_NODE_LENGTH1 @ 0x522C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor producer index";
+        } write_pointer[7:0] = 0x0;
+    } IN_HASH_CHN_NODE_WR_POINT1 @ 0x5230;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Descriptor consumer index";
+        } read_pointer[7:0] = 0x0;
+    } IN_HASH_CHN_NODE_RD_POINT1 @ 0x5234;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Bytes not yet consumed by the engine";
+        } data_len[31:0] = 0x0;
+    } IN_HASH_CHN_DATA_LEN1 @ 0x52C0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Non-zero when symmetric channel validation failed";
+        } error[31:0] = 0x0;
+    } REE_SYM_CALC_CTRL_CHECK_ERR @ 0x8070;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Validation error detail";
+        } status[31:0] = 0x0;
+    } REE_SYM_CALC_CTRL_CHECK_ERR_STATUS @ 0x8074;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Non-zero when hash channel control validation failed";
+        } error[31:0] = 0x0;
+    } REE_HASH_CALC_CTRL_CHECK_ERR @ 0x8078;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Hash-control validation error detail";
+        } status[31:0] = 0x0;
+    } REE_HASH_CALC_CTRL_CHECK_ERR_STATUS @ 0x807C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Completion bits for hash channels 0 through 15";
+        } hash_chann_raw_int[15:0] = 0x0;
+    } HASH_CHANN_RAW_INT @ 0x8600;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Interrupt-enable bits for hash channels 0 through 15";
+        } hash_chann_raw_int_en[15:0] = 0x0;
+    } HASH_CHANN_RAW_INT_EN @ 0x8604;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Raw interrupt per channel [15:0]";
+        } sym_chann_raw_int[15:0] = 0x0;
+    } SYM_CHANN_RAW_INT @ 0x8610;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "State word selected by the state address register";
+        } state[31:0] = 0x0;
+    } CHANN_HASH_STATE_VAL0 @ 0xA080;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "State word index";
+        } index[4:0] = 0x0;
+    } CHANN_HASH_STATE_VAL_ADDR0 @ 0xA084;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "State word selected by the state address register";
+        } state[31:0] = 0x0;
+    } CHANN_HASH_STATE_VAL1 @ 0xA100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "State word index";
+        } index[4:0] = 0x0;
+    } CHANN_HASH_STATE_VAL_ADDR1 @ 0xA104;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Completion bits for symmetric channels";
+        } out_sym_chan_raw_int[15:0] = 0x0;
+    } OUT_SYM_CHAN_RAW_LAST_NODE_INT @ 0xC000;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 35:32";
+        } address_high[3:0] = 0x0;
+    } OUT_SYM_CHN_NODE_START_ADDR_H0 @ 0xD020;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 31:0";
+        } address_low[31:0] = 0x0;
+    } OUT_SYM_CHN_NODE_START_ADDR_L0 @ 0xD024;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor count";
+        } node_length[7:0] = 0x0;
+    } OUT_SYM_CHN_NODE_LENGTH0 @ 0xD028;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Producer index";
+        } write_pointer[7:0] = 0x0;
+    } OUT_SYM_CHN_NODE_WR_POINT0 @ 0xD030;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Consumer index";
+        } read_pointer[7:0] = 0x0;
+    } OUT_SYM_CHN_NODE_RD_POINT0 @ 0xD034;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 35:32";
+        } address_high[3:0] = 0x0;
+    } OUT_SYM_CHN_NODE_START_ADDR_H1 @ 0xD120;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address bits 31:0";
+        } address_low[31:0] = 0x0;
+    } OUT_SYM_CHN_NODE_START_ADDR_L1 @ 0xD124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor count";
+        } node_length[7:0] = 0x0;
+    } OUT_SYM_CHN_NODE_LENGTH1 @ 0xD128;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Producer index";
+        } write_pointer[7:0] = 0x0;
+    } OUT_SYM_CHN_NODE_WR_POINT1 @ 0xD130;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Consumer index";
+        } read_pointer[7:0] = 0x0;
+    } OUT_SYM_CHN_NODE_RD_POINT1 @ 0xD134;
+};

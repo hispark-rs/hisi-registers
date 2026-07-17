@@ -1,0 +1,60 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_sys_ctl0_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reset count value";
+        } reset_count[31:0] = 0x0;
+    } RESET_COUNT @ 0x8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "REFCLK frequency status: 0=40MHz; 1=24MHz";
+        } refclk_freq_status[0:0] = 0x0;
+    } HW_CTL @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Watchdog reset record";
+        } wdt_rst[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Software reset record";
+        } soft_rst[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Hardware reset record";
+        } hard_rst[2:2] = 0x0;
+    } REG_SYS_RST_RECORD @ 0x98;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "WDT reset history";
+        } sys_wdt_rst_his[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Software reset history";
+        } sys_soft_rst_his[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "POR reset filter history";
+        } por_rst_filter_his[3:3] = 0x0;
+    } SYS_RST_RECORD_0 @ 0xA0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Write to clear reset history bits";
+        } sys_diag_clr[31:0] = 0x0;
+    } SYS_DIAG_CLR_1 @ 0xA4;
+};

@@ -1,0 +1,152 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_rf_wb_ctl_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } SYS_CTL_ID @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RF_WL_REG_CLK_CTL @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RF_WL_REG_SOFT_RSTN @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RF_WL_REG_CMD_SOFT_RSTN @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RF_WL_REG_CMD_FIFO_STS @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RF_WL_CBB_DIS @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RF_BT_CBB_DIS @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } ABB_ADC_CTRL @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } ABB_DAC_CTRL @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } ABB_EN_CTRL @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_WL_ADC_MUX @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RF_MAN_EN_CTRL @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TRXEN_CTRL @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_DCOC_IQ_CTRL @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_PA_IDX_CTRL @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_LPF_CTRL @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RADAR_CTRL @ 0x54;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_PPA_CODE @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TEMP_LOCK_CTRL @ 0x5C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TEMP_BANK_SEL_CTRL @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RF_DIAG_MUX @ 0x64;
+};

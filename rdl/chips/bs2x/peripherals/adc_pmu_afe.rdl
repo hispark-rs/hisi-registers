@@ -1,0 +1,138 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_adc_pmu_afe_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } afe_adc_rst_n[0:0] = 0x0;
+    } AFE_ADC_RST_N @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo3_en_dly[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo3_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo2_en_dly[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo2_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo1_en_dly[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo1_en[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_afeldo_iso_en_n[6:6] = 0x0;
+    } AFE_ADC_LDO_CFG @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_gadc_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_gadc_mux_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } s2d_gadc_iso_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } d2s_gadc_alarm[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } d2s_gadc_done[4:4] = 0x0;
+    } AFE_GADC_CFG @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_GADC_DATA_L @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_GADC_DATA_H @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_HADC_CFG @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_HADC_DATA_L @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_HADC_DATA_H @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } afe_pwr_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } afe_iso_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } afe_pwr_ack[2:2] = 0x0;
+    } AFE_DIG_PWR_EN @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } afe_soft_rst[0:0] = 0x0;
+    } AFE_SOFT_RST @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } afe_clk_en[0:0] = 0x0;
+    } AFE_CLK_EN @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_CMP_ALARM_EN @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } AFE_ISO_CFG @ 0x30;
+};

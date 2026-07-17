@@ -1,0 +1,1016 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_km_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Lock owner: 0=idle, 1=REE, 2=TEE, 4=PCPU, 5=AIDSP";
+        } km_lock_status[2:0] = 0x0;
+    } RKP_LOCK @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start software-key PBKDF2 calculation; hardware clears on completion";
+        } sw_calc_req[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PBKDF2 hash algorithm: 0=SHA256, 1=SHA1, 3=SHA384, 4=SHA512, 5=SM3";
+        } pbkdf2_alg_sel_cfg[3:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PBKDF2 key source; 3 selects the software-provided key window";
+        } pbkdf2_key_sel_cfg[8:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Hardware-key length selector; unused for the software-key path";
+        } pbkdf2_key_len[15:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PBKDF2 iteration count";
+        } rkp_pbkdf_calc_time[31:16] = 0x0;
+    } RKP_CMD_CFG @ 0x4;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Non-zero when the most recent KDF operation failed";
+        } error[31:0] = 0x0;
+    } KDF_ERROR @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Raw RKP completion interrupt; write one to clear";
+        } rkp_raw_int[0:0] = 0x0;
+    } RKP_RAW_INT @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enable RKP completion interrupt";
+        } rkp_int_enable[0:0] = 0x0;
+    } RKP_INT_ENABLE @ 0x14;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Masked RKP completion interrupt";
+        } rkp_int[0:0] = 0x0;
+    } RKP_INT @ 0x18;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA0 @ 0x100;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA1 @ 0x104;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA2 @ 0x108;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA3 @ 0x10C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA4 @ 0x110;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA5 @ 0x114;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA6 @ 0x118;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA7 @ 0x11C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA8 @ 0x120;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA9 @ 0x124;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA10 @ 0x128;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA11 @ 0x12C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA12 @ 0x130;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA13 @ 0x134;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA14 @ 0x138;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA15 @ 0x13C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA16 @ 0x140;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA17 @ 0x144;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA18 @ 0x148;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA19 @ 0x14C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA20 @ 0x150;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA21 @ 0x154;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA22 @ 0x158;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA23 @ 0x15C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA24 @ 0x160;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA25 @ 0x164;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA26 @ 0x168;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA27 @ 0x16C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA28 @ 0x170;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA29 @ 0x174;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA30 @ 0x178;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded salt word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_DATA31 @ 0x17C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY0 @ 0x180;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY1 @ 0x184;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY2 @ 0x188;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY3 @ 0x18C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY4 @ 0x190;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY5 @ 0x194;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY6 @ 0x198;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY7 @ 0x19C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY8 @ 0x1A0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY9 @ 0x1A4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY10 @ 0x1A8;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY11 @ 0x1AC;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY12 @ 0x1B0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY13 @ 0x1B4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY14 @ 0x1B8;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY15 @ 0x1BC;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY16 @ 0x1C0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY17 @ 0x1C4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY18 @ 0x1C8;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY19 @ 0x1CC;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY20 @ 0x1D0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY21 @ 0x1D4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY22 @ 0x1D8;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY23 @ 0x1DC;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY24 @ 0x1E0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY25 @ 0x1E4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY26 @ 0x1E8;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY27 @ 0x1EC;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY28 @ 0x1F0;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY29 @ 0x1F4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY30 @ 0x1F8;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Padded password word";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_KEY31 @ 0x1FC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL0 @ 0x200;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL1 @ 0x204;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL2 @ 0x208;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL3 @ 0x20C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL4 @ 0x210;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL5 @ 0x214;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL6 @ 0x218;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL7 @ 0x21C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL8 @ 0x220;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL9 @ 0x224;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL10 @ 0x228;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL11 @ 0x22C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL12 @ 0x230;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL13 @ 0x234;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL14 @ 0x238;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Initial hash state before start; derived key material after completion";
+        } data[31:0] = 0x0;
+    } RKP_PBKDF2_VAL15 @ 0x23C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Key data[31:0]";
+        } data[31:0] = 0x0;
+    } KL_DATA_IN_0 @ 0x1000;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Key data[63:32]";
+        } data[31:0] = 0x0;
+    } KL_DATA_IN_1 @ 0x1004;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Key data[95:64]";
+        } data[31:0] = 0x0;
+    } KL_DATA_IN_2 @ 0x1008;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Key data[127:96]";
+        } data[31:0] = 0x0;
+    } KL_DATA_IN_3 @ 0x100C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Target key slot address";
+        } key_addr[9:0] = 0x0;
+    } KL_KEY_ADDR @ 0x1010;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Port select";
+        } port_sel[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Descriptor code";
+        } dsc_code[11:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key encrypt enable";
+        } key_enc[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key decrypt enable";
+        } key_dec[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Flash key source select";
+        } kl_flash_sel[19:18] = 0x0;
+    } KL_KEY_CFG @ 0x1014;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key security: 0=NS; 1=Secure";
+        } key_sec[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source non-secure: 0=secure; 1=NS";
+        } src_nsec[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source secure: 0=NS; 1=Secure";
+        } src_sec[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination non-secure";
+        } dest_nsec[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination secure";
+        } dest_sec[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master-only access";
+        } master_only[5:5] = 0x0;
+    } KL_KEY_SEC_CFG @ 0x1018;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "KLAD processing state";
+        } state[31:0] = 0x0;
+    } KL_STATE @ 0x1030;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "KLAD error code";
+        } error[31:0] = 0x0;
+    } KL_ERROR @ 0x1038;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Key controller error code";
+        } error[31:0] = 0x0;
+    } KC_ERROR @ 0x103C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "KLAD interrupt enable";
+        } kl_int_en[0:0] = 0x0;
+    } KL_INT_EN @ 0x1040;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Common KLAD completion; write one to clear";
+        } kl_int_raw[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            onwrite = woclr;
+            desc = "Clear-key route completion; write one to clear";
+        } clr_kl_int_raw[14:14] = 0x0;
+    } KL_INT_RAW @ 0x1044;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "KLAD interrupt flag";
+        } kl_int[0:0] = 0x0;
+    } KL_INT @ 0x1048;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Lock request";
+        } kl_lock[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Lock sequence number";
+        } kl_lock_num[6:4] = 0x0;
+    } KL_LOCK_CTRL @ 0x1074;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Unlock request";
+        } kl_unlock[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Unlock sequence number";
+        } kl_unlock_num[6:4] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Common unlock sequence number";
+        } kl_com_unlock_num[10:8] = 0x0;
+    } KL_UNLOCK_CTRL @ 0x1078;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Lock operation busy state";
+        } lock_busy[1:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Lock failure state";
+        } lock_fail[3:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Unlock failure state";
+        } unlock_fail[5:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current lock sequence number";
+        } lock_num[10:8] = 0x0;
+    } KL_COM_LOCK_INFO @ 0x107C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "0xAA means locked by the caller";
+        } lock_status[7:0] = 0x0;
+    } KL_COM_LOCK_STATUS @ 0x1080;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Common KDF start";
+        } kl_com_start[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Level select";
+        } kl_com_level_sel[3:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Algorithm select";
+        } kl_com_alg_sel[5:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key size select";
+        } kl_com_key_size[7:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Root key select: 4=USD; 5=SBRK; 6=ABRK; 13=DRK; 18=PSK";
+        } rk_choose[12:8] = 0x0;
+    } KL_COM_CTRL @ 0x1084;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Root key ready";
+        } kl_com_rk_rdy[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Level 1 key ready";
+        } kl_com_lv1_rdy[1:1] = 0x0;
+    } KL_COM_STATUS @ 0x1088;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start clear-key route; hardware clears on completion";
+        } start[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key size: 1=128bit; 2=192bit; 3=256bit";
+        } key_size[3:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Software HMAC key block index";
+        } key_count[15:13] = 0x0;
+    } KL_CLR_CTRL @ 0x1438;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Config signature alarm";
+        } kl_cfg_sig_alarm[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Common CRC16 alarm";
+        } kl_com_crc16_alarm[1:1] = 0x0;
+    } KL_ALARM_INFO @ 0x1600;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key slot number";
+        } key_slot_num[9:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Lock command: 0x01=REE; 0x10=TEE; 0x100=PCPU; 0x110=AIDSP";
+        } lock_cmd[20:20] = 0x0;
+    } KC_TEECPU_LOCK_CMD @ 0x1B00;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key slot number";
+        } key_slot_num[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Keyslot type: 0=mcipher; 1=HMAC";
+        } flush_hmac_kslot_ind[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TSCipher indicator";
+        } tscipher_ind[16:16] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Lock command: 1=lock; 0=unlock";
+        } lock_cmd[20:20] = 0x0;
+    } KC_REECPU_LOCK_CMD @ 0x1B04;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key slot number";
+        } key_slot_num[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Keyslot type: 0=mcipher; 1=HMAC";
+        } flush_hmac_kslot_ind[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TSCipher indicator";
+        } tscipher_ind[16:16] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Lock command: 1=lock; 0=unlock";
+        } lock_cmd[20:20] = 0x0;
+    } KC_PCPU_LOCK_CMD @ 0x1B08;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Key slot number";
+        } key_slot_num[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Keyslot type: 0=mcipher; 1=HMAC";
+        } flush_hmac_kslot_ind[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TSCipher indicator";
+        } tscipher_ind[16:16] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Lock command: 1=lock; 0=unlock";
+        } lock_cmd[20:20] = 0x0;
+    } KC_AIDSP_LOCK_CMD @ 0x1B0C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Keyslot flush is in progress";
+        } flush_busy[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Last keyslot unlock failed";
+        } unlock_fail[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Last keyslot flush timed out";
+        } timeout_error[2:2] = 0x0;
+    } KC_REECPU_FLUSH_BUSY @ 0x1B14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Slot number to query (0-255)";
+        } slot_num_cfg[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Keyslot type: 0=mcipher; 1=HMAC";
+        } slot_cfg_type[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TSCipher slot indicator";
+        } tscipher_slot_ind[16:16] = 0x0;
+    } KC_RD_SLOT_NUM @ 0x1B30;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Lock status: 0=unlock; 1=REE; 2=TEE; 4=PCPU; 6=AIDSP";
+        } rd_lock_status[2:0] = 0x0;
+    } KC_RD_LOCK_STATUS @ 0x1B34;
+};

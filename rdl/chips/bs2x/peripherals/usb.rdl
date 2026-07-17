@@ -1,0 +1,1239 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_usb_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } SESREQSCS[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SESREQ[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SESENDDET[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HSTNEGSCS[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HNPREQ[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HSTSETHNPEN[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DEVHNPEN[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CONIDSTS[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DBNCTIME[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ASESVLD[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } BSESVLD[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CHIRP_ON[27:27] = 0x0;
+    } GOTGCTL @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GOTGINT @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } GLBLINTRMSK[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HBSTLEN[4:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DMAEN[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXFEMPLVL[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PTXFEMPLVL[8:8] = 0x0;
+    } GAHBCFG @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } TOUTCAL[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PHYIF[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPI_UTMI_SEL[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FSINTF[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PHYSEL[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DDRSEL[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SRPCAP[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HNPCAP[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } USBTRDTIM[13:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PHYLPWRCLKSEL[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OTGI2CSEL[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPIFSLS[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPIAUTORES[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPICLKSUSM[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPIEXTVBUSDRV[20:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPIEXTVBUSINDICATOR[21:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TERMSELDLPULSE[22:22] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } IC_USB_CAP[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NO_PULLUP[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FORCEHOSTMODE[29:29] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FORCEDEVMODE[30:30] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CORRUPTTXPACKET[31:31] = 0x0;
+    } GUSBCFG @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } CSFTRST[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HSFTRST[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FRMCNTRRST[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INTKNQFLSH[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RXFFLSH[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TXFFLSH[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TXFNUM[10:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DMAREQ[30:30] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } AHBIDLE[31:31] = 0x0;
+    } GRSTCTL @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } CURMOD[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } MODEMIS[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OTGINT[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SOF[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RXFLVL[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXFEMP[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GINNAKEFF[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GOUTNAKEFF[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPICKINT[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CINT[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ERLYSUSP[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } USBSUSP[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } USBRST[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ENUMDONE[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ISOOUTDROP[14:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EOPF[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RESTORE_DONE[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EPMIS[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } IEPINT[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OEPINT[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INCOMPISOIN[20:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INCOMPLP[21:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FETSUSP[22:22] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RESETDET[23:23] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTINT[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HCHINT[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PTXFEMP[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } LPM[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CONIDSTSCHNG[28:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DISCONNINT[29:29] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SESSREQINT[30:30] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } WKUPINT[31:31] = 0x0;
+    } GINTSTS @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } CURMODMSK[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } MODEMISMSK[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OTGINTMSK[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SOFMSK[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RXFLVLMSK[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXFEMPMSK[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GINNAKEFFMSK[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GOUTNAKEFFMSK[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ULPICKINTMSK[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CINTMSK[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ERLYSUSPMSK[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } USBSUSPMSK[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } USBRSTMSK[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ENUMDONEMSK[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ISOOUTDROPMSK[14:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EOPFMSK[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EPMISMSK[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } IEPINTMSK[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OEPINTMSK[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INCOMPISOINMSK[20:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INCOMPLPMSK[21:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FETSUSPMSK[22:22] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTINTMSK[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HCHINTMSK[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PTXFEMPMSK[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CONIDSTSCHNGMSK[28:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DISCONNINTMSK[29:29] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SESSREQINTMSK[30:30] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } WKUPINTMSK[31:31] = 0x0;
+    } GINTMSK @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } CHNUM[3:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } BCNT[14:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DPID_DATA2[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GLOB_OUT_NAK[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FN[24:21] = 0x0;
+    } GRXSTSRD @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GRXSTSPD @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } RXFDEP[15:0] = 0x0;
+    } GRXFSIZ @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXFDEP[15:0] = 0x0;
+    } GNPTXFSIZ @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXFSPCAVAIL[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXQSPCAVAIL[23:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXQTOP[30:24] = 0x0;
+    } GNPTXSTS @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } RWDATA[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } REGADDR[15:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ADDR[22:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CEN[23:23] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ACK[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CSUSPCTL[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CDEVADR[27:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CDATSE0[28:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RW[30:30] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } BSYDNE_SC[31:31] = 0x0;
+    } GI2CCTL @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } REGDATA[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } VCTRL[15:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } REGADDR[21:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } REGWR[22:22] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NEWREGREQ[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } VSTSBSY[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } VSTSDONE[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DISULPIDRVR[31:31] = 0x0;
+    } GPVNDCTL @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } GPI[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GPO[31:16] = 0x0;
+    } GGPIO @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GUID @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GSNPSID @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GHWCFG1 @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } OTGMODE[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OTGARCH[4:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SINGPNT[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } HSPHYTYPE[7:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FSPHYTYPE[9:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NUMDEVEPS[13:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NUMHSTCHNL[17:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PERIOSUPPORT[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DYNFIFOSIZING[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } MPI[20:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NPTXQDEPTH[23:22] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PTXQDEPTH[25:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TKNQDEPTH[30:26] = 0x0;
+    } GHWCFG2 @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } XFERSIZEWIDTH[3:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PKTSIZEWIDTH[6:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OTGEN[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } I2CINTSEL[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } VNDCTLSUPT[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OPTFEATURE[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RSTTYPE[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DFIFODEPTH[31:16] = 0x0;
+    } GHWCFG3 @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } NUMDEVPERIOEPS[3:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ENABLEPWROPT[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } AHBFREQ[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PHYDATAWIDTH[15:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NUMCTLEPS[19:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } IDDGFLTR[20:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } VBUSVALIDFLTR[21:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } AVALIDFLTR[22:22] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } BVALIDFLTR[23:23] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SESSENDFLTR[24:24] = 0x0;
+    } GHWCFG4 @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } HSIC_CONN[30:30] = 0x0;
+    } GLPMCFG @ 0x54;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } PMU_IRQ_SEL[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PMU_ACTIVE[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RESTORE[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } POWER_DOWN_CLAMP[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } POWER_DOWN_RST[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } POWER_DOWN[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DISABLE_VBUS[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } LINESTATE[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } LINESTATE_INT[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RESETDET[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RESETDET_INT[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DISCONN[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DISCONN_INT[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CONNDET[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CONNDET_INT[14:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } IDDIG[21:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } BVALID[22:22] = 0x0;
+    } GPWRDN @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GDFIFOCFG @ 0x5C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } GADPCTL @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } PTXFSTADDR[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PTXFSIZE[31:16] = 0x0;
+    } HPTXFSIZ @ 0x100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } FSLSPCLKSEL[1:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FSLSSUPP[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } F_32KHZSUSPEND[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } MULTISEGDMA[23:23] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FLENTRIES[25:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PERSCHEDENABLE[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } MODECHANGERDY[31:31] = 0x0;
+    } HCFG @ 0x400;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } FRINT[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RELOADCTRL[16:16] = 0x0;
+    } HFIR @ 0x404;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } FRNUM[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } FRREM[31:16] = 0x0;
+    } HFNUM @ 0x408;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } PTXFSPCAVAIL[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PTXQSPCAVAIL[23:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TERMINATE[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TOKEN[26:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CHAN[30:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ODD[31:31] = 0x0;
+    } HPTXSTS @ 0x410;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } HAINT[15:0] = 0x0;
+    } HAINT @ 0x414;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } HAINTMSK[15:0] = 0x0;
+    } HAINTMSK @ 0x418;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } PRTCONNSTS[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTCONNDET[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTENA[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTENCHNG[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTOVRCURRACT[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTOVRCURRCHNG[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTRES[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTSUSP[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTRST[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTLNSTS[11:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTPWR[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTTSTCTL[16:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PRTSPD[18:17] = 0x0;
+    } HPRT @ 0x440;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } DEVSPD[1:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } NZSTSOUTHSHK[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } DEVADDR[10:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PERFRINT[12:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EPMISCNT[22:18] = 0x0;
+    } DCFG @ 0x800;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } RMTWKUPSIG[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SFTDISCON[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GNPINNAKSTS[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } GOUTNAKSTS[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TSTCTL[6:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SGNPINNAK[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CGNPINNAK[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SGOUTNAK[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } CGOUTNAK[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } PWRONPRGDONE[11:11] = 0x0;
+    } DCTL @ 0x804;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } SUSPSTS[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ENUMSPD[2:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ERRTICERR[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SOFFN[21:8] = 0x0;
+    } DSTS @ 0x808;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } XFERCOMPLMSK[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EPDISBLDMSK[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } AHBERRMSK[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TIMEOUTMSK[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INTKNTXFEMPMSK[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INTKNEPMISMSK[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } INEPNAKEFFMSK[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TXFIFOUNDRNMSK[8:8] = 0x0;
+    } DIEPMSK @ 0x810;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } XFERCOMPLMSK[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EPDISBLDMSK[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } AHBERRMSK[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } SETUPMSK[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OUTTKNEPDISMSK[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } BACK2BACKSETUP[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } OUTPKTERRMSK[8:8] = 0x0;
+    } DOEPMSK @ 0x814;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } INEPINT[15:0] = 0x0;
+    } DAINT @ 0x818;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } INEPINT[15:0] = 0x0;
+    } DAINTMSK @ 0x81C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } INTKNWPTR[4:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } WRAPBIT[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } EPTKN[31:8] = 0x0;
+    } DTKNQR1 @ 0x820;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } DTKNQR2 @ 0x824;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } DVBUSDIS[15:0] = 0x0;
+    } DVBUSDIS @ 0x828;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } DVBUSPULSE[11:0] = 0x0;
+    } DVBUSPULSE @ 0x82C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } NONISOTHREN[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ISOTHREN[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } TXTHRLEN[10:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RXTHREN[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } RXTHRLEN[25:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ARBPRKEN[27:27] = 0x0;
+    } DTHRCTL @ 0x830;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } DTKNQR4 @ 0x834;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } DEACHINT @ 0x838;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } DEACHINTMSK @ 0x83C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } PCGCCTL @ 0xE00;
+};

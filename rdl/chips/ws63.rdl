@@ -1,8 +1,348 @@
-`include "../ip/ssi-v151.rdl"
+`include "../properties.rdl"
+`include "../ip/spi-v151.rdl"
+`include "ws63/peripherals/sys_ctl1.rdl"
+`include "ws63/peripherals/io_config.rdl"
+`include "ws63/peripherals/gpio0.rdl"
+`include "ws63/peripherals/uart0.rdl"
+`include "ws63/peripherals/i2c0.rdl"
+`include "ws63/peripherals/pwm.rdl"
+`include "ws63/peripherals/dma.rdl"
+`include "ws63/peripherals/sfc_cfg.rdl"
+`include "ws63/peripherals/i2s.rdl"
+`include "ws63/peripherals/lsadc.rdl"
+`include "ws63/peripherals/tsensor.rdl"
+`include "ws63/peripherals/timer.rdl"
+`include "ws63/peripherals/wdt.rdl"
+`include "ws63/peripherals/rtc.rdl"
+`include "ws63/peripherals/efuse.rdl"
+`include "ws63/peripherals/sys_ctl0.rdl"
+`include "ws63/peripherals/cmu.rdl"
+`include "ws63/peripherals/glb_ctl_m.rdl"
+`include "ws63/peripherals/spacc.rdl"
+`include "ws63/peripherals/pke.rdl"
+`include "ws63/peripherals/km.rdl"
+`include "ws63/peripherals/trng.rdl"
+`include "ws63/peripherals/tcxo.rdl"
+`include "ws63/peripherals/cldo_crg.rdl"
+`include "ws63/peripherals/rf_wb_ctl.rdl"
+`include "ws63/peripherals/share_mem_ctl.rdl"
+`include "ws63/peripherals/fama_remap.rdl"
+`include "ws63/peripherals/bt_em_ctl.rdl"
+`include "ws63/peripherals/riscv_patch.rdl"
 
 addrmap ws63 {
-    name = "HiSilicon WS63 register map (experimental subset)";
+    ws63_sys_ctl1_regs sys_ctl1 @ 0x44000000;
+    ws63_io_config_regs io_config @ 0x4400D000;
+    ws63_gpio0_regs gpio0 @ 0x44028000;
+    ws63_gpio0_regs gpio1 @ 0x44029000;
+    ws63_gpio0_regs gpio2 @ 0x4402A000;
+    ws63_uart0_regs uart0 @ 0x44010000;
+    ws63_uart0_regs uart1 @ 0x44011000;
+    ws63_uart0_regs uart2 @ 0x44012000;
+    ws63_i2c0_regs i2c0 @ 0x44018000;
+    ws63_i2c0_regs i2c1 @ 0x44018100;
+    ws63_pwm_regs pwm @ 0x44024000;
+    ws63_dma_regs dma @ 0x4A000000;
+    ws63_sfc_cfg_regs sfc_cfg @ 0x48000000;
+    spi_v151_regs spi0 @ 0x44020000;
+    spi_v151_regs spi1 @ 0x44021000;
+    ws63_i2s_regs i2s @ 0x44025000;
+    ws63_lsadc_regs lsadc @ 0x4400C000;
+    ws63_tsensor_regs tsensor @ 0x4400E000;
+    ws63_timer_regs timer @ 0x44002000;
+    ws63_wdt_regs wdt @ 0x40006000;
+    ws63_rtc_regs rtc @ 0x57024000;
+    ws63_efuse_regs efuse @ 0x44008000;
+    ws63_sys_ctl0_regs sys_ctl0 @ 0x40000000;
+    ws63_cmu_regs cmu @ 0x40003000;
+    ws63_glb_ctl_m_regs glb_ctl_m @ 0x40002000;
+    ws63_spacc_regs spacc @ 0x44100000;
+    ws63_pke_regs pke @ 0x44110000;
+    ws63_km_regs km @ 0x44112000;
+    ws63_trng_regs trng @ 0x44114000;
+    ws63_tcxo_regs tcxo @ 0x440004C0;
+    ws63_cldo_crg_regs cldo_crg @ 0x44001100;
+    ws63_dma_regs sdma @ 0x520A0000;
+    ws63_gpio0_regs ulp_gpio @ 0x57030000;
+    ws63_rf_wb_ctl_regs rf_wb_ctl @ 0x44004000;
+    ws63_share_mem_ctl_regs share_mem_ctl @ 0x44006C00;
+    ws63_fama_remap_regs fama_remap @ 0x44007800;
+    ws63_bt_em_ctl_regs bt_em_ctl @ 0x49003000;
+    ws63_riscv_patch_regs riscv_patch @ 0xE0000000;
 
-    ssi_v151 spi0 @ 0x44020000;
-    ssi_v151 spi1 @ 0x44021000;
+    signal {
+        hisi_irq_number = 47;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SLE_INT;
+
+    signal {
+        hisi_irq_number = 67;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } GLP_UART_RX_WAKE_INT;
+
+    signal {
+        hisi_irq_number = 68;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TIMING_GEN_INT;
+
+    signal {
+        hisi_irq_number = 46;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } BLE_INT;
+
+    signal {
+        hisi_irq_number = 45;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } WLMAC_INT;
+
+    signal {
+        hisi_irq_number = 44;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } WLPHY_INT;
+
+    signal {
+        hisi_irq_number = 42;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } COEX_WIFI_RESUME_INT;
+
+    signal {
+        hisi_irq_number = 41;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } COEX_BT_INT;
+
+    signal {
+        hisi_irq_number = 40;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } COEX_WL_INT;
+
+    signal {
+        hisi_irq_number = 39;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SOFT_INT3;
+
+    signal {
+        hisi_irq_number = 38;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SOFT_INT2;
+
+    signal {
+        hisi_irq_number = 37;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SOFT_INT1;
+
+    signal {
+        hisi_irq_number = 36;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SOFT_INT0;
+
+    signal {
+        hisi_irq_number = 28;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TIMER_INT2;
+
+    signal {
+        hisi_irq_number = 27;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TIMER_INT1;
+
+    signal {
+        hisi_irq_number = 26;
+        hisi_irq_owner = "SYS_CTL1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TIMER_INT0;
+
+    signal {
+        hisi_irq_number = 33;
+        hisi_irq_owner = "GPIO0";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } GPIO_INT0;
+
+    signal {
+        hisi_irq_number = 34;
+        hisi_irq_owner = "GPIO1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } GPIO_INT1;
+
+    signal {
+        hisi_irq_number = 35;
+        hisi_irq_owner = "GPIO2";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } GPIO_INT2;
+
+    signal {
+        hisi_irq_number = 53;
+        hisi_irq_owner = "UART0";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } UART0_INT;
+
+    signal {
+        hisi_irq_number = 54;
+        hisi_irq_owner = "UART1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } UART1_INT;
+
+    signal {
+        hisi_irq_number = 55;
+        hisi_irq_owner = "UART2";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } UART2_INT;
+
+    signal {
+        hisi_irq_number = 31;
+        hisi_irq_owner = "I2C0";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } I2C0_INT;
+
+    signal {
+        hisi_irq_number = 32;
+        hisi_irq_owner = "I2C1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } I2C1_INT;
+
+    signal {
+        hisi_irq_number = 57;
+        hisi_irq_owner = "PWM";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } PWM_CFG_INT;
+
+    signal {
+        hisi_irq_number = 56;
+        hisi_irq_owner = "PWM";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } PWM_ABNOR_INT;
+
+    signal {
+        hisi_irq_number = 59;
+        hisi_irq_owner = "DMA";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } DMA_INT;
+
+    signal {
+        hisi_irq_number = 58;
+        hisi_irq_owner = "SFC_CFG";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SFC_INT;
+
+    signal {
+        hisi_irq_number = 43;
+        hisi_irq_owner = "SPI0";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SPI_INT;
+
+    signal {
+        hisi_irq_number = 52;
+        hisi_irq_owner = "SPI1";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } QSPI_INT;
+
+    signal {
+        hisi_irq_number = 62;
+        hisi_irq_owner = "I2S";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } I2S_RX_INT;
+
+    signal {
+        hisi_irq_number = 61;
+        hisi_irq_owner = "I2S";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } I2S_TX_INT;
+
+    signal {
+        hisi_irq_number = 51;
+        hisi_irq_owner = "I2S";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } I2S_INT;
+
+    signal {
+        hisi_irq_number = 72;
+        hisi_irq_owner = "LSADC";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } LSADC_INTR;
+
+    signal {
+        hisi_irq_number = 48;
+        hisi_irq_owner = "TSENSOR";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TSENSOR_INT;
+
+    signal {
+        hisi_irq_number = 60;
+        hisi_irq_owner = "TIMER";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TIMER_ABNOR_INT;
+
+    signal {
+        hisi_irq_number = 29;
+        hisi_irq_owner = "RTC";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } RTC_IRQ;
+
+    signal {
+        hisi_irq_number = 71;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } TCM_MONITOR_INT;
+
+    signal {
+        hisi_irq_number = 70;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } MEM_MONITOR_INT;
+
+    signal {
+        hisi_irq_number = 69;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } MAC_MONITOR_INT;
+
+    signal {
+        hisi_irq_number = 50;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } DIAG_INT;
+
+    signal {
+        hisi_irq_number = 49;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } PMU_CMU_ERR_INT;
+
+    signal {
+        hisi_irq_number = 65;
+        hisi_irq_owner = "SPACC";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } RKP_REE_INT;
+
+    signal {
+        hisi_irq_number = 64;
+        hisi_irq_owner = "SPACC";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } SPACC_REE_INT;
+
+    signal {
+        hisi_irq_number = 63;
+        hisi_irq_owner = "PKE";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } PKE_REE_INT;
+
+    signal {
+        hisi_irq_number = 66;
+        hisi_irq_owner = "KM";
+        hisi_evidence = "ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD";
+    } KLAD_REE_INT;
 };

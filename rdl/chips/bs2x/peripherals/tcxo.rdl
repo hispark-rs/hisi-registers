@@ -1,0 +1,55 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_tcxo_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO count refresh: 1=trigger count latch";
+        } refresh[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO count clear: 1=clear counter";
+        } clear[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO count enable: 1=enable counting";
+        } enable[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TCXO count value valid flag";
+        } valid[4:4] = 0x0;
+    } TCXO_STATUS @ 0x0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Counter value bits [15:0]";
+        } count0[15:0] = 0x0;
+    } TCXO_COUNT0 @ 0x4;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Counter value bits [31:16]";
+        } count1[15:0] = 0x0;
+    } TCXO_COUNT1 @ 0x8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Counter value bits [47:32]";
+        } count2[15:0] = 0x0;
+    } TCXO_COUNT2 @ 0xC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Counter value bits [63:48]";
+        } count3[15:0] = 0x0;
+    } TCXO_COUNT3 @ 0x10;
+};

@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-"""Minimal, deterministic SystemRDL to CMSIS-SVD exporter for the tracer bullet.
+"""Deterministic SystemRDL to CMSIS-SVD exporter for the bootstrap model.
 
-This deliberately supports only flat addrmap -> register -> field structures.
-Unsupported node shapes fail closed instead of producing a plausible wrong SVD.
+The exporter intentionally supports the subset represented by the imported
+WS63/BS2X baselines. Unsupported node shapes and properties fail closed instead
+of producing a plausible but semantically wrong SVD.
+
+Register arrays are currently emitted as expanded registers because the
+PeakRDL SVD importer expands them. This preserves addresses and field behavior,
+but not the original PAC array API. ``check.py`` keeps that limitation visible.
 """
 
 from pathlib import Path
@@ -10,8 +15,8 @@ import sys
 import xml.etree.ElementTree as ET
 
 from systemrdl import RDLCompiler
-from systemrdl.node import AddrmapNode, FieldNode, RegNode
-from systemrdl.rdltypes import AccessType
+from systemrdl.node import AddrmapNode, FieldNode, RegNode, SignalNode
+from systemrdl.rdltypes import AccessType, OnReadType, OnWriteType
 
 
 ACCESS = {
@@ -20,6 +25,22 @@ ACCESS = {
     AccessType.w: "write-only",
     AccessType.rw1: "read-write",
     AccessType.w1: "write-only",
+}
+
+READ_ACTION = {
+    OnReadType.rclr: "clear",
+    OnReadType.rset: "set",
+}
+
+MODIFIED_WRITE = {
+    OnWriteType.woset: "oneToSet",
+    OnWriteType.woclr: "oneToClear",
+    OnWriteType.wot: "oneToToggle",
+    OnWriteType.wzs: "zeroToSet",
+    OnWriteType.wzc: "zeroToClear",
+    OnWriteType.wzt: "zeroToToggle",
+    OnWriteType.wclr: "clear",
+    OnWriteType.wset: "set",
 }
 
 
@@ -40,6 +61,46 @@ def reset_value(reg: RegNode) -> int | None:
     return value if found else None
 
 
+def add_write_constraint(parent: ET.Element, node: RegNode | FieldNode) -> None:
+    minimum = node.get_property("hisi_write_min")
+    maximum = node.get_property("hisi_write_max")
+    if minimum is None and maximum is None:
+        return
+    if minimum is None or maximum is None or int(minimum) > int(maximum):
+        raise ValueError(f"invalid write constraint: {node.get_path()}")
+    constraint = ET.SubElement(parent, "writeConstraint")
+    value_range = ET.SubElement(constraint, "range")
+    add(value_range, "minimum", int(minimum))
+    add(value_range, "maximum", int(maximum))
+
+
+def add_enumerated_values(parent: ET.Element, field: FieldNode) -> None:
+    encoded = field.get_property("encode")
+    if encoded is None:
+        return
+    values = ET.SubElement(parent, "enumeratedValues")
+    for member in encoded:
+        value = ET.SubElement(values, "enumeratedValue")
+        add(value, "name", member.name)
+        if member.rdl_desc:
+            add(value, "description", member.rdl_desc)
+        add(value, "value", int(member.value))
+
+
+def add_side_effects(parent: ET.Element, field: FieldNode) -> None:
+    onread = field.get_property("onread")
+    if onread is not None:
+        if onread not in READ_ACTION:
+            raise ValueError(f"unsupported onread {onread}: {field.get_path()}")
+        add(parent, "readAction", READ_ACTION[onread])
+
+    onwrite = field.get_property("onwrite")
+    if onwrite is not None:
+        if onwrite not in MODIFIED_WRITE:
+            raise ValueError(f"unsupported onwrite {onwrite}: {field.get_path()}")
+        add(parent, "modifiedWriteValues", MODIFIED_WRITE[onwrite])
+
+
 def export(source: Path, destination: Path) -> None:
     compiler = RDLCompiler()
     compiler.compile_file(str(source))
@@ -56,9 +117,26 @@ def export(source: Path, destination: Path) -> None:
     add(device, "width", 32)
     peripherals = ET.SubElement(device, "peripherals")
 
-    for peripheral in root_node.children():
-        if not isinstance(peripheral, AddrmapNode):
-            raise TypeError(f"unsupported top-level node: {peripheral.get_path()}")
+    irq_by_owner: dict[str, list[SignalNode]] = {}
+    peripheral_nodes: list[AddrmapNode] = []
+    for child in root_node.children():
+        if isinstance(child, AddrmapNode):
+            peripheral_nodes.append(child)
+        elif isinstance(child, SignalNode):
+            owner = child.get_property("hisi_irq_owner")
+            number = child.get_property("hisi_irq_number")
+            if not owner or number is None:
+                raise ValueError(f"incomplete IRQ signal metadata: {child.get_path()}")
+            irq_by_owner.setdefault(owner.upper(), []).append(child)
+        else:
+            raise TypeError(f"unsupported top-level node: {child.get_path()}")
+
+    known_owners = {p.inst_name.upper() for p in peripheral_nodes}
+    orphan_owners = set(irq_by_owner) - known_owners
+    if orphan_owners:
+        raise ValueError(f"IRQ owners do not name a peripheral: {sorted(orphan_owners)}")
+
+    for peripheral in peripheral_nodes:
 
         registers = list(peripheral.children())
         if not registers or any(not isinstance(reg, RegNode) for reg in registers):
@@ -68,6 +146,14 @@ def export(source: Path, destination: Path) -> None:
         add(pxml, "name", peripheral.inst_name.upper())
         add(pxml, "description", peripheral.get_property("name") or peripheral.inst_name)
         add(pxml, "baseAddress", f"0x{peripheral.absolute_address:08X}")
+        for irq in sorted(
+            irq_by_owner.get(peripheral.inst_name.upper(), []),
+            key=lambda node: int(node.get_property("hisi_irq_number")),
+        ):
+            ixml = ET.SubElement(pxml, "interrupt")
+            add(ixml, "name", irq.inst_name.upper())
+            add(ixml, "description", irq.get_property("hisi_evidence") or irq.inst_name)
+            add(ixml, "value", int(irq.get_property("hisi_irq_number")))
         block = ET.SubElement(pxml, "addressBlock")
         add(block, "offset", "0x0")
         add(block, "size", f"0x{peripheral.size:X}")
@@ -83,6 +169,7 @@ def export(source: Path, destination: Path) -> None:
             reset = reset_value(reg)
             if reset is not None:
                 add(rxml, "resetValue", f"0x{reset:08X}")
+            add_write_constraint(rxml, reg)
             fxmls = ET.SubElement(rxml, "fields")
 
             for field in reg.children():
@@ -97,6 +184,9 @@ def export(source: Path, destination: Path) -> None:
                 add(fxml, "bitOffset", field.low)
                 add(fxml, "bitWidth", field.width)
                 add(fxml, "access", ACCESS[access])
+                add_write_constraint(fxml, field)
+                add_side_effects(fxml, field)
+                add_enumerated_values(fxml, field)
 
     ET.indent(device, space="  ")
     destination.write_bytes(ET.tostring(device, encoding="utf-8", xml_declaration=True))

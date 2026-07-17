@@ -1,0 +1,45 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_glb_ctl_m_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "BCPU reset status";
+        } bcpu_reset_sts[31:0] = 0x0;
+    } BCPU_RESET_STS @ 0x30;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "MCPU reset status";
+        } mcpu_reset_sts[31:0] = 0x0;
+    } MCPU_RESET_STS @ 0x34;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Write 0xFF to clear all reset status bits";
+        } rst_sts_clear[31:0] = 0x0;
+    } RESET_STS_CLEAR @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WDT clock gate control at bit[4]";
+        } wdt_gate[4:4] = 0x0;
+    } AON_CRG_CKEN_CTL @ 0x100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WDT soft reset at bit[1]";
+        } wdt_soft_rst[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Chip reset enable: 1=assert chip reset";
+        } chip_reset_en[2:2] = 0x0;
+    } CHIP_RESET @ 0x110;
+};

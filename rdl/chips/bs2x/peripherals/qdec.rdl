@@ -1,0 +1,207 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_qdec_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } start[0:0] = 0x0;
+    } QDEC_TASK_START @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } stop[0:0] = 0x0;
+    } QDEC_TASK_STOP @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } readclr_acc[0:0] = 0x0;
+    } QDEC_TASK_READCLR_ACC @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rd_clr_acc[0:0] = 0x0;
+    } QDEC_TASK_RD_CLR_ACC @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rd_clr_dbl[0:0] = 0x0;
+    } QDEC_TASK_RD_CLR_DBL @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } en[0:0] = 0x0;
+    } QDEC_ENABLE @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } events_stopped[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } acc_rdy[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } dbl_rdy[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } report_rdy[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } sample_rdy[4:4] = 0x0;
+    } QDEC_EVENT_INT_STS @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } stopped[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } acc_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } dbl_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } report_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } sample_en[4:4] = 0x0;
+    } QDEC_INT_EN @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } stop_int_clr[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } acc_clr[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } dbl_clr[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } report_clr[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } sample_clr[4:4] = 0x0;
+    } QDEC_INT_CLR @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } pol[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } en[1:1] = 0x0;
+    } QDEC_LEDPOL_DATA @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } period[3:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } clk_freq[4:4] = 0x0;
+    } QDEC_SAMPLEPER_DATA @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } samlple_repo_val[2:0] = 0x0;
+    } QDEC_REPORTER_DATA @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } defen_num[6:4] = 0x0;
+    } QDEC_DEFEN_DATA @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } led_pre[9:0] = 0x0;
+    } QDEC_LEDPRE_DATA @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } sample_val[2:0] = 0x0;
+    } QDEC_SAMPLE_DATA @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } acc_rd_val[15:0] = 0x0;
+    } QDEC_ACC_DATA @ 0x54;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } dbl_rd_val[3:0] = 0x0;
+    } QDEC_ACCDBL_DATA @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } acc_rd_val_shadow[15:0] = 0x0;
+    } QDEC_ACC_READ @ 0x5C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } dbl_rd_val_shadow[3:0] = 0x0;
+    } QDEC_ACCDBL_READ @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } acc_event_cnt[8:0] = 0x0;
+    } QDEC_ACC_EVENT @ 0x64;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fpga_io_src[0:0] = 0x0;
+    } QDEC_FPGA_IO_SEL @ 0x68;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } sel[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } en[4:4] = 0x0;
+    } QDEC_CLK_CTL @ 0x70;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } soft_rst[0:0] = 0x0;
+    } QDEC_SOFT_RST @ 0x74;
+};

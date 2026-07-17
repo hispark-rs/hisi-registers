@@ -1,0 +1,493 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_uart0_regs {
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Interrupt ID: 0x0=modem status; 0x1=no interrupt; 0x2=THR empty; 0x4=rx
+                            data; 0x6=rx line status; 0x7=busy; 0xC=char timeout";
+        } intr_id[3:0] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "FIFO enable status: 0=FIFO disabled; 1=FIFO enabled";
+        } fifo_en_s[4:4] = 0x0;
+    } INTR_ID @ 0x0;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write: TX data; Read: RX data";
+        } data[7:0] = 0x0;
+    } DATA @ 0x4;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Divider enable: 0=div accessible when not busy; 1=div accessible anytime";
+        } div_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Break control: 0=normal; 1=force TX to space";
+        } xbreak[1:1] = 0x0;
+        field {
+            enum UART0_UART_CTL_dlen_e1 {
+                Bits5 = 0 {
+                    desc = "5-bit data";
+                };
+                Bits6 = 1 {
+                    desc = "6-bit data";
+                };
+                Bits7 = 2 {
+                    desc = "7-bit data";
+                };
+                Bits8 = 3 {
+                    desc = "8-bit data";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = UART0_UART_CTL_dlen_e1;
+            desc = "Data length: 00=5bit; 01=6bit; 10=7bit; 11=8bit";
+        } dlen[3:2] = 0x0;
+        field {
+            enum UART0_UART_CTL_eps_e2 {
+                Odd = 0 {
+                    desc = "Odd parity";
+                };
+                Even = 1 {
+                    desc = "Even parity";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = UART0_UART_CTL_eps_e2;
+            desc = "Parity select: 0=odd; 1=even";
+        } eps[4:4] = 0x0;
+        field {
+            enum UART0_UART_CTL_pen_e3 {
+                Disabled = 0 {
+                    desc = "No parity";
+                };
+                Enabled = 1 {
+                    desc = "Parity enabled";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = UART0_UART_CTL_pen_e3;
+            desc = "Parity enable: 0=disabled; 1=enabled";
+        } pen[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Sticky parity: 0=disabled; 1=enabled";
+        } sps[6:6] = 0x0;
+        field {
+            enum UART0_UART_CTL_stp_e4 {
+                Stop1 = 0 {
+                    desc = "1 stop bit";
+                };
+                Stop1_5_or_2 = 1 {
+                    desc = "1.5 (5-bit data) or 2 stop bits";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = UART0_UART_CTL_stp_e4;
+            desc = "Stop bits: 0=1bit; 1=1.5/2bit";
+        } stp[7:7] = 0x0;
+    } UART_CTL @ 0x8;
+    reg {
+        hisi_write_min = 0;
+        hisi_write_max = 255;
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Divider integer high 8 bits";
+        } div_h[7:0] = 0x0;
+    } DIV_H @ 0xC;
+    reg {
+        hisi_write_min = 0;
+        hisi_write_max = 255;
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Divider integer low 8 bits";
+        } div_l[7:0] = 0x0;
+    } DIV_L @ 0x10;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Divider fractional part (divided by 2^6)";
+        } div_fra[5:0] = 0x0;
+    } DIV_FRA @ 0x14;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX line status interrupt enable";
+        } rece_line_stat_intr_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Modem status interrupt enable";
+        } modem_intr_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX data available interrupt enable";
+        } rece_data_intr_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX empty interrupt enable";
+        } tran_em_intr_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Programmable THRE interrupt mode enable";
+        } ptim_en[4:4] = 0x0;
+    } INTR_EN @ 0x18;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Busy detect interrupt status";
+        } busy_det_intr[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Modem interrupt status";
+        } modem_intr_status[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "THR empty interrupt status";
+        } thre_intr_status[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Character timeout interrupt status";
+        } char_to_intr_status[3:3] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX data available interrupt status";
+        } data_avail_intr_status[4:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX line interrupt status";
+        } line_intr_status[5:5] = 0x0;
+    } INTR_STATUS @ 0x1C;
+    reg {
+        regwidth = 0x10;
+        field {
+            enum UART0_FIFO_CTL_tx_empty_trig_e5 {
+                Empty = 0 {
+                    desc = "FIFO empty";
+                };
+                Chars2 = 1 {
+                    desc = "2 characters remaining";
+                };
+                Quarter = 2 {
+                    desc = "FIFO 1/4 full";
+                };
+                Half = 3 {
+                    desc = "FIFO 1/2 full";
+                };
+            } ;
+            sw = w;
+            hw = r;
+            encode = UART0_FIFO_CTL_tx_empty_trig_e5;
+            desc = "TX empty trigger: 00=empty; 01=2chars; 10=1/4; 11=1/2";
+        } tx_empty_trig[1:0] = 0x0;
+        field {
+            enum UART0_FIFO_CTL_rx_empty_trig_e6 {
+                Char1 = 0 {
+                    desc = "1 character in FIFO";
+                };
+                Quarter = 1 {
+                    desc = "FIFO 1/4 full";
+                };
+                Half = 2 {
+                    desc = "FIFO 1/2 full";
+                };
+                Less2 = 3 {
+                    desc = "2 below full";
+                };
+            } ;
+            sw = w;
+            hw = r;
+            encode = UART0_FIFO_CTL_rx_empty_trig_e6;
+            desc = "RX trigger: 00=1char; 01=1/4; 10=1/2; 11=2below full";
+        } rx_empty_trig[3:2] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "FIFO enable";
+        } fifo_en[4:4] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "TX FIFO reset: 0=no reset; 1=reset";
+        } tx_fifo_rst[5:5] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX FIFO reset: 0=no reset; 1=reset";
+        } rx_fifo_rst[6:6] = 0x0;
+    } FIFO_CTL @ 0x24;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FIFO access mode: 0=disabled; 1=enabled";
+        } far[0:0] = 0x0;
+    } FAR @ 0x28;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Auto flow control enable";
+        } afc_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Loopback mode: 0=disabled; 1=enabled";
+        } lb_mode[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RTS software control";
+        } rts[2:2] = 0x0;
+    } MODEM_CTL @ 0x2C;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "CTS change indicator";
+        } dcts[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "CTS signal state";
+        } cts[1:1] = 0x0;
+    } MODEM_STATUS @ 0x30;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO error status";
+        } rx_fifo_err[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Framing error";
+        } frame_err[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Parity error";
+        } parity_err[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Overrun error";
+        } overrun_err[3:3] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Break interrupt";
+        } break_intr[4:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Data available in RX FIFO/RBR";
+        } data_available[5:5] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "THR empty flag";
+        } thre_s[6:6] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Transmitter empty flag";
+        } tx_empty_s[7:7] = 0x1;
+    } LINE_STATUS @ 0x34;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "General purpose storage";
+        } uart_gp_reg[7:0] = 0x0;
+    } UART_GP_REG @ 0x38;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO top data";
+        } tx_fifo_read[7:0] = 0x0;
+    } TX_FIFO_READ @ 0x3C;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write: push data to RX FIFO; Read: rx_fifo_level[6:0]";
+        } rx_fifo_write[7:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX FIFO parity error";
+        } rx_fifo_pe[8:8] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX FIFO framing error";
+        } rx_fifo_fe[9:9] = 0x0;
+    } RX_FIFO_WRITE @ 0x40;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO full flag";
+        } tx_fifo_full[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO empty flag";
+        } tx_fifo_empty[1:1] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO full flag";
+        } rx_fifo_full[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO empty flag";
+        } rx_fifo_empty[3:3] = 0x0;
+    } FIFO_STATUS @ 0x44;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO data count";
+        } tx_fifo_level[6:0] = 0x0;
+    } TX_FIFO_CNT @ 0x48;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reserved";
+        } reserved[6:0] = 0x0;
+    } RX_FIFO_CNT @ 0x4C;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX halt: 0=disabled; 1=enabled";
+        } halt_tx[0:0] = 0x0;
+    } HALT_TX @ 0x50;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = w;
+            hw = r;
+            desc = "DMA software acknowledge (write-clear)";
+        } dma_sw_ack[0:0] = 0x0;
+    } DMA_SW_ACK @ 0x54;
+    reg {
+        regwidth = 0x10;
+        field {
+            enum UART0_BAUD_CTL_baud_div_e7 {
+                Div8 = 7 {
+                    desc = "8x oversampling";
+                };
+                Div16 = 15 {
+                    desc = "16x oversampling";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = UART0_BAUD_CTL_baud_div_e7;
+            desc = "Baud rate oversampling: 0x7=8x; 0xF=16x";
+        } baud_div[3:0] = 0xF;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX sample phase";
+        } sample_phase[7:4] = 0x7;
+    } BAUD_CTL @ 0x58;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX stop bits when stp_mode=1";
+        } rx_sp[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX stop bits when stp_mode=1";
+        } tx_sp[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Stop bit control mode: 0=UART_CTL stp; 1=STP_CTL";
+        } stp_mode[2:2] = 0x0;
+    } STP_CTL @ 0x5C;
+    reg {
+        regwidth = 0x10;
+        field {
+            sw = r;
+            hw = r;
+            desc = "FIFO depth: 0x4=64";
+        } fifo_depth[7:0] = 0x4;
+        field {
+            sw = r;
+            hw = r;
+            desc = "APB data width: 0x1=16bit";
+        } apb_data_width[9:8] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "AFCE mode: 0=disabled; 1=enabled";
+        } afce_mode[10:10] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "DMA mode: 0=DMA_EXTRA disabled; 1=enabled";
+        } dma_mode[11:11] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Shadow feature enable";
+        } shadow[12:12] = 0x0;
+    } UART_PARAMETER @ 0x60;
+};

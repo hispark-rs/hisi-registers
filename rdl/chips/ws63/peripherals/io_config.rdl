@@ -1,0 +1,977 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_io_config_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_00 pin mux: 0:GPIO_00; 1:PWM0; 2:DIAG[0]; 3:SPI1_CSN; 4:JTAG_TDI";
+        } gpio_00_sel[2:0] = 0x0;
+    } GPIO_00_SEL @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_01 pin mux: 0:GPIO_01; 1:PWM1; 2:DIAG[1]; 3:SPI1_IO0; 4:JTAG_MODE;
+                            5:BT_SAMPLE";
+        } gpio_01_sel[2:0] = 0x0;
+    } GPIO_01_SEL @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_02 pin mux: 0:GPIO_02; 1:PWM2; 2:DIAG[2]; 3:SPI1_IO3;
+                            4:WIFI_TSF_SYNC; 5:WL_GLP_SYNC_PULSE; 6:BSLE_GLP_SYNC_PULSE";
+        } gpio_02_sel[2:0] = 0x0;
+    } GPIO_02_SEL @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_03 pin mux: 0:GPIO_03; 1:PWM3; 2:PMU_32K_TEST; 3:SPI1_IO1;
+                            4:HW_ID[0]; 5:DIAG[3]";
+        } gpio_03_sel[2:0] = 0x0;
+    } GPIO_03_SEL @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_04 pin mux: 0:SSI_CLK; 1:PWM4; 2:GPIO_04; 3:SPI1_IO1; 4:JTAG_ENABLE;
+                            5:DFT_JTAG_TMS";
+        } gpio_04_sel[2:0] = 0x0;
+    } GPIO_04_SEL @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_05 pin mux: 0:SSI_DATA; 1:PWM5; 2:UART2_CTS; 3:SPI1_IO2; 4:GPIO_05;
+                            5:SPI0_IN; 6:DFT_JTAG_TCK";
+        } gpio_05_sel[2:0] = 0x0;
+    } GPIO_05_SEL @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_06 pin mux: 0:GPIO_06; 1:PWM6; 2:UART2_RTS; 3:SPI1_SCK;
+                            4:REFCLK_FREQ_STATUS; 5:DIAG[4]; 6:SPI0_OUT; 7:DFT_JTAG_TDI";
+        } gpio_06_sel[2:0] = 0x0;
+    } GPIO_06_SEL @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_07 pin mux: 0:GPIO_07; 1:PWM7; 2:UART2_RXD; 3:SPI0_SCK; 4:I2S_MCLK;
+                            5:DIAG[5]";
+        } gpio_07_sel[2:0] = 0x0;
+    } GPIO_07_SEL @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_08 pin mux: 0:GPIO_08; 1:PWM0; 2:UART2_TXD; 3:SPI0_CS1_N; 4:DIAG[6]";
+        } gpio_08_sel[2:0] = 0x0;
+    } GPIO_08_SEL @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_09 pin mux: 0:GPIO_09; 1:PWM1; 2:RADAR_ANT0_SW; 3:SPI0_OUT;
+                            4:I2S_DO; 5:HW_ID[1]; 6:DIAG[7]; 7:JTAG_TDO";
+        } gpio_09_sel[2:0] = 0x0;
+    } GPIO_09_SEL @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_10 pin mux: 0:GPIO_10; 1:PWM2; 2:ANT0_SW; 3:SPI0_CS0_N; 4:I2S_SCLK;
+                            5:DIAG[0]";
+        } gpio_10_sel[2:0] = 0x0;
+    } GPIO_10_SEL @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_11 pin mux: 0:GPIO_11; 1:PWM3; 2:RADAR_ANT1_SW; 3:SPI0_IN;
+                            4:I2S_LRCLK; 5:DIAG[1]; 6:HW_ID[2]";
+        } gpio_11_sel[2:0] = 0x0;
+    } GPIO_11_SEL @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_12 pin mux: 0:GPIO_12; 1:PWM4; 2:ANT1_SW; 4:I2S_DI; 6:HW_ID[3]";
+        } gpio_12_sel[2:0] = 0x0;
+    } GPIO_12_SEL @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_13 pin mux: 0:GPIO_13; 1:UART1_CTS; 2:RADAR_ANT0_SW; 3:DFT_JTAG_TDO;
+                            4:JTAG_TMS";
+        } gpio_13_sel[2:0] = 0x0;
+    } GPIO_13_SEL @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO_14 pin mux: 0:GPIO_14; 1:UART1_RTS; 2:RADAR_ANT1_SW;
+                            3:DFT_JTAG_TRSTN; 4:JTAG_TCK";
+        } gpio_14_sel[2:0] = 0x0;
+    } GPIO_14_SEL @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART1_TXD pin mux: 0:GPIO_15; 1:UART1_TXD; 2:I2C1_SDA";
+        } uart1_txd_sel[1:0] = 0x0;
+    } UART1_TXD_SEL @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART1_RXD pin mux: 0:GPIO_16; 1:UART1_RXD; 2:I2C1_SCL";
+        } uart1_rxd_sel[1:0] = 0x0;
+    } UART1_RXD_SEL @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART0_TXD pin mux: 0:GPIO_17; 1:UART0_TXD; 2:I2C0_SDA";
+        } uart0_txd_sel[1:0] = 0x0;
+    } UART0_TXD_SEL @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART0_RXD pin mux: 0:GPIO_18; 1:UART0_RXD; 2:I2C0_SCL";
+        } uart0_rxd_sel[1:0] = 0x0;
+    } UART0_RXD_SEL @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger: 0:No Schmitt; 1:Schmitt Enable";
+        } pad_gpio_00_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_00_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_00_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2. DS2~DS0: 111~000, drive strength decreases";
+        } pad_gpio_00_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable. PE/PS: 00:no pull; 01:strong pull-up; 10:pull-down;
+                            11:pull-up";
+        } pad_gpio_00_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select. PE/PS: 00:no pull; 01:strong pull-up; 10:pull-down;
+                            11:pull-up";
+        } pad_gpio_00_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable: 0:input disabled; 1:input enabled";
+        } pad_gpio_00_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_00_CTRL @ 0x800;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger: 0:No Schmitt; 1:Schmitt Enable";
+        } pad_gpio_01_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_01_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_01_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_01_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_01_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_01_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_01_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_01_CTRL @ 0x804;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_02_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_02_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_02_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_02_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_02_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_02_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_02_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_02_CTRL @ 0x808;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_03_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_03_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_03_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_03_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_03_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_03_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_03_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_03_CTRL @ 0x80C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_04_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_04_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_04_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_04_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_04_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_04_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_04_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_04_CTRL @ 0x810;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_05_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_05_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_05_ctrl_ds1[5:5] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_05_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_05_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_05_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_05_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_05_CTRL @ 0x814;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_06_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_06_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_06_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_06_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_06_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_06_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_06_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_06_CTRL @ 0x818;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_07_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_07_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_07_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_07_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_07_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_07_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_07_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_07_CTRL @ 0x81C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_08_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_08_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_08_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_08_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_08_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_08_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_08_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_08_CTRL @ 0x820;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_09_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_09_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_09_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_09_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_09_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_09_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_09_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_09_CTRL @ 0x824;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_10_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_10_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_10_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_10_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_10_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_10_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_10_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_10_CTRL @ 0x828;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_11_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_11_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_11_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_11_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_11_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_11_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_11_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_11_CTRL @ 0x82C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_12_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_12_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_12_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_12_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_12_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_12_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_12_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_12_CTRL @ 0x830;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_13_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_13_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_13_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_13_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_13_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_13_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_13_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_13_CTRL @ 0x834;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_gpio_14_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_gpio_14_ctrl_ds0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_gpio_14_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_gpio_14_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_gpio_14_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_gpio_14_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_gpio_14_ctrl_ie[11:11] = 0x1;
+    } PAD_GPIO_14_CTRL @ 0x838;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_uart1_txd_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_uart1_txd_ctrl_ie[11:11] = 0x1;
+    } PAD_UART1_TXD_CTRL @ 0x83C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_uart1_rxd_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_uart1_rxd_ctrl_ie[11:11] = 0x1;
+    } PAD_UART1_RXD_CTRL @ 0x840;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_uart0_txd_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_uart0_txd_ctrl_ie[11:11] = 0x1;
+    } PAD_UART0_TXD_CTRL @ 0x844;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_uart0_rxd_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_uart0_rxd_ctrl_ie[11:11] = 0x1;
+    } PAD_UART0_RXD_CTRL @ 0x848;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_sfc_clk_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_sfc_clk_ctrl_ds0[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_sfc_clk_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_sfc_clk_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_sfc_clk_ctrl_pe[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_sfc_clk_ctrl_ps[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_sfc_clk_ctrl_ie[11:11] = 0x1;
+    } PAD_SFC_CLK_CTRL @ 0x868;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_sfc_csn_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_sfc_csn_ctrl_ds0[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_sfc_csn_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_sfc_csn_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_sfc_csn_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_sfc_csn_ctrl_ps[10:10] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_sfc_csn_ctrl_ie[11:11] = 0x1;
+    } PAD_SFC_CSN_CTRL @ 0x86C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_sfc_io0_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_sfc_io0_ctrl_ds0[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_sfc_io0_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_sfc_io0_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_sfc_io0_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_sfc_io0_ctrl_ps[10:10] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_sfc_io0_ctrl_ie[11:11] = 0x1;
+    } PAD_SFC_IO0_CTRL @ 0x870;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_sfc_io1_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_sfc_io1_ctrl_ds0[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_sfc_io1_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_sfc_io1_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_sfc_io1_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_sfc_io1_ctrl_ps[10:10] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_sfc_io1_ctrl_ie[11:11] = 0x1;
+    } PAD_SFC_IO1_CTRL @ 0x874;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_sfc_io2_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_sfc_io2_ctrl_ds0[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_sfc_io2_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_sfc_io2_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_sfc_io2_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_sfc_io2_ctrl_ps[10:10] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_sfc_io2_ctrl_ie[11:11] = 0x1;
+    } PAD_SFC_IO2_CTRL @ 0x878;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Schmitt trigger";
+        } pad_sfc_io3_ctrl_st[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 0";
+        } pad_sfc_io3_ctrl_ds0[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 1";
+        } pad_sfc_io3_ctrl_ds1[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Drive strength bit 2";
+        } pad_sfc_io3_ctrl_ds2[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull enable";
+        } pad_sfc_io3_ctrl_pe[9:9] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Pull select";
+        } pad_sfc_io3_ctrl_ps[10:10] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Input enable";
+        } pad_sfc_io3_ctrl_ie[11:11] = 0x1;
+    } PAD_SFC_IO3_CTRL @ 0x87C;
+};

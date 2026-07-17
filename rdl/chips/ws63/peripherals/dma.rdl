@@ -1,0 +1,941 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_dma_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Channel interrupt status (after mask)";
+        } int_st[7:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Channel transfer interrupt status (after mask)";
+        } int_trans_st[15:8] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Channel error interrupt status (after mask)";
+        } int_err_st[23:16] = 0x0;
+    } DMAC_INT_ST @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clear channel transfer interrupt";
+        } int_trans_clr[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clear channel error interrupt";
+        } int_err_clr[15:8] = 0x0;
+    } DMAC_INT_CLR @ 0x8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Raw transfer interrupt status (before mask)";
+        } ori_int_trans_st[7:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Raw error interrupt status (before mask)";
+        } ori_int_err_st[15:8] = 0x0;
+    } DMAC_ORI_INT_ST @ 0xC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Channel enable status: 0=disabled; 1=enabled";
+        } en_chns[7:0] = 0x0;
+    } DMAC_EN_CHNS @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Last burst request per peripheral";
+        } last_burst_req[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Burst request per peripheral";
+        } burst_req[31:16] = 0x0;
+    } DMAC_BURST_REQ @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Last single request per peripheral";
+        } last_single_req[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Single request per peripheral";
+        } single_req[31:16] = 0x0;
+    } DMAC_SINGLE_REQ @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMAC enable: 0=disabled; 1=enabled";
+        } dmac_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master 1 endianness: 0=little; 1=big";
+        } dmac_m1[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master 2 endianness: 0=little; 1=big";
+        } dmac_m2[2:2] = 0x0;
+    } DMAC_CONFIG @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA request sync: 0=enable sync; 1=disable sync";
+        } damc_sync[15:0] = 0x0;
+    } DMAC_SYNC @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master for next LLI node: 0=Master1; 1=Master2";
+        } dmac_lm_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Linked list address [31:2]";
+        } dmac_lli_0[31:2] = 0x0;
+    } DMAC_LLI0 @ 0x100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 destination address";
+        } dmac_d_addr_0[31:0] = 0x0;
+    } DMAC_D_ADDR0 @ 0x104;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel enable: 0=disable; 1=enable";
+        } dmac_chn_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source peripheral select";
+        } dmac_s_peripheral_0[4:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination peripheral select";
+        } dmac_d_peripheral_0[8:5] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4 {
+                Mem2Mem_DMAC = 0 {
+                    desc = "Memory to Memory, DMAC flow control";
+                };
+                Mem2Per_DMAC = 1 {
+                    desc = "Memory to Peripheral, DMAC flow control";
+                };
+                Per2Mem_DMAC = 2 {
+                    desc = "Peripheral to Memory, DMAC flow control";
+                };
+                Per2Per_DMAC = 3 {
+                    desc = "Peripheral to Peripheral, DMAC flow control";
+                };
+                Per2Per_Dst = 4 {
+                    desc = "Peripheral to Peripheral, Destination flow control";
+                };
+                Mem2Per_Dst = 5 {
+                    desc = "Memory to Peripheral, Destination flow control";
+                };
+                Per2Mem_Src = 6 {
+                    desc = "Peripheral to Memory, Source flow control";
+                };
+                Per2Per_Src = 7 {
+                    desc = "Peripheral to Peripheral, Source flow control";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4;
+            desc = "Flow control: 000=mem2mem; 001=mem2per; 010=per2mem; 011=per2per(DMAC);
+                            100=per2per(dst); 101=mem2per(dst); 110=per2mem(src); 111=per2per(src)";
+        } dmac_flow_ctl_0[11:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Error interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_en_0[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_tc_0[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus lock: 0=disabled; 1=enabled";
+        } dmac_lock_0[14:14] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "FIFO has data: 0=no; 1=yes";
+        } dmac_active_0[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Halt: 0=allow DMA; 1=ignore DMA requests";
+        } dmac_halt_0[16:16] = 0x0;
+    } DMAC_CHN_CONFIG0 @ 0x108;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 source address";
+        } dmac_s_addr_0[31:0] = 0x0;
+    } DMAC_S_ADDR0 @ 0x110;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer size";
+        } dmac_trans_size_0[11:0] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1 {
+                BS1 = 0 {
+                    desc = "Burst size 1";
+                };
+                BS4 = 1 {
+                    desc = "Burst size 4";
+                };
+                BS8 = 2 {
+                    desc = "Burst size 8";
+                };
+                BS16 = 3 {
+                    desc = "Burst size 16";
+                };
+                BS32 = 4 {
+                    desc = "Burst size 32";
+                };
+                BS64 = 5 {
+                    desc = "Burst size 64";
+                };
+                BS128 = 6 {
+                    desc = "Burst size 128";
+                };
+                BS256 = 7 {
+                    desc = "Burst size 256";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1;
+            desc = "Source burst size: 000=1; 001=4; 010=8; 011=16; 100=32; 101=64; 110=128;
+                            111=256";
+        } dmac_s_bsize_0[14:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination burst size";
+        } dmac_d_bsize_0[17:15] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2;
+            desc = "Source width: 000=8bit; 001=16bit; 010=32bit";
+        } dmac_s_width_0[20:18] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3;
+            desc = "Destination width";
+        } dmac_d_width_0[23:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source master: 0=Master1; 1=Master2";
+        } dmac_s_master_0[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination master";
+        } dmac_d_master_0[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source address increment: 0=no; 1=yes";
+        } dmac_s_inc_0[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination address increment";
+        } dmac_d_inc_0[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Protection HPROT[2:0]";
+        } dmac_prot_0[30:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt enable";
+        } dmac_trans_int_0[31:31] = 0x0;
+    } DMAC_CHN_CONTROL0 @ 0x114;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master for next LLI node: 0=Master1; 1=Master2";
+        } dmac_lm_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Linked list address [31:2]";
+        } dmac_lli_0[31:2] = 0x0;
+    } DMAC_LLI1 @ 0x120;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 destination address";
+        } dmac_d_addr_0[31:0] = 0x0;
+    } DMAC_D_ADDR1 @ 0x124;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel enable: 0=disable; 1=enable";
+        } dmac_chn_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source peripheral select";
+        } dmac_s_peripheral_0[4:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination peripheral select";
+        } dmac_d_peripheral_0[8:5] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4 {
+                Mem2Mem_DMAC = 0 {
+                    desc = "Memory to Memory, DMAC flow control";
+                };
+                Mem2Per_DMAC = 1 {
+                    desc = "Memory to Peripheral, DMAC flow control";
+                };
+                Per2Mem_DMAC = 2 {
+                    desc = "Peripheral to Memory, DMAC flow control";
+                };
+                Per2Per_DMAC = 3 {
+                    desc = "Peripheral to Peripheral, DMAC flow control";
+                };
+                Per2Per_Dst = 4 {
+                    desc = "Peripheral to Peripheral, Destination flow control";
+                };
+                Mem2Per_Dst = 5 {
+                    desc = "Memory to Peripheral, Destination flow control";
+                };
+                Per2Mem_Src = 6 {
+                    desc = "Peripheral to Memory, Source flow control";
+                };
+                Per2Per_Src = 7 {
+                    desc = "Peripheral to Peripheral, Source flow control";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4;
+            desc = "Flow control: 000=mem2mem; 001=mem2per; 010=per2mem; 011=per2per(DMAC);
+                            100=per2per(dst); 101=mem2per(dst); 110=per2mem(src); 111=per2per(src)";
+        } dmac_flow_ctl_0[11:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Error interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_en_0[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_tc_0[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus lock: 0=disabled; 1=enabled";
+        } dmac_lock_0[14:14] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "FIFO has data: 0=no; 1=yes";
+        } dmac_active_0[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Halt: 0=allow DMA; 1=ignore DMA requests";
+        } dmac_halt_0[16:16] = 0x0;
+    } DMAC_CHN_CONFIG1 @ 0x128;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 source address";
+        } dmac_s_addr_0[31:0] = 0x0;
+    } DMAC_S_ADDR1 @ 0x130;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer size";
+        } dmac_trans_size_0[11:0] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1 {
+                BS1 = 0 {
+                    desc = "Burst size 1";
+                };
+                BS4 = 1 {
+                    desc = "Burst size 4";
+                };
+                BS8 = 2 {
+                    desc = "Burst size 8";
+                };
+                BS16 = 3 {
+                    desc = "Burst size 16";
+                };
+                BS32 = 4 {
+                    desc = "Burst size 32";
+                };
+                BS64 = 5 {
+                    desc = "Burst size 64";
+                };
+                BS128 = 6 {
+                    desc = "Burst size 128";
+                };
+                BS256 = 7 {
+                    desc = "Burst size 256";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1;
+            desc = "Source burst size: 000=1; 001=4; 010=8; 011=16; 100=32; 101=64; 110=128;
+                            111=256";
+        } dmac_s_bsize_0[14:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination burst size";
+        } dmac_d_bsize_0[17:15] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2;
+            desc = "Source width: 000=8bit; 001=16bit; 010=32bit";
+        } dmac_s_width_0[20:18] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3;
+            desc = "Destination width";
+        } dmac_d_width_0[23:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source master: 0=Master1; 1=Master2";
+        } dmac_s_master_0[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination master";
+        } dmac_d_master_0[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source address increment: 0=no; 1=yes";
+        } dmac_s_inc_0[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination address increment";
+        } dmac_d_inc_0[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Protection HPROT[2:0]";
+        } dmac_prot_0[30:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt enable";
+        } dmac_trans_int_0[31:31] = 0x0;
+    } DMAC_CHN_CONTROL1 @ 0x134;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master for next LLI node: 0=Master1; 1=Master2";
+        } dmac_lm_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Linked list address [31:2]";
+        } dmac_lli_0[31:2] = 0x0;
+    } DMAC_LLI2 @ 0x140;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 destination address";
+        } dmac_d_addr_0[31:0] = 0x0;
+    } DMAC_D_ADDR2 @ 0x144;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel enable: 0=disable; 1=enable";
+        } dmac_chn_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source peripheral select";
+        } dmac_s_peripheral_0[4:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination peripheral select";
+        } dmac_d_peripheral_0[8:5] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4 {
+                Mem2Mem_DMAC = 0 {
+                    desc = "Memory to Memory, DMAC flow control";
+                };
+                Mem2Per_DMAC = 1 {
+                    desc = "Memory to Peripheral, DMAC flow control";
+                };
+                Per2Mem_DMAC = 2 {
+                    desc = "Peripheral to Memory, DMAC flow control";
+                };
+                Per2Per_DMAC = 3 {
+                    desc = "Peripheral to Peripheral, DMAC flow control";
+                };
+                Per2Per_Dst = 4 {
+                    desc = "Peripheral to Peripheral, Destination flow control";
+                };
+                Mem2Per_Dst = 5 {
+                    desc = "Memory to Peripheral, Destination flow control";
+                };
+                Per2Mem_Src = 6 {
+                    desc = "Peripheral to Memory, Source flow control";
+                };
+                Per2Per_Src = 7 {
+                    desc = "Peripheral to Peripheral, Source flow control";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4;
+            desc = "Flow control: 000=mem2mem; 001=mem2per; 010=per2mem; 011=per2per(DMAC);
+                            100=per2per(dst); 101=mem2per(dst); 110=per2mem(src); 111=per2per(src)";
+        } dmac_flow_ctl_0[11:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Error interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_en_0[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_tc_0[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus lock: 0=disabled; 1=enabled";
+        } dmac_lock_0[14:14] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "FIFO has data: 0=no; 1=yes";
+        } dmac_active_0[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Halt: 0=allow DMA; 1=ignore DMA requests";
+        } dmac_halt_0[16:16] = 0x0;
+    } DMAC_CHN_CONFIG2 @ 0x148;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 source address";
+        } dmac_s_addr_0[31:0] = 0x0;
+    } DMAC_S_ADDR2 @ 0x150;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer size";
+        } dmac_trans_size_0[11:0] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1 {
+                BS1 = 0 {
+                    desc = "Burst size 1";
+                };
+                BS4 = 1 {
+                    desc = "Burst size 4";
+                };
+                BS8 = 2 {
+                    desc = "Burst size 8";
+                };
+                BS16 = 3 {
+                    desc = "Burst size 16";
+                };
+                BS32 = 4 {
+                    desc = "Burst size 32";
+                };
+                BS64 = 5 {
+                    desc = "Burst size 64";
+                };
+                BS128 = 6 {
+                    desc = "Burst size 128";
+                };
+                BS256 = 7 {
+                    desc = "Burst size 256";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1;
+            desc = "Source burst size: 000=1; 001=4; 010=8; 011=16; 100=32; 101=64; 110=128;
+                            111=256";
+        } dmac_s_bsize_0[14:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination burst size";
+        } dmac_d_bsize_0[17:15] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2;
+            desc = "Source width: 000=8bit; 001=16bit; 010=32bit";
+        } dmac_s_width_0[20:18] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3;
+            desc = "Destination width";
+        } dmac_d_width_0[23:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source master: 0=Master1; 1=Master2";
+        } dmac_s_master_0[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination master";
+        } dmac_d_master_0[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source address increment: 0=no; 1=yes";
+        } dmac_s_inc_0[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination address increment";
+        } dmac_d_inc_0[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Protection HPROT[2:0]";
+        } dmac_prot_0[30:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt enable";
+        } dmac_trans_int_0[31:31] = 0x0;
+    } DMAC_CHN_CONTROL2 @ 0x154;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master for next LLI node: 0=Master1; 1=Master2";
+        } dmac_lm_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Linked list address [31:2]";
+        } dmac_lli_0[31:2] = 0x0;
+    } DMAC_LLI3 @ 0x160;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 destination address";
+        } dmac_d_addr_0[31:0] = 0x0;
+    } DMAC_D_ADDR3 @ 0x164;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel enable: 0=disable; 1=enable";
+        } dmac_chn_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source peripheral select";
+        } dmac_s_peripheral_0[4:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination peripheral select";
+        } dmac_d_peripheral_0[8:5] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4 {
+                Mem2Mem_DMAC = 0 {
+                    desc = "Memory to Memory, DMAC flow control";
+                };
+                Mem2Per_DMAC = 1 {
+                    desc = "Memory to Peripheral, DMAC flow control";
+                };
+                Per2Mem_DMAC = 2 {
+                    desc = "Peripheral to Memory, DMAC flow control";
+                };
+                Per2Per_DMAC = 3 {
+                    desc = "Peripheral to Peripheral, DMAC flow control";
+                };
+                Per2Per_Dst = 4 {
+                    desc = "Peripheral to Peripheral, Destination flow control";
+                };
+                Mem2Per_Dst = 5 {
+                    desc = "Memory to Peripheral, Destination flow control";
+                };
+                Per2Mem_Src = 6 {
+                    desc = "Peripheral to Memory, Source flow control";
+                };
+                Per2Per_Src = 7 {
+                    desc = "Peripheral to Peripheral, Source flow control";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONFIG_dmac_flow_ctl_0_e4;
+            desc = "Flow control: 000=mem2mem; 001=mem2per; 010=per2mem; 011=per2per(DMAC);
+                            100=per2per(dst); 101=mem2per(dst); 110=per2mem(src); 111=per2per(src)";
+        } dmac_flow_ctl_0[11:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Error interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_en_0[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt mask: 0=masked; 1=unmasked";
+        } dmac_int_tc_0[13:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus lock: 0=disabled; 1=enabled";
+        } dmac_lock_0[14:14] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "FIFO has data: 0=no; 1=yes";
+        } dmac_active_0[15:15] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Halt: 0=allow DMA; 1=ignore DMA requests";
+        } dmac_halt_0[16:16] = 0x0;
+    } DMAC_CHN_CONFIG3 @ 0x168;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Channel 0 source address";
+        } dmac_s_addr_0[31:0] = 0x0;
+    } DMAC_S_ADDR3 @ 0x170;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer size";
+        } dmac_trans_size_0[11:0] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1 {
+                BS1 = 0 {
+                    desc = "Burst size 1";
+                };
+                BS4 = 1 {
+                    desc = "Burst size 4";
+                };
+                BS8 = 2 {
+                    desc = "Burst size 8";
+                };
+                BS16 = 3 {
+                    desc = "Burst size 16";
+                };
+                BS32 = 4 {
+                    desc = "Burst size 32";
+                };
+                BS64 = 5 {
+                    desc = "Burst size 64";
+                };
+                BS128 = 6 {
+                    desc = "Burst size 128";
+                };
+                BS256 = 7 {
+                    desc = "Burst size 256";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_bsize_0_e1;
+            desc = "Source burst size: 000=1; 001=4; 010=8; 011=16; 100=32; 101=64; 110=128;
+                            111=256";
+        } dmac_s_bsize_0[14:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination burst size";
+        } dmac_d_bsize_0[17:15] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_s_width_0_e2;
+            desc = "Source width: 000=8bit; 001=16bit; 010=32bit";
+        } dmac_s_width_0[20:18] = 0x0;
+        field {
+            enum DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3 {
+                Byte = 0 {
+                    desc = "8-bit";
+                };
+                Halfword = 1 {
+                    desc = "16-bit";
+                };
+                Word = 2 {
+                    desc = "32-bit";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = DMA_DMAC_CHN_CONTROL_dmac_d_width_0_e3;
+            desc = "Destination width";
+        } dmac_d_width_0[23:21] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source master: 0=Master1; 1=Master2";
+        } dmac_s_master_0[24:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination master";
+        } dmac_d_master_0[25:25] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Source address increment: 0=no; 1=yes";
+        } dmac_s_inc_0[26:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Destination address increment";
+        } dmac_d_inc_0[27:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Protection HPROT[2:0]";
+        } dmac_prot_0[30:28] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt enable";
+        } dmac_trans_int_0[31:31] = 0x0;
+    } DMAC_CHN_CONTROL3 @ 0x174;
+};

@@ -1,0 +1,11 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_aon_afe_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } afe_iso_en[10:10] = 0x0;
+    } AFE_ISO @ 0x230;
+};

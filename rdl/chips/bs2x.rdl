@@ -1,9 +1,365 @@
-`include "../ip/ssi-v151.rdl"
+`include "../properties.rdl"
+`include "../ip/spi-v151.rdl"
+`include "bs2x/peripherals/glb_ctl_m.rdl"
+`include "bs2x/peripherals/gpio0.rdl"
+`include "bs2x/peripherals/uart0.rdl"
+`include "bs2x/peripherals/timer.rdl"
+`include "bs2x/peripherals/wdt.rdl"
+`include "bs2x/peripherals/tcxo.rdl"
+`include "bs2x/peripherals/pwm.rdl"
+`include "bs2x/peripherals/dma.rdl"
+`include "bs2x/peripherals/i2c0.rdl"
+`include "bs2x/peripherals/rtc.rdl"
+`include "bs2x/peripherals/trng.rdl"
+`include "bs2x/peripherals/gadc.rdl"
+`include "bs2x/peripherals/keyscan.rdl"
+`include "bs2x/peripherals/pdm.rdl"
+`include "bs2x/peripherals/qdec.rdl"
+`include "bs2x/peripherals/adc_pmu_afe.rdl"
+`include "bs2x/peripherals/aon_afe.rdl"
+`include "bs2x/peripherals/usb.rdl"
 
 addrmap bs2x {
-    name = "HiSilicon BS2X register map (experimental subset)";
+    bs2x_glb_ctl_m_regs glb_ctl_m @ 0x57000000;
+    bs2x_gpio0_regs gpio0 @ 0x57010000;
+    bs2x_uart0_regs uart0 @ 0x52081000;
+    bs2x_timer_regs timer @ 0x52002000;
+    bs2x_wdt_regs wdt @ 0x52003000;
+    bs2x_tcxo_regs tcxo @ 0x57000200;
+    spi_v151_regs spi0 @ 0x52087000;
+    bs2x_pwm_regs pwm @ 0x52090000;
+    bs2x_dma_regs dma @ 0x52070000;
+    bs2x_i2c0_regs i2c0 @ 0x52083000;
+    bs2x_rtc_regs rtc @ 0x57024100;
+    bs2x_trng_regs trng @ 0x52009000;
+    bs2x_gpio0_regs gpio1 @ 0x57014000;
+    bs2x_gpio0_regs gpio2 @ 0x57018000;
+    bs2x_gpio0_regs gpio3 @ 0x5701C000;
+    bs2x_gpio0_regs gpio4 @ 0x57020000;
+    bs2x_gpio0_regs ulp_gpio @ 0x57030000;
+    bs2x_uart0_regs uart1 @ 0x52080000;
+    bs2x_uart0_regs uart2 @ 0x52082000;
+    bs2x_i2c0_regs i2c1 @ 0x52084000;
+    spi_v151_regs spi1 @ 0x52088000;
+    spi_v151_regs spi2 @ 0x52089000;
+    bs2x_dma_regs sdma @ 0x520A0000;
+    bs2x_gadc_regs gadc @ 0x57036000;
+    bs2x_keyscan_regs keyscan @ 0x5208D000;
+    bs2x_pdm_regs pdm @ 0x5208E000;
+    bs2x_qdec_regs qdec @ 0x52000200;
+    bs2x_adc_pmu_afe_regs adc_pmu_afe @ 0x57008700;
+    bs2x_aon_afe_regs aon_afe @ 0x5702C000;
+    bs2x_usb_regs usb @ 0x58000000;
 
-    ssi_v151 spi0 @ 0x52087000;
-    ssi_v151 spi1 @ 0x52088000;
-    ssi_v151 spi2 @ 0x52089000;
+    signal {
+        hisi_irq_number = 26;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_INT0;
+
+    signal {
+        hisi_irq_number = 27;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_INT1;
+
+    signal {
+        hisi_irq_number = 32;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } MCU_PCLR_LOCK;
+
+    signal {
+        hisi_irq_number = 36;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_TOGGLE_POS;
+
+    signal {
+        hisi_irq_number = 37;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_TOGGLE_NEG;
+
+    signal {
+        hisi_irq_number = 40;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } MCU_SIMO1P1_VSET;
+
+    signal {
+        hisi_irq_number = 43;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } QSPI0_2CS;
+
+    signal {
+        hisi_irq_number = 47;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } M_WAKEUP;
+
+    signal {
+        hisi_irq_number = 48;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } M_SLEEP;
+
+    signal {
+        hisi_irq_number = 64;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_BB_BT;
+
+    signal {
+        hisi_irq_number = 65;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_BB_BLE;
+
+    signal {
+        hisi_irq_number = 66;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } BT_BB_GLE;
+
+    signal {
+        hisi_irq_number = 67;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } I2S;
+
+    signal {
+        hisi_irq_number = 68;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } RF_PRT;
+
+    signal {
+        hisi_irq_number = 69;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } NFC;
+
+    signal {
+        hisi_irq_number = 73;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } OSC_EN_WKUP;
+
+    signal {
+        hisi_irq_number = 74;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } OSC_EN_SLEEP;
+
+    signal {
+        hisi_irq_number = 78;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } PMU_CMU_ERR;
+
+    signal {
+        hisi_irq_number = 79;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } ULP_INT;
+
+    signal {
+        hisi_irq_number = 85;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } PMU2_CLK_32K_CALI;
+
+    signal {
+        hisi_irq_number = 86;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } ULP_WKUP_INT;
+
+    signal {
+        hisi_irq_number = 87;
+        hisi_irq_owner = "GLB_CTL_M";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } TSENSOR;
+
+    signal {
+        hisi_irq_number = 34;
+        hisi_irq_owner = "GPIO0";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } GPIO_0;
+
+    signal {
+        hisi_irq_number = 39;
+        hisi_irq_owner = "UART0";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } UART_0;
+
+    signal {
+        hisi_irq_number = 53;
+        hisi_irq_owner = "TIMER";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } TIMER_0;
+
+    signal {
+        hisi_irq_number = 54;
+        hisi_irq_owner = "TIMER";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } TIMER_1;
+
+    signal {
+        hisi_irq_number = 55;
+        hisi_irq_owner = "TIMER";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } TIMER_2;
+
+    signal {
+        hisi_irq_number = 56;
+        hisi_irq_owner = "TIMER";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } TIMER_3;
+
+    signal {
+        hisi_irq_number = 59;
+        hisi_irq_owner = "SPI0";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } SPI_M_S_0;
+
+    signal {
+        hisi_irq_number = 71;
+        hisi_irq_owner = "PWM";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } PWM_0;
+
+    signal {
+        hisi_irq_number = 72;
+        hisi_irq_owner = "PWM";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } PWM_1;
+
+    signal {
+        hisi_irq_number = 62;
+        hisi_irq_owner = "I2C0";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } I2C_0;
+
+    signal {
+        hisi_irq_number = 49;
+        hisi_irq_owner = "RTC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } RTC_0;
+
+    signal {
+        hisi_irq_number = 50;
+        hisi_irq_owner = "RTC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } RTC_1;
+
+    signal {
+        hisi_irq_number = 51;
+        hisi_irq_owner = "RTC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } RTC_2;
+
+    signal {
+        hisi_irq_number = 52;
+        hisi_irq_owner = "RTC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } RTC_3;
+
+    signal {
+        hisi_irq_number = 70;
+        hisi_irq_owner = "TRNG";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } SEC;
+
+    signal {
+        hisi_irq_number = 35;
+        hisi_irq_owner = "GPIO1";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } GPIO_1;
+
+    signal {
+        hisi_irq_number = 33;
+        hisi_irq_owner = "ULP_GPIO";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } ULP_GPIO;
+
+    signal {
+        hisi_irq_number = 41;
+        hisi_irq_owner = "UART1";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } UART_1;
+
+    signal {
+        hisi_irq_number = 42;
+        hisi_irq_owner = "UART2";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } UART_2;
+
+    signal {
+        hisi_irq_number = 63;
+        hisi_irq_owner = "I2C1";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } I2C_1;
+
+    signal {
+        hisi_irq_number = 60;
+        hisi_irq_owner = "SPI1";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } SPI_M_S_1;
+
+    signal {
+        hisi_irq_number = 61;
+        hisi_irq_owner = "SPI2";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } SPI_M;
+
+    signal {
+        hisi_irq_number = 57;
+        hisi_irq_owner = "SDMA";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } M_SDMA;
+
+    signal {
+        hisi_irq_number = 28;
+        hisi_irq_owner = "GADC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } GADC_DONE;
+
+    signal {
+        hisi_irq_number = 29;
+        hisi_irq_owner = "GADC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } GADC_ALARM;
+
+    signal {
+        hisi_irq_number = 38;
+        hisi_irq_owner = "KEYSCAN";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } KEY_SCAN_LOW_POWER;
+
+    signal {
+        hisi_irq_number = 46;
+        hisi_irq_owner = "KEYSCAN";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } KEY_SCAN;
+
+    signal {
+        hisi_irq_number = 44;
+        hisi_irq_owner = "PDM";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } PDM;
+
+    signal {
+        hisi_irq_number = 88;
+        hisi_irq_owner = "QDEC";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } QDEC;
+
+    signal {
+        hisi_irq_number = 89;
+        hisi_irq_owner = "USB";
+        hisi_evidence = "PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative";
+    } USB;
 };

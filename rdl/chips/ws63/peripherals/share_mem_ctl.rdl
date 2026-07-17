@@ -1,0 +1,166 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_share_mem_ctl_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clock enables for the configurable shared RAM banks";
+        } share_ram_cken[23:10] = 0x0;
+    } CFG_RAM_CKEN @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM12 selection: 0 packet RAM, 1 BGLE";
+        } ram12_sel[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM11 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram11_sel[3:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM10 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram10_sel[5:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM9 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram9_sel[7:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM8 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram8_sel[9:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM7 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram7_sel[11:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM6 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram6_sel[13:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RAM5 selection: 0 packet RAM, 1 BGLE, 2 ITCM, 3 DTCM";
+        } ram5_sel[15:14] = 0x0;
+    } CFG_RAM_SEL @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RAM_SW_CONFLICT_CLR @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RAM_SW_CONFLICT_ST @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } RAMX_SW_CONFLICT_BASE_ADDR @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_FREQ_BUSDMAC @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RX_EN @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RX_START_ADDR @ 0x5C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RX_END_ADDR @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RX_DONE_STS @ 0x64;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_RX_DONE_ADDR @ 0x68;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_WLPHY2PKT_RX_RAM_STS @ 0x6C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TX_EN @ 0x70;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TX_START_ADDR @ 0x74;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TX_END_ADDR @ 0x78;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TX_DONE_STS @ 0x7C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_TX_DONE_ADDR @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } CFG_WLPHY2PKT_TX_RAM_STS @ 0x84;
+};

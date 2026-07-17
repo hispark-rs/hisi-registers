@@ -1,0 +1,290 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_i2s_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "IP version";
+        } version[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Loopback mode enable";
+        } loopback_mode[8:8] = 0x0;
+    } VERSION @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Number of channels: 0=2ch; 1=4ch; 2=6ch; 3=8ch";
+        } channels[1:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clock edge: 0=rising; 1=falling";
+        } clk_edge[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Mode: 0=slave; 1=master";
+        } master_slave[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PCM mode: 0=I2S; 1=PCM";
+        } pcm_mode[4:4] = 0x0;
+    } MODE @ 0x40;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX interrupt status";
+        } rx_int[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX interrupt status";
+        } tx_int[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX overflow status";
+        } rx_overflow[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX underflow status";
+        } tx_underflow[3:3] = 0x0;
+    } INTSTATUS @ 0x44;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear RX interrupt";
+        } rx_int_clr[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear TX interrupt";
+        } tx_int_clr[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear RX overflow";
+        } rx_overflow_clr[2:2] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear TX underflow";
+        } tx_underflow_clr[3:3] = 0x0;
+    } INTCLR @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX left channel data";
+        } left_tx_data[31:0] = 0x0;
+    } LEFT_TX @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX right channel data";
+        } right_tx_data[31:0] = 0x0;
+    } RIGHT_TX @ 0x50;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX left channel data";
+        } left_rx_data[31:0] = 0x0;
+    } LEFT_RX @ 0x54;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX right channel data";
+        } right_rx_data[31:0] = 0x0;
+    } RIGHT_RX @ 0x58;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "TX enable set";
+        } tx_en[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX enable set";
+        } rx_en[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "TX reset set";
+        } tx_rst[2:2] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX reset set";
+        } rx_rst[3:3] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "TX interrupt enable set";
+        } tx_intr_en[4:4] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX interrupt enable set";
+        } rx_intr_en[5:5] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Merge enable set";
+        } merge_en[6:6] = 0x0;
+    } CT_SET @ 0x5C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "TX enable clear";
+        } tx_en[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX enable clear";
+        } rx_en[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "TX interrupt disable";
+        } tx_intr_en[4:4] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "RX interrupt disable";
+        } rx_intr_en[5:5] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Merge disable";
+        } merge_en[6:6] = 0x0;
+    } CT_CLR @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX FIFO threshold";
+        } tx_threshold[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO threshold";
+        } rx_threshold[15:8] = 0x0;
+    } FIFO_THRESHOLD @ 0x64;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX left FIFO depth";
+        } left_depth[7:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX right FIFO depth";
+        } right_depth[15:8] = 0x0;
+    } RX_STA @ 0x68;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX left FIFO depth";
+        } left_depth[7:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX right FIFO depth";
+        } right_depth[15:8] = 0x0;
+    } TX_STA @ 0x6C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX data width mode";
+        } tx_mode[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX data width mode";
+        } rx_mode[10:8] = 0x0;
+    } DATA_WIDTH_SET @ 0x78;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Signed extension enable";
+        } signed_ext_en[0:0] = 0x0;
+    } SIGNED_EXT @ 0x84;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX interrupt mask";
+        } rx_int_mask[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX interrupt mask";
+        } tx_int_mask[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX overflow mask";
+        } rx_overflow_mask[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX underflow mask";
+        } tx_underflow_mask[3:3] = 0x0;
+    } INTMASK @ 0x8C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "BCLK divider";
+        } bclk_div[7:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clock enable";
+        } clk_en[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clock source select";
+        } clk_sel[9:9] = 0x0;
+    } I2S_CRG @ 0x90;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "BCLK divider number";
+        } bclk_div_num[6:0] = 0x0;
+    } I2S_BCLK_DIV_NUM @ 0x94;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FS divider number";
+        } fs_div_num[9:0] = 0x0;
+    } I2S_FS_DIV_NUM @ 0x98;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FS divider ratio number";
+        } fs_div_ratio_num[10:0] = 0x0;
+    } I2S_FS_DIV_RATIO_NUM @ 0x9C;
+};

@@ -1,0 +1,216 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_pke_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Operand bit length for modular arithmetic";
+        } work_len[31:0] = 0x0;
+    } PKE_WORK_LEN @ 0x0;
+    reg {
+        field {
+            enum PKE_PKE_INSTR0_instr0_e1 {
+                MUL_MOD = 0 {
+                    desc = "Modular multiplication";
+                };
+                ADD_MOD = 1 {
+                    desc = "Modular addition";
+                };
+                SUB_MOD = 2 {
+                    desc = "Modular subtraction";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = PKE_PKE_INSTR0_instr0_e1;
+            desc = "Instruction code 0 (0=MUL_MOD, 1=ADD_MOD, 2=SUB_MOD)";
+        } instr0[31:0] = 0x0;
+    } PKE_INSTR0 @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Instruction code 1";
+        } instr1[31:0] = 0x0;
+    } PKE_INSTR1 @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Instruction start address [31:0]";
+        } instr_addr_low[31:0] = 0x0;
+    } PKE_INSTR_ADDR_LOW @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Instruction start address high bits";
+        } instr_addr_hig[31:0] = 0x0;
+    } PKE_INSTR_ADDR_HIG @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Total instruction length in bytes";
+        } instr_len[31:0] = 0x0;
+    } PKE_INSTR_LEN @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Mask RNG enable: 0=disabled; 1=enabled";
+        } mask_rng_cfg[0:0] = 0x0;
+    } PKE_MASK_RNG_CFG @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Montgomery pre-computed parameter word 0";
+        } mont_para0[31:0] = 0x0;
+    } PKE_MONT_PARA0 @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Montgomery pre-computed parameter word 1";
+        } mont_para1[31:0] = 0x0;
+    } PKE_MONT_PARA1 @ 0x24;
+    reg {
+        field {
+            enum PKE_PKE_START_pke_start0_e2 {
+                StartCode = 5 {
+                    desc = "Must write 0x5 to start PKE operation";
+                };
+            } ;
+            sw = w;
+            hw = r;
+            encode = PKE_PKE_START_pke_start0_e2;
+            desc = "Start code 0 (write 0x5 to start)";
+        } pke_start0[3:0] = 0x0;
+        field {
+            enum PKE_PKE_START_pke_start1_e3 {
+                StartCode = 10 {
+                    desc = "Must write 0xA to start PKE operation";
+                };
+            } ;
+            sw = w;
+            hw = r;
+            encode = PKE_PKE_START_pke_start1_e3;
+            desc = "Start code 1 (write 0xA)";
+        } pke_start1[7:4] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Batch start code (write 0x5)";
+        } pke_batch_start[11:8] = 0x0;
+    } PKE_START @ 0x40;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Instruction buffer 0 ready";
+        } instr0_rdy[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Instruction buffer 1 ready";
+        } instr1_rdy[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Batch instruction ready";
+        } batch_instr_rdy[2:2] = 0x0;
+    } PKE_INSTR_RDY @ 0x44;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "PKE busy: 0=idle; 1=busy";
+        } pke_busy[0:0] = 0x0;
+    } PKE_BUSY @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Side-channel noise enable";
+        } noise_en[0:0] = 0x0;
+    } PKE_NOISE_EN @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Operation finish interrupt enable";
+        } finish_int_enable[0:0] = 0x0;
+    } PKE_INT_ENABLE @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Finish interrupt status (expect 0x5 after completion)";
+        } finish_int_nomask[3:0] = 0x0;
+    } PKE_INT_NOMASK_STATUS @ 0x84;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Security alarm interrupt";
+        } alarm_int[3:0] = 0x0;
+    } PKE_ALARM_STATUS @ 0x8C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Operation failure status";
+        } pke_failure_flag[10:0] = 0x0;
+    } PKE_FAILURE_FLAG @ 0x90;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear PKE DRAM";
+        } dram_clr[0:0] = 0x0;
+    } PKE_DRAM_CLR @ 0xC0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Current PKE data-RAM mask word";
+        } dram_mask[31:0] = 0x0;
+    } PKE_DRAM_MASK @ 0xF0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Lock request";
+        } pke_lock[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Lock type: 0=soft; 1=hard";
+        } pke_lock_type[1:1] = 0x0;
+    } PKE_LOCK_CTRL @ 0x810;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Lock busy flag";
+        } pke_lock_busy[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Unlock failure flag";
+        } pke_unlock_fail[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Lock count";
+        } pke_lock_cnt[6:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Lock status: 0x6A=PCPU; 0x35=AIDSP; 0xA5=TEE; 0xAA=ACPU";
+        } pke_lock_stat[15:8] = 0x0;
+    } PKE_LOCK_STATUS @ 0x814;
+};

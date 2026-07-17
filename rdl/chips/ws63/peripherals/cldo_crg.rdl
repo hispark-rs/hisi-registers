@@ -1,0 +1,331 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_cldo_crg_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM clock gates: bits [10:2], 9 channels";
+        } pwm_cken[10:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "I2S/SIO bus clock gate";
+        } i2s_bus_cken[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "I2S/SIO functional clock gate";
+        } i2s_cken[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "General clock gates: bits [27:18], 10 channels";
+        } gen_cken[27:18] = 0x0;
+    } CKEN_CTL0 @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "BT clock gates: bits [12:8], 5 channels";
+        } bt_cken[12:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WIFI clock gates: bits [14:13], 2 channels";
+        } wifi_cken[14:13] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART clock gates: bits [20:18], 3 channels";
+        } uart_cken[20:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI clock gate at bit 25";
+        } spi_cken[25:25] = 0x0;
+    } CKEN_CTL1 @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clock divider control 0";
+        } div_ctl0[31:0] = 0x0;
+    } DIV_CTL0 @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI divider stage 1 value written by spi_porting_clock_init";
+        } spi_div1_cfg[4:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI divider stage 2 value written by spi_porting_clock_init";
+        } spi_div2_cfg[9:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI divider load enable latch bit";
+        } spi_load_div_en[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 divider value";
+        } pwm0_div1_cfg[19:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM0 divider load enable latch bit";
+        } pwm0_load_div_en[20:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 divider value";
+        } pwm1_div1_cfg[29:26] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM1 divider load enable latch bit";
+        } pwm1_load_div_en[30:30] = 0x0;
+    } DIV_CTL3 @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM2 divider value";
+        } pwm2_div1_cfg[7:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM2 divider load enable latch bit";
+        } pwm2_load_div_en[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM3 divider value";
+        } pwm3_div1_cfg[17:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM3 divider load enable latch bit";
+        } pwm3_load_div_en[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM4 divider value";
+        } pwm4_div1_cfg[27:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM4 divider load enable latch bit";
+        } pwm4_load_div_en[28:28] = 0x0;
+    } DIV_CTL4 @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM5 divider value";
+        } pwm5_div1_cfg[7:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM5 divider load enable latch bit";
+        } pwm5_load_div_en[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM6 divider value";
+        } pwm6_div1_cfg[17:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM6 divider load enable latch bit";
+        } pwm6_load_div_en[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM7 divider value";
+        } pwm7_div1_cfg[27:24] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM7 divider load enable latch bit";
+        } pwm7_load_div_en[28:28] = 0x0;
+    } DIV_CTL5 @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TSENSOR and bus clock dividers";
+        } div_tsensor_bus[31:0] = 0x0;
+    } DIV_CTL7 @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TRNG clock divider";
+        } div_trng[31:0] = 0x0;
+    } DIV_CTL9 @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO 120M divider 1 value (3-bit)";
+        } tcxo_120m_div1_num[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO 120M load divider enable";
+        } tcxo_120m_load_div_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO 120M divider enable";
+        } tcxo_120m_div_en[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "MAC main divider value (6-bit)";
+        } mac_main_div_num[10:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WTO divider enable";
+        } wtop_div_en[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO 120M divider 2 value (3-bit)";
+        } tcxo_120m_div2_num[14:12] = 0x0;
+    } DIV_CTL10 @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RF_CTL clock: 0=TCXO; 1=PLL";
+        } rf_ctl_clk_sel[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART0 clock: 0=TCXO; 1=PLL";
+        } uart0_clk_sel[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART1 clock select";
+        } uart1_clk_sel[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "UART2 clock select";
+        } uart2_clk_sel[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI clock select";
+        } spi_clk_sel[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "PWM clock: 0=TCXO; 1=PLL";
+        } pwm_clk_sel[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Bus clock select";
+        } bus_clk_sel[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Flash clock: 0=TCXO; 1=PLL";
+        } flash_clk_sel[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WIFI_PHY clock select";
+        } wifi_phy_clk_sel[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WIFI_MAC clock select";
+        } wifi_mac_clk_sel[20:20] = 0x0;
+    } CLK_SEL @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "13-bit soft reset control (bits [15:3])";
+        } cfg0_b3_b15[15:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "8-bit soft reset control (bits [24:17])";
+        } cfg0_b17_b24[24:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "2-bit soft reset control (bits [28:27])";
+        } cfg0_b27_b28[28:27] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Soft reset bit 30";
+        } cfg0_b30[30:30] = 0x0;
+    } RST_SOFT_CFG0 @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "GPIO module reset: 0=reset; 1=released";
+        } soft_rst_gpio_n[0:0] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TGLP (BT) reset: 0=reset; 1=released";
+        } soft_rst_tglp_n[1:1] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "BSUB (BT) reset: 0=reset; 1=released";
+        } soft_rst_bsub_n[2:2] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "CRG BSUB (BT) reset: 0=reset; 1=released";
+        } soft_rst_crg_bsub_n[3:3] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WIFI subsystem reset: 0=reset; 1=released";
+        } soft_rst_wifi_n[4:4] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "LSADC core reset: 0=reset; 1=released";
+        } soft_rst_lsadc_n[5:5] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TCXO counter reset: 0=reset; 1=released";
+        } soft_rst_tcxo_cnt_n[6:6] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "LSADC bus interface reset: 0=reset; 1=released";
+        } soft_rst_lsadc_bus_n[7:7] = 0x1;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "WCPU memory controller reset: 0=reset; 1=released";
+        } soft_rst_wcpu_mem_ctl_n[8:8] = 0x1;
+    } RST_SOFT_CFG1 @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "I2S MCLK divider number written by sio_porting_set_sample_rate";
+        } i2s_mclk_div_num[31:0] = 0x0;
+    } I2S_DIV_CFG @ 0x44;
+};

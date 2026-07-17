@@ -1,0 +1,26 @@
+// HiSilicon integration metadata not covered by the SystemRDL 2.0 core model.
+
+property hisi_irq_number {
+    type = longint unsigned;
+    component = signal;
+};
+
+property hisi_irq_owner {
+    type = string;
+    component = signal;
+};
+
+property hisi_evidence {
+    type = string;
+    component = addrmap | regfile | reg | field | signal;
+};
+
+property hisi_write_min {
+    type = longint unsigned;
+    component = reg | field;
+};
+
+property hisi_write_max {
+    type = longint unsigned;
+    component = reg | field;
+};

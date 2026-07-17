@@ -1,0 +1,350 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_trng_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } health_test_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } online_test_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } post_proc_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rnd_chk_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } lfsr_reseed_en[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } private_en[5:5] = 0x0;
+    } TRNG_CTRL @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } trng_sel[1:0] = 0x0;
+    } TRNG_SRC_SEL @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fro_sel[4:0] = 0x0;
+    } TRNG_FRO_SEL @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } trng_all_reg_lock[0:0] = 0x0;
+    } TRNG_ALL_REG_LOCK @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } trng_low_power_enable[0:0] = 0x0;
+    } TRNG_LOW_POWER_ENABLE @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ro_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tero_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } fro_en[2:2] = 0x0;
+    } TRNG_RING_EN @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ro_timer_cnt[15:0] = 0x0;
+    } TRNG_RO_TIMER_CNT @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tero_bit_sel[1:0] = 0x0;
+    } TRNG_TERO_BIT_SEL @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tero_vctr_low_cfg[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tero_vctr_cfg[31:16] = 0x0;
+    } TRNG_TERO_VCTR_CFG @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } online_test_fail_ck_cnt[3:0] = 0x0;
+    } TRNG_ONLINE_TEST_FAIL_CK_TH @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } mono_ck_low[6:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } mono_ck_hig[22:16] = 0x0;
+    } TRNG_MONOBIT_TEST_CK_TH @ 0x64;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } long_run_hig[7:0] = 0x0;
+    } TRNG_LONG_RUN_TEST_CK_TH @ 0x68;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } run_0_ck_low[6:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } run_0_ck_hig[14:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } run_1_ck_low[22:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } run_1_ck_hig[30:24] = 0x0;
+    } TRNG_RUN1_TEST_CK_TH @ 0x6C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } run_00_ck_low[5:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } run_00_ck_hig[13:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } run_11_ck_low[21:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } run_11_ck_hig[29:24] = 0x0;
+    } TRNG_RUN2_TEST_CK_TH @ 0x70;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } poker_ck_hig[10:0] = 0x0;
+    } TRNG_POKER_TEST_CK_TH @ 0x74;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rpt_cnt_test[7:0] = 0x0;
+    } TRNG_RPT_TEST_TH @ 0x78;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } adapt_low_test[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } adapt_hig_test[25:16] = 0x0;
+    } TRNG_ADAPT_TEST_TH @ 0x7C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } total_failure_ck_hig[10:0] = 0x0;
+    } TRNG_TOTAL_FAILURE_TEST_CK_TH @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rnd_fail_ck_cnt[2:0] = 0x0;
+    } TRNG_RND_TEST_FAIL_CK_TH @ 0x84;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+        } trng_data[31:0] = 0x0;
+    } TRNG_FIFO_DATA @ 0x100;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } trng_ready[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } trng_done[1:1] = 0x0;
+    } TRNG_FIFO_READY @ 0x104;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rng_fifo_real_cnt[4:0] = 0x0;
+    } TRNG_DATA_ST @ 0x108;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rpt_test_alarm[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } adapt_test_alarm[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } total_failure_test_alarm[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } online_test_alarm[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rn_chk_alarm[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } crc_alarm[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } prt_alarm[6:6] = 0x0;
+    } TRNG_ALARM @ 0x110;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } rpt_test_alarm_post[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } adapt_test_alarm_post[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } total_failure_test_alarm_post[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } online_test_alarm_post[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rn_chk_alarm_post[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } crc_alarm_post[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } prt_alarm_post[6:6] = 0x0;
+    } TRNG_ALARM_POST @ 0x114;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } trng_alarm_mask[4:0] = 0x0;
+    } TRNG_ALARM_MASK @ 0x118;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } trng_alarm_clr[0:0] = 0x0;
+    } TRNG_ALARM_CLR @ 0x11C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tero_cnt_sel[3:0] = 0x0;
+    } TRNG_TERO_CNT_SEL @ 0x160;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tero_ring_cnt[15:0] = 0x0;
+    } TRNG_TERO_RING_CNT @ 0x164;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fro_force_rst_n[0:0] = 0x0;
+    } TRNG_FRO_FORCE_RST @ 0x170;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fro_sample_clk_sel[0:0] = 0x0;
+    } TRNG_FRO_SAMPLE_CLK_SEL @ 0x174;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fro_div_cnt[7:0] = 0x0;
+    } TRNG_FRO_DIV_CNT @ 0x178;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fro_cnt_sel[4:0] = 0x0;
+    } TRNG_FRO_CNT_SEL @ 0x17C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fro_cnt_n[15:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } fro_cnt_p[31:16] = 0x0;
+    } TRNG_FRO_RING_CNT @ 0x180;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } TRNG_FRO_DIV_CLK_CNT @ 0x184;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } TRNG_FRO_CNT_CLK_CNT @ 0x188;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } low_power_en[5:0] = 0x0;
+    } TRNG_REAL_CLOCK_EN @ 0x1E0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } TRNG_VER_NUM @ 0x200;
+};

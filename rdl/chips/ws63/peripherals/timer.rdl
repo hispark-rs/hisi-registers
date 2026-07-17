@@ -1,0 +1,263 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_timer_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Abnormal interrupt raw status for all timers";
+        } abnor_intr_raw[2:0] = 0x0;
+    } ABNOR_INTR_RAW @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Abnormal interrupt mask for all timers";
+        } abnor_imsk[2:0] = 0x0;
+    } ABNOR_IMSK @ 0x64;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Abnormal interrupt status for all timers";
+        } abnor_intr_stat[2:0] = 0x0;
+    } ABNOR_INTR_STAT @ 0x68;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear interrupts for all timers by writing one bit per channel; reads return zero and do not clear on WS63 silicon";
+        } eoi[2:0] = 0x0;
+    } EOI_REN @ 0x78;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Raw interrupt status for all timers";
+        } raw_intr[2:0] = 0x0;
+    } RAW_INTR_STAT @ 0x7C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Interrupt status for all timers (after mask)";
+        } intr_stat[2:0] = 0x0;
+    } INTR_STAT @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Timer 0 load count value";
+        } load_count[31:0] = 0x0;
+    } TIMER_LOAD_COUNT0 @ 0x100;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Timer 0 current count value";
+        } current_value[31:0] = 0x0;
+    } TIMER_CURRENT_VALUE0 @ 0x108;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Timer enable: 0=disabled; 1=enabled";
+        } enable[0:0] = 0x0;
+        field {
+            enum TIMER_TIMER_CONTROL_mode_e1 {
+                OneShot = 0 {
+                    desc = "One-shot mode";
+                };
+                Periodic = 1 {
+                    desc = "Periodic mode";
+                };
+                FreeRun = 3 {
+                    desc = "Free-running mode";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = TIMER_TIMER_CONTROL_mode_e1;
+            desc = "Timer mode (TIMER_V150, per vendor control_reg_mode_v150_t): 0=one-shot; 1=periodic; 3=free-run (2 is a one-shot alias)";
+        } mode[2:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Interrupt mask: 0=unmasked; 1=masked";
+        } int_mask[3:3] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Reset FSM: 1=reset timer FSM";
+        } rstfsm[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Current-count latch request (TIMER_V150): write 1 to snapshot the live down-counter into the current-value register; the HW asserts cnt_lock when the snapshot is ready. Required to read a fresh count on silicon (the current-value register is a latch, not a live counter).";
+        } cnt_req[5:5] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current-count latch valid (TIMER_V150): set by HW after a cnt_req snapshot completes; poll until 1 before reading the current-value register.";
+        } cnt_lock[6:6] = 0x0;
+    } TIMER_CONTROL0 @ 0x110;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Write 1 to clear this timer interrupt; reads return zero and do not clear on WS63 silicon";
+        } eoi[0:0] = 0x0;
+    } TIMER_EOI0 @ 0x114;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Raw interrupt status";
+        } raw_intr[0:0] = 0x0;
+    } TIMER_RAW_INTR0 @ 0x118;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Timer 0 load count value";
+        } load_count[31:0] = 0x0;
+    } TIMER_LOAD_COUNT1 @ 0x200;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Timer 0 current count value";
+        } current_value[31:0] = 0x0;
+    } TIMER_CURRENT_VALUE1 @ 0x208;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Timer enable: 0=disabled; 1=enabled";
+        } enable[0:0] = 0x0;
+        field {
+            enum TIMER_TIMER_CONTROL_mode_e1 {
+                OneShot = 0 {
+                    desc = "One-shot mode";
+                };
+                Periodic = 1 {
+                    desc = "Periodic mode";
+                };
+                FreeRun = 3 {
+                    desc = "Free-running mode";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = TIMER_TIMER_CONTROL_mode_e1;
+            desc = "Timer mode (TIMER_V150, per vendor control_reg_mode_v150_t): 0=one-shot; 1=periodic; 3=free-run (2 is a one-shot alias)";
+        } mode[2:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Interrupt mask: 0=unmasked; 1=masked";
+        } int_mask[3:3] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Reset FSM: 1=reset timer FSM";
+        } rstfsm[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Current-count latch request (TIMER_V150): write 1 to snapshot the live down-counter into the current-value register; the HW asserts cnt_lock when the snapshot is ready. Required to read a fresh count on silicon (the current-value register is a latch, not a live counter).";
+        } cnt_req[5:5] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current-count latch valid (TIMER_V150): set by HW after a cnt_req snapshot completes; poll until 1 before reading the current-value register.";
+        } cnt_lock[6:6] = 0x0;
+    } TIMER_CONTROL1 @ 0x210;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Write 1 to clear this timer interrupt; reads return zero and do not clear on WS63 silicon";
+        } eoi[0:0] = 0x0;
+    } TIMER_EOI1 @ 0x214;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Raw interrupt status";
+        } raw_intr[0:0] = 0x0;
+    } TIMER_RAW_INTR1 @ 0x218;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Timer 0 load count value";
+        } load_count[31:0] = 0x0;
+    } TIMER_LOAD_COUNT2 @ 0x300;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Timer 0 current count value";
+        } current_value[31:0] = 0x0;
+    } TIMER_CURRENT_VALUE2 @ 0x308;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Timer enable: 0=disabled; 1=enabled";
+        } enable[0:0] = 0x0;
+        field {
+            enum TIMER_TIMER_CONTROL_mode_e1 {
+                OneShot = 0 {
+                    desc = "One-shot mode";
+                };
+                Periodic = 1 {
+                    desc = "Periodic mode";
+                };
+                FreeRun = 3 {
+                    desc = "Free-running mode";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = TIMER_TIMER_CONTROL_mode_e1;
+            desc = "Timer mode (TIMER_V150, per vendor control_reg_mode_v150_t): 0=one-shot; 1=periodic; 3=free-run (2 is a one-shot alias)";
+        } mode[2:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Interrupt mask: 0=unmasked; 1=masked";
+        } int_mask[3:3] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Reset FSM: 1=reset timer FSM";
+        } rstfsm[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Current-count latch request (TIMER_V150): write 1 to snapshot the live down-counter into the current-value register; the HW asserts cnt_lock when the snapshot is ready. Required to read a fresh count on silicon (the current-value register is a latch, not a live counter).";
+        } cnt_req[5:5] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Current-count latch valid (TIMER_V150): set by HW after a cnt_req snapshot completes; poll until 1 before reading the current-value register.";
+        } cnt_lock[6:6] = 0x0;
+    } TIMER_CONTROL2 @ 0x310;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Write 1 to clear this timer interrupt; reads return zero and do not clear on WS63 silicon";
+        } eoi[0:0] = 0x0;
+    } TIMER_EOI2 @ 0x314;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Raw interrupt status";
+        } raw_intr[0:0] = 0x0;
+    } TIMER_RAW_INTR2 @ 0x318;
+};

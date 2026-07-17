@@ -1,0 +1,675 @@
+// Shared HiSilicon SPI v151 register block.
+//
+// Primary oracle: the byte-identical hal_spi_v151_regs_def.h and register
+// operation sources in fbb_ws63 and fbb_bs2x. Chip maps own base addresses,
+// instance counts, IRQs, clocks, resets, DMA handshakes and pin routing.
+
+addrmap spi_v151_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SPI enable: 0=disabled; 1=enabled";
+        } spi_en[0:0] = 0x0;
+    } SPI_ER @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Shift register loop test: 0=normal; 1=loopback";
+        } soe[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Shift register loop test control";
+        } srlt[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Slave-select toggle enable";
+        } ssn_te[2:2] = 0x0;
+        field {
+            enum SPI0_SPI_CTRA_scph_e1 {
+                FirstEdge = 0 {
+                    desc = "Sample on first clock edge";
+                };
+                SecondEdge = 1 {
+                    desc = "Sample on second clock edge";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPI0_SPI_CTRA_scph_e1;
+            desc = "Clock phase: 0=first edge sample; 1=second edge sample";
+        } scph[3:3] = 0x0;
+        field {
+            enum SPI0_SPI_CTRA_scpol_e2 {
+                LowIdle = 0 {
+                    desc = "SCK idle low";
+                };
+                HighIdle = 1 {
+                    desc = "SCK idle high";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPI0_SPI_CTRA_scpol_e2;
+            desc = "Clock polarity: 0=low idle; 1=high idle";
+        } scpol[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Control frame size in 16-bit transfer mode";
+        } cfs16[8:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data frame size in 16-bit transfer mode";
+        } dfs16[12:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data frame size in 32-bit mode (0=4bit; up to 31=35bit)";
+        } dfs32[17:13] = 0x0;
+        field {
+            enum SPI0_SPI_CTRA_trsm_e3 {
+                TxRx = 0 {
+                    desc = "Transmit and Receive";
+                };
+                TxOnly = 1 {
+                    desc = "Transmit Only";
+                };
+                RxOnly = 2 {
+                    desc = "Receive Only";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = SPI0_SPI_CTRA_trsm_e3;
+            desc = "Transfer mode: 00=TX/RX; 01=TX only; 10=RX only";
+        } trsm[19:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Enhanced SPI frame format";
+        } enhff[21:20] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Serial protocol selection";
+        } prs[23:22] = 0x0;
+    } SPI_CTRA @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Number of data frames (master TX only mode)";
+        } ndf[15:0] = 0x0;
+    } SPI_CTRB @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Wait cycles between control and data phases";
+        } waitnum[4:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address and instruction transfer format";
+        } aaitf[6:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Read data strobe enable";
+        } rdsen[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Address phase length selector";
+        } addrlen[11:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Instruction phase length selector";
+        } ilen[13:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Instruction DDR enable";
+        } iddren[14:14] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Data DDR enable";
+        } ddren[15:15] = 0x0;
+    } SPI_ENHCTL @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Microwire handshaking enable";
+        } mh[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Microwire sequential transfer mode";
+        } mss[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Microwire transfer direction";
+        } mtrc[2:2] = 0x0;
+    } SPI_MCR @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Even clock divider (master): SCK = SSI_CLK / FRDV";
+        } frdv[15:0] = 0x0;
+    } SPI_BRS @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX DMA enable";
+        } tden[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX DMA enable";
+        } rden[1:1] = 0x0;
+    } SPI_DCR @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA RX FIFO threshold";
+        } dma_rx_data_level[7:0] = 0x0;
+    } SPI_DRDL @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DMA TX FIFO threshold";
+        } dma_tx_data_level[7:0] = 0x0;
+    } SPI_DTDL @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX sample delay in SSI clock cycles";
+        } rxdsd[7:0] = 0x0;
+    } SPI_RSDR @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transmit data drive edge delay";
+        } txdde[7:0] = 0x0;
+    } SPI_TDER @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM0 @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM1 @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM2 @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM3 @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM4 @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM5 @ 0x40;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM6 @ 0x44;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM7 @ 0x48;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM8 @ 0x4C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM9 @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM10 @ 0x54;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM11 @ 0x58;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM12 @ 0x5C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM13 @ 0x60;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM14 @ 0x64;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM15 @ 0x68;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM16 @ 0x6C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM17 @ 0x70;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM18 @ 0x74;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM19 @ 0x78;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM20 @ 0x7C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM21 @ 0x80;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM22 @ 0x84;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM23 @ 0x88;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM24 @ 0x8C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM25 @ 0x90;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM26 @ 0x94;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM27 @ 0x98;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM28 @ 0x9C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM29 @ 0xA0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM30 @ 0xA4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM31 @ 0xA8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM32 @ 0xAC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM33 @ 0xB0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM34 @ 0xB4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Write pushes TX FIFO; read pops RX FIFO";
+        } datar[31:0] = 0x0;
+    } SPI_DRNM35 @ 0xB8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO full raw status";
+        } rxf_irq[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO overflow raw status";
+        } rxo_irq[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO underflow raw status";
+        } rxu_irq[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO empty raw status";
+        } txe_irq[7:7] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO overflow raw status";
+        } txo_irq[8:8] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Multi-master contention raw status";
+        } mst_irq[15:15] = 0x0;
+    } SPI_RAINSR @ 0xBC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX full interrupt status";
+        } rxf_is[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX overflow interrupt status";
+        } rxo_is[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX underflow interrupt status";
+        } rxu_is[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX empty interrupt status";
+        } txe_is[7:7] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX overflow interrupt status";
+        } txo_is[8:8] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Multi-master interrupt status";
+        } mst_is[15:15] = 0x0;
+    } SPI_INSR @ 0xC0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX full interrupt mask";
+        } rxf_im[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX overflow interrupt mask";
+        } rxo_im[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX underflow interrupt mask";
+        } rxu_im[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX empty interrupt mask";
+        } txe_im[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX overflow interrupt mask";
+        } txo_im[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Multi-master interrupt mask";
+        } mst_im[15:15] = 0x0;
+    } SPI_INMAR @ 0xC4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "One enable bit per slave-select output";
+        } slave_enable[15:0] = 0x0;
+    } SPI_SLENR @ 0xC8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX FIFO threshold level";
+        } tx_fifo_threshold[7:0] = 0x0;
+    } SPI_TWLR @ 0xCC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO data level";
+        } tx_fifo_level[7:0] = 0x0;
+    } SPI_TLR @ 0xD0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reading clears the TX FIFO overflow interrupt";
+        } cis[0:0] = 0x0;
+    } SPI_TFOFICR @ 0xD4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO threshold level";
+        } rx_fifo_threshold[7:0] = 0x0;
+    } SPI_RWLR @ 0xD8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO data level";
+        } rx_fifo_level[7:0] = 0x0;
+    } SPI_RLR @ 0xDC;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reading clears the RX FIFO underflow interrupt";
+        } cis[0:0] = 0x0;
+    } SPI_RFFICR @ 0xE0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Data collision error (master): the last transfer was
+                            halted because another master asserted ss_in_n. Cleared on read.";
+        } dcol[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO not empty";
+        } rxfne[4:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO full";
+        } rxff[5:5] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO not full";
+        } txfnf[11:11] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO empty";
+        } txfe[12:12] = 0x1;
+        field {
+            sw = r;
+            hw = r;
+            desc = "SPI busy flag (serial transfer in progress)";
+        } busy[15:15] = 0x0;
+    } SPI_WSR @ 0xE4;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reading clears the multi-master interrupt";
+        } cis[0:0] = 0x0;
+    } SPI_MSTICR @ 0xE8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "ASCII-encoded component version";
+        } id[31:0] = 0x0;
+    } SPI_ID @ 0xEC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Vendor extension control value";
+        } value[31:0] = 0x0;
+    } SPI_RSVD @ 0xF0;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reading clears the RX FIFO overflow interrupt";
+        } cis[0:0] = 0x0;
+    } SPI_RXOICR @ 0xF4;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Reading clears TX overflow, RX underflow/overflow, and multi-master interrupts";
+        } cis[0:0] = 0x0;
+    } SPI_ICR @ 0xF8;
+};

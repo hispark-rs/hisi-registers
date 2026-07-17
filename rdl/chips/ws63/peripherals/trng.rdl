@@ -1,0 +1,45 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_trng_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Random data (read to get random number)";
+        } trng_data[31:0] = 0x0;
+    } TRNG_FIFO_DATA @ 0x100;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Data ready: 1=data available in FIFO";
+        } trng_data_ready[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TRNG generation done";
+        } trng_done[1:1] = 0x0;
+    } TRNG_FIFO_READY @ 0x104;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Data status";
+        } data_st[31:0] = 0x0;
+    } TRNG_DATA_ST @ 0x108;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FRO sample clock select: 0=inner; 1=external";
+        } fro_sample_clk_sel[0:0] = 0x0;
+    } TRNG_FRO_SAMPLE_CLK_SEL @ 0x174;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "FRO divider count (default 0x1b)";
+        } fro_div_cnt[7:0] = 0x0;
+    } TRNG_FRO_DIV_CNT @ 0x178;
+};

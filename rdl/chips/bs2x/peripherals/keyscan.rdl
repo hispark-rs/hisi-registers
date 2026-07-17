@@ -1,0 +1,201 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_keyscan_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } alow_slp[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slp_req[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } slp_ack[8:8] = 0x0;
+    } KEYSCAN_LP_CTL @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } ena[0:0] = 0x0;
+    } KEYSCAN_ENABLE @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } fifo_rd_clken[0:0] = 0x0;
+    } KEYSCAN_CLK_ENA @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } task_start[0:0] = 0x0;
+    } KEYSCAN_START @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } event_fifo_full_int_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_press_int_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_release_int_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_value_rdy_int_en[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_stopped_int_en[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_keyscan_one_int_en[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_fifo_afull_int_en[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_press_aon_int_en[7:7] = 0x0;
+    } KEYSCAN_INT_EN @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } event_fifo_full_clr[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_press_clr[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_release_clr[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_value_rdy_clr[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_stopped_clr[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_keyscan_one_clr[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_fifo_afull_clr[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_press_aon_clr[7:7] = 0x0;
+    } KEYSCAN_EVENT_CLR @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } event_fifo_full[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_press[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_release[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_value_rdy[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_stopped[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_keyscan_one[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_fifo_afull[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } event_key_press_aon[7:7] = 0x0;
+    } KEYSCAN_EVENT_STS @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } clo_pin_en[2:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } row_pin_en[8:4] = 0x0;
+    } KEYSCAN_PIN_NUM @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } scan_dir[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } scan_mode[5:4] = 0x0;
+    } KEYSCAN_MODE @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } tpulse[1:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ttern[5:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } tidle[10:8] = 0x0;
+    } KEYSCAN_PULSE @ 0x38;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } scan_num[1:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ghost[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } io_de[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } key_num_sel[13:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } rep_all_key[14:14] = 0x0;
+    } KEYSCAN_DE @ 0x50;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } key_value[8:0] = 0x0;
+    } KEY_VALUE_FIFO @ 0x94;
+};

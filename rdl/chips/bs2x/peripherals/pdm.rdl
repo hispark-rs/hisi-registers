@@ -1,0 +1,270 @@
+// Bootstrap source: PROVISIONAL bs2x-pac BS2X.svd snapshot 2026-07-17; fbb_bs2x is authoritative
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap bs2x_pdm_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Whole-register value; individual fields are not yet documented";
+        } VALUE[31:0] = 0x0;
+    } VERSION @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } pdm_dp_rst_n[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } clk_freq_sel[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } func_up_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } dmic_clken[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } saradc_clken[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } ckdiv_6144k_clken[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_clken[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } func_up_ch_en_0[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } cic_clken_0[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } compd_clken_0[10:10] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_clken_0[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_clken_0[12:12] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } func_up_ch_en_1[16:16] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } cic_clken_1[17:17] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } compd_clken_1[18:18] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_clken_1[19:19] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_clken_1[20:20] = 0x0;
+    } CLK_RST_EN @ 0x4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } mic_sel[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fs_sel_0[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fs_sel_1[5:5] = 0x0;
+    } CH_CTRL @ 0x8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } dmic_clk_sel[1:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } dmic_mode[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } dmic_reverse[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } saradc_gain[15:8] = 0x0;
+    } MIC_CTRL @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } cic_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } cic_en_1[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } cic_gain_0[15:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } cic_gain_1[23:16] = 0x0;
+    } CIC_CTRL @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } compd_bypass_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } compd_bypass_en_1[1:1] = 0x0;
+    } COMPD_CTRL @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_bypass_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_fs_sel[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_adc_dc[31:8] = 0x0;
+    } HPF_CTRL0 @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_bypass_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_fs_sel[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } hpf_adc_dc[31:8] = 0x0;
+    } HPF_CTRL1 @ 0x1C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_bypass_en_0[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_bypass_en_1[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_mode_0[5:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_mode_1[7:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_fifo_clr_0[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } srcdn_fifo_clr_1[9:9] = 0x0;
+    } SRCDN_CTRL @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_aempty_th[4:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_afull_th[12:8] = 0x0;
+    } UP_FIFO_CTRL @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_full_int_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_afull_int_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_empty_int_en[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_aempty_int_en[3:3] = 0x0;
+    } UP_FIFO_ST_CTRL @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_full_int_clr[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_afull_int_clr[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_empty_int_clr[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_aempty_int_clr[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+        } up_fifo_clr[4:4] = 0x0;
+    } UP_FIFO_ST_CLR @ 0x2C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+        } up_fifo_full_int[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+        } up_fifo_afull_int[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+        } up_fifo_empty_int[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+        } up_fifo_aempty_int[3:3] = 0x0;
+    } UP_FIFO_ST @ 0x30;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+        } pcm_word[31:0] = 0x0;
+    } UP_FIFO_DATA @ 0x80;
+};

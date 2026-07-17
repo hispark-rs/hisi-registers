@@ -1,0 +1,12 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_bt_em_ctl_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Temporarily gate Bluetooth exchange-memory access";
+        } enable[0:0] = 0x0;
+    } EM_GT_MODE @ 0x74;
+};

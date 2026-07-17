@@ -1,0 +1,184 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_tsensor_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Control ID";
+        } tsensor_ctl_id[15:0] = 0x0;
+    } TSENSOR_CTL_ID @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Common configuration register 0";
+        } tsensor_reg0[31:0] = 0x0;
+    } TSENSOR_REG0 @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Common configuration register 1";
+        } tsensor_reg1[31:0] = 0x0;
+    } TSENSOR_REG1 @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Common configuration register 2";
+        } tsensor_reg2[31:0] = 0x0;
+    } TSENSOR_REG2 @ 0x18;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Common configuration register 3";
+        } tsensor_reg3[31:0] = 0x0;
+    } TSENSOR_REG3 @ 0x1C;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Write 1 to refresh temperature reading";
+        } tsensor_start[0:0] = 0x0;
+    } TSENSOR_START @ 0x300;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Temperature sensor enable";
+        } tsensor_enable[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Temperature sensor mode";
+        } tsensor_mode[2:1] = 0x0;
+    } TSENSOR_CTRL @ 0x304;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clear status";
+        } clr[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Data ready flag";
+        } rdy[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Temperature code (10-bit, range 114-896 for -40C to 125C)";
+        } data[11:2] = 0x0;
+    } TSENSOR_STS @ 0x308;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Temperature calibration enable";
+        } temp_calib[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Temperature CT select";
+        } temp_ct_sel[2:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "DFT mode enable";
+        } dft[4:4] = 0x0;
+    } TSENSOR_CTRL1 @ 0x310;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "High temperature threshold (10-bit code)";
+        } temp_high_limit[9:0] = 0x0;
+    } TSENSOR_TEMP_HIGH_LIMIT @ 0x314;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Low temperature threshold (10-bit code)";
+        } temp_low_limit[9:0] = 0x0;
+    } TSENSOR_TEMP_LOW_LIMIT @ 0x318;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Over-temperature threshold (10-bit code)";
+        } over_temp[9:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Over-temperature interrupt enable";
+        } over_temp_en[10:10] = 0x0;
+    } TSENSOR_OVER_TEMP @ 0x31C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Conversion done interrupt enable";
+        } done_int_en[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Out-of-threshold interrupt enable";
+        } out_thresh_int_en[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Over-temperature interrupt enable";
+        } overtemp_int_en[2:2] = 0x0;
+    } TSENSOR_TEMP_INT_EN @ 0x320;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear done interrupt";
+        } done_int_clr[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear out-of-threshold interrupt";
+        } out_thresh_int_clr[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear over-temperature interrupt";
+        } overtemp_int_clr[2:2] = 0x0;
+    } TSENSOR_TEMP_INT_CLR @ 0x324;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Conversion done interrupt status";
+        } done_int_sts[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Out-of-threshold interrupt status";
+        } out_thresh_int_sts[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Over-temperature interrupt status";
+        } overtemp_int_sts[2:2] = 0x0;
+    } TSENSOR_TEMP_INT_STS @ 0x328;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Auto refresh period in 32kHz clock cycles";
+        } auto_refresh_period[15:0] = 0x0;
+    } TSENSOR_AUTO_REFRESH_PERIOD @ 0x330;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Auto refresh enable";
+        } auto_refresh_en[0:0] = 0x0;
+    } TSENSOR_AUTO_REFRESH_CFG @ 0x334;
+};

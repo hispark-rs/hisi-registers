@@ -1,0 +1,302 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_i2c0_regs {
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Transfer complete interrupt mask: 0=masked; 1=unmasked";
+        } int_done_mask[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Arbitration loss interrupt mask";
+        } int_arb_loss_mask[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "ACK error interrupt mask";
+        } int_ack_err_mask[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX interrupt mask";
+        } int_rx_mask[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX interrupt mask";
+        } int_tx_mask[4:4] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Stop condition interrupt mask";
+        } int_stop_mask[5:5] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Start condition interrupt mask";
+        } int_start_mask[6:6] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "I2C interrupt master mask";
+        } int_mask[7:7] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "I2C enable: 0=disabled; 1=enabled";
+        } i2c_en[8:8] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO overflow interrupt mask";
+        } int_rxtide_mask[9:9] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX FIFO overflow interrupt mask";
+        } int_txtide_mask[10:10] = 0x0;
+        field {
+            enum I2C0_I2C_CTRL_mode_ctrl_e1 {
+                NoFIFO = 0 {
+                    desc = "No FIFO transfer mode";
+                };
+                FIFO = 1 {
+                    desc = "FIFO transfer mode";
+                };
+            } ;
+            sw = rw;
+            hw = r;
+            encode = I2C0_I2C_CTRL_mode_ctrl_e1;
+            desc = "I2C mode: 0=no FIFO; 1=FIFO mode";
+        } mode_ctrl[11:11] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX FIFO complete interrupt mask";
+        } int_txfifo_over_mask[12:12] = 0x0;
+    } I2C_CTRL @ 0x0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Generate stop condition: 0=end; 1=active";
+        } op_stop[0:0] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Generate write operation";
+        } op_we[1:1] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Generate read operation";
+        } op_rd[2:2] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Generate start condition";
+        } op_start[3:3] = 0x0;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Master RX ACK: 0=send ACK; 1=no ACK";
+        } op_ack[4:4] = 0x0;
+    } I2C_COM @ 0x4;
+    reg {
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear transfer complete interrupt";
+        } clr_int_done[0:0] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear arbitration loss interrupt";
+        } clr_int_arb_loss[1:1] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear ACK error interrupt";
+        } clr_int_ack_err[2:2] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear RX interrupt";
+        } clr_int_rx[3:3] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear TX interrupt";
+        } clr_int_tx[4:4] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear stop interrupt";
+        } clr_int_stop[5:5] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear start interrupt";
+        } clr_int_start[6:6] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear RX FIFO overflow interrupt";
+        } clr_int_rxtide[7:7] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear TX FIFO overflow interrupt";
+        } clr_int_txtide[8:8] = 0x0;
+        field {
+            sw = w;
+            hw = r;
+            desc = "Clear TX FIFO complete interrupt";
+        } clr_int_txfifo_over[9:9] = 0x0;
+    } I2C_ICR @ 0x8;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Transfer complete interrupt flag";
+        } int_done[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Arbitration loss interrupt flag";
+        } int_arb_loss[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "ACK error interrupt flag";
+        } int_ack_err[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX interrupt flag";
+        } int_rx[3:3] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX interrupt flag";
+        } int_tx[4:4] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Stop interrupt flag";
+        } int_stop[5:5] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Start interrupt flag";
+        } int_start[6:6] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Bus busy: 0=idle; 1=busy";
+        } bus_busy[7:7] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO overflow flag";
+        } int_rxtide[8:8] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO overflow flag";
+        } int_txtide[9:9] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO complete flag";
+        } int_txfifo_over[10:10] = 0x0;
+    } I2C_SR @ 0xC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SCL high period (value*2 = actual period)";
+        } scl_h[15:0] = 0x0;
+    } I2C_SCL_H @ 0x10;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "SCL low period (value*2 = actual period)";
+        } scl_l[15:0] = 0x0;
+    } I2C_SCL_L @ 0x14;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX data byte";
+        } i2c_txr[7:0] = 0x0;
+    } I2C_TXR @ 0x18;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX data byte";
+        } i2c_rxr[7:0] = 0x0;
+    } I2C_RXR @ 0x1C;
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO full: 0=not full; 1=full";
+        } txff[0:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "TX FIFO empty: 0=not empty; 1=empty";
+        } txfe[1:1] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO full";
+        } rxff[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "RX FIFO empty";
+        } rxfe[3:3] = 0x0;
+    } I2C_FIFOSTATUS @ 0x20;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX FIFO character count (write any value to clear TX FIFO)";
+        } txcount[5:0] = 0x0;
+    } I2C_TXCOUNT @ 0x24;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO character count (write any value to clear RX FIFO)";
+        } rxcount[5:0] = 0x0;
+    } I2C_RXCOUNT @ 0x28;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "RX FIFO overflow interrupt trigger value";
+        } rxtide[5:0] = 0x1;
+    } I2C_RXTIDE @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "TX FIFO overflow interrupt trigger value";
+        } txtide[5:0] = 0x1;
+    } I2C_TXTIDE @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Glitch filter period in ic_clk cycles";
+        } ftrper[3:0] = 0xF;
+    } I2C_FTRPER @ 0x34;
+};

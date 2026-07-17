@@ -1,0 +1,944 @@
+// Bootstrap source: ws63-pac WS63.svd snapshot 2026-07-17; reconcile with fbb_ws63 and semi-official SVD
+// Imported once; this RDL is now reviewed canonical source.
+
+addrmap ws63_efuse_regs {
+    reg {
+        field {
+            sw = r;
+            hw = r;
+            desc = "Manufacturing status";
+        } man_sts[1:0] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Boot0 done flag";
+        } boot0_done[2:2] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Boot1 done flag";
+        } boot1_done[3:3] = 0x0;
+        field {
+            sw = r;
+            hw = r;
+            desc = "Boot2 done flag";
+        } boot2_done[4:4] = 0x0;
+    } EFUSE_STS @ 0x2C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Mode-select magic word (0xA5A5=write, 0x5A5A=read)";
+        } efuse_wr_rd[15:0] = 0x0;
+    } EFUSE_CTL_DATA @ 0x30;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Clock period in cycles (e.g. 0x29 @ 24MHz, 0x19 @ 40MHz)";
+        } clk_period[7:0] = 0x0;
+    } EFUSE_CLK_PERIOD @ 0x34;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "AVDD switch: 1=enable program voltage, 0=disable";
+        } avdd_sw[0:0] = 0x0;
+    } EFUSE_AVDD_CTL @ 0x3C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA0 @ 0x800;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA1 @ 0x804;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA2 @ 0x808;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA3 @ 0x80C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA4 @ 0x810;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA5 @ 0x814;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA6 @ 0x818;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA7 @ 0x81C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA8 @ 0x820;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA9 @ 0x824;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA10 @ 0x828;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA11 @ 0x82C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA12 @ 0x830;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA13 @ 0x834;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA14 @ 0x838;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA15 @ 0x83C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA16 @ 0x840;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA17 @ 0x844;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA18 @ 0x848;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA19 @ 0x84C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA20 @ 0x850;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA21 @ 0x854;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA22 @ 0x858;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA23 @ 0x85C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA24 @ 0x860;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA25 @ 0x864;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA26 @ 0x868;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA27 @ 0x86C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA28 @ 0x870;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA29 @ 0x874;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA30 @ 0x878;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA31 @ 0x87C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA32 @ 0x880;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA33 @ 0x884;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA34 @ 0x888;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA35 @ 0x88C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA36 @ 0x890;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA37 @ 0x894;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA38 @ 0x898;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA39 @ 0x89C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA40 @ 0x8A0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA41 @ 0x8A4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA42 @ 0x8A8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA43 @ 0x8AC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA44 @ 0x8B0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA45 @ 0x8B4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA46 @ 0x8B8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA47 @ 0x8BC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA48 @ 0x8C0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA49 @ 0x8C4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA50 @ 0x8C8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA51 @ 0x8CC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA52 @ 0x8D0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA53 @ 0x8D4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA54 @ 0x8D8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA55 @ 0x8DC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA56 @ 0x8E0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA57 @ 0x8E4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA58 @ 0x8E8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA59 @ 0x8EC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA60 @ 0x8F0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA61 @ 0x8F4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA62 @ 0x8F8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA63 @ 0x8FC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA64 @ 0x900;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA65 @ 0x904;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA66 @ 0x908;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA67 @ 0x90C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA68 @ 0x910;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA69 @ 0x914;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA70 @ 0x918;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA71 @ 0x91C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA72 @ 0x920;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA73 @ 0x924;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA74 @ 0x928;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA75 @ 0x92C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA76 @ 0x930;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA77 @ 0x934;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA78 @ 0x938;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA79 @ 0x93C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA80 @ 0x940;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA81 @ 0x944;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA82 @ 0x948;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA83 @ 0x94C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA84 @ 0x950;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA85 @ 0x954;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA86 @ 0x958;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA87 @ 0x95C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA88 @ 0x960;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA89 @ 0x964;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA90 @ 0x968;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA91 @ 0x96C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA92 @ 0x970;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA93 @ 0x974;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA94 @ 0x978;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA95 @ 0x97C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA96 @ 0x980;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA97 @ 0x984;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA98 @ 0x988;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA99 @ 0x98C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA100 @ 0x990;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA101 @ 0x994;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA102 @ 0x998;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA103 @ 0x99C;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA104 @ 0x9A0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA105 @ 0x9A4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA106 @ 0x9A8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA107 @ 0x9AC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA108 @ 0x9B0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA109 @ 0x9B4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA110 @ 0x9B8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA111 @ 0x9BC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA112 @ 0x9C0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA113 @ 0x9C4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA114 @ 0x9C8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA115 @ 0x9CC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA116 @ 0x9D0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA117 @ 0x9D4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA118 @ 0x9D8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA119 @ 0x9DC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA120 @ 0x9E0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA121 @ 0x9E4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA122 @ 0x9E8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA123 @ 0x9EC;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA124 @ 0x9F0;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA125 @ 0x9F4;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA126 @ 0x9F8;
+    reg {
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Two packed eFuse bytes (low byte=[7:0], high byte=[15:8])";
+        } data[15:0] = 0x0;
+    } EFUSE_DATA127 @ 0x9FC;
+};
