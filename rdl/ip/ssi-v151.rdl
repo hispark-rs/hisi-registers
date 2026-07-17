@@ -1,0 +1,71 @@
+// HiSilicon SSI v151 common register block.
+//
+// This tracer bullet intentionally models only the configuration prefix. Expand
+// it register-by-register after source reconciliation and evidence review.
+
+addrmap ssi_v151 {
+    name = "HiSilicon SSI v151";
+    desc = "Common synchronous serial controller register block";
+
+    default regwidth = 32;
+    default accesswidth = 32;
+
+    reg {
+        name = "SPI enable register";
+        field {
+            sw = rw;
+            hw = r;
+            reset = 0;
+            desc = "Enable the controller";
+        } start_en[0:0];
+    } spi_er @ 0x00;
+
+    reg {
+        name = "SPI control register A";
+        field { sw = rw; hw = r; reset = 0; } soe[0:0];
+        field { sw = rw; hw = r; reset = 0; } srlt[1:1];
+        field { sw = rw; hw = r; reset = 0; } ssn_te[2:2];
+        field { sw = rw; hw = r; reset = 0; } scph[3:3];
+        field { sw = rw; hw = r; reset = 0; } scpol[4:4];
+        field { sw = rw; hw = r; reset = 0; } cfs16[8:5];
+        field { sw = rw; hw = r; reset = 0; } dfs16[12:9];
+        field { sw = rw; hw = r; reset = 0; } dfs32[17:13];
+        field { sw = rw; hw = r; reset = 0; } trsm[19:18];
+        field { sw = rw; hw = r; reset = 0; } enhff[21:20];
+        field { sw = rw; hw = r; reset = 0; } prs[23:22];
+    } spi_ctra @ 0x04;
+
+    reg {
+        name = "SPI control register B";
+        field { sw = rw; hw = r; reset = 0; } nrdf[15:0];
+    } spi_ctrb @ 0x08;
+
+    reg {
+        name = "Enhanced transfer control register";
+        field { sw = rw; hw = r; reset = 0; } waitnum[4:0];
+        field { sw = rw; hw = r; reset = 0; } aaitf[6:5];
+        field { sw = rw; hw = r; reset = 0; } rdsen[7:7];
+        field { sw = rw; hw = r; reset = 0; } addrlen[11:8];
+        field { sw = rw; hw = r; reset = 0; } ilen[13:12];
+        field { sw = rw; hw = r; reset = 0; } iddren[14:14];
+        field { sw = rw; hw = r; reset = 0; } ddren[15:15];
+    } spi_enhctl @ 0x0c;
+
+    reg {
+        name = "Microwire control register";
+        field { sw = rw; hw = r; reset = 0; } mh[0:0];
+        field { sw = rw; hw = r; reset = 0; } mss[1:1];
+        field { sw = rw; hw = r; reset = 0; } mtrc[2:2];
+    } spi_mcr @ 0x10;
+
+    reg {
+        name = "Baud rate select register";
+        field { sw = rw; hw = r; reset = 0; } frdv[15:0];
+    } spi_brs @ 0x14;
+
+    reg {
+        name = "DMA control register";
+        field { sw = rw; hw = r; reset = 0; } tden[0:0];
+        field { sw = rw; hw = r; reset = 0; } rden[1:1];
+    } spi_dcr @ 0x18;
+};

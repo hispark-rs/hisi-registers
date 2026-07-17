@@ -1,0 +1,8 @@
+`include "../ip/ssi-v151.rdl"
+
+addrmap ws63 {
+    name = "HiSilicon WS63 register map (experimental subset)";
+
+    ssi_v151 spi0 @ 0x44020000;
+    ssi_v151 spi1 @ 0x44021000;
+};

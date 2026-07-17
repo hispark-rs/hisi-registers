@@ -1,0 +1,9 @@
+`include "../ip/ssi-v151.rdl"
+
+addrmap bs2x {
+    name = "HiSilicon BS2X register map (experimental subset)";
+
+    ssi_v151 spi0 @ 0x52087000;
+    ssi_v151 spi1 @ 0x52088000;
+    ssi_v151 spi2 @ 0x52089000;
+};
