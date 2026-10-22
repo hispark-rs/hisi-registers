@@ -1,7 +1,7 @@
 // Shared by WS53 and BS2X. Their fbb SDK v151 register definitions are
 // semantically identical; chip maps retain instance addresses and IRQs.
 
-addrmap i2c_v151_ws53_bs2x_regs {
+addrmap i2c_v151_ws53_bs2x_regs #(bit SDK_VIEW = false) {
     reg {
         field {
             sw = rw;
@@ -154,6 +154,22 @@ addrmap i2c_v151_ws53_bs2x_regs {
             hw = r;
         } first_data_byte[11:11] = 0x0;
     } IC_DATA_CMD @ 0x1C;
+    IC_DATA_CMD->ispresent = !SDK_VIEW;
+    external reg {
+        desc = "Read pops a receive FIFO entry; never use read-modify-write at this address";
+        field {sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal";} dat[7:0];
+        field {sw=r; hw=w;} first_data_byte[11:11];
+    } IC_DATA_READ @ 0x1c;
+    IC_DATA_READ->ispresent = SDK_VIEW;
+    reg {
+        hisi_svd_alternate_register = "IC_DATA_READ";
+        desc = "Write pushes a transmit data/read command; no command readback established";
+        field {sw=w; hw=r;} dat[7:0];
+        field {sw=w; hw=r;} cmd[8:8];
+        field {sw=w; hw=r;} stop[9:9];
+        field {sw=w; hw=r;} restart[10:10];
+    } IC_DATA_WRITE @ 0x1c;
+    IC_DATA_WRITE->ispresent = SDK_VIEW;
     reg {
         field {
             sw = rw;
@@ -208,90 +224,99 @@ addrmap i2c_v151_ws53_bs2x_regs {
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=rw; hw=r;} nack[0:0];
+        nack->ispresent = SDK_VIEW;
     } IC_SLAVE_DATA_NACK_ONLY @ 0x58;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } activity[0:0] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } tfnf[1:1] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } tfe[2:2] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rfne[3:3] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rff[4:4] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } mst_activity[5:5] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } slv_activity[6:6] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } mst_hold_tx_fifo_empty[7:7] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } mst_hold_rx_fifo_full[8:8] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } slv_hold_tx_fifo_empty[9:9] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } slv_hold_rx_fifo_full[10:10] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } sda_stuck_not_recovered[11:11] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } smbus_quick_cmd_bit[16:16] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } smbus_slave_addr_valid[17:17] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } smbus_slave_addr_resolved[18:18] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } smbus_suspend_status[19:19] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } smbus_alert_status[20:20] = 0x0;
     } IC_STATUS @ 0x60;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=r; hw=w;} txflr[31:0];
+        txflr->ispresent = SDK_VIEW;
     } IC_TXFLR @ 0x64;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=r; hw=w;} rxflr[31:0];
+        rxflr->ispresent = SDK_VIEW;
     } IC_RXFLR @ 0x68;
     reg {
         field {
@@ -307,38 +332,71 @@ addrmap i2c_v151_ws53_bs2x_regs {
     } IC_SDA_TX_HOLD @ 0x70;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } tx_flush_cnt[8:0] = 0x0;
     } IC_TX_FLUSH_CNT @ 0x74;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } user_abrt[0:0] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } sda_stuck_at_low[1:1] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } device_noack[2:2] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } device_slvaddr_noack[3:3] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } abrt_device_write[4:4] = 0x0;
     } IC_TX_ABRT_SOURCE @ 0x78;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=r; hw=w;} addr_7b_noack[0:0];
+        addr_7b_noack->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} addr1_10b_noack[1:1];
+        addr1_10b_noack->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} addr2_10b_noack[2:2];
+        addr2_10b_noack->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} txdata_noack[3:3];
+        txdata_noack->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} gcall_noack[4:4];
+        gcall_noack->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} gcalll_read[5:5];
+        gcalll_read->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} hs_ackdet[6:6];
+        hs_ackdet->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} sbyte_ackdet[7:7];
+        sbyte_ackdet->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} hs_norstrt[8:8];
+        hs_norstrt->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} sbyte_norstrt[9:9];
+        sbyte_norstrt->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} rd_10b_norstrt[10:10];
+        rd_10b_norstrt->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} master_dis[11:11];
+        master_dis->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} lost[12:12];
+        lost->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} slvflush_txfifo[13:13];
+        slvflush_txfifo->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} slv_arblost[14:14];
+        slv_arblost->ispresent = SDK_VIEW;
+        field {sw=r; hw=w;} slvrd_intx[15:15];
+        slvrd_intx->ispresent = SDK_VIEW;
     } IC_TX_ABRT_SLV_INTX @ 0x7C;
     reg {
         field {
@@ -346,18 +404,21 @@ addrmap i2c_v151_ws53_bs2x_regs {
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=rw; hw=r;} ack_gen_call[0:0];
+        ack_gen_call->ispresent = SDK_VIEW;
     } IC_ACK_GENERAL_CALL @ 0x80;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } ic_en[0:0] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } slv_disable_whlle_busy[1:1] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } slv_rx_data_lost[2:2] = 0x0;
     } IC_ENABLE_STATUS @ 0x84;
@@ -377,6 +438,9 @@ addrmap i2c_v151_ws53_bs2x_regs {
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=rw; hw=r;} dmatdl[31:0];
+        dmatdl->ispresent = SDK_VIEW;
     } IC_DMA_TDLR @ 0xA4;
     reg {
         field {
@@ -384,6 +448,9 @@ addrmap i2c_v151_ws53_bs2x_regs {
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
+        VALUE->ispresent = !SDK_VIEW;
+        field {sw=rw; hw=r;} dmardl[31:0];
+        dmardl->ispresent = SDK_VIEW;
     } IC_DMA_RDLR @ 0xA8;
     reg {
         field {
@@ -455,145 +522,145 @@ addrmap i2c_v151_ws53_bs2x_regs {
     } IC_INTR_MASK @ 0xB0;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_rx_under[0:0] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_rx_over[1:1] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_rx_full[2:2] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_tx_over[3:3] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_tx_empty[4:4] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_rd_req[5:5] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_tx_abrt[6:6] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_rx_done[7:7] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_activity[8:8] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_stop_det[9:9] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_start_det[10:10] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_gen_call[11:11] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_restart_det[12:12] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_master_on_hold[13:13] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } r_scl_stuck_at_low[14:14] = 0x0;
     } IC_INTR_STAT @ 0xB4;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rx_under[0:0] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rx_over[1:1] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rx_full[2:2] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } tx_over[3:3] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } tx_empty[4:4] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rd_req[5:5] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } tx_abrt[6:6] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } rx_done[7:7] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } activity[8:8] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } stop_det[9:9] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } start_det[10:10] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } gen_call[11:11] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } restart_det[12:12] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } master_on_hold[13:13] = 0x0;
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
         } scl_stuck_at_low[14:14] = 0x0;
     } IC_RAW_INTR_STAT @ 0xB8;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? r : rw;
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
     } IC_INTR_STAT_ALL @ 0xBC;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? w : rw;
             hw = r;
             desc = "Whole-register value; individual fields are not yet documented";
         } VALUE[31:0] = 0x0;
     } IC_CLR_INTR @ 0xC0;
     reg {
         field {
-            sw = rw;
+            sw = SDK_VIEW ? w : rw;
             hw = r;
         } clr_int[0:0] = 0x0;
     } IC_CLR_INT @ 0xC4;

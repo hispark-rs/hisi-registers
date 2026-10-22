@@ -909,3 +909,48 @@ The unchanged source also exposes hazards the Rust implementation must avoid:
 These behaviors are reproduced by executable source checks. They are not
 claims about the installed custom image, ROM, silicon reset or low-power
 correctness. RDL/PAC is prepared; PWM HAL/model/physical validation remain open.
+
+## WS53 I2C source/PAC contract (2026-10-23)
+
+Source pin remains `fbb_ws53 163d9150ab94a02d09a05f623351f9facee3025e`.
+`ws53_liteos_app.config` selects non-PRO v151, master, LPC/LPM and Fast-plus;
+slave/interrupt/DMA are disabled in that reference build, high speed is disabled.
+The port owns two configured instances at `0x52083000/0x52084000`, IRQ62/63,
+8-entry TX/RX FIFOs, and reports 32MHz. It toggles M_CLKEN1 bits6/7 with halfword
+RMW. These are SDK integration facts, not installed-image or silicon proof.
+Shared clocks, pads and bus ownership still require a separate handoff.
+
+`check_ws53_i2c_contract.py` compiles the original regs/master/port C sources
+against host RAM and stubs after validating every input against that pin. It
+checks all 36 register views per instance and named fields against generated
+SVD, both clock gates preserving unrelated bits, every restart/stop flag
+combination, interrupt mask polarity, and the actual clear-all write of 1 to
+`IC_CLR_INT +0xc4`. No bus or probe is opened. Normal source count results at
+32MHz are high/low 153/159 (100kHz), 32/40 (400kHz), and 6/21 (1MHz); the last
+uses the source's mode3 and HS count slots. These are encodings, not measured
+bus frequencies or proof that generic DesignWare high-speed semantics apply.
+
+Do not copy these source defects into a HAL:
+
+- Header comments call clear registers read-to-clear, but source helpers write.
+  `ic_v151_clr_intr_data_t` exceeds 32 bits: compiled TX_ABRT/STOP/START helpers
+  write `0x10000000`/`0x80000000`/`0`, unlike the status bitmap. A separate
+  `set_clr_intr` helper writes a right-shifted value to ENABLE_STATUS, not CLR.
+  Selective clear positions/readback are unresolved. Only the source clear-all
+  command is modeled; no selective W1C or read-clear semantics are invented.
+- ENABLE setters read-modify-write the command-containing register, replaying
+  ABORT if read back set. FIFO force-stop/restart helpers also read a receive
+  FIFO register before writing a command; Rust must keep separate read/write views.
+- With Fast-plus enabled, the HS enum becomes3; `speed_mode+1` truncates to zero
+  in the two-bit field. The master init configures counts/mode before returning
+  the high-speed rejection. Counts above16 bits silently truncate; zero baud
+  reaches a division by zero if it reaches the calculator. Validate before MMIO.
+- The legacy BS2X HAL clears by reading CLR_INTR and emits independent STOPs
+  for each embedded-hal Operation. This is not a suitable WS53 transaction
+  implementation. Legacy outputs/APIs are preserved pending a separate review.
+
+The shared IP now has an opt-in `SDK_VIEW`, used only by WS53: RX-pop/TX-command
+aliases at0x1c, RO status/abort/level fields, WO clear commands, named abort causes,
+and no claimed reset values. Both WS53 instances use it. WS63/BS2X generated
+outputs remain byte-identical. No I2C HAL, model, bus timing or HIL support is
+claimed by this source/PAC milestone.

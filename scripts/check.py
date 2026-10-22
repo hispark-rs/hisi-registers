@@ -68,9 +68,9 @@ EXPECTED = {
         "source_arrays": 0,
         "output_arrays": 6,
         "cluster_arrays": 1,
-        "registers_expanded": 934,
-        "fields_expanded": 1927,
-        "write_constraints": 16,
+        "registers_expanded": 936,
+        "fields_expanded": 1959,
+        "write_constraints": 18,
     },
 }
 

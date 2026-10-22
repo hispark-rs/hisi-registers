@@ -130,8 +130,24 @@ addrmap ws53 {
     uart2.TX_FIFO_READ.tx_fifo_read->hisi_svd_read_action = "modifyExternal";
     uart1->hisi_svd_derived_from = "UART0";
     uart2->hisi_svd_derived_from = "UART0";
-    i2c_v151_ws53_bs2x_regs i2c0 @ 0x52083000;
-    i2c_v151_ws53_bs2x_regs i2c1 @ 0x52084000;
+    i2c_v151_ws53_bs2x_regs #(.SDK_VIEW(true)) i2c0 @ 0x52083000;
+    i2c0->hisi_reset_unverified = true;
+    i2c0->hisi_evidence = "SDK-source 163d9150 application v151 non-PRO, FIFO8, IRQ62; shared bus/pads/clock require handoff; not silicon verified";
+    i2c0.IC_CLR_INT.clr_int->hisi_write_min = 1;
+    i2c0.IC_CLR_INT.clr_int->hisi_write_max = 1;
+    i2c0.IC_CLR_INT.clr_int->desc = "Source clr_all_int writes 1; header says read-clear but conflicts with executed helper; read behavior not exposed";
+    i2c0.IC_CLR_INTR.VALUE->desc = "Selective clear layout unresolved: SDK bitfield exceeds 32 bits and helper masks disagree with status; do not infer W1C positions or read-clear";
+    i2c0.IC_INTR_STAT_ALL.VALUE->desc = "Status slot from SDK struct; no verified software write or individual field semantics";
+
+    i2c_v151_ws53_bs2x_regs #(.SDK_VIEW(true)) i2c1 @ 0x52084000;
+    i2c1->hisi_reset_unverified = true;
+    i2c1->hisi_evidence = "SDK-source 163d9150 application v151 non-PRO, FIFO8, IRQ63; shared bus/pads/clock require handoff; not silicon verified";
+    i2c1.IC_CLR_INT.clr_int->hisi_write_min = 1;
+    i2c1.IC_CLR_INT.clr_int->hisi_write_max = 1;
+    i2c1.IC_CLR_INT.clr_int->desc = "Source clr_all_int writes 1; header says read-clear but conflicts with executed helper; read behavior not exposed";
+    i2c1.IC_CLR_INTR.VALUE->desc = "Selective clear layout unresolved: SDK bitfield exceeds 32 bits and helper masks disagree with status; do not infer W1C positions or read-clear";
+    i2c1.IC_INTR_STAT_ALL.VALUE->desc = "Status slot from SDK struct; no verified software write or individual field semantics";
+
     rtc_v150_ws53_bs2x_regs rtc0 @ 0x57029100;
     rtc_v150_ws53_bs2x_regs rtc1 @ 0x57029200;
     // Source SDK 163d9150 RTC v150: two configured 32-bit channels, not

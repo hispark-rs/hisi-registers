@@ -105,3 +105,9 @@ not a separately maintained truth source. See `evidence/README.md`.
 Apache-2.0. Imported source material remains subject to its original license and
 must not be copied into this repository unless redistribution is explicitly
 permitted.
+
+The optional WS53 I2C source oracle checks the pinned vendor C against host RAM
+(no hardware): `uv run --script scripts/check_ws53_i2c_contract.py --sdk /path/to/fbb_ws53`.
+It verifies the non-PRO instance layout, FIFO command aliases and clock gates,
+and records contradictory clear helpers instead of guessing selective-clear bits.
+See the WS53 source matrix for remaining timing/ownership limitations.
