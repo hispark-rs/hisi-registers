@@ -7,6 +7,52 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_pwm_profile_withholds_resets_and_exposes_event_enable(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            tree = ET.parse(dest)
+            pwm = tree.find("./peripherals/peripheral[name='PWM']")
+            regs = {r.findtext("name"): r for r in pwm.findall("registers/register")}
+            self.assertEqual(len(regs), 115)
+            self.assertEqual(int(pwm.findtext("baseAddress"), 0), 0x52082000)
+            self.assertEqual({i.findtext("name"): int(i.findtext("value")) for i in pwm.findall("interrupt")},
+                             {"PWM_ABNOR": 71, "PWM_CFG": 72})
+            for reg in regs.values():
+                self.assertEqual(reg.findtext("size"), "32")
+                self.assertIsNone(reg.find("resetValue"))
+                self.assertIsNone(reg.find("resetMask"))
+                self.assertIsNone(reg.find(".//modifiedWriteValues"), "commands are not assumed W1C storage")
+            for group in range(4):
+                for suffix, offset in (("SEL", 0), ("STARTCLRCNT_EN", 4), ("START", 8)):
+                    reg = regs[f"PWM_{suffix}{group}"]
+                    self.assertEqual(int(reg.findtext("addressOffset"), 0), group*16+offset)
+                command = regs[f"PWM_START{group}"]
+                self.assertEqual(command.findtext("access"), "write-only")
+                for bound in ("minimum", "maximum"):
+                    self.assertEqual(command.findtext("fields/field/writeConstraint/range/"+bound), "1")
+            for channel in range(8):
+                for suffix, off in (("OFFSET", 0x0c), ("FREQ", 0x14), ("DUTY", 0x1c)):
+                    for half, delta in (("L", 0), ("H", 4)):
+                        reg = regs[f"PWM_{suffix}_{half}{channel}"]
+                        self.assertEqual(int(reg.findtext("addressOffset"), 0), 0x100+channel*64+off+delta)
+                        self.assertEqual(reg.findtext("fields/field/bitWidth"), "16")
+                for suffix in ("PERIODLOAD_FLAG", "PERIODCNT"):
+                    self.assertEqual(regs[f"PWM_{suffix}{channel}"].findtext("access"), "read-only")
+            for suffix in ("ABNOR_STATE_CLR0", "ABNOR_STATE_CLR1", "CFG_INT_CLR0"):
+                self.assertEqual(regs[f"PWM_{suffix}"].findtext("access"), "write-only")
+            enum = regs["PWM_INT_MASK"].findall("fields/field/enumeratedValues/enumeratedValue")
+            self.assertEqual({v.findtext("name"): int(v.findtext("value")) for v in enum},
+                             {"Disabled": 0, "AbnormalOnly": 1, "PeriodEndOnly": 2, "AllEvents": 3})
+            clocks = tree.find("./peripherals/peripheral[name='M_CRG']")
+            div = clocks.find("registers/register[name='PWM_M_DIV3']")
+            self.assertEqual(int(div.findtext("addressOffset"), 0), 0x7c)
+            self.assertEqual(div.findtext("size"), "16")
+            self.assertIsNone(div.find("resetValue"))
+            self.assertEqual({f.findtext("name"): (int(f.findtext("bitOffset")), int(f.findtext("bitWidth")))
+                              for f in div.findall("fields/field")},
+                             {"ENABLE": (0, 1), "LOAD": (1, 1), "DIVIDER": (2, 5)})
+
     def test_ws53_gpio_basic_banks_commands_and_unknown_reset_values(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"

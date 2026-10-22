@@ -854,3 +854,58 @@ delivery, low-power wakeup or recovery on a physical board.
 ```sh
 uv run --script scripts/check_ws53_rtc_contract.py --sdk /path/to/fbb_ws53
 ```
+
+## PWM v151 application source contract (2026-10-23)
+
+Source pin `163d9150ab94a02d09a05f623351f9facee3025e`: application menuconfig,
+acore platform/IRQ and clock-recovery headers, PWM public/port/HAL headers, and
+the original PWM driver, HAL and port C files. The optional
+`scripts/check_ws53_pwm_contract.py --sdk /path/to/fbb_ws53` hashes every input
+against that commit and compiles the unchanged implementation with host RAM,
+clock/IRQ stubs and a delay observer. It does not access MMIO, ROM or a board.
+
+The selected profile uses 4 groups, 8 channels, LPM support and no PRELOAD.
+PWM is `0x52082000`, local causes 71/72; SPWM IRQ definitions alone do not prove
+a second usable application instance. All 115 word slots and field encodings
+are checked against the C types and generated SVD. High count halves remain
+16-bit fields in the PAC, but the application helper writes only low halves.
+The SDK port limits low+high to 255 and offset to low; the public driver limits
+cycle count to 32767. Neither limit proves the physical counter width. WS63's
+measured high-half behavior must not be transferred to WS53.
+
+The clock port sets M_CLKEN0 bit7, then accesses PWM_M_DIV3 (`0x5200007c`) as a
+halfword: enable bit0, clear load bit1, program divider[6:2]=16, set load bit1.
+Enable preserves unrelated bits; disable clears the gate and writes zero to
+the whole divider halfword. The new shared-control register describes this
+source evidence, not application-exclusive ownership. The port reports 32MHz;
+the input/divider relationship, frequency and waveforms remain unmeasured.
+
+INT_MASK is an **event-enable** field: bit0 abnormal, bit1 step-end, 1 permits
+delivery. The original init writes3 with a remove-mask comment. WS53 adds named
+encodings and withholds all PWM reset values. START is a write-one commit
+command; clear words are write-only acknowledgement masks. SDK helpers RMW
+these command words, but that does not establish meaningful readback or safe
+RMW. Self-clear claims are removed for WS53; no W1C storage semantics, read
+side effects or clear latency are invented. WS63/BS2X outputs are unchanged.
+
+For non-repeating pulse sequences, source group start first enables selected
+channels and commits with STARTCLRCNT=1, then stages EN=0 for channels with
+nonzero cycles, waits1us, and commits again with STARTCLRCNT=0. Host tests
+observe both sides of the delay for all four groups, including a continuous
+cycles=0 channel; they cannot prove the output waveform or stop edge.
+
+The unchanged source also exposes hazards the Rust implementation must avoid:
+
+- Its u32 low+high check accepts both zero and overflowing sums.
+- The group helper accepts channel8 even though this profile configures0..7.
+- Repeat is one global variable: opening channel1 as repeating changes a
+  previously configured non-repeating channel0's subsequent group-start path.
+- Registering any channel enables both shared IRQs; unregistering any other
+  channel disables both. Ownership/lifetime must therefore cover the shared
+  block, groups and IRQs, rather than independently tearing down each channel.
+- The direct HAL callback executes before step-end acknowledgement. Register
+  deinit only forgets the base pointer; it does not stop or mask the device.
+
+These behaviors are reproduced by executable source checks. They are not
+claims about the installed custom image, ROM, silicon reset or low-power
+correctness. RDL/PAC is prepared; PWM HAL/model/physical validation remain open.
