@@ -68,8 +68,8 @@ EXPECTED = {
         "source_arrays": 0,
         "output_arrays": 6,
         "cluster_arrays": 1,
-        "registers_expanded": 930,
-        "fields_expanded": 1909,
+        "registers_expanded": 933,
+        "fields_expanded": 1924,
         "write_constraints": 10,
     },
 }
@@ -200,6 +200,15 @@ for filename, expected in EXPECTED.items():
         assert "0 free, 1 busy" in wregs["WDT_STATUS"].findtext("fields/field/description")
         modes = wregs["WDT_CR"].findall("fields/field[name='WDT_MODE']/enumeratedValues/enumeratedValue")
         assert [(v.findtext("name"), v.findtext("value")) for v in modes] == [("ResetOnFirst", "0"), ("ResetOnSecond", "1")]
+        for name, offset, access in (("NMI_ENABLE", 0x700, "read-write"),
+                                    ("NMI_RAW_STATUS", 0x704, "read-only"),
+                                    ("NMI_MASKED_STATUS", 0x708, "read-only")):
+            reg = by_name["M_CRG"].find(f"registers/register[name='{name}']")
+            assert int(reg.findtext("addressOffset"), 0) == offset
+            assert reg.findtext("size") == "16" and reg.findtext("access") == access
+            assert reg.find("resetValue") is None and reg.find("readAction") is None
+            assert [(f.findtext("name"), f.findtext("bitOffset")) for f in reg.findall("fields/field")] == [
+                ("WATCHDOG", "1"), ("XIP_CONTROL", "2"), ("XIP_CACHE", "3"), ("MDMA", "4"), ("SMDMA", "5")]
     for p in peripheral_nodes:
         if base := p.get("derivedFrom"):
             import copy

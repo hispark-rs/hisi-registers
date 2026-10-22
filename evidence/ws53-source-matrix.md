@@ -731,3 +731,37 @@ base is `0x52000700`, but source/ROM status offset conventions also differ.
 NMI delivery, stage progression after EOI, lock protection range, clock loss,
 reset timing and physical watchdog recovery are still unverified; no complete
 watchdog HAL/model claim follows from the PAC.
+
+## Resolved application NMI source profile (2026-10-23)
+
+The source/ROM discrepancy above is resolved **for the pinned
+`ws53_liteos_app` source configuration**, not for the installed custom firmware.
+`check_ws53_nmi_profile.py` runs the SDK's unchanged `TargetEnvironment` resolver
+in an isolated temporary copy (its import removes bytecode caches). The expanded
+RAM set contains `non_os` and `watchdog_port`; neither active RAM nor ROM set
+contains `non_os_rom` or `non_os_ram`. The checker then executes the original
+CMake `component_on_rom()` macro: only `non_os` is selected. The pinned
+`build_component.cmake` exports public header directories only for selected
+components and links their interfaces into the target. Both candidate component
+files export their own directory, and these are the only two `non_os.h` files
+in the SDK. Thus the selected application path is the source header, with
+**NMI_CWDT = 1**, not the bundled ROM header's bit2.
+
+The original source `kernel/non_os/non_os/non_os_nmi.c` is compiled unchanged
+with the selected original header. Only the MMIO and IRQ-save primitives are
+replaced by host mocks; dependency output checks the selected header. Tests
+verify halfword enable RMW at `0x52000700`, raw-status read at `+4`, masked-status
+read at `+8`, neighboring enable-bit preservation, IRQ save/restore, five source
+classifications and the no-source case. The checker compares the corresponding
+three 16-bit M_CRG registers and fifteen fields to the generated SVD. Read-only
+status has no speculative clear-on-read or writable-clear API. The status source
+names are software route evidence, not proof that every named engine is usable
+or application-owned. Bit0/GWDT is omitted: the selected source classification
+does not handle it. Unknown bits and reset values remain unmodeled.
+
+This is not a complete vendor build and does not check its linked ELF, nor the
+currently installed firmware. It also does not prove CPU NMI entry/return,
+maskability, repeated/nested NMI behavior or watchdog reset sequencing. No local
+interrupt number or RISC-V PLIC route is invented. The previous WDT register
+checker continues to report both header values as source context; the profile
+checker supplies the missing component-selection evidence.
