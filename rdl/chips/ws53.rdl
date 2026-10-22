@@ -17,6 +17,7 @@
 `include "ws53/adc-v155.rdl"
 `include "ws53/tsensor.rdl"
 `include "ws53/sdio-v151.rdl"
+`include "ws53/trng.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -34,6 +35,7 @@ addrmap ws53 {
     ws53_mcu_diag_regs mcu_diag @ 0x52004100;
     ws53_tsensor_regs tsensor @ 0x59006300;
     ws53_sdio_v151_regs sdio @ 0x52060000;
+    ws53_trng_regs trng @ 0x52024000;
     watchdog_v151_regs wdt @ 0x5702B000;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;

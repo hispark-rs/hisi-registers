@@ -61,4 +61,9 @@ addrmap ws53_m_crg_regs {
     reg {
         field {sw=rw; hw=r; desc="SPI_BUS_0: 0 slave, 1 master; QSPI bus1 is master-only";} master[0:0];
     } SPI_DEVICE_MODE @ 0x950;
+    reg {
+        name = "TRNG_SEC_CFB: volatile shared ring control; SDK waits 200 us after enabling";
+        hisi_evidence = "SDK-source 163d9150 security_unified_porting.h TRNG_SEC_CFB and hal_trng.c inner_trng_ring_enable; u16 read/modify/write";
+        field {sw=rw; hw=r;} ring_enable[0:0];
+    } TRNG_RING_CONTROL @ 0x1600;
 };

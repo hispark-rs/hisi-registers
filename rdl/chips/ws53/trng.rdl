@@ -1,0 +1,28 @@
+// SDK 163d9150: security_unified_porting.h + hal_cipher/trng/hal_trng{,_reg}.h/c.
+// The selected application uses the unified security address, NOT the older
+// platform_core.h TRNG_RB_BASE. Application service also supplies control-core
+// random buffers over IPC: these registers are not an exclusive Rust token.
+addrmap ws53_trng_regs {
+    hisi_evidence = "SDK-source 163d9150 unified-security OS TRNG; application IPC random-buffer service; ownership and silicon behavior unverified";
+    external reg {
+        name = "Consume one FIFO word; SDK reads twice per candidate and discards the comparison word";
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal"; } value[31:0];
+    } FIFO_DATA @ 0x100;
+    reg {
+        name = "Both data_ready and done must be set before the SDK consumes a candidate";
+        field { sw=r; hw=w; } data_ready[0:0];
+        field { sw=r; hw=w; } done[1:1];
+    } FIFO_READY @ 0x104;
+    // Optional header/source capability, disabled by CONFIG_ENTROPY_SOURCES_FROM_FRO
+    // in ws53_liteos_app. No default clock or frequency is inferred.
+    reg {
+        name = "Optional FRO entropy-source clock selector; SDK writes 1 for internal FRO";
+        field { sw=rw; hw=r; } internal_fro[0:0];
+    } FRO_SAMPLE_CLK_SEL @ 0x174;
+    reg {
+        name = "Optional FRO divider encoding; SDK uses 0x1b for its divide-by-54 setup";
+        field { sw=rw; hw=r; } value[7:0];
+    } FRO_DIV_CNT @ 0x178;
+    // DATA_ST +0x108 is only a macro with no field/access evidence. Omitted.
+    // No documented TRNG IRQ or reset values. Ring enable lives in M_CRG.
+};

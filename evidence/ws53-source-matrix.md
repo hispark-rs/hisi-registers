@@ -373,3 +373,56 @@ No HAL, SDIO model, data transfer or IRQ-delivery test is claimed yet.
 
 Current map: 28 peripherals, 786 expanded register views, 1606 fields, 20 IRQs.
 The SDIO layout is ROM-derived evidence, distinct from a transfer HIL result.
+
+## Unified-security TRNG: source-address and shared-service audit
+
+SDK `163d9150ab94a02d09a05f623351f9facee3025e`,
+`build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config`, enables
+SECURITY_UNIFIED_SUPPORT_TRNG and TRNG_RING_ENABLE; ENTROPY_SOURCES_FROM_FRO is
+unset. `target_config.py` selects BUILD_APPLICATION_STANDARD and
+`acore_trng_buffer`. The application branch of
+`drivers/drivers/hal/security_unified/CMakeLists.txt` builds `hal_trng.c` and
+`crypto_osal/cfbb/os/crypto_osal_lib.c`. The OS header includes the WS53
+`security_unified_porting.h` and adds `TRNG_REG_BASE_ADDR` for every TRNG access.
+Thus this source path uses **0x52024000** (SEC_SUBSYS_BASE 0x52010000 + 0x14000),
+not the legacy **0x52009800** TRNG_RB_BASE in platform_core.h. A different
+ROM/boot configuration is not assumed to use this application path.
+
+| RDL register | Source evidence | Access/meaning |
+|---|---|---|
+| TRNG.FIFO_DATA +0x100 | hal_cipher/trng/hal_trng_reg.h and hal_trng.c | 32-bit RO FIFO consumption, readAction modifyExternal |
+| TRNG.FIFO_READY +0x104 | same, is_trng_ready() | 32-bit RO, data_ready bit0 AND done bit1 required |
+| TRNG.FRO_SAMPLE_CLK_SEL +0x174 | optional FRO init branch | 32-bit RW, bit0=1 selects internal FRO; branch disabled in selected config |
+| TRNG.FRO_DIV_CNT +0x178 | optional FRO init branch | 32-bit RW, low8 encoding; source uses 0x1b and describes divide by54, no general formula inferred |
+| M_CRG.TRNG_RING_CONTROL +0x1600 | TRNG_SEC_CFB macro + inner_trng_ring_enable() | 16-bit RW bit0; shared volatile ring control, not OTP/security provisioning |
+
+No reset values or TRNG interrupt are invented. DATA_ST +0x108 is a macro only,
+without demonstrated access/field semantics, and is omitted. CONFIG_TRNG_CLK_OPEN
+is not enabled in the selected application; its optional TRNG_SAMPLE_CKDIV address
+is not defined by this WS53 port, so it is also omitted. SDK init enables the ring
+and waits 200 us, deinit disables it; neither operation is safe to perform behind
+another core/service's back. No TRNG MMIO read or ring-control write was performed.
+
+The SDK reads FIFO_READY twice, then consumes two FIFO words per candidate. It
+rejects a candidate of zero/all-ones or equal to its comparison word. This is a
+source-level filter, not an entropy-quality proof. The timeout macro is named
+IN_US, its comment says 10ms, but the actual body counts 1,000,000 polling
+iterations with no delay; do not expose this as a measured microsecond timeout.
+
+`drivers/chips/ws53/porting/security_unified/trng_ipc_acore_buffer.c` registers
+IPC_MSG_UPDATE_SHARE_RANDOM_NUMBER. Application main calls the registration.
+The callback reads type/address/length from the message, adds **0x10000000** to
+the control-core address and fills the entire or one half of the requested buffer
+with application-generated random bytes. The source does not validate payload
+length, mapped range, arithmetic overflow or alignment before these operations;
+those checks and ownership must be designed explicitly for Rust. Its target
+buffer is dynamic, not the static IPC message queue. The control-core companion
+named by CMake is absent from this release. The installed custom gateway firmware
+and its buffer protocol are not established by this SDK audit.
+
+This proves an application-facing TRNG service with cross-core consumers; it
+does not prove exclusive application ownership, a safe handover, or permission
+to overwrite RAM used by either service. Future HAL must coordinate the existing
+service or use an explicitly verified handover. No HAL, model, hardware random
+read, statistical/cryptographic-quality test or stable API is claimed here.
+Current map: **29 peripherals, 791 register views, 1612 fields, 20 IRQs**.

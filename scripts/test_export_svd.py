@@ -7,6 +7,38 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_unified_trng_consumption_and_halfword_ring_control(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            peripherals = {p.findtext("name"): p for p in ET.parse(dest).findall(".//peripheral")}
+            trng = peripherals["TRNG"]
+            self.assertEqual(int(trng.findtext("baseAddress"), 0), 0x52024000)
+            self.assertIsNone(trng.find("interrupt"))
+            regs = {r.findtext("name"): r for r in trng.findall("registers/register")}
+            self.assertEqual(set(regs), {"FIFO_DATA", "FIFO_READY", "FRO_SAMPLE_CLK_SEL", "FRO_DIV_CNT"})
+            for name, offset, access in (
+                ("FIFO_DATA", 0x100, "read-only"), ("FIFO_READY", 0x104, "read-only"),
+                ("FRO_SAMPLE_CLK_SEL", 0x174, "read-write"), ("FRO_DIV_CNT", 0x178, "read-write"),
+            ):
+                self.assertEqual(int(regs[name].findtext("addressOffset"), 0), offset)
+                self.assertEqual(regs[name].findtext("access"), access)
+                self.assertEqual(regs[name].findtext("size"), "32")
+                self.assertIsNone(regs[name].find("resetValue"))
+            self.assertEqual(regs["FIFO_DATA"].findtext("fields/field/readAction"), "modifyExternal")
+            self.assertIsNone(regs["FIFO_READY"].find(".//readAction"))
+            ready_fields = {f.findtext("name"): f for f in regs["FIFO_READY"].findall("fields/field")}
+            self.assertEqual(set(ready_fields), {"DATA_READY", "DONE"})
+            self.assertEqual(ready_fields["DATA_READY"].findtext("bitOffset"), "0")
+            self.assertEqual(ready_fields["DONE"].findtext("bitOffset"), "1")
+            self.assertEqual(regs["FRO_DIV_CNT"].findtext("fields/field/bitWidth"), "8")
+            ring = peripherals["M_CRG"].find("registers/register[name='TRNG_RING_CONTROL']")
+            self.assertEqual(int(ring.findtext("addressOffset"), 0), 0x1600)
+            self.assertEqual(ring.findtext("size"), "16")
+            self.assertEqual(ring.findtext("access"), "read-write")
+            self.assertEqual(ring.findtext("fields/field/bitWidth"), "1")
+            self.assertIsNone(ring.find("resetValue"))
+
     def test_ws53_sdio_command_views_do_not_offer_rmw(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"
