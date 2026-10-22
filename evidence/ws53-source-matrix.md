@@ -679,3 +679,55 @@ and compares bank bases/bit spans to the concrete port. It does not access MMIO.
 The WS53 map is now **31 peripherals, 928 register views, 1908 fields, 20 IRQs**.
 WS63/BS2X SVD bytes remain unchanged. GPIO HAL, pin ownership, pad configuration,
 debounce, clock management and hardware validation remain open.
+
+## Application watchdog v151 access audit (2026-10-23)
+
+SDK commit `163d9150ab94a02d09a05f623351f9facee3025e`, application profile
+`ws53_liteos_app`. Sources are `drivers/drivers/hal/watchdog/v151/`
+`hal_watchdog_v151{,_regs_def,_regs_op}.{c,h}`, the WS53 watchdog port,
+`include/acore/platform_core.h`, `ws53_application/main.c` and the non-OS NMI
+sources (paths below the SDK's `src/`). No new silicon evidence is claimed.
+
+The block is eleven 32-bit slots at `0x5702b000`. The SDK-view parameter on the
+shared IP adds separate read/write aliases for LOCK and CCVR, giving thirteen
+SVD views. LOCK reads 0 unlocked / 1 locked; writing `0x5a5a5a5a` unlocks and
+other keys lock. A key is not a readable state value, so neither view permits
+RMW. CCVR_REQUEST writes 1 while CCVR_STATUS reads valid at bit1; requests cannot
+accidentally write a sampled acknowledgement back. LOAD is a 24-bit value at
+bits31:8; this does not prove the unknown low-byte counter initialization.
+
+The SDK kick path writes **0x5a5a5a5a**. The register comment contradicts itself
+about other keys; only the actual driver key is constrained/exported. The SDK
+status definition is **0 free, 1 busy**, opposite the inherited import. Mode 0
+resets on the first expiry interrupt, mode 1 on the second (subject to RST_EN),
+not an asserted additional full timeout after that interrupt. EOI reads zero
+and clears the interrupt per the register comment. The actual SDK clear helper
+performs a read then writes 1, so it does not independently prove write-only
+clear behavior. Only read-to-clear is exposed, with `modifyExternal` to prevent
+passive generated Debug reads. LP/status setter helpers also do not establish
+writable status hardware. All inherited reset annotations are withheld for WS53.
+
+`check_ws53_watchdog_layout.py` compiles the unchanged original C register types
+and operation helpers into a **host RAM** test, checking offsets, widths, field
+encodings and actual kick/lock/latch/clear accesses. This is source-layout and
+helper evidence, not a hardware or QEMU behavior model. `check.py` enforces the
+asymmetric API, no reset assumptions and no invented WDT local IRQ in normal CI.
+WS63/BS2X generated output is unchanged by the opt-in SDK view; legacy watchdog
+semantics on those targets remain a separately reviewed migration.
+
+The port defaults to **32,000 Hz**, not WS63's 24 MHz; an FPGA branch uses
+31,902 Hz. Neither is a measurement of the current board. Application startup
+sets bits2/3 at `0x57030900` using halfword RMW, then the port releases bit0 using
+word RMW and waits 60 us. Full reset/clock ownership and mixed-width effects
+remain to be audited before a safe constructor.
+
+WDT uses an NMI aggregation path: the port's local-IRQ registration is empty,
+and `watchdog_func_adapt` enables `NMI_CWDT`. The current non-OS source header
+`kernel/non_os/non_os/non_os.h` calls that bit **1**, whereas the bundled ROM
+header `drivers/chips/ws53/rom/app/kernel/non_os/non_os/non_os.h` calls it **2**.
+The selected include path must be proven before binding the route. The NMI block
+base is `0x52000700`, but source/ROM status offset conventions also differ.
+`B_WDT_IRQN = LOCAL_INTERRUPT0 + 60` is not assigned to the application watchdog.
+NMI delivery, stage progression after EOI, lock protection range, clock loss,
+reset timing and physical watchdog recovery are still unverified; no complete
+watchdog HAL/model claim follows from the PAC.

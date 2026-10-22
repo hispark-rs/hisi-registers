@@ -2,7 +2,9 @@
 // Confirmed by byte-identical register definition and operation headers in
 // fbb_ws53, fbb_ws63 and fbb_bs2x.
 
-addrmap watchdog_v151_regs {
+// SDK_VIEW separates asymmetric command/status words. The default preserves
+// existing WS63/BS2X output until their consumers are migrated explicitly.
+addrmap watchdog_v151_regs #(bit SDK_VIEW = false) {
     reg {
         field {
             sw = w;
@@ -10,6 +12,16 @@ addrmap watchdog_v151_regs {
             desc = "Write 0x5A5A5A5A to unlock, other values lock";
         } wdt_lock[31:0] = 0x0;
     } WDT_LOCK @ 0x0;
+    WDT_LOCK->ispresent = !SDK_VIEW;
+    reg {
+        field { sw=r; hw=w; desc="0 unlocked, 1 locked; not the last written key"; } locked[0:0];
+    } LOCK_STATUS @ 0x0;
+    LOCK_STATUS->ispresent = SDK_VIEW;
+    reg {
+        hisi_svd_alternate_register = "LOCK_STATUS";
+        field { sw=w; hw=r; desc="0x5A5A5A5A unlocks; any other value locks"; } key[31:0];
+    } LOCK_COMMAND @ 0x0;
+    LOCK_COMMAND->ispresent = SDK_VIEW;
     reg {
         field {
             sw = rw;
@@ -24,7 +36,7 @@ addrmap watchdog_v151_regs {
             desc = "Write anything except 0x5A5A5A5A to restart counter";
         } wdt_restart[31:0] = 0x0;
     } WDT_RESTART @ 0x8;
-    reg {
+    external reg {
         field {
             sw = r;
             hw = r;
@@ -114,4 +126,14 @@ addrmap watchdog_v151_regs {
             desc = "Acknowledge: 1=counter value valid";
         } ccvr_ack[1:1] = 0x0;
     } WDT_CCVR_EN @ 0x28;
+    WDT_CCVR_EN->ispresent = !SDK_VIEW;
+    reg {
+        field { sw=r; hw=w; desc="Counter latch valid; inspect after requesting a snapshot"; } valid[1:1];
+    } CCVR_STATUS @ 0x28;
+    CCVR_STATUS->ispresent = SDK_VIEW;
+    reg {
+        hisi_svd_alternate_register = "CCVR_STATUS";
+        field { sw=w; hw=r; hisi_write_min=1; hisi_write_max=1; } request[0:0];
+    } CCVR_REQUEST @ 0x28;
+    CCVR_REQUEST->ispresent = SDK_VIEW;
 };

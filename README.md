@@ -88,6 +88,7 @@ also be compared against the generated map without copying vendor headers:
 
 ```bash
 uv run --locked scripts/check_ws53_sdk_layout.py --sdk /path/to/fbb_ws53
+uv run --script scripts/check_ws53_watchdog_layout.py --sdk /path/to/fbb_ws53
 ```
 
 This optional source-layout check is not required by ordinary generation or

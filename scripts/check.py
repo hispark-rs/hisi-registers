@@ -68,9 +68,9 @@ EXPECTED = {
         "source_arrays": 0,
         "output_arrays": 6,
         "cluster_arrays": 1,
-        "registers_expanded": 928,
-        "fields_expanded": 1908,
-        "write_constraints": 8,
+        "registers_expanded": 930,
+        "fields_expanded": 1909,
+        "write_constraints": 10,
     },
 }
 
@@ -172,6 +172,34 @@ for filename, expected in EXPECTED.items():
 
     # Count effective instance registers, including checked derived peripherals.
     by_name = {p.findtext("name"): p for p in peripheral_nodes}
+    if filename == "WS53.experimental.svd":
+        # SDK-backed access contracts: a readable key or mixed request/status
+        # word would allow misleading read-modify-write APIs in downstream PACs.
+        wdt = by_name["WDT"]
+        wregs = {r.findtext("name"): r for r in wdt.findall("registers/register")}
+        assert len(wregs) == 13 and not wdt.findall("interrupt")
+        for name, offset, access in (
+            ("LOCK_STATUS", 0, "read-only"), ("LOCK_COMMAND", 0, "write-only"),
+            ("WDT_LOAD", 4, "read-write"), ("WDT_RESTART", 8, "write-only"),
+            ("WDT_EOI", 12, "read-only"), ("WDT_CR", 16, "read-write"),
+            ("WDT_CNT", 20, "read-only"), ("WDT_RAW_INTR", 24, "read-only"),
+            ("WDT_INTR", 28, "read-only"), ("WDT_LPIF_STATE", 32, "read-only"),
+            ("WDT_STATUS", 36, "read-only"), ("CCVR_STATUS", 40, "read-only"),
+            ("CCVR_REQUEST", 40, "write-only"),
+        ):
+            r = wregs[name]
+            assert int(r.findtext("addressOffset"), 0) == offset, name
+            assert r.findtext("access") == access and r.findtext("size") == "32", name
+            assert r.find("resetValue") is None and r.find("resetMask") is None, name
+        assert wregs["LOCK_COMMAND"].findtext("alternateRegister") == "LOCK_STATUS"
+        assert wregs["CCVR_REQUEST"].findtext("alternateRegister") == "CCVR_STATUS"
+        assert wregs["WDT_EOI"].findtext("readAction") == "modifyExternal"
+        for name, value in (("WDT_RESTART", 0x5a5a5a5a), ("CCVR_REQUEST", 1)):
+            c = wregs[name].find("fields/field/writeConstraint/range")
+            assert int(c.findtext("minimum"), 0) == int(c.findtext("maximum"), 0) == value
+        assert "0 free, 1 busy" in wregs["WDT_STATUS"].findtext("fields/field/description")
+        modes = wregs["WDT_CR"].findall("fields/field[name='WDT_MODE']/enumeratedValues/enumeratedValue")
+        assert [(v.findtext("name"), v.findtext("value")) for v in modes] == [("ResetOnFirst", "0"), ("ResetOnSecond", "1")]
     for p in peripheral_nodes:
         if base := p.get("derivedFrom"):
             import copy

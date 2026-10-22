@@ -23,6 +23,10 @@
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
+enum ws53_wdt_expiry_mode {
+    ResetOnFirst = 0 { desc = "Reset on first expiry interrupt when RST_EN is set"; };
+    ResetOnSecond = 1 { desc = "Reset on second expiry interrupt when RST_EN is set"; };
+};
 addrmap ws53 {
     hisi_evidence = "licensed-sdk: fbb_ws53 163d9150ab94a02d09a05f623351f9facee3025e; ws53_liteos_app; acore MCU_MODE_1";
     ws53_system_memory_regs system_memory @ 0x57030000;
@@ -40,7 +44,18 @@ addrmap ws53 {
     ws53_sdio_v151_regs sdio @ 0x52060000;
     ws53_trng_regs trng @ 0x52024000;
     ws53_efuse_read_regs efuse @ 0x57024000;
-    watchdog_v151_regs wdt @ 0x5702B000;
+    watchdog_v151_regs #(.SDK_VIEW(true)) wdt @ 0x5702B000;
+    wdt->hisi_reset_unverified = true;
+    wdt->hisi_evidence = "SDK-source 163d9150 acore watchdog v151, base from acore/platform_core.h; no silicon reset or NMI route validation";
+    wdt.WDT_RESTART.wdt_restart->desc = "SDK kick writes 0x5A5A5A5A; other keys have contradictory SDK comments and are not specified";
+    wdt.WDT_RESTART.wdt_restart->hisi_write_min = 0x5a5a5a5a;
+    wdt.WDT_RESTART.wdt_restart->hisi_write_max = 0x5a5a5a5a;
+    wdt.WDT_STATUS.wdt_status->desc = "SDK register definition: 0 free, 1 busy";
+    wdt.WDT_EOI.wdt_eoi->onread = ruser;
+    wdt.WDT_EOI.wdt_eoi->hisi_svd_read_action = "modifyExternal";
+    wdt.WDT_EOI.wdt_eoi->desc = "Read returns zero and clears interrupt per SDK register comment; SDK clear helper reads then writes 1, independent write-only clear behavior unverified";
+    wdt.WDT_CR.wdt_mode->desc = "0 reset on first expiry interrupt, 1 reset on second expiry interrupt; reset still gated by RST_EN";
+    wdt.WDT_CR.wdt_mode->encode = ws53_wdt_expiry_mode;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart0 @ 0x52081000;
