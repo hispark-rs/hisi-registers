@@ -30,11 +30,12 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 30,
+        "peripherals": 31,
         "interrupts": 20,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
+            "GLB_CTL": 0x57000000,
             "PINMUX_MCU": 0x52008000,
             "PINMUX_AON": 0x57036000,
             "PINMUX_TZPC": 0x5703A000,
@@ -67,9 +68,9 @@ EXPECTED = {
         "source_arrays": 0,
         "output_arrays": 6,
         "cluster_arrays": 1,
-        "registers_expanded": 922,
-        "fields_expanded": 1901,
-        "write_constraints": 7,
+        "registers_expanded": 925,
+        "fields_expanded": 1905,
+        "write_constraints": 8,
     },
 }
 

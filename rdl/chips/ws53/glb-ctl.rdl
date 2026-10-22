@@ -1,0 +1,16 @@
+// fbb_ws53 163d9150 acore/platform_core.h GLB_CTL_M_RB_BASE,
+// uart_porting.c. Shared controls; no reset state or exclusive ownership claim.
+addrmap ws53_glb_ctl_regs {
+    hisi_evidence = "SDK-source 163d9150 acore/platform_core.h and uart_porting.c; shared application/control-core controls, incomplete subset";
+    reg {
+        name = "UART L0 interrupt routing command view: SDK writes the complete word 1 to route only to acore; other values and physical read behavior unverified";
+        hisi_evidence = "uart_port_config_pinmux under CONFIG_UART_MULTI_CORE_RESUME: writel(0x57000048, 1)";
+        field {sw=w; hw=r; hisi_write_min=1; hisi_write_max=1;} acore_only[31:0];
+    } UART_L0_IRQ_ROUTE_COMMAND @ 0x48;
+    reg {
+        regwidth = 16;
+        accesswidth = 16;
+        hisi_evidence = "uart_porting.c UART_SOFT_RST_C, UART_SOFT_RST_L0_POS; uart_port_set_reset uses 16-bit clear then set; debug UART bypasses reset";
+        field {sw=rw; hw=r; desc="UART L0/application UART2 reset, active low; preserve all other bits";} uart_l0_reset_n[7:7];
+    } UART_SOFT_RESET @ 0xb0;
+};

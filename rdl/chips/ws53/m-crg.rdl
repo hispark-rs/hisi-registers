@@ -30,6 +30,11 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r; desc="ADC port uses 32-bit reg_clrbit/reg_setbit: assert low, delay 1us, release high, delay 1us";} lsadc_reset_n[13:13];
     } SOFT_RESET1 @ 0x54;
     reg {
+        hisi_evidence = "SDK-source 163d9150 uart_porting.c UART_SOFT_RST_A and uart_port_set_reset; 16-bit clear then set, debug UART bypasses reset";
+        field {sw=rw; hw=r; desc="UART H0/application UART1 reset, active low; shared register, preserve other bits";} uart_h0_reset_n[0:0];
+        field {sw=rw; hw=r; desc="UART H1/application UART0 reset, active low; shared register, preserve other bits";} uart_h1_reset_n[1:1];
+    } UART_SOFT_RESET @ 0x168;
+    reg {
         field {sw=rw; hw=r;} cpu_enable[0:0];
         field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
         field {sw=rw; hw=r;} mdma_enable[3:3];

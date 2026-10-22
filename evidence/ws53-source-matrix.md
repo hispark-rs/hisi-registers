@@ -589,3 +589,47 @@ their existing silicon-specific behavior is not generalized to WS53. Updated
 map: **30 peripherals, 922 register views, 1901 fields, 20 IRQs**. UART HAL
 configuration, full IRQ/error paths, DMA, timing and physical-board validation
 remain incomplete; console output alone proves none of those capabilities.
+
+## UART reset/routing controls and clock conflicts (2026-10-23)
+
+The same pinned SDK `163d9150` establishes two shared halfword reset registers
+in `uart_porting.c`: H0/application UART1 bit0 and H1/application UART0 bit1 at
+`0x52000168`, L0/application UART2 bit7 at `0x570000b0`. The helper performs a
+16-bit RMW clear followed by a 16-bit RMW set. It does not specify a pulse delay,
+completion poll or reset contents. The configured software-debug UART bypasses
+this reset. The RDL therefore exposes active-low fields with unknown resets;
+it does not imply that the control core has released the UART or that resetting
+a live console is safe.
+
+`acore/platform_core.h` names `0x57000000` as `GLB_CTL_M_RB_BASE`. The new
+`GLB_CTL` instance contains only the above reset and the evidenced full-word
+L0 IRQ-routing command at `+0x48`. `uart_port_config_pinmux()` writes exactly
+`1` under `CONFIG_UART_MULTI_CORE_RESUME`, described as acore-only routing.
+Physical read semantics and other values are not established. This is a WO
+command view constrained to 1, not an invented one-bit RW selector. The SVD
+constraint documents the command; unsafe raw writes still require caller checks.
+The adjacent TCXO window is a separate existing peripheral, not absorbed here.
+
+Clock initialization is **not closed** by these controls:
+
+- `ws53_liteos_app.config` disables `CONFIG_UART_SUPPORT_LPC`; the only call to
+  `uart_port_clock_enable()` in `driver/uart/uart.c` is under that condition,
+  and no WS53 implementation was found in the SDK source tree.
+- `hal_clocks_application_private.h` names UARTL0 as M_CLKEN0 bit9 and H1 as
+  M_CLKEN1 bit5. WS53 `clock_recover.h` unions instead mark both positions
+  reserved. The generic header also assigns SPI/ADC bits inconsistent with the
+  WS53 concrete ports. H0 bit4 agrees, but agreement for one UART cannot justify
+  writes to the other two alleged gates. The RDL deliberately omits them.
+- `dev_work_clock_init()` sets a software UART clock value to 32 MHz. Its port
+  setter ignores the bus argument and writes no clock source/divider register.
+  That software value cannot establish all three physical UART clock paths.
+- `clock_recover.c` writes zero to `0x52001104` to enable UART auto-gating, but
+  provides no per-instance field/source/divider semantics. It is not modeled as
+  a manual UART gate or a frequency selector.
+
+The optional SDK checker now compares three reset field mappings, the 16-bit
+clear/set path and the constrained routing command in addition to 25 UART
+register views/76 fields. Export tests reject writable gates at the conflicting
+bit positions. Legacy WS63/BS2X SVD output is unchanged. Current WS53 map:
+**31 peripherals, 925 register views, 1905 fields, 20 IRQs**. No hardware register
+was accessed, and no full clock-aware UART constructor is claimed.

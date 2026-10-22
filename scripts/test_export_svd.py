@@ -7,6 +7,37 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_uart_reset_widths_and_restricted_route_command(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            tree = ET.parse(dest)
+            for block, base, offset, fields in (
+                ("M_CRG", 0x52000000, 0x168, {"UART_H0_RESET_N": 0, "UART_H1_RESET_N": 1}),
+                ("GLB_CTL", 0x57000000, 0xb0, {"UART_L0_RESET_N": 7}),
+            ):
+                peripheral = tree.find(f"./peripherals/peripheral[name='{block}']")
+                self.assertEqual(int(peripheral.findtext("baseAddress"), 0), base)
+                reg = peripheral.find("registers/register[name='UART_SOFT_RESET']")
+                self.assertEqual(int(reg.findtext("addressOffset"), 0), offset)
+                self.assertEqual(reg.findtext("size"), "16")
+                self.assertEqual(reg.findtext("access"), "read-write")
+                self.assertIsNone(reg.find("resetValue"))
+                self.assertEqual({f.findtext("name"): int(f.findtext("bitOffset"))
+                                  for f in reg.findall("fields/field")}, fields)
+            route = tree.find("./peripherals/peripheral[name='GLB_CTL']/registers/register[name='UART_L0_IRQ_ROUTE_COMMAND']")
+            self.assertEqual(int(route.findtext("addressOffset"), 0), 0x48)
+            self.assertEqual(route.findtext("size"), "32")
+            self.assertEqual(route.findtext("access"), "write-only")
+            self.assertIsNone(route.find("resetValue"))
+            for bound in ("minimum", "maximum"):
+                self.assertEqual(route.findtext("fields/field/writeConstraint/range/" + bound), "1")
+            # Conflicting legacy UARTL0/H1 clock enums must not become writable gates.
+            clocks = tree.find("./peripherals/peripheral[name='M_CRG']")
+            for reg, reserved in (("M_CLKEN0", 9), ("M_CLKEN1", 5)):
+                fields = clocks.findall(f"registers/register[name='{reg}']/fields/field")
+                self.assertNotIn(reserved, [int(f.findtext("bitOffset")) for f in fields])
+
     def test_ws53_uart_has_word_access_and_separate_fifo_directions(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"
