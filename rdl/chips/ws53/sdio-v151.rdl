@@ -1,0 +1,119 @@
+// SDK 163d9150 acore.sym + A-board ROM 0x1e872..0x1f1e4 (SHA256 in evidence).
+// The SDK release omits v151 register headers. Names/fields below are restricted
+// to observed operations plus the public hal_sdio.h/sdio_porting.h contracts.
+// No reset values. No claim of application-exclusive ownership or ADMA drain.
+addrmap ws53_sdio_v151_regs {
+    hisi_evidence = "ROM-audit A-board 2026-10-23 a1ac5c03c613112f973b45bdfbfd399d3f3017b315b61d1f6b0d2a07d2ce4671; SDK 163d9150 acore.sym and public SDIO headers; not a transfer test";
+    reg {
+        name = "Device capability configuration, not the host-side CCCR address space";
+        field { sw=w; hw=r; } cccr_revision[3:0];
+        field { sw=w; hw=r; } sdio_revision[7:4];
+        field { sw=w; hw=r; } sd_revision[11:8];
+        field { sw=w; hw=r; } continuous_spi_interrupt[12:12];
+        field { sw=w; hw=r; } direct_command[13:13];
+        field { sw=w; hw=r; } multiblock[14:14];
+        field { sw=w; hw=r; } read_wait[15:15];
+        field { sw=w; hw=r; } suspend_resume[16:16];
+        field { sw=w; hw=r; } interrupt_4bit[17:17];
+        field { sw=w; hw=r; } low_speed[18:18];
+        field { sw=w; hw=r; } low_speed_4bit[19:19];
+        field { sw=w; hw=r; } master_power_control[20:20];
+        field { sw=w; hw=r; } high_speed[21:21];
+        field { sw=w; hw=r; } card_type[23:22];
+    } CCCR_CAPABILITY @ 0x4;
+    reg {
+        field { sw=rw; hw=r; } function0[0:0];
+        field { sw=rw; hw=r; } memory[1:1];
+        field { sw=rw; hw=r; } function1[2:2];
+    } GLOBAL_INTERRUPT_ENABLE @ 0x18;
+    reg {
+        field { sw=r; hw=w; } function0[0:0];
+        field { sw=r; hw=w; } memory[1:1];
+        field { sw=r; hw=w; } function1[2:2];
+    } GLOBAL_INTERRUPT_STATUS @ 0x1c;
+    reg {
+        hisi_svd_alternate_register = "GLOBAL_INTERRUPT_STATUS";
+        name = "ROM writes the captured status to acknowledge. Exact clear semantics not silicon tested; separate command view prevents RMW";
+        field { sw=w; hw=r; } value[31:0];
+    } GLOBAL_INTERRUPT_ACK @ 0x1c;
+    reg {
+        name = "Opaque mode configuration: ROM sets bits 0..6, meanings not established by an available register header";
+        field { sw=rw; hw=r; } value[31:0];
+    } MODE @ 0x24;
+    reg {
+        name = "ROM initialization sets bit 4; voltage-switch routine sets bits 0..2. Electrical sequencing remains unverified";
+        field { sw=rw; hw=r; } value[31:0];
+    } VOLTAGE_CONTROL @ 0x28;
+    reg {
+        name = "Opaque configuration: ROM reads then writes 0x2f92 during initialization";
+        field { sw=rw; hw=r; } value[31:0];
+    } CONFIG_2C @ 0x2c;
+    reg {
+        name = "Opaque configuration: ROM sets bit 0 after registering the IRQ";
+        field { sw=rw; hw=r; } value[31:0];
+    } CONFIG_30 @ 0x30;
+    reg {
+        name = "ROM enables bits 0..10 and bit 16; individual event semantics not fully established";
+        field { sw=rw; hw=r; } events[10:0];
+        field { sw=rw; hw=r; } event16[16:16];
+    } FUNCTION0_INTERRUPT_ENABLE @ 0x34;
+    reg { field { sw=r; hw=w; } value[31:0]; } FUNCTION0_INTERRUPT_STATUS @ 0x38;
+    reg {
+        hisi_svd_alternate_register = "FUNCTION0_INTERRUPT_STATUS";
+        name = "Captured-status acknowledgement command; no automatic RMW or inferred W1C/reset values";
+        field { sw=w; hw=r; } value[31:0];
+    } FUNCTION0_INTERRUPT_ACK @ 0x38;
+    reg { field { sw=r; hw=w; } value[31:0]; } FUNCTION0_RESET_STATUS @ 0x3c;
+    reg {
+        hisi_svd_alternate_register = "FUNCTION0_RESET_STATUS";
+        name = "ROM writes readback OR 1 during function0 reset handling; completion/self-clear semantics unknown";
+        field { sw=w; hw=r; } value[31:0];
+    } FUNCTION0_RESET_COMMAND @ 0x3c;
+    reg {
+        name = "ROM submits an 8-byte-stride ADMA table here after the host read/write callback. Starts bus-master access; not a software-only pointer";
+        field { sw=w; hw=r; } address[31:0];
+    } ADMA_TABLE @ 0x40;
+    reg { field { sw=r; hw=w; } ready[0:0]; } HOST_CLOCK @ 0x44;
+    reg { field { sw=r; hw=w; } value[31:0]; } FUNCTION1_SEND_STATUS @ 0x104;
+    reg {
+        hisi_svd_alternate_register = "FUNCTION1_SEND_STATUS";
+        name = "ROM writes readback OR 1 after setting send length; self-clear behavior unspecified";
+        field { sw=w; hw=r; } value[31:0];
+    } FUNCTION1_SEND_COMMAND @ 0x104;
+    reg {
+        name = "Opaque function1 configuration: ROM replaces low 24 bits with 0xff8000";
+        field { sw=rw; hw=r; } value[31:0];
+    } FUNCTION1_CONFIG @ 0x10c;
+    reg { field { sw=r; hw=w; } value[31:0]; } FUNCTION1_INTERRUPT_STATUS @ 0x110;
+    reg {
+        hisi_svd_alternate_register = "FUNCTION1_INTERRUPT_STATUS";
+        name = "Captured-status acknowledgement command; no automatic RMW or inferred W1C/reset values";
+        field { sw=w; hw=r; } value[31:0];
+    } FUNCTION1_INTERRUPT_ACK @ 0x110;
+    reg { field { sw=rw; hw=r; } events[13:0]; } FUNCTION1_INTERRUPT_ENABLE @ 0x114;
+    reg {
+        field { sw=rw; hw=r; } io_device_code[3:0];
+        field { sw=rw; hw=r; } csa_support[4:4];
+        field { sw=rw; hw=r; } extended_io_device_code[12:5];
+        field { sw=rw; hw=r; } sps[13:13];
+    } FUNCTION1_FBR @ 0x118;
+    reg {
+        name = "ROM sets bit 0 after function enable interrupt and polls it during init";
+        field { sw=rw; hw=r; } ready[0:0];
+    } FUNCTION1_READY @ 0x11c;
+    reg { field { sw=rw; hw=r; } bytes[20:0]; } FUNCTION1_SEND_LENGTH @ 0x120;
+    reg { field { sw=r; hw=w; } value[31:0]; } HOST_MESSAGE @ 0x128;
+    reg {
+        name = "ROM writes a device-to-host message. No modify API; message delivery/acknowledgement requires protocol ownership";
+        field { sw=w; hw=r; } value[31:0];
+    } DEVICE_MESSAGE @ 0x12c;
+    reg {
+        field { sw=r; hw=w; } count[8:0];
+        field { sw=r; hw=w; } address[25:9];
+        field { sw=r; hw=w; } increment[26:26];
+        field { sw=r; hw=w; } block_mode[27:27];
+        field { sw=r; hw=w; } function[30:28];
+        field { sw=r; hw=w; } write[31:31];
+    } CMD53_ARGUMENT @ 0x254;
+    reg { field { sw=r; hw=w; } bytes[11:0]; } FUNCTION1_BLOCK_SIZE @ 0x258;
+};

@@ -7,6 +7,37 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_sdio_command_views_do_not_offer_rmw(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            sdio = ET.parse(dest).find("./peripherals/peripheral[name='SDIO']")
+            self.assertEqual(int(sdio.findtext("baseAddress"), 0), 0x52060000)
+            self.assertEqual(sdio.findtext("interrupt/value"), "46")
+            regs = {r.findtext("name"): r for r in sdio.findall("registers/register")}
+            self.assertEqual(len(regs), 28)
+            for prefix, command, offset in (
+                ("GLOBAL_INTERRUPT", "ACK", 0x1c),
+                ("FUNCTION0_INTERRUPT", "ACK", 0x38),
+                ("FUNCTION0_RESET", "COMMAND", 0x3c),
+                ("FUNCTION1_SEND", "COMMAND", 0x104),
+                ("FUNCTION1_INTERRUPT", "ACK", 0x110),
+            ):
+                status = regs[prefix + "_STATUS"]
+                action = regs[prefix + "_" + command]
+                self.assertEqual(int(status.findtext("addressOffset"), 0), offset)
+                self.assertEqual(status.findtext("access"), "read-only")
+                self.assertEqual(int(action.findtext("addressOffset"), 0), offset)
+                self.assertEqual(action.findtext("access"), "write-only")
+                self.assertEqual(action.findtext("alternateRegister"), prefix + "_STATUS")
+            self.assertEqual(regs["ADMA_TABLE"].findtext("addressOffset"), "0x40")
+            self.assertEqual(regs["ADMA_TABLE"].findtext("access"), "write-only")
+            self.assertEqual(regs["CMD53_ARGUMENT"].findtext("addressOffset"), "0x254")
+            self.assertEqual(regs["FUNCTION1_BLOCK_SIZE"].findtext("fields/field/bitWidth"), "12")
+            for reg in regs.values():
+                self.assertIsNone(reg.find("resetValue"))
+                self.assertIsNone(reg.find(".//modifiedWriteValues"))
+
     def test_ws53_tsensor_polling_subset_does_not_invent_clear_or_irq(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"

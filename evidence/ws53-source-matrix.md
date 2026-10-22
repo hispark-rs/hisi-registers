@@ -307,3 +307,69 @@ pinned C source. Export tests verify the status bitfield and restricted access
 shape. No TSENSOR register was accessed on hardware in this audit; no HAL or
 QEMU behavior is claimed. Current map: 27 peripherals, 758 expanded register
 views, 1552 fields, 19 IRQ numbers. WS63/BS2X output is unchanged.
+
+## SDIO v151 device interface: ROM-backed layout audit
+
+SDK `163d9150ab94a02d09a05f623351f9facee3025e`, selected
+`ws53_liteos_app.config`, enables DRIVER_SUPPORT_SDIO, SDIO_USING_V151 and
+SDIO_EXTEND_INFO; memory-card mode and tuning are disabled. There is one bus
+in `rom/app/drivers/chips/ws53/porting/include/sdio_porting.h`. The referenced
+v151 C/register headers are absent from this SDK release. We did not substitute
+WS63 SDIO, an SD host controller, or host-visible CCCR addresses.
+
+A-board J-Link 23121302 / UART 5CB7019921 was checked with AT, halted, and ROM
+`[0x1e872,0x1f1e4)` read only, then resumed. AT remained healthy. Capture length
+2418, SHA256 `a1ac5c03c613112f973b45bdfbfd399d3f3017b315b61d1f6b0d2a07d2ce4671`.
+No SDIO MMIO read/write, ROM function call, DMA transfer, RAM load or Flash
+write was performed. Symbols are from `rom_config/acore/acore.sym`; full
+control-flow inspection uses the SDK's `riscv32-linux-musl-objdump`, since
+stock objdump misdecodes proprietary compressed/48-bit WS53 instructions.
+The raw ROM is not redistributed. `scripts/check_ws53_sdio_rom.py` optionally
+checks the exact capture hash, decodes the address immediates of 28 SVD views,
+and checks base/IRQ. Ordinary builds/generation do not depend on the capture.
+
+| Evidence | ROM location | Result |
+|---|---|---|
+| sdio_porting_base_addr_get | 0x1f176 | LUI a0,0x52060; SDIO base 0x52060000 |
+| sdio_port_register_irq table | 0x1f1dc; direct completion at 0x1f0e4 | IRQ 46, matching acore/chip_core_irq.h |
+| host clock ready | 0x1e8e2 | word at +0x44, bit 0 |
+| interrupt address getter | 0x1f11e | selector 0 -> +0x38, 1 -> +0x1c, 2 -> +0x110 |
+| interrupt getter/setter | 0x1f150 / 0x1f162 | word read / word write, same register address |
+| global/function0/function1 enables | 0x1ea44 / 0x1ea6a / 0x1eada | +0x18 bits0..2 / +0x34 bits0..10,16 / +0x114 bits0..13 |
+| CCCR getter/setter | 0x1f140 / 0x1f158 | capability word at +4; init writes 0xb36343 |
+| function1 FBR init | 0x1eb68 | +0x118; IO code[3:0], CSA[4], extended code[12:5], SPS[13] |
+| ADMA submit | 0x1ee98 / 0x1eef2 | dummy read then table-pointer write to +0x40 after callback |
+| prepare send | 0x1ea12 | +0x120 length low21 bits; +0x104 read then OR1 write |
+| host/device messages | 0x1ef9c / 0x1e924 | +0x128 read / +0x12c dummy read then write |
+| command/block length | 0x1f094 | +0x254 CMD53 argument; +0x258 low12 block size |
+| port soft reset | 0x1f1c8 | RET only: not a hardware reset or quiescence primitive |
+
+Public `hal_sdio.h` defines CMD53 fields and global interrupt masks;
+`sdio_porting.h` defines CCCR/FBR capabilities and the ADMA format. ROM descriptor
+construction at 0x1e8f4 rejects null table/address, zero length and index >=129,
+then stores an 8-byte descriptor (u16 flags=0x21, u16 length, u32 address).
+It does not reject u32 lengths beyond u16 before storing. Descriptor bounds,
+zero-length semantics, alignment, host block mode, cache ownership and stopping
+an in-flight transfer must be handled by the future HAL rather than inheriting
+these unchecked behaviors. CMD53 count=0 in byte mode means 512; the ROM rejects
+zero block-count multiplication as invalid. This does not prove every protocol
+mode or all host behavior is supported.
+
+The RDL includes 23 distinct word offsets / 28 access views. Three interrupt
+acknowledgements, reset command and send command use complementary RO/WO views
+so no misleading modify() is generated. ROM writes captured status back to
+acknowledge; the precise hardware clear mechanism is not yet tested, so W1C,
+read-clear and reset values are not invented. Opaque configuration at +0x24,
++0x28, +0x2c, +0x30 and +0x10c is preserved without speculative bit meanings.
+The modeled subset does not include the undocumented 64-word extended window,
+CIS data, complete reset/clock controls or host voltage/tuning support.
+
+SDIO ADMA is an independent RAM bus master, not an MDMA channel. Hence
+MDMA ENABLED_CHANNELS=0 cannot authorize RAM takeover. Current vendor gateway
+firmware ownership, active SDIO/ADMA state and stop/drain conditions remain
+unverified. The source HCC device backend binds callbacks and owns descriptor/
+RX/TX buffers; application visibility does not imply Rust-exclusive tokens.
+No HAL, SDIO model, data transfer or IRQ-delivery test is claimed yet.
+
+Current map: 28 peripherals, 786 expanded register views, 1606 fields, 20 IRQs.
+The SDIO layout is ROM-derived evidence, distinct from a transfer HIL result.

@@ -16,6 +16,7 @@
 `include "ws53/mdma-v151.rdl"
 `include "ws53/adc-v155.rdl"
 `include "ws53/tsensor.rdl"
+`include "ws53/sdio-v151.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -32,6 +33,7 @@ addrmap ws53 {
     ws53_adc_v155_regs adc @ 0x5208A000;
     ws53_mcu_diag_regs mcu_diag @ 0x52004100;
     ws53_tsensor_regs tsensor @ 0x59006300;
+    ws53_sdio_v151_regs sdio @ 0x52060000;
     watchdog_v151_regs wdt @ 0x5702B000;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;
@@ -61,6 +63,7 @@ addrmap ws53 {
     signal { hisi_irq_number = 41; hisi_irq_owner = "UART1"; } UART_1;
     signal { hisi_irq_number = 42; hisi_irq_owner = "UART2"; } UART_2;
     signal { hisi_irq_number = 43; hisi_irq_owner = "QSPI1"; } QSPI0_2CS;
+    signal { hisi_irq_number = 46; hisi_irq_owner = "SDIO"; } SDIO;
     signal { hisi_irq_number = 49; hisi_irq_owner = "RTC0"; } RTC_0;
     signal { hisi_irq_number = 50; hisi_irq_owner = "RTC1"; } RTC_1;
     signal { hisi_irq_number = 53; hisi_irq_owner = "TIMER"; } TIMER_0;
