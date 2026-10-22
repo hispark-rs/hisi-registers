@@ -1,27 +1,27 @@
 // Timer v150 layout shared by WS53, WS63 and BS2X. All three SDK operation
 // layers clear EOI by writing one; the read-to-clear SDK comment is stale.
 
-addrmap timer_v150_regs {
+addrmap timer_v150_regs #(longint unsigned CHANNELS = 3) {
     reg {
         field {
             sw = r;
             hw = r;
             desc = "Abnormal interrupt raw status for all timers";
-        } abnor_intr_raw[2:0] = 0x0;
+        } abnor_intr_raw[CHANNELS-1:0] = 0x0;
     } ABNOR_INTR_RAW @ 0x60;
     reg {
         field {
             sw = rw;
             hw = r;
             desc = "Abnormal interrupt mask for all timers";
-        } abnor_imsk[2:0] = 0x0;
+        } abnor_imsk[CHANNELS-1:0] = 0x0;
     } ABNOR_IMSK @ 0x64;
     reg {
         field {
             sw = r;
             hw = r;
             desc = "Abnormal interrupt status for all timers";
-        } abnor_intr_stat[2:0] = 0x0;
+        } abnor_intr_stat[CHANNELS-1:0] = 0x0;
     } ABNOR_INTR_STAT @ 0x68;
     reg {
         field {
@@ -29,21 +29,21 @@ addrmap timer_v150_regs {
             hw = r;
             onwrite = woclr;
             desc = "Write one bit per channel to clear timer interrupts; reads return zero";
-        } eoi[2:0] = 0x0;
+        } eoi[CHANNELS-1:0] = 0x0;
     } EOI_REN @ 0x78;
     reg {
         field {
             sw = r;
             hw = r;
             desc = "Raw interrupt status for all timers";
-        } raw_intr[2:0] = 0x0;
+        } raw_intr[CHANNELS-1:0] = 0x0;
     } RAW_INTR_STAT @ 0x7C;
     reg {
         field {
             sw = r;
             hw = r;
             desc = "Interrupt status for all timers (after mask)";
-        } intr_stat[2:0] = 0x0;
+        } intr_stat[CHANNELS-1:0] = 0x0;
     } INTR_STAT @ 0x80;
     reg {
         field {
@@ -264,4 +264,9 @@ addrmap timer_v150_regs {
             desc = "Raw interrupt status";
         } raw_intr[0:0] = 0x0;
     } TIMER_RAW_INTR2 @ 0x318;
+    TIMER_LOAD_COUNT2->ispresent = CHANNELS > 2;
+    TIMER_CURRENT_VALUE2->ispresent = CHANNELS > 2;
+    TIMER_CONTROL2->ispresent = CHANNELS > 2;
+    TIMER_EOI2->ispresent = CHANNELS > 2;
+    TIMER_RAW_INTR2->ispresent = CHANNELS > 2;
 };

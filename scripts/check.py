@@ -30,16 +30,20 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 13,
-        "interrupts": 0,
+        "peripherals": 17,
+        "interrupts": 15,
         "addresses": {
+            "SYSTEM_MEMORY": 0x57030000,
             "WDT": 0x5702B000,
             "SFC_CFG": 0x53000000,
             "PWM": 0x52082000,
             "UART0": 0x52081000,
+            "UART1": 0x52080000,
+            "UART2": 0x57014000,
             "I2C0": 0x52083000,
             "I2C1": 0x52084000,
             "RTC0": 0x57029100,
+            "RTC1": 0x57029200,
             "I2S": 0x52030000,
             "TIMER": 0x52002000,
             "TCXO": 0x57000200,
@@ -48,9 +52,9 @@ EXPECTED = {
             "GPIO2": 0x57010000,
         },
         "source_arrays": 0,
-        "registers_expanded": 349,
-        "fields_expanded": 664,
-        "write_constraints": 2,
+        "registers_expanded": 403,
+        "fields_expanded": 804,
+        "write_constraints": 6,
     },
 }
 
@@ -75,12 +79,12 @@ shared_contracts = {
     "sfc_v150_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "pwm_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "sio_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
-    "uart_v151_basic_regs": {"ws53": 1, "ws63": 3, "bs2x": 3},
+    "uart_v151_basic_regs": {"ws53": 3, "ws63": 3, "bs2x": 3},
     "timer_v150_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "tcxo_v150_data16_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "gpio_v150_basic_regs": {"ws53": 3, "ws63": 4, "bs2x": 6},
     "i2c_v151_ws53_bs2x_regs": {"ws53": 2, "bs2x": 2},
-    "rtc_v150_ws53_bs2x_regs": {"ws53": 1, "bs2x": 1},
+    "rtc_v150_ws53_bs2x_regs": {"ws53": 2, "bs2x": 1},
 }
 for type_name, chips in shared_contracts.items():
     for chip, instances in chips.items():

@@ -3,7 +3,8 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 "$ROOT/scripts/generate.sh"
-uv run python "$ROOT/scripts/check.py"
+uv run --locked --project "$ROOT" python "$ROOT/scripts/check.py"
+uv run --locked --project "$ROOT" python "$ROOT/scripts/test_export_svd.py"
 
 if command -v svd2rust >/dev/null 2>&1; then
     TMP="$(mktemp -d)"
@@ -11,7 +12,7 @@ if command -v svd2rust >/dev/null 2>&1; then
     mkdir -p "$TMP/ws63" "$TMP/bs2x" "$TMP/ws53"
     svd2rust -i "$ROOT/generated/WS63.experimental.svd" -o "$TMP/ws63"
     svd2rust -i "$ROOT/generated/BS2X.experimental.svd" -o "$TMP/bs2x"
-    svd2rust -i "$ROOT/generated/WS53.experimental.svd" -o "$TMP/ws53"
+    svd2rust --target riscv -i "$ROOT/generated/WS53.experimental.svd" -o "$TMP/ws53"
 else
     echo "warning: svd2rust is not installed; skipping PAC parser smoke" >&2
 fi

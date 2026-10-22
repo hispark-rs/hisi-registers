@@ -23,8 +23,8 @@ ACCESS = {
     AccessType.r: "read-only",
     AccessType.rw: "read-write",
     AccessType.w: "write-only",
-    AccessType.rw1: "read-write",
-    AccessType.w1: "write-only",
+    AccessType.rw1: "read-writeOnce",
+    AccessType.w1: "writeOnce",
 }
 
 READ_ACTION = {
@@ -59,6 +59,12 @@ def reset_value(reg: RegNode) -> int | None:
             value |= int(reset) << field.low
             found = True
     return value if found else None
+
+
+def reset_mask(reg: RegNode) -> int:
+    """Unknown/reserved reset bits must not become known zero bits in SVD."""
+    return sum(((1 << field.width) - 1) << field.low
+               for field in reg.fields() if field.get_property("reset") is not None)
 
 
 def add_write_constraint(parent: ET.Element, node: RegNode | FieldNode) -> None:
@@ -169,6 +175,15 @@ def export(source: Path, destination: Path) -> None:
             reset = reset_value(reg)
             if reset is not None:
                 add(rxml, "resetValue", f"0x{reset:08X}")
+                add(rxml, "resetMask", f"0x{reset_mask(reg):08X}")
+            accesses = {field.get_property("sw") for field in reg.fields()}
+            # SVD register access defaults to read-write. Field-only access
+            # metadata otherwise gives write-only EOI registers a read API.
+            if len(accesses) == 1:
+                access = next(iter(accesses))
+                if access not in ACCESS:
+                    raise ValueError(f"unsupported access {access}: {reg.get_path()}")
+                add(rxml, "access", ACCESS[access])
             add_write_constraint(rxml, reg)
             fxmls = ET.SubElement(rxml, "fields")
 
