@@ -1,0 +1,59 @@
+// fbb_ws53 163d9150 clock_recover.h u_m_cken_0/1, hal_clocks.h,
+// adc/i2c/spi port implementations. Do NOT use the generic app clock enum:
+// it disagrees with the actual WS53 ADC/SPI port and clock-recovery unions.
+// 16-bit accesses are used by reg16_setbit/writew in the peripheral ports.
+// This describes shared state, not an acore-exclusive clock-control token.
+addrmap ws53_m_crg_regs {
+    hisi_evidence = "SDK-source 163d9150 clock_recover.h and WS53 peripheral ports; shared clock control; reset values unknown";
+    default regwidth = 16;
+    default accesswidth = 16;
+    reg {
+        field {sw=rw; hw=r;} mdiag_enable[1:1];
+        field {sw=rw; hw=r;} i2s_enable[2:2];
+        field {sw=rw; hw=r;} mtop_glue_trigger_enable[6:6];
+        field {sw=rw; hw=r;} pwm_enable[7:7];
+        field {sw=rw; hw=r;} sdio_device_enable[11:11];
+        field {sw=rw; hw=r;} secure_pwm_enable[14:14];
+    } M_CLKEN0 @ 0x40;
+    reg {
+        field {sw=rw; hw=r;} timer_enable[0:0];
+        field {sw=rw; hw=r;} sdio_ahb_enable[1:1];
+        field {sw=rw; hw=r;} lsadc_apb_enable[2:2];
+        field {sw=rw; hw=r; desc="UART H0 = application UART1";} uart_h0_enable[4:4];
+        field {sw=rw; hw=r;} i2c0_enable[6:6];
+        field {sw=rw; hw=r;} i2c1_enable[7:7];
+        field {sw=rw; hw=r; desc="SPI3_MS = SDK application SPI_BUS_0";} spi3_ms_enable[11:11];
+    } M_CLKEN1 @ 0x44;
+    reg {
+        field {sw=rw; hw=r;} cpu_enable[0:0];
+        field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
+        field {sw=rw; hw=r;} mdma_enable[3:3];
+        field {sw=rw; hw=r; desc="Header-defined gate; does not prove SDMA instance accessibility";} sdma_enable[4:4];
+        field {sw=rw; hw=r;} common_bus_enable[5:5];
+        field {sw=rw; hw=r;} mcu_core_channel[6:6];
+        field {sw=rw; hw=r;} common_bus_channel[7:7];
+        field {sw=rw; hw=r;} hifi_channel[8:8];
+        field {sw=rw; hw=r;} codec_channel[9:9];
+    } MSUB_NORMAL @ 0x3e0;
+    reg {
+        field {sw=rw; hw=r;} cpu_enable[0:0];
+        field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
+        field {sw=rw; hw=r;} mcu_bus_enable[2:2];
+        field {sw=rw; hw=r;} mdma_enable[3:3];
+        field {sw=rw; hw=r;} sdma_enable[4:4];
+        field {sw=rw; hw=r;} common_bus_enable[5:5];
+        field {sw=rw; hw=r;} mcu_core_channel[6:6];
+        field {sw=rw; hw=r;} common_bus_channel[7:7];
+        field {sw=rw; hw=r;} hifi_channel[8:8];
+        field {sw=rw; hw=r;} codec_channel[9:9];
+    } MSUB_SLEEP @ 0x3e4;
+    reg {
+        field {sw=rw; hw=r; desc="ADC port GLB_CLKEN_LSADC_OFFSET";} lsadc_enable[12:12];
+    } GLOBAL_CLKEN @ 0x548;
+    reg {
+        field {sw=rw; hw=r; desc="SPI_BUS_0 port writes 1 to enable, 0 to disable; other fields unmodeled";} enable[0:0];
+    } SPI_CLOCK @ 0x55c;
+    reg {
+        field {sw=rw; hw=r; desc="SPI_BUS_0: 0 slave, 1 master; QSPI bus1 is master-only";} master[0:0];
+    } SPI_DEVICE_MODE @ 0x950;
+};

@@ -10,12 +10,18 @@
 `include "../ip/tcxo-v150-data16.rdl"
 `include "../ip/gpio-v150-basic.rdl"
 `include "ws53/system-memory.rdl"
+`include "ws53/pinctrl.rdl"
+`include "ws53/m-crg.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
 addrmap ws53 {
     hisi_evidence = "licensed-sdk: fbb_ws53 163d9150ab94a02d09a05f623351f9facee3025e; ws53_liteos_app; acore MCU_MODE_1";
     ws53_system_memory_regs system_memory @ 0x57030000;
+    ws53_m_crg_regs m_crg @ 0x52000000;
+    ws53_pinmux_mcu_regs pinmux_mcu @ 0x52008000;
+    ws53_pinmux_aon_regs pinmux_aon @ 0x57036000;
+    ws53_pinmux_tzpc_regs pinmux_tzpc @ 0x5703A000;
     watchdog_v151_regs wdt @ 0x5702B000;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;

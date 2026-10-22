@@ -1,0 +1,90 @@
+// fbb_ws53 163d9150: drivers/hal/pinmux/ws53/hal_pinctrl_ws53.c,
+// chips/ws53/include/acore/platform_core.h. Register facts, not board wiring.
+// Reset values unknown; each pad may be owned by firmware on another core.
+reg ws53_pin_sel {
+    field { sw=rw; hw=r; desc="Pin-specific mux selection; legal functions depend on the pad"; } mode[2:0];
+};
+
+reg ws53_pad #(boolean EXTENDED_DRIVE = false) {
+    field { sw=rw; hw=r; } drive_low[1:0];
+    field { sw=rw; hw=r; } input_enable[2:2];
+    field { sw=rw; hw=r; desc="0 none, 1 pull-up, 2 pull-down; 3 is not a supported SDK setting"; } pull[4:3];
+    field { sw=rw; hw=r; } schmitt_enable[5:5];
+    field { sw=rw; hw=r; ispresent=EXTENDED_DRIVE;
+        desc="Drive code bits 3:2, present only on MGPIO0/2/3/4 and AGPIO5/6";
+    } drive_high[7:6];
+};
+
+addrmap ws53_pinmux_mcu_regs {
+    hisi_evidence = "SDK-source 163d9150 hal_pinctrl_ws53.c g_pin_mode_map; shared configuration; reset unknown";
+    // Holes correspond to pads routed through the AON pinmux, not extra pins.
+    ws53_pin_sel MGPIO0_SEL @ 0x00;
+    ws53_pin_sel MGPIO2_SEL @ 0x08;
+    ws53_pin_sel MGPIO3_SEL @ 0x0c;
+    ws53_pin_sel MGPIO4_SEL @ 0x10;
+    ws53_pin_sel MGPIO5_SEL @ 0x14;
+    ws53_pin_sel MGPIO8_SEL @ 0x20;
+    ws53_pin_sel MGPIO9_SEL @ 0x24;
+    ws53_pin_sel MGPIO10_SEL @ 0x28;
+    ws53_pin_sel MGPIO12_SEL @ 0x30;
+    ws53_pin_sel MGPIO13_SEL @ 0x34;
+    ws53_pin_sel MGPIO14_SEL @ 0x38; // SGPIO0, SWDIO: debug reservation required
+    ws53_pin_sel MGPIO15_SEL @ 0x3c; // SGPIO1, SWCLK: debug reservation required
+    ws53_pin_sel MGPIO17_SEL @ 0x44;
+    ws53_pin_sel MGPIO18_SEL @ 0x48;
+    ws53_pin_sel MGPIO19_SEL @ 0x4c;
+    ws53_pin_sel MGPIO20_SEL @ 0x50;
+    ws53_pin_sel MGPIO21_SEL @ 0x54; // SGPIO2
+    ws53_pin_sel MGPIO22_SEL @ 0x58;
+};
+
+addrmap ws53_pinmux_aon_regs {
+    hisi_evidence = "SDK-source 163d9150 hal_pinctrl_ws53.c g_pin_mode/pull/ds/ds2/ie/st_map; aliases resolved to canonical AGPIO pads; reset unknown";
+    ws53_pin_sel AGPIO1_SEL @ 0x04;
+    ws53_pin_sel AGPIO2_SEL @ 0x08;
+    ws53_pin_sel AGPIO3_SEL @ 0x0c;
+    ws53_pin_sel AGPIO4_SEL @ 0x10;
+    ws53_pin_sel AGPIO5_SEL @ 0x14;
+    ws53_pin_sel AGPIO10_SEL @ 0x18;
+    ws53_pin_sel AGPIO11_SEL @ 0x1c;
+    ws53_pad AGPIO12_PAD @ 0x20; // RST_N: pad control only, no GPIO/mux
+    ws53_pad AGPIO1_PAD @ 0x24;
+    ws53_pad AGPIO2_PAD @ 0x28;
+    ws53_pad AGPIO3_PAD @ 0x2c;
+    ws53_pad AGPIO4_PAD @ 0x30;
+    ws53_pad #(.EXTENDED_DRIVE(true)) AGPIO5_PAD @ 0x34;
+    ws53_pad AGPIO10_PAD @ 0x38;
+    ws53_pad AGPIO11_PAD @ 0x3c;
+    ws53_pad #(.EXTENDED_DRIVE(true)) MGPIO0_PAD @ 0x40;
+    ws53_pad #(.EXTENDED_DRIVE(true)) AGPIO6_PAD @ 0x44; // MGPIO1
+    ws53_pad #(.EXTENDED_DRIVE(true)) MGPIO2_PAD @ 0x48;
+    ws53_pad #(.EXTENDED_DRIVE(true)) MGPIO3_PAD @ 0x4c;
+    ws53_pad #(.EXTENDED_DRIVE(true)) MGPIO4_PAD @ 0x50;
+    ws53_pad MGPIO5_PAD @ 0x54;
+    ws53_pad AGPIO0_PAD @ 0x58; // MGPIO6
+    ws53_pad AGPIO9_PAD @ 0x5c; // MGPIO7
+    ws53_pad MGPIO8_PAD @ 0x60;
+    ws53_pad MGPIO9_PAD @ 0x64;
+    ws53_pad MGPIO10_PAD @ 0x68;
+    ws53_pad AGPIO7_PAD @ 0x6c; // MGPIO11
+    ws53_pad MGPIO12_PAD @ 0x70;
+    ws53_pad MGPIO13_PAD @ 0x74;
+    ws53_pad AGPIO8_PAD @ 0x80; // MGPIO16
+    ws53_pad MGPIO17_PAD @ 0x84;
+    ws53_pad MGPIO18_PAD @ 0x88;
+    ws53_pad MGPIO19_PAD @ 0x8c;
+    ws53_pad MGPIO20_PAD @ 0x90;
+    ws53_pad MGPIO22_PAD @ 0x98;
+    ws53_pin_sel AGPIO6_SEL @ 0xb8; // MGPIO1
+    ws53_pin_sel AGPIO0_SEL @ 0xbc; // MGPIO6
+    ws53_pin_sel AGPIO9_SEL @ 0xc0; // MGPIO7
+    ws53_pin_sel AGPIO7_SEL @ 0xc4; // MGPIO11
+    ws53_pin_sel AGPIO8_SEL @ 0xc8; // MGPIO16
+};
+
+addrmap ws53_pinmux_tzpc_regs {
+    hisi_evidence = "SDK-source 163d9150 hal_pinctrl_ws53.c: SGPIO pads live in TZPC; ownership and debug reservation required; reset unknown";
+    ws53_pad MGPIO14_PAD @ 0x170; // SGPIO0 / SWDIO
+    ws53_pad MGPIO15_PAD @ 0x174; // SGPIO1 / SWCLK
+    ws53_pad MGPIO21_PAD @ 0x178; // SGPIO2
+};

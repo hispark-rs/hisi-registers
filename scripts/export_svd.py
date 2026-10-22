@@ -167,6 +167,10 @@ def export(source: Path, destination: Path) -> None:
         rxmls = ET.SubElement(pxml, "registers")
 
         for reg in registers:
+            if reg.is_array:
+                raise ValueError(f"register arrays need explicit SVD dim export: {reg.get_path()}")
+            if reg.get_property("accesswidth") != reg.get_property("regwidth"):
+                raise ValueError(f"split-width register access is not implemented: {reg.get_path()}")
             rxml = ET.SubElement(rxmls, "register")
             add(rxml, "name", reg.inst_name.upper())
             add(rxml, "description", reg.get_property("name") or reg.inst_name)

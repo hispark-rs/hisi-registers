@@ -58,5 +58,45 @@ class ExportSemantics(unittest.TestCase):
                 export(source, Path(work) / "test.svd")
 
 
+    def test_ws53_pin_alias_domains_and_clock_fields(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            peripherals = {p.findtext("name"): p for p in ET.parse(dest).findall(".//peripheral")}
+            def registers(peripheral):
+                return {r.findtext("name"): r for r in peripherals[peripheral].findall("registers/register")}
+            mcu, aon, tzpc = map(registers, ("PINMUX_MCU", "PINMUX_AON", "PINMUX_TZPC"))
+            self.assertEqual(len(mcu), 18)
+            self.assertEqual(len(aon), 40)
+            self.assertEqual(len(tzpc), 3)
+            self.assertNotIn("MGPIO1_SEL", mcu)
+            self.assertEqual(aon["AGPIO6_SEL"].findtext("addressOffset"), "0xB8")
+            self.assertEqual(aon["AGPIO6_PAD"].findtext("addressOffset"), "0x44")
+            self.assertEqual(tzpc["MGPIO14_PAD"].findtext("addressOffset"), "0x170")
+            self.assertEqual(mcu["MGPIO14_SEL"].findtext("addressOffset"), "0x38")
+            self.assertIn("AGPIO12_PAD", aon)
+            self.assertNotIn("AGPIO12_SEL", aon)
+            extended = {name for name, reg in aon.items() if
+                        reg.find("fields/field[name='DRIVE_HIGH']") is not None}
+            self.assertEqual(extended, {"MGPIO0_PAD", "MGPIO2_PAD", "MGPIO3_PAD", "MGPIO4_PAD", "AGPIO5_PAD", "AGPIO6_PAD"})
+            clocks = registers("M_CRG")
+            self.assertEqual(clocks["M_CLKEN1"].findtext("size"), "16")
+            for field, bit in (("TIMER_ENABLE", 0), ("LSADC_APB_ENABLE", 2), ("SPI3_MS_ENABLE", 11)):
+                self.assertEqual(clocks["M_CLKEN1"].findtext(f"fields/field[name='{field}']/bitOffset"), str(bit))
+            for reg in list(mcu.values()) + list(aon.values()) + list(tzpc.values()) + list(clocks.values()):
+                self.assertIsNone(reg.find("resetValue"))
+
+    def test_reject_unimplemented_array_and_split_access(self):
+        for declaration, message in (
+            ("reg {field {sw=rw;} value[31:0];} data[2] @ 0 += 4;", "register arrays"),
+            ("reg {regwidth=32; accesswidth=16; field {sw=rw;} value[31:0];} data @ 0;", "split-width"),
+        ):
+            with self.subTest(message=message), tempfile.TemporaryDirectory() as work:
+                source = Path(work) / "test.rdl"
+                source.write_text("addrmap chip {addrmap {" + declaration + "} peripheral @ 0x1000;};")
+                with self.assertRaisesRegex(ValueError, message):
+                    export(source, Path(work) / "test.svd")
+
+
 if __name__ == "__main__":
     unittest.main()

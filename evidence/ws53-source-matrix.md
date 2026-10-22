@@ -35,8 +35,38 @@ but `src/application/ws53/ws53_application/main.c:373-385` unconditionally
 changes it to **32 MHz** in `dev_work_clock_init()` (called from `main`, line
 574). The RAM takeover profile uses the post-startup 32 MHz value. This is an
 SDK software rate, not a measured oscillator frequency or a proven match to an
-unidentified installed firmware. Clock gate/selector registers still need their
-own evidence before a HAL may configure them.
+unidentified installed firmware. The gate subset below has register evidence;
+clock ownership, source/divider selection and changes still need validation.
+
+## Pin and clock configuration blocks
+
+`rdl/chips/ws53/pinctrl.rdl` follows
+`src/drivers/drivers/hal/pinmux/ws53/hal_pinctrl_ws53.c`, rather than the
+incompatible generic `hal_pinctrl_v150_regs_def.h`. Its 32-bit RMW accessor is
+`uapi_reg_setbits` in `src/include/common_def.h`.
+
+- MCU mux at `0x52008000`: 18 bonded MGPIO selections. No phantom linear slots
+  for MGPIO1/6/7/11/16; those map to AGPIO6/0/9/7/8.
+- AON at `0x57036000`: 12 AGPIO muxes and 28 pad controls. AGPIO12/RST_N has
+  pad control only. MGPIO24..29 flash pads are excluded from this app profile.
+- TZPC at `0x5703a000`: pads for MGPIO14/15/21 (SGPIO0/1/2), with their muxes
+  in the MCU block. MGPIO14/15 are debug pins and require explicit reservation.
+- Six pads have 4-bit drive codes split over bits 1:0 and 7:6: MGPIO0/2/3/4,
+  AGPIO5/6. Other pads have only the low 2-bit code. The SDK enum alone allows
+  unsupported strengths, and its setter can modify low bits before rejecting
+  the high bits; the Rust configuration must validate before any MMIO.
+
+`rdl/chips/ws53/m-crg.rdl` uses `clock_recover.h`'s `u_m_cken_0/1` and
+the actual ADC/I2C/SPI port code. In particular M_CLKEN1 bit 2 is LSADC APB,
+bit 11 is SPI3_MS (application SPI_BUS_0), bit 0 is TIMER. The generic
+`hal_clocks_application_private.h` enum disagrees and is not used as the truth.
+16-bit access is evidenced by `reg16_setbit`/`writew` in those ports; higher
+register bits and undocumented selectors are not invented. MSUB gate fields
+come from `hal_clocks.h`; a named SDMA gate does not prove a usable SDMA instance.
+
+All four new blocks have unknown reset values and shared ownership. They have
+SDK-source evidence only: adding a PAC register does not authorize claiming or
+reconfiguring the control core's clocks, reset pad, flash pads, or SWD pins.
 
 The exporter now carries explicit register access and known reset masks. This
 changes generated WS63/BS2X SVD metadata (not their released PACs): read-only and
