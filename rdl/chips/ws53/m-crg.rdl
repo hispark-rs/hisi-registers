@@ -25,6 +25,11 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r; desc="SPI3_MS = SDK application SPI_BUS_0";} spi3_ms_enable[11:11];
     } M_CLKEN1 @ 0x44;
     reg {
+        regwidth = 32;
+        accesswidth = 32;
+        field {sw=rw; hw=r; desc="ADC port uses 32-bit reg_clrbit/reg_setbit: assert low, delay 1us, release high, delay 1us";} lsadc_reset_n[13:13];
+    } SOFT_RESET1 @ 0x54;
+    reg {
         field {sw=rw; hw=r;} cpu_enable[0:0];
         field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
         field {sw=rw; hw=r;} mdma_enable[3:3];

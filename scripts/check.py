@@ -30,8 +30,8 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 24,
-        "interrupts": 18,
+        "peripherals": 26,
+        "interrupts": 19,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
@@ -41,6 +41,8 @@ EXPECTED = {
             "SPI0": 0x52087000,
             "QSPI1": 0x5208D000,
             "MDMA": 0x52070000,
+            "ADC": 0x5208A000,
+            "MCU_DIAG": 0x52004100,
             "WDT": 0x5702B000,
             "SFC_CFG": 0x53000000,
             "PWM": 0x52082000,
@@ -59,10 +61,10 @@ EXPECTED = {
             "GPIO2": 0x57010000,
         },
         "source_arrays": 0,
-        "output_arrays": 4,
+        "output_arrays": 5,
         "cluster_arrays": 1,
-        "registers_expanded": 716,
-        "fields_expanded": 1483,
+        "registers_expanded": 752,
+        "fields_expanded": 1545,
         "write_constraints": 6,
     },
 }

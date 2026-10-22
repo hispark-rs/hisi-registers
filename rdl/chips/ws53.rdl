@@ -14,6 +14,7 @@
 `include "ws53/m-crg.rdl"
 `include "ws53/spi-v151-100.rdl"
 `include "ws53/mdma-v151.rdl"
+`include "ws53/adc-v155.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -27,6 +28,8 @@ addrmap ws53 {
     ws53_spi0_v151_100_regs spi0 @ 0x52087000;
     ws53_qspi1_v151_100_regs qspi1 @ 0x5208D000;
     ws53_mdma_v151_regs mdma @ 0x52070000;
+    ws53_adc_v155_regs adc @ 0x5208A000;
+    ws53_mcu_diag_regs mcu_diag @ 0x52004100;
     watchdog_v151_regs wdt @ 0x5702B000;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;
@@ -67,4 +70,6 @@ addrmap ws53 {
     signal { hisi_irq_number = 67; hisi_irq_owner = "I2S"; } I2S;
     signal { hisi_irq_number = 71; hisi_irq_owner = "PWM"; } PWM_ABNOR;
     signal { hisi_irq_number = 72; hisi_irq_owner = "PWM"; } PWM_CFG;
+    // IRQ number only: selected v155 SDK handler is empty (polling capture).
+    signal { hisi_irq_number = 80; hisi_irq_owner = "ADC"; } LSADC;
 };

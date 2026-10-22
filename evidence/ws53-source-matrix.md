@@ -185,6 +185,90 @@ The mux helpers in the DMA port are no-ops, so no invented mux register is
 exported. The separate `SDMA_BASE_ADDR` macro and clock bit still do not
 establish an accessible app instance; SDMA is not generated.
 
-This addition brings the map to 24 peripherals, 716 expanded register views,
-1483 expanded fields and 18 IRQs. It supplies register access and evidence,
+The MDMA milestone (`d8de2dc`) brought the map to 24 peripherals, 716 expanded
+register views, 1483 expanded fields and 18 IRQs. It supplies register access and evidence,
 not DMA ownership, a safe HAL, a transfer model or silicon transfer validation.
+
+## ADC v155 and shared diagnostic capture
+
+The same SDK commit selects `CONFIG_ADC_USING_V155=y` for `ws53_liteos_app`.
+Sources, relative to the SDK root:
+
+- `src/drivers/drivers/hal/adc/v155/hal_adc_v155_regs_def.h`,
+  `hal_adc_v155_regs_op.{h,c}`, `hal_adc_v155.c`;
+- `src/drivers/chips/ws53/porting/adc/adc_porting.c` and
+  `porting/include/adc_porting.h`;
+- `src/drivers/drivers/hal/cpu_trace/hal_cpu_trace.{h,c}`, **CORE == APPS**;
+- `src/drivers/chips/ws53/porting/cpu_trace_acore/mcpu_trace_porting.c`.
+
+ADC is at `0x5208a000`, IRQ 80 (`LSADC`). MCU_DIAG's ADC struct view starts at
+`0x52004100`; the CPU trace driver uses base `0x52004000` plus offsets 0x100
+and above, reaching the same registers. Both resources need an explicit shared
+ownership handoff, not an exclusive ADC token by itself.
+
+Important differences from v153/v154 and stale port declarations:
+
+- `lsadc_ctrl_8` is at +0x1c, ctrl_11 at +0x24 and ctrl_12 at +0x28. Missing
+  suffix numbers do not reserve holes in the SDK struct. Host C static asserts
+  against the original header confirmed these and calibration/diagnostic offsets.
+- Eight channel-enable bits are described. The manual selector has only two
+  bits; the selected implementation sets it to zero and does not implement a
+  usable manual sample API. Do not advertise eight-channel manual conversion.
+- Acquisition uses MCU_DIAG to write RAM. Legacy `HAL_ADC_SCAN_CH*` constants
+  at 0x4400d01c and the all-zero pin macros are not used by v155; no FIFO MMIO
+  at those addresses is generated. Data words in RAM carry 12-bit samples at
+  bits 2–13 and a three-bit channel at bits 14–16.
+- IRQ 80 is routed in the platform, but `hal_adc_irq_handler()` is empty and
+  says interrupt mode is unsupported. No interrupt mask/status/ack semantics
+  have been invented. The selected path polls diagnostic SAMPLE_DONE.
+- Five refresh/clear controls are explicitly pulsed **1 then 0** by the SDK.
+  They are command-only views with no read/modify API; they are not marked W1C
+  or self-clearing. Start/stop and opaque analog configuration are also exposed
+  only as write commands, without claiming their physical readback is known.
+- The three analog configuration words at +0xf4/+0xf8/+0xfc have only opaque
+  write values in the SDK. Unexplained header slots, other filter/gain controls,
+  unknown reset values and unsupported FIFO/IRQ behavior remain omitted.
+- M_CRG reset bit 13 at `0x52000054` uses 32-bit accesses, unlike the 16-bit
+  clock gates. SDK asserts low, waits 1 us, releases high, waits 1 us.
+
+The selected ADC port clears the following pad registers when enabling a channel:
+
+| ADC channel | Pad identity | Pad address |
+|---|---|---|
+| 0 | AGPIO1 | 0x57036024 |
+| 1 | AGPIO3 | 0x5703602c |
+| 2 | AGPIO4 | 0x57036030 |
+| 3 | AGPIO6 / MGPIO1 | 0x57036044 |
+| 4 | MGPIO22 | 0x57036098 |
+| 5 | MGPIO8 | 0x57036060 |
+| 6 | MGPIO9 | 0x57036064 |
+| 7 | AGPIO0 / MGPIO6 | 0x57036058 |
+
+These are chip-pad identities, not board MIO/AIO connector numbers. No pad was
+changed during this audit. The SDK's 1800 mV conversion constant is not proof
+of board input voltage limits or calibration accuracy.
+
+CPU trace establishes SAMPLE_MODE at `0x52004204`: mode[1:0], enable[8], sync[9].
+The ADC struct and getter place SAMPLE_DONE at `0x52004228`; the CPU-trace port
+mistakenly aliases its DONE macro to the done-address-low register at 0x52004220.
+RDL keeps the ADC flag and address registers separate; silicon flag semantics
+still need a controlled capture test.
+
+A-board read-only preflight on 2026-10-23 found `CPU_TRACE=3`,
+`SAMPLE_MODE=0x301` and range `0x200223ec..0x200227d0`, while MDMA enabled
+channels remained zero. Thus there is an enabled diagnostic RAM writer even
+with no MDMA channel enabled. CPU halt alone is not a quiescence proof. The
+range is disjoint from the proposed RAM ELF, but takeover must explicitly
+account for the writer. Resume and vendor AT liveness succeeded afterward;
+ADC/calibration/capture were not started or stopped by this audit.
+
+Remaining ADC HAL requirements include bounded calibration failures, CAP error
+handling, exclusive diagnostic-buffer lifetime/cache maintenance, verified stop
+and drain before releasing memory, and restoration of borrowed trace state.
+The SDK silently breaks out of calibration/completion polling and frees its
+buffer after issuing stop without proving drain; these paths must not be copied
+as safe Rust behavior. No ADC conversion or IRQ has been validated on silicon.
+
+Current map: 26 peripherals, 752 expanded register views, 1545 expanded fields,
+19 IRQ numbers. ADC/MCU_DIAG describe only the evidenced subset, not complete
+ADC register coverage or a supported HAL.

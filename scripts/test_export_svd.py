@@ -225,6 +225,42 @@ class ExportSemantics(unittest.TestCase):
             self.assertEqual(fields["ACTIVE"].findtext("access"), "read-only")
             self.assertTrue(all(r.find("resetValue") is None for r in peripheral.findall(".//register")))
 
+    def test_ws53_adc_v155_capture_and_pulse_commands(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            blocks = {p.findtext("name"): p for p in ET.parse(dest).findall(".//peripheral")}
+            adc = blocks["ADC"]
+            self.assertEqual(adc.findtext("baseAddress"), "0x5208A000")
+            self.assertEqual(adc.findtext("interrupt/value"), "80")
+            regs = {r.findtext("name"): r for r in adc.findall("registers/register")}
+            self.assertNotIn("FIFO", regs)
+            for name, offset in (("SCAN_COMMAND", 0x1c), ("ANALOG_CONTROL", 0x24),
+                                 ("MANUAL_CONTROL", 0x28), ("OFFSET_STATUS", 0x44),
+                                 ("CAP_CALIBRATION", 0x88), ("CAP_STATUS", 0xa0),
+                                 ("ANALOG_CONFIG[%s]", 0xf4)):
+                self.assertEqual(int(regs[name].findtext("addressOffset"), 0), offset)
+            for name in ("OFFSET_REFRESH", "OFFSET_STATE_CLEAR", "CAP_REFRESH",
+                         "CAP_FINISH_CLEAR", "GAIN_STATE_CLEAR"):
+                reg = regs[name]
+                self.assertEqual(reg.findtext("access"), "write-only")
+                self.assertIsNone(reg.find(".//modifiedWriteValues"), "pulse must not become W1C")
+                self.assertIsNone(reg.find(".//readAction"))
+            self.assertTrue(all(r.find("resetValue") is None for r in regs.values()))
+            self.assertEqual(regs["ANALOG_CONFIG[%s]"].findtext("dim"), "3")
+            self.assertEqual(regs["MANUAL_CONTROL"].findtext("fields/field[name='CHANNEL']/bitWidth"), "2")
+            diag = blocks["MCU_DIAG"]
+            self.assertEqual(diag.findtext("baseAddress"), "0x52004100")
+            self.assertIsNone(diag.find("interrupt"))
+            self.assertEqual(diag.findtext("registers/register[name='SAMPLE_DONE']/addressOffset"), "0x128")
+            mode = diag.find("registers/register[name='SAMPLE_MODE']")
+            self.assertEqual(mode.findtext("addressOffset"), "0x104")
+            self.assertEqual(mode.findtext("fields/field[name='ENABLE']/bitOffset"), "8")
+            self.assertEqual(mode.findtext("fields/field[name='SYNC']/bitOffset"), "9")
+            reset = blocks["M_CRG"].find("registers/register[name='SOFT_RESET1']")
+            self.assertEqual(reset.findtext("size"), "32")
+            self.assertEqual(reset.findtext("fields/field/bitOffset"), "13")
+
 
 if __name__ == "__main__":
     unittest.main()

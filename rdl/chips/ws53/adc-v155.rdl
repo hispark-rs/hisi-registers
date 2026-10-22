@@ -1,0 +1,126 @@
+// SDK 163d9150, hal/adc/v155/{regs_def,regs_op}.h/.c and WS53 adc_porting.c.
+// Only fields used or explicitly described by the selected implementation.
+// Sparse lsadc_ctrl_N names are NOT offset/4: ctrl_8 is at 0x1c.
+// Acquisition is through shared MCU_DIAG RAM capture, not the legacy FIFO.
+// Unused/unexplained header slots and unknown reset values are omitted.
+
+enum ws53_adc_average {
+    ONE = 0; TWO = 1; FOUR = 2; EIGHT = 3;
+};
+
+addrmap ws53_adc_v155_regs {
+    hisi_evidence = "SDK-source 163d9150 ws53_liteos_app ADC v155; runtime analog ownership, calibration and IRQ behavior not silicon verified";
+    reg {
+        field { sw=rw; hw=r; } channels[7:0];
+        field { sw=rw; hw=r; encode=ws53_adc_average; } average[9:8];
+        field { sw=rw; hw=r; } sample_count[14:10];
+        field { sw=rw; hw=r; } start_count[22:15];
+        field { sw=rw; hw=r; } discard_count[29:23];
+    } SCAN_CONTROL @ 0x0;
+    reg {
+        name = "Command view of lsadc_ctrl_8. SDK writes one to start/stop; self-clear and simultaneous command behavior unknown.";
+        field { sw=w; hw=r; } start[0:0];
+        field { sw=w; hw=r; } stop[1:1];
+    } SCAN_COMMAND @ 0x1c;
+    reg {
+        field { sw=rw; hw=r; } analog_enable[15:0];
+        field { sw=rw; hw=r; } reset_n[16:16];
+    } ANALOG_CONTROL @ 0x24;
+    reg {
+        field { sw=rw; hw=r; } channel[1:0];
+        field { sw=rw; hw=r; } manual_select[2:2];
+    } MANUAL_CONTROL @ 0x28;
+    reg {
+        field { sw=rw; hw=r; } mode[0:0];
+        field { sw=rw; hw=r; } loop_select[1:1];
+        field { sw=rw; hw=r; } inverse[2:2];
+        field { sw=rw; hw=r; } accumulation_cycle[5:4];
+        field { sw=rw; hw=r; } range[7:6];
+        field { sw=rw; hw=r; } manual_data[13:8];
+        field { sw=rw; hw=r; } data_inverse[16:16];
+    } OFFSET_CALIBRATION @ 0x2c;
+    reg { field { sw=rw; hw=r; } enable[0:0]; } OFFSET_ENABLE @ 0x30;
+    reg { field { sw=rw; hw=r; } enable[0:0]; } OFFSET_DATA_ENABLE @ 0x34;
+    reg {
+        name = "Command-only view: SDK explicitly writes 1 then 0; not a self-clearing or W1C declaration";
+        field { sw=w; hw=r; } pulse[0:0];
+    } OFFSET_REFRESH @ 0x38;
+    reg {
+        name = "Command-only view: SDK explicitly writes 1 then 0 to clear finish state; readback unspecified";
+        field { sw=w; hw=r; } pulse[0:0];
+    } OFFSET_STATE_CLEAR @ 0x3c;
+    reg { field { sw=r; hw=w; } finished[0:0]; } OFFSET_STATUS @ 0x44;
+    reg {
+        field { sw=r; hw=w; } data[5:0];
+        field { sw=r; hw=w; } loop_count[11:6];
+    } OFFSET_RESULT @ 0x50;
+    reg {
+        field { sw=rw; hw=r; } mode[0:0];
+        field { sw=rw; hw=r; } algorithm[1:1];
+        field { sw=rw; hw=r; } accumulation_cycle[3:2];
+        field { sw=rw; hw=r; } start_index[7:4];
+        field { sw=rw; hw=r; } weight_select[8:8];
+        field { sw=rw; hw=r; } dac_delay[9:9];
+        field { sw=rw; hw=r; } manual_cap[15:12];
+        field { sw=rw; hw=r; } manual_sh_enable[16:16];
+        field { sw=rw; hw=r; } manual_pn_select[17:17];
+    } CAP_CALIBRATION @ 0x88;
+    reg { field { sw=rw; hw=r; } enable[0:0]; } CAP_ENABLE @ 0x8c;
+    reg {
+        name = "Command-only view: SDK explicitly writes 1 then 0";
+        field { sw=w; hw=r; } pulse[0:0];
+    } CAP_REFRESH @ 0x94;
+    reg {
+        name = "Command-only view: SDK explicitly writes 1 then 0 to clear finish state";
+        field { sw=w; hw=r; } pulse[0:0];
+    } CAP_FINISH_CLEAR @ 0x98;
+    reg {
+        name = "Command-only view: SDK explicitly writes 1 then 0 to clear gain state";
+        field { sw=w; hw=r; } pulse[0:0];
+    } GAIN_STATE_CLEAR @ 0x9c;
+    reg {
+        field { sw=r; hw=w; } finished[0:0];
+        field { sw=r; hw=w; } error[8:8];
+    } CAP_STATUS @ 0xa0;
+    reg {
+        name = "Opaque analog configuration written by the v155 SDK; individual field meanings are not documented";
+        field { sw=w; hw=r; } value[31:0];
+    } ANALOG_CONFIG[3] @ 0xf4 += 4;
+};
+
+enum ws53_diag_sample_mode { ONCE = 0; REPEAT = 1; };
+
+addrmap ws53_mcu_diag_regs {
+    hisi_evidence = "SDK-source 163d9150 ADC v155 mcu_diag_regs_t + CORE==APPS hal_cpu_trace.c; shared ADC/CPU-trace RAM bus master, no exclusive ADC ownership";
+    reg { field { sw=rw; hw=r; } select[0:0]; } MONITOR_SELECT @ 0x0;
+    reg { field { sw=rw; hw=r; } select[0:0]; } TRACE_SAVE_SELECT @ 0x4;
+    reg {
+        field { sw=rw; hw=r; } trace_enable[0:0];
+        field { sw=rw; hw=r; } mcpu_enable[1:1];
+    } CPU_TRACE @ 0x8;
+    reg {
+        name = "Clock enable mask; SDK trace writes 0x1ff, individual clock ownership needs audit";
+        field { sw=rw; hw=r; } mask[8:0];
+    } MONITOR_CLOCK @ 0xc;
+    reg {
+        name = "Opaque source selection; ADC SDK writes 6. Other selectors are not defined here";
+        field { sw=rw; hw=r; } value[31:0];
+    } SAMPLE_SELECT @ 0x100;
+    reg {
+        field { sw=rw; hw=r; encode=ws53_diag_sample_mode; } mode[1:0];
+        field { sw=rw; hw=r; } enable[8:8];
+        field { sw=rw; hw=r; } sync[9:9];
+    } SAMPLE_MODE @ 0x104;
+    reg { field { sw=rw; hw=r; } value[15:0]; } LENGTH_LOW @ 0x108;
+    reg { field { sw=rw; hw=r; } value[15:0]; } LENGTH_HIGH @ 0x10c;
+    reg { field { sw=rw; hw=r; } value[15:0]; } START_LOW @ 0x110;
+    reg { field { sw=rw; hw=r; } value[15:0]; } START_HIGH @ 0x114;
+    reg { field { sw=rw; hw=r; } value[15:0]; } END_LOW @ 0x118;
+    reg { field { sw=rw; hw=r; } value[15:0]; } END_HIGH @ 0x11c;
+    reg { field { sw=r; hw=w; } value[15:0]; } DONE_ADDRESS_LOW @ 0x120;
+    reg { field { sw=r; hw=w; } value[15:0]; } DONE_ADDRESS_HIGH @ 0x124;
+    reg {
+        name = "ADC v155 struct and sample_done_data_t; CPU-trace port's DONE macro at +0x120 conflicts and is not used";
+        field { sw=r; hw=w; } done[0:0];
+    } SAMPLE_DONE @ 0x128;
+};

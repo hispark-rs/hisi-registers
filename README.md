@@ -75,6 +75,16 @@ and field behavior are retained, but the original PAC array API shape is not.
 The checker reports the 39 WS63 and 11 BS2X source arrays that still require a
 controlled compaction pass. No PAC may migrate until that API-shape gate closes.
 
+With a local pinned WS53 SDK checkout, ADC/diagnostic C structure offsets can
+also be compared against the generated map without copying vendor headers:
+
+```bash
+uv run --locked scripts/check_ws53_sdk_layout.py --sdk /path/to/fbb_ws53
+```
+
+This optional source-layout check is not required by ordinary generation or
+Cargo builds and does not access hardware.
+
 ## Truth and provenance
 
 Every register fact must record its evidence class. A generated SVD is an export,
