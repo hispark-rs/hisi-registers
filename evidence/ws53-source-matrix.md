@@ -272,3 +272,38 @@ as safe Rust behavior. No ADC conversion or IRQ has been validated on silicon.
 Current map: 26 peripherals, 752 expanded register views, 1545 expanded fields,
 19 IRQ numbers. ADC/MCU_DIAG describe only the evidenced subset, not complete
 ADC register coverage or a supported HAL.
+
+## WS53 temperature sensor polling subset
+
+Pinned SDK `163d9150ab94a02d09a05f623351f9facee3025e`:
+`src/drivers/chips/ws53/porting/tsensor/tsensor_porting.c` and its CMakeLists;
+`src/application/ws53/ws53_application/main.c` initializes this port directly.
+`src/middleware/services/wifi_service/service/soc_wifi_service_api.c` calls the
+same getter for Wi-Fi temperature queries. Application access is evidenced;
+exclusive ownership across firmware users/cores is not established.
+
+Six 32-bit accesses are modeled at base `0x59006300`: START +0, CONTROL +4,
+AUTO_STATUS +8, SAMPLE_TIME +0x10, AUTO_REFRESH_PERIOD +0x30 and
+AUTO_REFRESH_CONFIG +0x34. `tsensor_reg_t` describes READY bit 1 and a 10-bit
+CODE at bits 11:2. Bit 0 is named `auto_clr`, but the implementation never
+writes it or explains its semantics; it is deliberately omitted. No reset
+values, IRQ, clear-on-read or W1C behavior are inferred. Four registers expose
+only the writes actually evidenced by the port; this is an API restriction,
+not a claim that physical readback is impossible. Opaque 32-bit fields record
+SDK access width, not the number of implemented configuration bits.
+
+The init sequence writes period 160, control 3, sample-time 2, refresh-config
+0 and start 1. SDK comments identify 5 ms at 32 kHz, 16-point average cyclic
+reporting and 0.256 ms per sample. These are source descriptions, not measured
+clock/timing facts. The polling code uses integer truncation toward zero:
+`(((code - 118) * 16500 / (933 - 118) - 4000) / 100)` degrees Celsius.
+It caps only the upper limit at 125 and casts to int8_t; a future HAL must
+handle the lower bound explicitly and use bounded readiness polling. There
+is no stop/deinit implementation here, and the generic tsensor.h declarations
+for IRQ, multiple thresholds and calibration do not prove WS53 support.
+
+The optional SDK layout checker compares all six absolute addresses with the
+pinned C source. Export tests verify the status bitfield and restricted access
+shape. No TSENSOR register was accessed on hardware in this audit; no HAL or
+QEMU behavior is claimed. Current map: 27 peripherals, 758 expanded register
+views, 1552 fields, 19 IRQ numbers. WS63/BS2X output is unchanged.

@@ -7,6 +7,34 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_tsensor_polling_subset_does_not_invent_clear_or_irq(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            sensor = ET.parse(dest).find("./peripherals/peripheral[name='TSENSOR']")
+            self.assertEqual(int(sensor.findtext("baseAddress"), 0), 0x59006300)
+            self.assertIsNone(sensor.find("interrupt"))
+            regs = {r.findtext("name"): r for r in sensor.findall("registers/register")}
+            for name, offset, access in (
+                ("START", 0, "write-only"), ("CONTROL", 4, "read-write"),
+                ("AUTO_STATUS", 8, "read-only"), ("SAMPLE_TIME", 16, "write-only"),
+                ("AUTO_REFRESH_PERIOD", 48, "write-only"),
+                ("AUTO_REFRESH_CONFIG", 52, "write-only"),
+            ):
+                self.assertEqual(int(regs[name].findtext("addressOffset"), 0), offset)
+                self.assertEqual(regs[name].findtext("access"), access)
+                self.assertEqual(regs[name].findtext("size"), "32")
+                self.assertIsNone(regs[name].find("resetValue"))
+            self.assertEqual(len(regs), 6)
+            status = regs["AUTO_STATUS"]
+            fields = {f.findtext("name"): f for f in status.findall("fields/field")}
+            self.assertEqual(set(fields), {"READY", "CODE"})
+            self.assertEqual(fields["READY"].findtext("bitOffset"), "1")
+            self.assertEqual(fields["CODE"].findtext("bitOffset"), "2")
+            self.assertEqual(fields["CODE"].findtext("bitWidth"), "10")
+            self.assertIsNone(sensor.find(".//modifiedWriteValues"))
+            self.assertIsNone(sensor.find(".//readAction"))
+
     def test_partial_reset_and_write_only_clear(self):
         with tempfile.TemporaryDirectory() as work:
             source = Path(work) / "test.rdl"

@@ -1,11 +1,12 @@
 """Optional local SDK comparison; ordinary generation/build does not require SDK.
 
 Run: uv run --locked scripts/check_ws53_sdk_layout.py --sdk /path/to/fbb_ws53
-Compare the generated ADC/diagnostic offsets with C offsetof in the pinned SDK.
+Compare ADC/diagnostic C offsetof and TSENSOR addresses with the pinned SDK.
 """
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -13,6 +14,7 @@ import xml.etree.ElementTree as ET
 
 PIN = "163d9150ab94a02d09a05f623351f9facee3025e"
 HEADER = "src/drivers/drivers/hal/adc/v155/hal_adc_v155_regs_def.h"
+TSENSOR_SOURCE = "src/drivers/chips/ws53/porting/tsensor/tsensor_porting.c"
 MAPPINGS = {
     "ADC": ("adc_regs_t", {
         "SCAN_CONTROL": "lsadc_ctrl_0", "SCAN_COMMAND": "lsadc_ctrl_8",
@@ -45,7 +47,7 @@ def main():
     parser.add_argument("--cc", default="cc", help="C compiler executable (no shell)")
     args = parser.parse_args()
     sdk = args.sdk.resolve()
-    subprocess.run(["git", "-C", str(sdk), "diff", "--exit-code", PIN, "--", HEADER],
+    subprocess.run(["git", "-C", str(sdk), "diff", "--exit-code", PIN, "--", HEADER, TSENSOR_SOURCE],
                    check=True, stdout=subprocess.DEVNULL)
     root = Path(__file__).resolve().parents[1]
     tree = ET.parse(root / "generated/WS53.experimental.svd")
@@ -71,7 +73,21 @@ def main():
         subprocess.run([args.cc, "-x", "c", "-std=c11", "-Wall", "-Werror", "-fsyntax-only", "-"],
                        input="\n".join(source), text=True, check=True,
                        env={**os.environ, "CCACHE_DIR": work})
+    tsensor = tree.find("./peripherals/peripheral[name='TSENSOR']")
+    base = int(tsensor.findtext("baseAddress"), 0)
+    c_addresses = dict(re.findall(r"^#define\s+(TSENSOR_\w+)\s+(0x[0-9A-Fa-f]+)\s*$",
+                                 (sdk / TSENSOR_SOURCE).read_text(), re.MULTILINE))
+    address_checks = 0
+    for name, macro in {"START": "TSENSOR_START", "CONTROL": "TSENSOR_CTRL",
+                        "AUTO_STATUS": "TSENSOR_AUTO_STS", "SAMPLE_TIME": "TSENSOR_CTRL1",
+                        "AUTO_REFRESH_PERIOD": "TSENSOR_AUTO_REFRESH_PERIOD",
+                        "AUTO_REFRESH_CONFIG": "TSENSOR_AUTO_REFRESH_CFG"}.items():
+        offset = int(tsensor.findtext(f"registers/register[name='{name}']/addressOffset"), 0)
+        if base + offset != int(c_addresses[macro], 0):
+            raise ValueError(f"TSENSOR.{name} differs from SDK {macro}")
+        address_checks += 1
     print(json.dumps({"sdk_commit": PIN, "header": HEADER, "offset_checks": checks,
+                      "tsensor_source": TSENSOR_SOURCE, "tsensor_address_checks": address_checks,
                       "layout_verified": True, "hardware_verified": False}, indent=2))
 
 

@@ -1,0 +1,31 @@
+// SDK 163d9150, chips/ws53/porting/tsensor/tsensor_porting.c.
+// Application startup calls init; runtime exclusivity is NOT established.
+// Only the polling implementation is evidenced, not the generic header's IRQs.
+addrmap ws53_tsensor_regs {
+    hisi_evidence = "SDK-source 163d9150 WS53 application tsensor port; shared thermal use/ownership and silicon behavior unverified";
+    reg {
+        name = "Command view: SDK writes 1 to start; stop and self-clear behavior unspecified";
+        field { sw=w; hw=r; } value[31:0];
+    } START @ 0x0;
+    reg {
+        name = "Opaque configuration: SDK writes 3 for 16-point average cyclic reports, reads zero as uninitialized";
+        field { sw=rw; hw=r; } value[31:0];
+    } CONTROL @ 0x4;
+    reg {
+        name = "Polling status subset. Bit 0 named auto_clr has no evidenced write/clear semantics and is omitted";
+        field { sw=r; hw=w; } ready[1:1];
+        field { sw=r; hw=w; } code[11:2];
+    } AUTO_STATUS @ 0x8;
+    reg {
+        name = "Opaque write view: SDK writes 2 for 0.256 ms per sample; readback unspecified";
+        field { sw=w; hw=r; } value[31:0];
+    } SAMPLE_TIME @ 0x10;
+    reg {
+        name = "Opaque write view: SDK writes 160 cycles of the 32 kHz source (5 ms); implemented width unknown";
+        field { sw=w; hw=r; } value[31:0];
+    } AUTO_REFRESH_PERIOD @ 0x30;
+    reg {
+        name = "Opaque write view: SDK writes 0 to disable auto-refresh reporting; readback unspecified";
+        field { sw=w; hw=r; } value[31:0];
+    } AUTO_REFRESH_CONFIG @ 0x34;
+};
