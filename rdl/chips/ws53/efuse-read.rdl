@@ -1,0 +1,33 @@
+// SDK 163d9150 WS53 efuse_porting.{c,h}, hal_efuse_v151{,_reg_def,_reg_op}.
+// Read-service subset only. Physical programming operations exist but the OTP
+// data write window, AVDD and programming switch are deliberately NOT exposed.
+// No operations here establish exclusive ownership or authorize hardware writes.
+addrmap ws53_efuse_read_regs {
+    hisi_evidence = "SDK-source 163d9150 WS53 EFUSE v151, one 2048-bit region; read-service subset, identity layout conflicts and ownership unresolved";
+    reg {
+        field {sw=r; hw=w;} manual_status[1:0];
+        field {sw=r; hw=w;} boot0_done[2:2];
+        field {sw=r; hw=w;} boot1_done[3:3];
+        field {sw=r; hw=w;} boot2_done[4:4];
+    } BOOT_STATUS @ 0x2c;
+    reg {
+        name = "Readback of the physical mode register; preserve upper bits when issuing a read-mode command";
+        field {sw=r; hw=w;} mode[15:0];
+    } MODE_STATUS @ 0x30;
+    reg {
+        hisi_svd_alternate_register = "MODE_STATUS";
+        name = "Restricted read-mode view of physical RW control. SDK preserves upper 16 bits; no implicit zeroing or RMW API. Programming mode is not modeled";
+        field {sw=w; hw=r; hisi_write_min=0x5a5a; hisi_write_max=0x5a5a;} read_mode[15:0];
+    } READ_MODE_COMMAND @ 0x30;
+    reg {
+        name = "Shared volatile controller timing; SDK initializes low8 to 0x1f preserving other bits; clock frequency and reset unknown";
+        field {sw=rw; hw=r;} value[7:0];
+    } CLOCK_PERIOD @ 0x34;
+    reg {
+        name = "Read-only service view of OTP storage: each 32-bit MMIO slot contains two logical bytes; no contiguous byte loads or program writes";
+        field {sw=r; hw=w;} even_byte[7:0];
+        field {sw=r; hw=w;} odd_byte[15:8];
+    } DATA_READ[128] @ 0x800 += 4;
+    // Physical AVDD +0x3c and system programming switch 0x57030258 omitted.
+    // No reset values: contents are provisioned OTP, not zero-initialized RAM.
+};

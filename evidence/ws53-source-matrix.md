@@ -426,3 +426,58 @@ to overwrite RAM used by either service. Future HAL must coordinate the existing
 service or use an explicitly verified handover. No HAL, model, hardware random
 read, statistical/cryptographic-quality test or stable API is claimed here.
 Current map: **29 peripherals, 791 register views, 1612 fields, 20 IRQs**.
+
+## eFuse v151 read-service subset
+
+SDK `163d9150ab94a02d09a05f623351f9facee3025e`, selected application config:
+DRIVER_SUPPORT_EFUSE, EFUSE_USING_V151, EFUSE_SWITCH_EN, EFUSE_REGION_NUM=1.
+Sources are `drivers/chips/ws53/porting/efuse/efuse_porting.{c,h}` and
+`drivers/drivers/hal/efuse/v151/hal_efuse_v151{,_reg_def,_reg_op}.{c,h}`.
+Port base is **0x57024000**. Boot status at +0x2c has manual state[1:0] and
+boot0/1/2-done bits2/3/4; only region0 is configured. No IRQ or reset values
+are inferred. The inactive-region status fields do not imply extra OTP regions.
+
+The 2048-bit region contains 256 logical bytes. Reads use **32-bit MMIO** at
+`base + 0x800 + (byte_index / 2) * 4`, then choose bits7:0 for an even index or
+bits15:8 for an odd index. The RDL `DATA_READ[128]` preserves this stride and
+two-byte payload; final slot offset is +0x9fc. It is a read-only *service view*,
+not a claim that the physical address can never be programmed. No OTP write
+view, AVDD programming control (+0x3c), system programming switch (0x57030258),
+MICLDO sequencing or burn helper is exposed. Raw unsafe pointer writes cannot
+be made safe by a PAC and are outside this read-only contract.
+
+The SDK read path is not a passive memory dump: init sets CLOCK_PERIOD +0x34
+low8 to 0x1f; each read writes 0x5a5a to mode-control +0x30 low16. Both preserve
+unmodeled upper bits via 32-bit accesses. RDL exposes MODE_STATUS (RO) and
+READ_MODE_COMMAND (WO alias), with a field constraint of exactly 0x5a5a.
+No misleading modify() exists on either view. A future driver must explicitly
+preserve upper bits and coordinate other users before issuing the command;
+write_with_zero is not automatically a correct hardware sequence. This
+restricted command view is not the physical register's full RW/programming
+interface. Clock changes, read-mode selection and all actual hardware accesses
+remain unperformed in this audit.
+
+Identity layouts are not collapsed into an unsupported universal interpretation:
+
+| SDK interface | Source-defined interpretation | Unresolved difference |
+|---|---|---|
+| efuse_read_item(EFUSE_CHIP_ID) | bit0 length8, i.e. byte0 | generic HAL get_chip_id callback is NULL |
+| efuse_read_item(EFUSE_DIE_ID) | bit8 length128, i.e. bytes1..16 | generic get_die_id uses EFUSE_DIE_ID_BASE_BYTE_ADDR=0 instead |
+| efuse_read_mac | slots at bits1728/1776/1824, lock bits840/841/842, newest locked slot | header MAC_ADDR_1/2/LAST macros and g_efuse_cfg MAC item names use different offsets |
+| version/security fields | named item-table bit ranges | interpretation of installed gateway provisioning not verified |
+
+No chip-identity, MAC or security-field typed HAL API is promised from those
+conflicting names. The raw bounded read layout is established; semantic identity
+requires a selected, evidenced schema. The generic driver also performs stateful
+initialization, so application visibility does not prove exclusive ownership or
+that clocks/timing can be changed while control-core/boot services use the IP.
+
+`scripts/check_ws53_efuse_layout.py --sdk /path/to/fbb_ws53` checks the four source
+files against the exact SDK commit, compiles their original pure address helpers
+and C layouts, and verifies all **256 logical byte addresses**, status bitfields,
+port control/status addresses and the read-mode value against generated SVD.
+It runs no MMIO function and requires no hardware. Normal generation remains
+independent of the SDK/compiler. Export tests require RO data/status, the WO
+command alias/range, 32-bit slots and absent invented resets/programming views.
+No eFuse HAL, behavior model, physical read or permanent write was performed.
+Current map: **30 peripherals, 923 register views, 1875 fields, 20 IRQs**.

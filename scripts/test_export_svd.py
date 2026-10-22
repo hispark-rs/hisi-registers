@@ -7,6 +7,37 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_efuse_read_view_has_no_otp_writes_or_assumed_reset(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            efuse = ET.parse(dest).find("./peripherals/peripheral[name='EFUSE']")
+            self.assertEqual(int(efuse.findtext("baseAddress"), 0), 0x57024000)
+            self.assertIsNone(efuse.find("interrupt"))
+            regs = {r.findtext("name"): r for r in efuse.findall("registers/register")}
+            self.assertEqual(set(regs), {"BOOT_STATUS", "MODE_STATUS", "READ_MODE_COMMAND", "CLOCK_PERIOD", "DATA_READ[%s]"})
+            for name, offset, access in (
+                ("BOOT_STATUS", 0x2c, "read-only"), ("MODE_STATUS", 0x30, "read-only"),
+                ("READ_MODE_COMMAND", 0x30, "write-only"), ("CLOCK_PERIOD", 0x34, "read-write"),
+                ("DATA_READ[%s]", 0x800, "read-only"),
+            ):
+                self.assertEqual(int(regs[name].findtext("addressOffset"), 0), offset)
+                self.assertEqual(regs[name].findtext("access"), access)
+                self.assertEqual(regs[name].findtext("size"), "32")
+                self.assertIsNone(regs[name].find("resetValue"))
+            cmd = regs["READ_MODE_COMMAND"]
+            self.assertEqual(cmd.findtext("alternateRegister"), "MODE_STATUS")
+            for bound in ("minimum", "maximum"):
+                self.assertEqual(int(cmd.findtext("fields/field/writeConstraint/range/" + bound)), 0x5a5a)
+            data = regs["DATA_READ[%s]"]
+            self.assertEqual(data.findtext("dim"), "128")
+            self.assertEqual(int(data.findtext("dimIncrement"), 0), 4)
+            fields = {f.findtext("name"): f for f in data.findall("fields/field")}
+            self.assertEqual(set(fields), {"EVEN_BYTE", "ODD_BYTE"})
+            for name, shift in (("EVEN_BYTE", 0), ("ODD_BYTE", 8)):
+                self.assertEqual(int(fields[name].findtext("bitOffset")), shift)
+                self.assertEqual(fields[name].findtext("bitWidth"), "8")
+
     def test_ws53_unified_trng_consumption_and_halfword_ring_control(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"
