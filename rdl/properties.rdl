@@ -15,6 +15,14 @@ property hisi_evidence {
     component = addrmap | regfile | reg | field | signal;
 };
 
+// A reused IP's legacy reset annotations are not necessarily established for
+// a new integration. True on any ancestor vetoes resetValue/resetMask export;
+// it cannot invent a new reset value or be undone by a child setting false.
+property hisi_reset_unverified {
+    type = boolean;
+    component = addrmap | regfile | reg | field;
+};
+
 // Explicit SVD instance reuse. The exporter proves register equivalence before
 // emitting derivedFrom; IRQs and base addresses remain instance-specific.
 property hisi_svd_derived_from {

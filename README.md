@@ -47,6 +47,14 @@ This repository therefore owns a deliberately small fail-closed exporter in
 `scripts/export_svd.py`. Expanding that exporter is part of the experiment and
 must be backed by golden SVD and `svd2rust` compatibility tests.
 
+Shared IP declarations do not establish chip-specific reset values. Mark an
+unverified integration, register file, register or field with
+`hisi_reset_unverified = true`: the exporter omits its reset value/mask even if
+an imported IP has legacy reset annotations. A child cannot override an
+ancestor's veto. Unknown bits outside a verified reset mask stay unknown.
+WS53 TIMER/TCXO use this guard; TIMER also omits the disputed common window
+documented in `evidence/ws53-source-matrix.md`.
+
 ## Layout
 
 - `rdl/ip/`: reusable IP definitions only after cross-chip equivalence is proven.

@@ -7,6 +7,57 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_unverified_inherited_reset_is_omitted_including_arrays(self):
+        with tempfile.TemporaryDirectory() as work:
+            source = Path(work) / "test.rdl"
+            dest = Path(work) / "test.svd"
+            properties = Path(__file__).resolve().parents[1] / "rdl/properties.rdl"
+            source.write_text(f'`include "{properties}"\n' + '''addrmap chip {
+                addrmap {
+                    reg {
+                        field { sw=rw; } known[3:0] = 5;
+                        field { sw=rw; hisi_reset_unverified=true; } unverified[7:4] = 9;
+                    } mixed @ 0;
+                } legacy @ 0x1000;
+                addrmap {
+                    hisi_reset_unverified=true;
+                    regfile {
+                        reg { field { sw=rw; hisi_reset_unverified=false; } value[7:0] = 7; } data[2] @ 0 += 4;
+                    } channels[2] @ 0 += 0x10;
+                } fresh @ 0x2000;
+            };''')
+            export(source, dest)
+            tree = ET.parse(dest)
+            known = tree.find("./peripherals/peripheral[name='LEGACY']/registers/register")
+            self.assertEqual(int(known.findtext("resetValue"), 0), 5)
+            self.assertEqual(int(known.findtext("resetMask"), 0), 0xf)
+            fresh = tree.find("./peripherals/peripheral[name='FRESH']")
+            self.assertIsNone(fresh.find(".//resetValue"))
+            self.assertIsNone(fresh.find(".//resetMask"))
+
+    def test_ws53_timer_uses_confirmed_channel_window_without_assumed_resets(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            tree = ET.parse(dest)
+            timer = tree.find("./peripherals/peripheral[name='TIMER']")
+            self.assertEqual(int(timer.findtext("addressBlock/size"), 0), 0x220)
+            regs = {r.findtext("name"): r for r in timer.findall("registers/register")}
+            self.assertEqual(len(regs), 12)
+            for name in ("EOI_REN", "RAW_INTR_STAT", "ABNOR_IMSK", "TIMER_CONTROL2"):
+                self.assertNotIn(name, regs)
+            for ch in (0, 1):
+                reg = regs[f"TIMER_MASKED_INTR{ch}"]
+                self.assertEqual(int(reg.findtext("addressOffset"), 0), 0x11c + ch * 0x100)
+                self.assertEqual(reg.findtext("access"), "read-only")
+                eoi = regs[f"TIMER_EOI{ch}"]
+                self.assertEqual(eoi.findtext("access"), "write-only")
+                self.assertEqual(eoi.findtext("fields/field/modifiedWriteValues"), "oneToClear")
+            for name in ("TIMER", "TCXO"):
+                block = tree.find(f"./peripherals/peripheral[name='{name}']")
+                self.assertIsNone(block.find(".//resetValue"))
+                self.assertIsNone(block.find(".//resetMask"))
+
     def test_ws53_efuse_read_view_has_no_otp_writes_or_assumed_reset(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"

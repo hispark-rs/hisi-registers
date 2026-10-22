@@ -58,11 +58,20 @@ def order_children(node: ET.Element, order: str) -> None:
     node[:] = sorted(node, key=lambda child: positions[child.tag])
 
 
+def verified_field_reset(field: FieldNode) -> int | None:
+    node = field
+    while isinstance(node, (AddrmapNode, RegfileNode, RegNode, FieldNode)):
+        if node.get_property("hisi_reset_unverified") is True:
+            return None
+        node = node.parent
+    return field.get_property("reset")
+
+
 def reset_value(reg: RegNode) -> int | None:
     value = 0
     found = False
     for field in reg.fields():
-        reset = field.get_property("reset")
+        reset = verified_field_reset(field)
         if reset is not None:
             value |= int(reset) << field.low
             found = True
@@ -72,7 +81,7 @@ def reset_value(reg: RegNode) -> int | None:
 def reset_mask(reg: RegNode) -> int:
     """Unknown/reserved reset bits must not become known zero bits in SVD."""
     return sum(((1 << field.width) - 1) << field.low
-               for field in reg.fields() if field.get_property("reset") is not None)
+               for field in reg.fields() if verified_field_reset(field) is not None)
 
 
 def add_write_constraint(parent: ET.Element, node: RegNode | FieldNode) -> None:
@@ -270,7 +279,10 @@ def export(source: Path, destination: Path) -> None:
             add(ixml, "value", int(irq.get_property("hisi_irq_number")))
         block = ET.SubElement(pxml, "addressBlock")
         add(block, "offset", "0x0")
-        add(block, "size", f"0x{peripheral.size:X}")
+        # Elaboration's size can include a trailing ispresent=false register.
+        # Export only the represented register window, retaining array strides.
+        extent = max(reg.raw_address_offset + reg.total_size for reg in registers)
+        add(block, "size", f"0x{extent:X}")
         add(block, "usage", "registers")
         rxmls = ET.SubElement(pxml, "registers")
         export_registers(rxmls, registers)

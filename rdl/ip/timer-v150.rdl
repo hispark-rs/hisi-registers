@@ -1,7 +1,10 @@
 // Timer v150 layout shared by WS53, WS63 and BS2X. All three SDK operation
-// layers clear EOI by writing one; the read-to-clear SDK comment is stale.
+// layers clear EOI by writing one. This does not establish EOI read behavior.
+// Common offsets are legacy imports; WS53 disables them because the SDK's
+// common-register C layout conflicts with its offset comments.
 
-addrmap timer_v150_regs #(longint unsigned CHANNELS = 3) {
+addrmap timer_v150_regs #(longint unsigned CHANNELS = 3,
+                         bit COMMON_REGS = true, bit LOCAL_MASKED_STATUS = false) {
     reg {
         field {
             sw = r;
@@ -269,4 +272,19 @@ addrmap timer_v150_regs #(longint unsigned CHANNELS = 3) {
     TIMER_CONTROL2->ispresent = CHANNELS > 2;
     TIMER_EOI2->ispresent = CHANNELS > 2;
     TIMER_RAW_INTR2->ispresent = CHANNELS > 2;
+    // WS53 common-register structure and offset comments disagree by 0x10;
+    // no used operation currently resolves those offsets. Exclude that region
+    // for WS53 until verified, preserving the legacy WS63/BS2X map unchanged.
+    ABNOR_INTR_RAW->ispresent = COMMON_REGS;
+    ABNOR_IMSK->ispresent = COMMON_REGS;
+    ABNOR_INTR_STAT->ispresent = COMMON_REGS;
+    EOI_REN->ispresent = COMMON_REGS;
+    RAW_INTR_STAT->ispresent = COMMON_REGS;
+    INTR_STAT->ispresent = COMMON_REGS;
+    reg { field {sw=r; hw=w;} pending[0:0]; } TIMER_MASKED_INTR0 @ 0x11c;
+    reg { field {sw=r; hw=w;} pending[0:0]; } TIMER_MASKED_INTR1 @ 0x21c;
+    reg { field {sw=r; hw=w;} pending[0:0]; } TIMER_MASKED_INTR2 @ 0x31c;
+    TIMER_MASKED_INTR0->ispresent = LOCAL_MASKED_STATUS;
+    TIMER_MASKED_INTR1->ispresent = LOCAL_MASKED_STATUS && CHANNELS > 1;
+    TIMER_MASKED_INTR2->ispresent = LOCAL_MASKED_STATUS && CHANNELS > 2;
 };

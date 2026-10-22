@@ -1,7 +1,7 @@
 """Optional local SDK comparison; ordinary generation/build does not require SDK.
 
 Run: uv run --locked scripts/check_ws53_sdk_layout.py --sdk /path/to/fbb_ws53
-Compare ADC/diagnostic C offsetof and TSENSOR addresses with the pinned SDK.
+Compare ADC/diagnostic, TIMER/TCXO C layouts and TSENSOR addresses with the pinned SDK.
 """
 import argparse
 import json
@@ -14,6 +14,8 @@ import xml.etree.ElementTree as ET
 
 PIN = "163d9150ab94a02d09a05f623351f9facee3025e"
 HEADER = "src/drivers/drivers/hal/adc/v155/hal_adc_v155_regs_def.h"
+TIMER_HEADER = "src/drivers/drivers/hal/timer/v150/hal_timer_v150_regs_def.h"
+TCXO_HEADER = "src/drivers/drivers/hal/tcxo/hal_tcxo_v150_regs_def.h"
 TSENSOR_SOURCE = "src/drivers/chips/ws53/porting/tsensor/tsensor_porting.c"
 MAPPINGS = {
     "ADC": ("adc_regs_t", {
@@ -47,12 +49,14 @@ def main():
     parser.add_argument("--cc", default="cc", help="C compiler executable (no shell)")
     args = parser.parse_args()
     sdk = args.sdk.resolve()
-    subprocess.run(["git", "-C", str(sdk), "diff", "--exit-code", PIN, "--", HEADER, TSENSOR_SOURCE],
+    subprocess.run(["git", "-C", str(sdk), "diff", "--exit-code", PIN, "--",
+                    HEADER, TIMER_HEADER, TCXO_HEADER, TSENSOR_SOURCE],
                    check=True, stdout=subprocess.DEVNULL)
     root = Path(__file__).resolve().parents[1]
     tree = ET.parse(root / "generated/WS53.experimental.svd")
     source = ['#include <stddef.h>', '#include <stdint.h>', 'typedef uint32_t errcode_t;',
               '#include ' + json.dumps(str(sdk / HEADER))]
+    source += ['#include ' + json.dumps(str(sdk / header)) for header in (TIMER_HEADER, TCXO_HEADER)]
     checks = 0
     for block, (ctype, mappings) in MAPPINGS.items():
         registers = {r.findtext("name"): r for r in tree.findall(
@@ -69,6 +73,27 @@ def main():
                 offset = int(array.findtext("addressOffset"), 0) + index * int(array.findtext("dimIncrement"), 0)
                 source.append(f'_Static_assert(offsetof(adc_regs_t, da_lsadc_rwreg_{index + 1}) == {offset}, "analog array");')
                 checks += 1
+    timing_checks = 0
+    timer = tree.find("./peripherals/peripheral[name='TIMER']")
+    for ch in range(2):
+        for name, member in {"TIMER_LOAD_COUNT": "load_count0", "TIMER_CURRENT_VALUE": "current_value0",
+                             "TIMER_CONTROL": "control", "TIMER_EOI": "eoi_ren",
+                             "TIMER_RAW_INTR": "raw_intr", "TIMER_MASKED_INTR": "intr"}.items():
+            offset = int(timer.findtext(f"registers/register[name='{name}{ch}']/addressOffset"), 0)
+            source.append(f'_Static_assert({0x100 * (ch + 1)} + offsetof(timer_v150_regs_t, {member}) == {offset}, "{name}{ch}");')
+            timing_checks += 1
+    tcxo = tree.find("./peripherals/peripheral[name='TCXO']")
+    for name, member in {"TCXO_STATUS": "status", **{f"TCXO_COUNT{i}": f"count{i}" for i in range(4)}}.items():
+        offset = int(tcxo.findtext(f"registers/register[name='{name}']/addressOffset"), 0)
+        source.append(f'_Static_assert(offsetof(tcxo_regs_t, {member}) == {offset}, "{name}");')
+        timing_checks += 1
+    # Preserve the contradictory common-structure evidence. Do not select its
+    # offsets over the comments as hardware truth; neither is exercised by the
+    # application's 32-bit timer operations.
+    common_offsets = {"abnor_intr_raw": 0x70, "abnor_imsk": 0x74, "abnor_intr_stat": 0x78,
+                      "eoi_ren": 0x88, "raw_intr_stat": 0x8c, "intr_stat": 0x90}
+    for member, offset in common_offsets.items():
+        source.append(f'_Static_assert(offsetof(timers_v150_regs_t, {member}) == {offset}, "common {member}");')
     with tempfile.TemporaryDirectory(prefix="ws53-sdk-layout-") as work:
         subprocess.run([args.cc, "-x", "c", "-std=c11", "-Wall", "-Werror", "-fsyntax-only", "-"],
                        input="\n".join(source), text=True, check=True,
@@ -87,6 +112,8 @@ def main():
             raise ValueError(f"TSENSOR.{name} differs from SDK {macro}")
         address_checks += 1
     print(json.dumps({"sdk_commit": PIN, "header": HEADER, "offset_checks": checks,
+                      "timing_headers": [TIMER_HEADER, TCXO_HEADER], "timing_offset_checks": timing_checks,
+                      "timer_common_c_offsets_unverified_on_hardware": common_offsets,
                       "tsensor_source": TSENSOR_SOURCE, "tsensor_address_checks": address_checks,
                       "layout_verified": True, "hardware_verified": False}, indent=2))
 

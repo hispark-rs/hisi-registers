@@ -481,3 +481,58 @@ independent of the SDK/compiler. Export tests require RO data/status, the WO
 command alias/range, 32-bit slots and absent invented resets/programming views.
 No eFuse HAL, behavior model, physical read or permanent write was performed.
 Current map: **30 peripherals, 923 register views, 1875 fields, 20 IRQs**.
+
+## TIMER / TCXO integration correction (2026-10-23)
+
+SDK `163d9150ab94a02d09a05f623351f9facee3025e`: timer/v150
+`hal_timer_v150_regs_def.h`, `hal_timer_v150_regs_op.h`, `hal_timer_v150.c`,
+WS53 timer porting and selected `ws53_liteos_app` config. This profile uses
+**two 32-bit hardware channels**, bases 0x52002100/0x52002200, IRQ53/54.
+MAX_TIMERS_NUM=8 is the software timer pool, not eight hardware channels.
+Main application changes the port's 30 MHz default to CLOCK_32M. That source
+configuration is not a measurement of the installed custom firmware's clock.
+
+The channel structure places low load/current/control/EOI/raw/masked status
+at +0/+8/+0x10/+0x14/+0x18/+0x1c. All use 32-bit MMIO. High words +4/+0xc
+belong to the optional 64-bit path, which is disabled in the selected profile;
+no 64-bit timer API is promised. Snapshot requests poll CNT_LOCK with a finite
+0xffff budget. The SDK clears EOI by writing one. Its read-side comment is
+ambiguous: a write-one acknowledgement does **not** prove reads have no effect.
+The PAC exposes a WO acknowledgement service view and makes no read assertion.
+
+The common-register C structure and its comments conflict:
+
+| Common field | Compiled C offset | Header comment / previous RDL offset |
+|---|---:|---:|
+| abnor_intr_raw | 0x70 | 0x60 |
+| abnor_imsk | 0x74 | 0x64 |
+| abnor_intr_stat | 0x78 | 0x68 |
+| eoi_ren | 0x88 | 0x78 |
+| raw_intr_stat | 0x8c | 0x7c |
+| intr_stat | 0x90 | 0x80 |
+
+Neither interpretation has hardware proof. WS53 now omits all six common
+registers instead of choosing either silently, and exposes each channel's
+confirmed masked status at +0x11c/+0x21c. Legacy WS63/BS2X outputs are unchanged;
+this is not retrospective validation of their imported common registers.
+The optional layout checker asserts the C offsets but labels them explicitly
+**unverified on hardware**. Exported addressBlock sizes exclude absent channels.
+
+TCXO v150 uses a 32-bit control/status register at 0x57000200 and four 32-bit
+slots at +4/+8/+0xc/+0x10, each carrying **16 bits**. Selected config does not
+use the optional two-data-register variant. The SDK refreshes, polls valid,
+and combines words3..0 into a 64-bit value. Init enables and clears a shared
+counter; deinit only drops the driver pointer. A future HAL must coordinate
+ownership before init, and cannot infer a private timebase or measured rate.
+
+No TIMER/TCXO reset value was established from these sources. The WS53
+integration now suppresses inherited generic-IP reset annotations via
+hisi_reset_unverified, so PAC consumers cannot call a misleading reset() or
+write() that depends on an assumed zero reset value. Complete command/load
+writes and preserving control-field updates remain possible. Deterministic
+model initialization is a simulator contract, not silicon reset evidence.
+
+The optional SDK checker covers 17 timing offsets in addition to the existing
+ADC/diagnostic/TSENSOR checks. No board access, RAM takeover or Flash write was
+performed. Updated map: **30 peripherals, 919 register views, 1871 fields,
+20 IRQs**. TCXO behavior modeling and hardware timing validation remain open.
