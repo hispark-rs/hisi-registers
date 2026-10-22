@@ -804,3 +804,53 @@ uv run --script scripts/check_ws53_tcxo_contract.py --sdk /path/to/fbb_ws53
 
 This optional SDK-dependent check is not part of ordinary Cargo builds or the
 SDK-free register-generation CI. It changes no RDL or generated PAC interface.
+
+## RTC v150 application profile and access corrections (2026-10-23)
+
+Source pin `163d9150ab94a02d09a05f623351f9facee3025e`, files under SDK `src/`:
+`drivers/drivers/hal/rtc_unified/{hal_rtc.c,hal_rtc.h,v150/*}`, WS53
+`porting/rtc_unified/rtc_porting.{c,h}`, acore platform/IRQ headers, application
+menuconfig and target configuration. `check_ws53_rtc_contract.py` records exact
+input hashes and compiles the unchanged C HAL with host-RAM backing and a delay
+recorder. It is source evidence, not execution of the configured ROM components
+`rtc_unified_rom`, `hal_rtc_unified_rom`, `rtc_unified_port_rom` or current firmware.
+
+There are **two configured 32-bit channels**, at `0x57029100` / `0x57029200`, with
+absolute local causes 49 / 50. `RTC_CLOCK_MAX_NUM=4` and `RTC_MAX_NUM=4` are port
+capacity values: the address table initializes only two entries, and
+`CONFIG_RTC_MAX_NUM=2` bounds the register-pointer array. They are not proof of
+four usable instances. Both `CONFIG_RTC_0_WIDTH_64` and `_1_WIDTH_64` are zero.
+The high-word slots exist in the register type but are not used by this profile.
+64-bit loading would additionally require a shared common-bank lock transaction;
+no common-bank or cross-core ownership is established here.
+
+Each channel has eight 32-bit slots. CONTROL bits are enable0, mode2:1,
+interrupt-mask3, reset-FSM4, snapshot-request5 and snapshot-ready6. Ready and
+raw/masked interrupt status now expose read-only fields for WS53. EOI exposes
+only the actual SDK write-one acknowledgement: the header's read-to-clear
+comment is not treated as verified read behavior. No W1C storage semantics or
+automatic clearing timing is inferred. All WS53 RTC reset values are withheld.
+Mode encodings 0/2=one-shot, 1=periodic, 3=free-run come from the SDK enum;
+the actual source configuration routine always selects mode0. WS63/BS2X output
+is unchanged by these instance-specific corrections.
+
+The selected source profile calls a **65 us delay after start** and **32 us after
+stop**, to synchronize to the low-speed domain. The default calculation rate is
+32768 Hz; changing the port's rate variable does not change the physical clock.
+These constants do not establish board crystal population or clock/reset setup.
+LPM support is off in this profile. The new HAL must require a working explicit
+delay provider and verified clocks rather than using an instruction-count delay.
+
+Original helper tests verify both channels, 16 register offsets, control/mode
+encodings, low-word-only load/read, no common unlock/high-word write, delays,
+EOI before callback and deinit leaving hardware unchanged. They also preserve
+two source API pitfalls as evidence: a disabled counter, a 65535-poll timeout,
+and a successfully sampled zero all return zero; the active read path never
+sets `*is_enable=true`. A Rust implementation must return distinct errors and
+must not read stale data after the polling budget expires. These tests do not
+prove expiry edges, counter reload, mask behavior, clear completion, IRQ
+delivery, low-power wakeup or recovery on a physical board.
+
+```sh
+uv run --script scripts/check_ws53_rtc_contract.py --sdk /path/to/fbb_ws53
+```

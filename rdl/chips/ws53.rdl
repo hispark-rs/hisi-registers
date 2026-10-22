@@ -27,6 +27,12 @@ enum ws53_wdt_expiry_mode {
     ResetOnFirst = 0 { desc = "Reset on first expiry interrupt when RST_EN is set"; };
     ResetOnSecond = 1 { desc = "Reset on second expiry interrupt when RST_EN is set"; };
 };
+enum ws53_rtc_mode {
+    OneShot = 0 { desc = "SDK one-shot mode"; };
+    Periodic = 1 { desc = "SDK periodic mode"; };
+    OneShotAlternate = 2 { desc = "SDK alias of one-shot mode"; };
+    FreeRun = 3 { desc = "SDK free-run mode"; };
+};
 addrmap ws53 {
     hisi_evidence = "licensed-sdk: fbb_ws53 163d9150ab94a02d09a05f623351f9facee3025e; ws53_liteos_app; acore MCU_MODE_1";
     ws53_system_memory_regs system_memory @ 0x57030000;
@@ -103,6 +109,31 @@ addrmap ws53 {
     i2c_v151_ws53_bs2x_regs i2c1 @ 0x52084000;
     rtc_v150_ws53_bs2x_regs rtc0 @ 0x57029100;
     rtc_v150_ws53_bs2x_regs rtc1 @ 0x57029200;
+    // Source SDK 163d9150 RTC v150: two configured 32-bit channels, not
+    // four physical instances merely because the port enum has capacity four.
+    // Keep BS2X inherited output unchanged; these are WS53 access corrections.
+    rtc0->hisi_reset_unverified = true;
+    rtc1->hisi_reset_unverified = true;
+    rtc0->hisi_evidence = "SDK-source RTC v150; ws53_liteos_app 32-bit profile, IRQ49; ROM execution and ownership unverified";
+    rtc1->hisi_evidence = "SDK-source RTC v150; ws53_liteos_app 32-bit profile, IRQ50; ROM execution and ownership unverified";
+    rtc0.CONTROL.mode->encode = ws53_rtc_mode;
+    rtc1.CONTROL.mode->encode = ws53_rtc_mode;
+    rtc0.CONTROL.cnt_lock->sw = r;
+    rtc1.CONTROL.cnt_lock->sw = r;
+    rtc0.CONTROL.cnt_lock->desc = "Snapshot ready status, polled after CNT_REQ; no software setter in SDK";
+    rtc1.CONTROL.cnt_lock->desc = "Snapshot ready status, polled after CNT_REQ; no software setter in SDK";
+    rtc0.RAW_INTR.int_status->sw = r;
+    rtc1.RAW_INTR.int_status->sw = r;
+    rtc0.INTR.int_status->sw = r;
+    rtc1.INTR.int_status->sw = r;
+    rtc0.EOI_REN.eoi->sw = w;
+    rtc1.EOI_REN.eoi->sw = w;
+    rtc0.EOI_REN.eoi->hisi_write_min = 1;
+    rtc0.EOI_REN.eoi->hisi_write_max = 1;
+    rtc1.EOI_REN.eoi->hisi_write_min = 1;
+    rtc1.EOI_REN.eoi->hisi_write_max = 1;
+    rtc0.EOI_REN.eoi->desc = "SDK acknowledges by writing one. Header claims read-clear but driver never reads; read behavior withheld";
+    rtc1.EOI_REN.eoi->desc = "SDK acknowledges by writing one. Header claims read-clear but driver never reads; read behavior withheld";
     sio_v151_regs i2s @ 0x52030000;
     timer_v150_regs #(.CHANNELS(2), .COMMON_REGS(false), .LOCAL_MASKED_STATUS(true)) timer @ 0x52002000;
     tcxo_v150_data16_regs tcxo @ 0x57000200;

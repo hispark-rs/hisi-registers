@@ -70,7 +70,7 @@ EXPECTED = {
         "cluster_arrays": 1,
         "registers_expanded": 933,
         "fields_expanded": 1924,
-        "write_constraints": 10,
+        "write_constraints": 12,
     },
 }
 
@@ -173,6 +173,29 @@ for filename, expected in EXPECTED.items():
     # Count effective instance registers, including checked derived peripherals.
     by_name = {p.findtext("name"): p for p in peripheral_nodes}
     if filename == "WS53.experimental.svd":
+        for instance in ("RTC0", "RTC1"):
+            rtc = by_name[instance]
+            regs = {r.findtext("name"): r for r in rtc.findall("registers/register")}
+            assert len(regs) == 8
+            for i, (name, access) in enumerate((
+                    ("LOAD_COUNT0", "read-write"), ("LOAD_COUNT1", "read-write"),
+                    ("CURRENT_VALUE0", "read-only"), ("CURRENT_VALUE1", "read-only"),
+                    ("CONTROL", None), ("EOI_REN", "write-only"),
+                    ("RAW_INTR", "read-only"), ("INTR", "read-only"))):
+                reg = regs[name]
+                assert int(reg.findtext("addressOffset"), 0) == 4 * i
+                assert reg.findtext("size") == "32" and reg.findtext("access") == access
+                assert reg.find("resetValue") is None and reg.find("resetMask") is None
+                assert reg.find("readAction") is None
+            assert regs["CONTROL"].findtext("fields/field[name='CNT_LOCK']/access") == "read-only"
+            assert [(f.findtext("name"), f.findtext("bitOffset"), f.findtext("bitWidth"))
+                    for f in regs["CONTROL"].findall("fields/field")] == [
+                ("ENABLE", "0", "1"), ("MODE", "1", "2"), ("INT_MASK", "3", "1"),
+                ("RSTFSM", "4", "1"), ("CNT_REQ", "5", "1"), ("CNT_LOCK", "6", "1")]
+            values = regs["CONTROL"].findall("fields/field[name='MODE']/enumeratedValues/enumeratedValue/value")
+            assert [int(v.text) for v in values] == [0, 1, 2, 3]
+            limit = regs["EOI_REN"].find("fields/field/writeConstraint/range")
+            assert limit.findtext("minimum") == limit.findtext("maximum") == "1"
         # SDK-backed access contracts: a readable key or mixed request/status
         # word would allow misleading read-modify-write APIs in downstream PACs.
         wdt = by_name["WDT"]
