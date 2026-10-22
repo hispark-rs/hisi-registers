@@ -765,3 +765,42 @@ maskability, repeated/nested NMI behavior or watchdog reset sequencing. No local
 interrupt number or RISC-V PLIC route is invented. The previous WDT register
 checker continues to report both header values as source context; the profile
 checker supplies the missing component-selection evidence.
+
+## TCXO source-helper and clock-epoch audit (2026-10-23)
+
+The pinned SDK `163d9150ab94a02d09a05f623351f9facee3025e` defines the application
+window at `0x57000200` and the control-core window at `0x57000214`. Different
+windows do not prove independent physical counters or exclusive ownership.
+The application profile selects four 16-bit data fields in 32-bit slots, not
+the optional two-word layout. No hardware reset values or TCXO IRQ are inferred.
+
+`scripts/check_ws53_tcxo_contract.py --sdk <checkout>` compiles the unchanged
+`drivers/drivers/hal/tcxo/hal_tcxo_v150.c` and `hal_tcxo_v150_regs_op.c` into a
+host-RAM test. It verifies all five SVD offsets/widths, enable-then-clear,
+high-to-low counter assembly excluding the reserved upper halves, the ready
+snapshot path and deinit leaving hardware enabled. It checks every source file
+against the pinned Git object and records hashes. This does not emulate latch
+handshakes, run on silicon, or execute the SDK's `0xffffffff`-iteration timeout.
+
+The WS53 port defaults to 32 ticks/us and application startup selects that same
+reference rate. The value is configuration evidence, not a measured board clock.
+Raw counter ticks require an explicit frequency for conversion. SDK LPM support
+records a software compensation value, then reinitializes/clears the counter on
+resume; raw samples cannot supply monotonic uptime across this transition.
+IRQ locking in the public driver does not establish control-core/NMI exclusion.
+The helpers set command bits with RMW but do not prove their hardware readback
+or self-clear latency; drivers must not replay an unrelated CLEAR on REFRESH.
+
+Crucially, `build/config/target_config/ws53/target_config.py` lists
+`tcxo_rom`, `hal_tcxo_rom`, `tcxo_port_rom` for the application profile. The C
+helper oracle is **source evidence, not execution of these ROM routines**.
+The installed custom firmware and its counter ownership remain unverified.
+Clock/reset provisioning, control-core coordination, command completion timing
+and sleep compensation require separate implementation and hardware acceptance.
+
+```sh
+uv run --script scripts/check_ws53_tcxo_contract.py --sdk /path/to/fbb_ws53
+```
+
+This optional SDK-dependent check is not part of ordinary Cargo builds or the
+SDK-free register-generation CI. It changes no RDL or generated PAC interface.
