@@ -39,11 +39,22 @@ currently supports:
 - enumerated values;
 - read-clear/read-set and standard modified-write behavior;
 - inclusive write ranges carried by repository UDPs.
+- one-dimensional register arrays with explicit stride;
+- complementary read-only/write-only alternate register views;
+- explicit FIFO read side effects and checked peripheral derivation.
 
-Register arrays and register aliases are not yet round-tripped with their original
-SVD/PAC shape. The bootstrap importer expands arrays and merges the one overlapping
-reset-register alias while recording that normalization in each import manifest.
-Unsupported constructs fail generation rather than being silently discarded.
+New WS53 FIFO windows use native SVD arrays and separate RX/TX views so generated
+PAC code cannot perform read-modify-write on a FIFO. Alternate views must match
+offset, width, dimension and stride and have complementary access permissions.
+Multidimensional arrays, split-width accesses and general RDL hardware aliases
+remain unsupported and fail generation.
+
+The bootstrap importer still expands legacy WS63/BS2X arrays and merges the one
+overlapping reset-register alias, recording that normalization in each import
+manifest. Those legacy API shapes are not changed by WS53 array support.
+Every export is checked against the vendored ARM CMSIS-SVD 1.3.9 schema as well
+as semantic tests. Schema-compliant element reordering was verified to produce
+byte-identical WS63/BS2X `svd2rust 0.37.1` output against commit `61ec855`.
 
 ## Adoption gates
 

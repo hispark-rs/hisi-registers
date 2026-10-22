@@ -1,0 +1,269 @@
+// WS53 application bus0/bus1 in fbb_ws53 163d9150.
+// Source: drivers/drivers/hal/spi/v151_100/{hal_spi,hal_qspi}_v151_100_regs_def.h
+// and regs_op.h; chips/ws53/porting/spi/spi_porting.c binds base/IRQ and adapter.
+// Reset values are not assumed. FIFO reads consume data; interrupt-clear reads
+// acknowledge errors. RX/TX views deliberately have no read-modify-write API.
+
+addrmap ws53_spi0_v151_100_regs {
+    hisi_evidence = "SDK-source 163d9150 v151_100 registers and operations; application instance; runtime ownership and silicon behavior pending";
+    reg {
+        field { sw=rw; hw=r; } start[0:0];
+    } ENABLE @ 0x0;
+    reg {
+        field { sw=rw; hw=r; } slave_output_disable[0:0];
+        field { sw=rw; hw=r; } loopback[1:1];
+        field { sw=rw; hw=r; } select_toggle[2:2];
+        field { sw=rw; hw=r; } phase[3:3];
+        field { sw=rw; hw=r; } polarity[4:4];
+        field { sw=rw; hw=r; } control_frame_size[8:5];
+        field { sw=rw; hw=r; } frame_size16[12:9];
+        field { sw=rw; hw=r; } frame_size32[17:13];
+        field { sw=rw; hw=r; } transfer_mode[19:18];
+        field { sw=rw; hw=r; } frame_format[21:20];
+        field { sw=rw; hw=r; } protocol[23:22];
+    } CONTROL @ 0x4;
+    reg {
+        field { sw=rw; hw=r; } value[15:0];
+    } FRAME_COUNT @ 0x8;
+    reg {
+        field { sw=rw; hw=r; } wait_cycles[4:0];
+        field { sw=rw; hw=r; } transfer_type[6:5];
+        field { sw=rw; hw=r; } rx_strobe_enable[7:7];
+        field { sw=rw; hw=r; } address_length[11:8];
+        field { sw=rw; hw=r; } instruction_length[13:12];
+        field { sw=rw; hw=r; } instruction_ddr[14:14];
+        field { sw=rw; hw=r; } data_ddr[15:15];
+    } ENHANCED_CONTROL @ 0xc;
+    reg {
+        field { sw=rw; hw=r; } handshake[0:0];
+        field { sw=rw; hw=r; } sequential[1:1];
+        field { sw=rw; hw=r; } transmit[2:2];
+    } MICROWIRE @ 0x10;
+    reg {
+        field { sw=rw; hw=r; } value[15:0];
+    } BAUD @ 0x14;
+    reg {
+        field { sw=rw; hw=r; } tx_enable[0:0];
+        field { sw=rw; hw=r; } rx_enable[1:1];
+    } DMA_CONTROL @ 0x18;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } DMA_RX_LEVEL @ 0x1c;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } DMA_TX_LEVEL @ 0x20;
+    reg {
+        field { sw=rw; hw=r; } value[7:0];
+    } RX_SAMPLE_DELAY @ 0x24;
+    reg {
+        field { sw=rw; hw=r; } value[7:0];
+    } TX_DRIVE_EDGE @ 0x28;
+    reg {
+        field { sw=r; hw=w; } rx_full[0:0];
+        field { sw=r; hw=w; } rx_overflow[1:1];
+        field { sw=r; hw=w; } rx_underflow[2:2];
+        field { sw=r; hw=w; } tx_empty[7:7];
+        field { sw=r; hw=w; } tx_overflow[8:8];
+        field { sw=r; hw=w; } multi_master[15:15];
+    } RAW_INTERRUPT @ 0xbc;
+    reg {
+        field { sw=r; hw=w; } rx_full[0:0];
+        field { sw=r; hw=w; } rx_overflow[1:1];
+        field { sw=r; hw=w; } rx_underflow[2:2];
+        field { sw=r; hw=w; } tx_empty[7:7];
+        field { sw=r; hw=w; } tx_overflow[8:8];
+        field { sw=r; hw=w; } multi_master[15:15];
+    } INTERRUPT_STATUS @ 0xc0;
+    reg {
+        field { sw=rw; hw=r; } rx_full[0:0];
+        field { sw=rw; hw=r; } rx_overflow[1:1];
+        field { sw=rw; hw=r; } rx_underflow[2:2];
+        field { sw=rw; hw=r; } tx_empty[7:7];
+        field { sw=rw; hw=r; } tx_overflow[8:8];
+        field { sw=rw; hw=r; } multi_master[15:15];
+    } INTERRUPT_MASK @ 0xc4;
+    reg {
+        field { sw=rw; hw=r; } value[15:0];
+    } SLAVE_ENABLE @ 0xc8;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } TX_THRESHOLD @ 0xcc;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } TX_LEVEL @ 0xd0;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_TX_OVERFLOW @ 0xd4;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } RX_THRESHOLD @ 0xd8;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } RX_LEVEL @ 0xdc;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_RX_UNDERFLOW @ 0xe0;
+    reg {
+        field { sw=r; hw=w; } collision_or_tx_error[0:0];
+        field { sw=r; hw=w; } rx_not_empty[4:4];
+        field { sw=r; hw=w; } rx_full[5:5];
+        field { sw=r; hw=w; } tx_not_full[11:11];
+        field { sw=r; hw=w; } tx_empty[12:12];
+        field { sw=r; hw=w; } busy[15:15];
+    } STATUS @ 0xe4;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_MULTI_MASTER @ 0xe8;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } VERSION @ 0xec;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_RX_OVERFLOW @ 0xf4;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_ALL @ 0xf8;
+    external reg {
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal";
+            desc="Pop one received frame from the shared RX FIFO, regardless of window index";
+        } data[31:0];
+    } RX[36] @ 0x2c += 4;
+    reg {
+        hisi_svd_alternate_register = "RX";
+        field { sw=w; hw=r; desc="Push one frame into the shared TX FIFO, regardless of window index"; } data[31:0];
+    } TX[36] @ 0x2c += 4;
+};
+
+addrmap ws53_qspi1_v151_100_regs {
+    hisi_evidence = "SDK-source 163d9150 v151_100 registers and operations; application instance; runtime ownership and silicon behavior pending";
+    reg {
+        field { sw=rw; hw=r; } frame_size16[3:0];
+        field { sw=rw; hw=r; } protocol[5:4];
+        field { sw=rw; hw=r; } phase[6:6];
+        field { sw=rw; hw=r; } polarity[7:7];
+        field { sw=rw; hw=r; } transfer_mode[9:8];
+        field { sw=rw; hw=r; } slave_output_disable[10:10];
+        field { sw=rw; hw=r; } loopback[11:11];
+        field { sw=rw; hw=r; } control_frame_size[15:12];
+        field { sw=rw; hw=r; } frame_size32[20:16];
+        field { sw=rw; hw=r; } frame_format[22:21];
+        field { sw=rw; hw=r; } select_toggle[24:24];
+    } CONTROL @ 0x0;
+    reg {
+        field { sw=rw; hw=r; } value[15:0];
+    } FRAME_COUNT @ 0x4;
+    reg {
+        field { sw=rw; hw=r; } start[0:0];
+    } ENABLE @ 0x8;
+    reg {
+        field { sw=rw; hw=r; } sequential[0:0];
+        field { sw=rw; hw=r; } transmit[1:1];
+        field { sw=rw; hw=r; } handshake[2:2];
+    } MICROWIRE @ 0xc;
+    reg {
+        field { sw=rw; hw=r; } value[15:0];
+    } SLAVE_ENABLE @ 0x10;
+    reg {
+        field { sw=rw; hw=r; } value[15:0];
+    } BAUD @ 0x14;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } TX_THRESHOLD @ 0x18;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } RX_THRESHOLD @ 0x1c;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } TX_LEVEL @ 0x20;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } RX_LEVEL @ 0x24;
+    reg {
+        field { sw=r; hw=w; } busy[0:0];
+        field { sw=r; hw=w; } tx_not_full[1:1];
+        field { sw=r; hw=w; } tx_empty[2:2];
+        field { sw=r; hw=w; } rx_not_empty[3:3];
+        field { sw=r; hw=w; } rx_full[4:4];
+        field { sw=r; hw=w; } tx_error[5:5];
+        field { sw=r; hw=w; } collision[6:6];
+    } STATUS @ 0x28;
+    reg {
+        field { sw=rw; hw=r; } tx_empty[0:0];
+        field { sw=rw; hw=r; } tx_overflow[1:1];
+        field { sw=rw; hw=r; } rx_underflow[2:2];
+        field { sw=rw; hw=r; } rx_overflow[3:3];
+        field { sw=rw; hw=r; } rx_full[4:4];
+        field { sw=rw; hw=r; } multi_master[5:5];
+    } INTERRUPT_MASK @ 0x2c;
+    reg {
+        field { sw=r; hw=w; } tx_empty[0:0];
+        field { sw=r; hw=w; } tx_overflow[1:1];
+        field { sw=r; hw=w; } rx_underflow[2:2];
+        field { sw=r; hw=w; } rx_overflow[3:3];
+        field { sw=r; hw=w; } rx_full[4:4];
+        field { sw=r; hw=w; } multi_master[5:5];
+    } INTERRUPT_STATUS @ 0x30;
+    reg {
+        field { sw=r; hw=w; } tx_empty[0:0];
+        field { sw=r; hw=w; } tx_overflow[1:1];
+        field { sw=r; hw=w; } rx_underflow[2:2];
+        field { sw=r; hw=w; } rx_overflow[3:3];
+        field { sw=r; hw=w; } rx_full[4:4];
+        field { sw=r; hw=w; } multi_master[5:5];
+    } RAW_INTERRUPT @ 0x34;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_TX_OVERFLOW @ 0x38;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_RX_OVERFLOW @ 0x3c;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_RX_UNDERFLOW @ 0x40;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_MULTI_MASTER @ 0x44;
+    reg {
+        field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
+    } CLEAR_ALL @ 0x48;
+    reg {
+        field { sw=rw; hw=r; } rx_enable[0:0];
+        field { sw=rw; hw=r; } tx_enable[1:1];
+    } DMA_CONTROL @ 0x4c;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } DMA_TX_LEVEL @ 0x50;
+    reg {
+        field { sw=rw; hw=r; } value[31:0];
+    } DMA_RX_LEVEL @ 0x54;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } IDENTIFICATION @ 0x58;
+    reg {
+        field { sw=r; hw=w; } value[31:0];
+    } VERSION @ 0x5c;
+    reg {
+        field { sw=rw; hw=r; } value[7:0];
+    } RX_SAMPLE_DELAY @ 0xf0;
+    reg {
+        field { sw=rw; hw=r; } transfer_type[1:0];
+        field { sw=rw; hw=r; } address_length[5:2];
+        field { sw=rw; hw=r; } instruction_length[9:8];
+        field { sw=rw; hw=r; } wait_cycles[15:11];
+        field { sw=rw; hw=r; } data_ddr[16:16];
+        field { sw=rw; hw=r; } instruction_ddr[17:17];
+        field { sw=rw; hw=r; } rx_strobe_enable[18:18];
+    } ENHANCED_CONTROL @ 0xf4;
+    reg {
+        field { sw=rw; hw=r; } value[7:0];
+    } TX_DRIVE_EDGE @ 0xf8;
+    external reg {
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal";
+            desc="Pop one received frame from the shared RX FIFO, regardless of window index";
+        } data[31:0];
+    } RX[36] @ 0x60 += 4;
+    reg {
+        hisi_svd_alternate_register = "RX";
+        field { sw=w; hw=r; desc="Push one frame into the shared TX FIFO, regardless of window index"; } data[31:0];
+    } TX[36] @ 0x60 += 4;
+};

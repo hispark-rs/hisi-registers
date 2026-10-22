@@ -30,14 +30,16 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 21,
-        "interrupts": 15,
+        "peripherals": 23,
+        "interrupts": 17,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
             "PINMUX_MCU": 0x52008000,
             "PINMUX_AON": 0x57036000,
             "PINMUX_TZPC": 0x5703A000,
+            "SPI0": 0x52087000,
+            "QSPI1": 0x5208D000,
             "WDT": 0x5702B000,
             "SFC_CFG": 0x53000000,
             "PWM": 0x52082000,
@@ -56,8 +58,9 @@ EXPECTED = {
             "GPIO2": 0x57010000,
         },
         "source_arrays": 0,
-        "registers_expanded": 471,
-        "fields_expanded": 999,
+        "output_arrays": 4,
+        "registers_expanded": 668,
+        "fields_expanded": 1275,
         "write_constraints": 6,
     },
 }
@@ -154,16 +157,18 @@ for filename, expected in EXPECTED.items():
             p.append(copy.deepcopy(by_name[base].find("registers")))
     registers = tree.findall("./peripherals/peripheral/registers/register")
     fields = tree.findall("./peripherals/peripheral/registers/register/fields/field")
-    if len(registers) != expected["registers_expanded"]:
+    register_count = sum(int(r.findtext("dim", "1")) for r in registers)
+    field_count = sum(int(r.findtext("dim", "1")) * len(r.findall("fields/field")) for r in registers)
+    if register_count != expected["registers_expanded"]:
         print(
             f"{filename}: expected {expected['registers_expanded']} expanded registers, "
-            f"got {len(registers)}"
+            f"got {register_count}"
         )
         failed = True
-    if len(fields) != expected["fields_expanded"]:
+    if field_count != expected["fields_expanded"]:
         print(
             f"{filename}: expected {expected['fields_expanded']} expanded fields, "
-            f"got {len(fields)}"
+            f"got {field_count}"
         )
         failed = True
     empty_registers = [r.findtext("name") for r in registers if not r.findall("./fields/field")]
@@ -174,8 +179,8 @@ for filename, expected in EXPECTED.items():
     # The bootstrap importer expands SVD arrays. Keep this visible until a
     # controlled compaction pass restores the source PAC array shape.
     output_arrays = tree.findall(".//register[dim]")
-    if output_arrays:
-        print(f"{filename}: unexpected partially compacted register arrays")
+    if len(output_arrays) != expected.get("output_arrays", 0):
+        print(f"{filename}: unexpected register array count {len(output_arrays)}")
         failed = True
 
     constraints = tree.findall(".//writeConstraint")
@@ -188,8 +193,9 @@ for filename, expected in EXPECTED.items():
 
     summary[filename] = {
         "peripherals": len(peripheral_nodes),
-        "registers_expanded": len(registers),
-        "fields_expanded": len(fields),
+        "registers_expanded": register_count,
+        "fields_expanded": field_count,
+        "register_arrays": len(output_arrays),
         "interrupts": irq_count,
         "enumerated_values": len(tree.findall(".//enumeratedValue")),
         "read_actions": len(tree.findall(".//readAction")),

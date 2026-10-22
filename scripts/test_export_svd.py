@@ -88,13 +88,80 @@ class ExportSemantics(unittest.TestCase):
 
     def test_reject_unimplemented_array_and_split_access(self):
         for declaration, message in (
-            ("reg {field {sw=rw;} value[31:0];} data[2] @ 0 += 4;", "register arrays"),
+            ("reg {field {sw=rw;} value[31:0];} data[2][2] @ 0 += 4;", "multidimensional register arrays"),
             ("reg {regwidth=32; accesswidth=16; field {sw=rw;} value[31:0];} data @ 0;", "split-width"),
         ):
             with self.subTest(message=message), tempfile.TemporaryDirectory() as work:
                 source = Path(work) / "test.rdl"
                 source.write_text("addrmap chip {addrmap {" + declaration + "} peripheral @ 0x1000;};")
                 with self.assertRaisesRegex(ValueError, message):
+                    export(source, Path(work) / "test.svd")
+
+    def test_fifo_array_views_and_read_side_effect(self):
+        with tempfile.TemporaryDirectory() as work:
+            source, dest = Path(work) / "test.rdl", Path(work) / "test.svd"
+            properties = Path(__file__).resolve().parents[1] / "rdl/properties.rdl"
+            source.write_text(f'`include "{properties}"\n' + '''addrmap chip {addrmap {
+                external reg {field {sw=r; hw=w; onread=ruser;
+                    hisi_svd_read_action="modifyExternal";} data[31:0];} rx[36] @ 0x2c +=4;
+                reg {hisi_svd_alternate_register="RX"; field {sw=w; hw=r;} data[31:0];} tx[36] @ 0x2c +=4;
+            } spi @ 0x1000;};''')
+            export(source, dest)
+            rx, tx = ET.parse(dest).findall(".//register")
+            self.assertEqual(rx.findtext("name"), "RX[%s]")
+            self.assertEqual(rx.findtext("dim"), "36")
+            self.assertEqual(rx.findtext("dimIncrement"), "0x4")
+            self.assertEqual(rx.findtext("addressOffset"), "0x2C")
+            self.assertEqual(rx.findtext("readAction"), "modifyExternal")
+            self.assertEqual(rx.findtext("access"), "read-only")
+            self.assertEqual(tx.findtext("access"), "write-only")
+            self.assertEqual(tx.findtext("alternateRegister"), "RX[%s]")
+            source.write_text(source.read_text().replace('hisi_svd_alternate_register="RX"', 'hisi_svd_alternate_register="MISSING"'))
+            with self.assertRaisesRegex(ValueError, "invalid alternate"):
+                export(source, dest)
+
+    def test_ws53_spi_instances_are_not_interchangeable(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            blocks = {p.findtext("name"): p for p in ET.parse(dest).findall(".//peripheral")}
+            for name, base, irq, enable, fifo, busy, tx_enable in (
+                ("SPI0", "0x52087000", "65", "0x0", "0x2C", "15", "0"),
+                ("QSPI1", "0x5208D000", "43", "0x8", "0x60", "0", "1"),
+            ):
+                p = blocks[name]
+                r = {node.findtext("name"): node for node in p.findall("registers/register")}
+                self.assertEqual(p.findtext("baseAddress"), base)
+                self.assertEqual(p.findtext("interrupt/value"), irq)
+                self.assertEqual(r["ENABLE"].findtext("addressOffset"), enable)
+                self.assertEqual(r["RX[%s]"].findtext("addressOffset"), fifo)
+                self.assertEqual(r["RX[%s]"].findtext("dim"), "36")
+                self.assertEqual(r["RX[%s]"].findtext("readAction"), "modifyExternal")
+                self.assertEqual(r["RX[%s]"].findtext("access"), "read-only")
+                self.assertEqual(r["TX[%s]"].findtext("access"), "write-only")
+                self.assertEqual(r["STATUS"].findtext("fields/field[name='BUSY']/bitOffset"), busy)
+                self.assertEqual(r["DMA_CONTROL"].findtext("fields/field[name='TX_ENABLE']/bitOffset"), tx_enable)
+                self.assertEqual(r["CLEAR_ALL"].findtext("access"), "read-only")
+                self.assertEqual(r["CLEAR_ALL"].findtext("readAction"), "clear")
+                self.assertTrue(all(node.find("resetValue") is None for node in r.values()))
+
+    def test_reject_mismatched_alternate_views(self):
+        properties = Path(__file__).resolve().parents[1] / "rdl/properties.rdl"
+        # These declarations are valid RDL. The alternate-view claim is not:
+        # a CMSIS consumer must not merge differently shaped or located data.
+        for receive, transmit in (
+            ("rx[2] @ 0 += 8", "tx[2] @ 0 += 4"),
+            ("rx[2] @ 0 += 4", "tx[3] @ 0 += 4"),
+            ("rx @ 0", "tx @ 4"),
+        ):
+            with self.subTest(receive=receive, transmit=transmit), tempfile.TemporaryDirectory() as work:
+                source = Path(work) / "test.rdl"
+                source.write_text(f'`include "{properties}"\n' + f'''addrmap chip {{addrmap {{
+                    reg {{field {{sw=r; hw=w;}} data[31:0];}} {receive};
+                    reg {{hisi_svd_alternate_register="RX";
+                        field {{sw=w; hw=r;}} data[31:0];}} {transmit};
+                }} spi @ 0x1000;}};''')
+                with self.assertRaisesRegex(ValueError, "invalid alternate"):
                     export(source, Path(work) / "test.svd")
 
 

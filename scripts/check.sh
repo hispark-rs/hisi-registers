@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 "$ROOT/scripts/generate.sh"
+uv run --locked --project "$ROOT" python "$ROOT/scripts/check_schema.py"
 uv run --locked --project "$ROOT" python "$ROOT/scripts/check.py"
 uv run --locked --project "$ROOT" python "$ROOT/scripts/test_export_svd.py"
 

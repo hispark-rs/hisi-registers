@@ -5,9 +5,8 @@ The exporter intentionally supports the subset represented by the imported
 WS63/BS2X baselines. Unsupported node shapes and properties fail closed instead
 of producing a plausible but semantically wrong SVD.
 
-Register arrays are currently emitted as expanded registers because the
-PeakRDL SVD importer expands them. This preserves addresses and field behavior,
-but not the original PAC array API. ``check.py`` keeps that limitation visible.
+One-dimensional register arrays preserve their stride and dimensions. Imported
+legacy WS63/BS2X maps remain expanded until separately reviewed and compacted.
 """
 
 from pathlib import Path
@@ -48,6 +47,15 @@ def add(parent: ET.Element, tag: str, text: object) -> ET.Element:
     node = ET.SubElement(parent, tag)
     node.text = str(text)
     return node
+
+
+def order_children(node: ET.Element, order: str) -> None:
+    """CMSIS-SVD XSD uses sequences; parser acceptance alone is insufficient."""
+    positions = {tag: index for index, tag in enumerate(order.split())}
+    unexpected = {child.tag for child in node} - positions.keys()
+    if unexpected:
+        raise ValueError(f"unhandled SVD elements in {node.tag}: {unexpected}")
+    node[:] = sorted(node, key=lambda child: positions[child.tag])
 
 
 def reset_value(reg: RegNode) -> int | None:
@@ -93,12 +101,24 @@ def add_enumerated_values(parent: ET.Element, field: FieldNode) -> None:
         add(value, "value", int(member.value))
 
 
-def add_side_effects(parent: ET.Element, field: FieldNode) -> None:
+def read_action(field: FieldNode) -> str | None:
     onread = field.get_property("onread")
+    explicit = field.get_property("hisi_svd_read_action")
+    if explicit is not None:
+        if onread != OnReadType.ruser or explicit not in ("modify", "modifyExternal"):
+            raise ValueError(f"invalid explicit read action: {field.get_path()}")
+        return explicit
     if onread is not None:
         if onread not in READ_ACTION:
             raise ValueError(f"unsupported onread {onread}: {field.get_path()}")
-        add(parent, "readAction", READ_ACTION[onread])
+        return READ_ACTION[onread]
+    return None
+
+
+def add_side_effects(parent: ET.Element, field: FieldNode) -> None:
+    action = read_action(field)
+    if action is not None:
+        add(parent, "readAction", action)
 
     onwrite = field.get_property("onwrite")
     if onwrite is not None:
@@ -143,6 +163,8 @@ def export(source: Path, destination: Path) -> None:
         raise ValueError(f"IRQ owners do not name a peripheral: {sorted(orphan_owners)}")
 
     for peripheral in peripheral_nodes:
+        if peripheral.is_array:
+            raise ValueError(f"peripheral arrays are not implemented: {peripheral.get_path()}")
 
         registers = list(peripheral.children())
         if not registers or any(not isinstance(reg, RegNode) for reg in registers):
@@ -165,16 +187,35 @@ def export(source: Path, destination: Path) -> None:
         add(block, "size", f"0x{peripheral.size:X}")
         add(block, "usage", "registers")
         rxmls = ET.SubElement(pxml, "registers")
+        regs_by_name = {r.inst_name.upper(): r for r in registers}
 
         for reg in registers:
-            if reg.is_array:
-                raise ValueError(f"register arrays need explicit SVD dim export: {reg.get_path()}")
+            if reg.is_array and len(reg.array_dimensions) != 1:
+                raise ValueError(f"multidimensional register arrays are not implemented: {reg.get_path()}")
+            if reg.is_alias:
+                raise ValueError(f"RDL hardware aliases need explicit semantic support: {reg.get_path()}")
             if reg.get_property("accesswidth") != reg.get_property("regwidth"):
                 raise ValueError(f"split-width register access is not implemented: {reg.get_path()}")
             rxml = ET.SubElement(rxmls, "register")
-            add(rxml, "name", reg.inst_name.upper())
+            if reg.is_array:
+                add(rxml, "dim", reg.array_dimensions[0])
+                add(rxml, "dimIncrement", f"0x{reg.array_stride:X}")
+            suffix = "[%s]" if reg.is_array else ""
+            add(rxml, "name", reg.inst_name.upper() + suffix)
             add(rxml, "description", reg.get_property("name") or reg.inst_name)
-            add(rxml, "addressOffset", f"0x{reg.address_offset:X}")
+            if alternate := reg.get_property("hisi_svd_alternate_register"):
+                other = regs_by_name.get(alternate.upper())
+                if (other is None or other == reg or
+                    other.get_property("hisi_svd_alternate_register") is not None or
+                    other.raw_address_offset != reg.raw_address_offset or
+                    other.get_property("regwidth") != reg.get_property("regwidth") or
+                    other.get_property("accesswidth") != reg.get_property("accesswidth") or
+                    other.array_dimensions != reg.array_dimensions or other.array_stride != reg.array_stride or
+                    ({f.get_property("sw") for f in reg.fields()}, {f.get_property("sw") for f in other.fields()})
+                    not in (({AccessType.r}, {AccessType.w}), ({AccessType.w}, {AccessType.r}))):
+                    raise ValueError(f"invalid alternate register view: {reg.get_path()}")
+                add(rxml, "alternateRegister", alternate.upper() + suffix)
+            add(rxml, "addressOffset", f"0x{reg.raw_address_offset:X}")
             add(rxml, "size", reg.get_property("regwidth"))
             reset = reset_value(reg)
             if reset is not None:
@@ -188,6 +229,11 @@ def export(source: Path, destination: Path) -> None:
                 if access not in ACCESS:
                     raise ValueError(f"unsupported access {access}: {reg.get_path()}")
                 add(rxml, "access", ACCESS[access])
+            actions = [read_action(f) for f in reg.fields()]
+            if any(actions):
+                # Whole-register Debug must not accidentally pop a FIFO or ack
+                # an interrupt. Preserve per-field details below as well.
+                add(rxml, "readAction", actions[0] if len(set(actions)) == 1 else "modify")
             add_write_constraint(rxml, reg)
             fxmls = ET.SubElement(rxml, "fields")
 
@@ -206,6 +252,12 @@ def export(source: Path, destination: Path) -> None:
                 add_write_constraint(fxml, field)
                 add_side_effects(fxml, field)
                 add_enumerated_values(fxml, field)
+
+        for register in rxmls:
+            for field in register.findall("fields/field"):
+                order_children(field, "name description bitOffset bitWidth access modifiedWriteValues writeConstraint readAction enumeratedValues")
+            order_children(register, "dim dimIncrement name description alternateRegister addressOffset size access resetValue resetMask writeConstraint readAction fields")
+        order_children(pxml, "name description baseAddress addressBlock interrupt registers")
 
     # Derivation is opt-in and checked after all register trees have been built,
     # so declaration/address ordering cannot hide an invalid reference. Compare

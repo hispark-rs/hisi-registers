@@ -22,6 +22,19 @@ property hisi_svd_derived_from {
     component = addrmap;
 };
 
+// Explicit mutually exclusive read/write views at the same address. The
+// exporter validates offset, size, dimensions, stride and access directions.
+property hisi_svd_alternate_register {
+    type = string;
+    component = reg;
+};
+
+// ruser alone does not specify which CMSIS-SVD side effect applies.
+property hisi_svd_read_action {
+    type = string;
+    component = field;
+};
+
 property hisi_write_min {
     type = longint unsigned;
     component = reg | field;

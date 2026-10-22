@@ -94,3 +94,35 @@ WS53 has separate acore/control-core ownership and product configurations that
 can select different SPI implementations (`v151` or `v151_100`). Future additions
 must therefore identify the core and product profile rather than creating one
 ambiguous flat map.
+
+## Application SPI v151_100
+
+The pinned `ws53_liteos_app` product selects `v151_100`. Source paths, relative
+to that SDK checkout:
+
+- `src/drivers/drivers/hal/spi/v151_100/hal_spi_v151_100_regs_def.h`,
+  `hal_spi_v151_100_regs_op.h` and `hal_spi_v151_100_adapt_op.h`;
+- the corresponding `hal_qspi_v151_100_*` files;
+- `src/drivers/chips/ws53/porting/spi/spi_porting.c`, plus the acore IRQ map.
+
+| PAC instance | SDK bus | Base | IRQ | Enable / control / FIFO | BUSY bit | DMA TX / RX bits |
+|---|---|---|---|---|---|---|
+| SPI0 | SPI_BUS_0 | 0x52087000 | 65 (SPI_3) | 0x00 / 0x04 / 0x2c | 15 | 0 / 1 |
+| QSPI1 | SPI_BUS_1 | 0x5208d000 | 43 (QSPI0_2CS) | 0x08 / 0x00 / 0x60 | 0 | 1 / 0 |
+
+The two layouts are separate RDL types. SPI0's adaptation layer translates
+standard-format port constants to its custom layout; copying those constants
+directly into CONTROL would program different fields. QSPI1's port is master
+only. Shared v151 layout names do not establish equivalence to these instances.
+
+Each instance exposes 36 FIFO access windows. All windows access the same FIFO,
+not 36 independent storage words. RDL exports overlapping RX (read-only, pop)
+and TX (write-only, push) arrays. Clear registers acknowledge interrupts on read;
+SDK descriptions say writes have no effect, so no write or modify API is emitted.
+No reset values or FIFO depth are inferred from the number of windows.
+
+The current description has 23 peripheral instances, 668 expanded register
+**views**, 1275 expanded fields and 17 IRQs. RX/TX views count separately despite
+sharing addresses. Validation covers schema, field/layout distinctions, access
+permissions and generation; SPI HAL, behavior models and silicon loopback are
+still pending. Acore routing is SDK evidence, not exclusive runtime ownership.

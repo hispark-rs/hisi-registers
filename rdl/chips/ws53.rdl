@@ -12,6 +12,7 @@
 `include "ws53/system-memory.rdl"
 `include "ws53/pinctrl.rdl"
 `include "ws53/m-crg.rdl"
+`include "ws53/spi-v151-100.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -22,6 +23,8 @@ addrmap ws53 {
     ws53_pinmux_mcu_regs pinmux_mcu @ 0x52008000;
     ws53_pinmux_aon_regs pinmux_aon @ 0x57036000;
     ws53_pinmux_tzpc_regs pinmux_tzpc @ 0x5703A000;
+    ws53_spi0_v151_100_regs spi0 @ 0x52087000;
+    ws53_qspi1_v151_100_regs qspi1 @ 0x5208D000;
     watchdog_v151_regs wdt @ 0x5702B000;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;
@@ -50,12 +53,14 @@ addrmap ws53 {
     signal { hisi_irq_number = 39; hisi_irq_owner = "UART0"; } UART_0;
     signal { hisi_irq_number = 41; hisi_irq_owner = "UART1"; } UART_1;
     signal { hisi_irq_number = 42; hisi_irq_owner = "UART2"; } UART_2;
+    signal { hisi_irq_number = 43; hisi_irq_owner = "QSPI1"; } QSPI0_2CS;
     signal { hisi_irq_number = 49; hisi_irq_owner = "RTC0"; } RTC_0;
     signal { hisi_irq_number = 50; hisi_irq_owner = "RTC1"; } RTC_1;
     signal { hisi_irq_number = 53; hisi_irq_owner = "TIMER"; } TIMER_0;
     signal { hisi_irq_number = 54; hisi_irq_owner = "TIMER"; } TIMER_1;
     signal { hisi_irq_number = 62; hisi_irq_owner = "I2C0"; } I2C_0;
     signal { hisi_irq_number = 63; hisi_irq_owner = "I2C1"; } I2C_1;
+    signal { hisi_irq_number = 65; hisi_irq_owner = "SPI0"; } SPI_3;
     signal { hisi_irq_number = 67; hisi_irq_owner = "I2S"; } I2S;
     signal { hisi_irq_number = 71; hisi_irq_owner = "PWM"; } PWM_ABNOR;
     signal { hisi_irq_number = 72; hisi_irq_owner = "PWM"; } PWM_CFG;

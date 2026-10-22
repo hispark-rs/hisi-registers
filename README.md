@@ -65,12 +65,14 @@ Install `uv`, then run:
 ./scripts/check.sh
 ```
 
-`check.sh` validates full-chip counts and semantic features, then asks an
-installed `svd2rust` to parse both generated files.
+`check.sh` validates all three generated files against the vendored CMSIS-SVD
+1.3.9 schema, checks chip counts and semantic features, then asks an installed
+`svd2rust` to parse them. New WS53 FIFO arrays retain their dimensions and access
+side effects; imported WS63/BS2X arrays remain expanded.
 
 Known bootstrap limitation: the SVD importer expands register arrays. Addresses
 and field behavior are retained, but the original PAC array API shape is not.
-The checker reports the 39 WS63 and 10 BS2X source arrays that still require a
+The checker reports the 39 WS63 and 11 BS2X source arrays that still require a
 controlled compaction pass. No PAC may migrate until that API-shape gate closes.
 
 ## Truth and provenance
