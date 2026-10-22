@@ -1,9 +1,9 @@
 // Active UART v151 basic layout shared by WS53, WS63 and BS2X. All audited
 // product configurations leave CONFIG_UART_IP_VERSION_V151_PRO disabled.
 
-addrmap uart_v151_basic_regs {
+addrmap uart_v151_basic_regs #(longint unsigned MMIO_WIDTH = 16, bit SDK_VIEW = false) {
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -17,15 +17,16 @@ addrmap uart_v151_basic_regs {
         } fifo_en_s[4:4] = 0x0;
     } INTR_ID @ 0x0;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
             desc = "Write: TX data; Read: RX data";
         } data[7:0] = 0x0;
     } DATA @ 0x4;
+    DATA->ispresent = !SDK_VIEW;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -107,7 +108,7 @@ addrmap uart_v151_basic_regs {
     reg {
         hisi_write_min = 0;
         hisi_write_max = 255;
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -117,7 +118,7 @@ addrmap uart_v151_basic_regs {
     reg {
         hisi_write_min = 0;
         hisi_write_max = 255;
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -125,7 +126,7 @@ addrmap uart_v151_basic_regs {
         } div_l[7:0] = 0x0;
     } DIV_L @ 0x10;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -133,7 +134,7 @@ addrmap uart_v151_basic_regs {
         } div_fra[5:0] = 0x0;
     } DIV_FRA @ 0x14;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -161,7 +162,7 @@ addrmap uart_v151_basic_regs {
         } ptim_en[4:4] = 0x0;
     } INTR_EN @ 0x18;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -194,7 +195,7 @@ addrmap uart_v151_basic_regs {
         } line_intr_status[5:5] = 0x0;
     } INTR_STATUS @ 0x1C;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             enum UART0_FIFO_CTL_tx_empty_trig_e5 {
                 Empty = 0 {
@@ -252,7 +253,7 @@ addrmap uart_v151_basic_regs {
         } rx_fifo_rst[6:6] = 0x0;
     } FIFO_CTL @ 0x24;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -260,7 +261,7 @@ addrmap uart_v151_basic_regs {
         } far[0:0] = 0x0;
     } FAR @ 0x28;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -276,9 +277,12 @@ addrmap uart_v151_basic_regs {
             hw = r;
             desc = "RTS software control";
         } rts[2:2] = 0x0;
+        field { sw=rw; hw=r; ispresent=SDK_VIEW; } dtr[3:3];
+        field { sw=rw; hw=r; ispresent=SDK_VIEW; } out1[4:4];
+        field { sw=rw; hw=r; ispresent=SDK_VIEW; } out2[5:5];
     } MODEM_CTL @ 0x2C;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -289,9 +293,15 @@ addrmap uart_v151_basic_regs {
             hw = r;
             desc = "CTS signal state";
         } cts[1:1] = 0x0;
+        field { sw=r; hw=w; ispresent=SDK_VIEW; onread=rclr; } ddcd[2:2];
+        field { sw=r; hw=w; ispresent=SDK_VIEW; } dcd[3:3];
+        field { sw=r; hw=w; ispresent=SDK_VIEW; onread=rclr; } teri[4:4];
+        field { sw=r; hw=w; ispresent=SDK_VIEW; } ri[5:5];
+        field { sw=r; hw=w; ispresent=SDK_VIEW; onread=rclr; } ddsr[6:6];
+        field { sw=r; hw=w; ispresent=SDK_VIEW; } dsr[7:7];
     } MODEM_STATUS @ 0x30;
-    reg {
-        regwidth = 0x10;
+    external reg {
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -334,15 +344,15 @@ addrmap uart_v151_basic_regs {
         } tx_empty_s[7:7] = 0x1;
     } LINE_STATUS @ 0x34;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
             desc = "General purpose storage";
         } uart_gp_reg[7:0] = 0x0;
     } UART_GP_REG @ 0x38;
-    reg {
-        regwidth = 0x10;
+    external reg {
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -350,7 +360,7 @@ addrmap uart_v151_basic_regs {
         } tx_fifo_read[7:0] = 0x0;
     } TX_FIFO_READ @ 0x3C;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -368,7 +378,7 @@ addrmap uart_v151_basic_regs {
         } rx_fifo_fe[9:9] = 0x0;
     } RX_FIFO_WRITE @ 0x40;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -384,14 +394,18 @@ addrmap uart_v151_basic_regs {
             hw = r;
             desc = "RX FIFO full flag";
         } rx_fifo_full[2:2] = 0x0;
+        field { sw=r; hw=w; ispresent=SDK_VIEW; desc="Receive FIFO contains data"; } rx_not_empty[2:2];
+        field { sw=r; hw=w; ispresent=SDK_VIEW; desc="Receive FIFO full"; } rx_full[3:3];
         field {
             sw = r;
             hw = r;
             desc = "RX FIFO empty flag";
         } rx_fifo_empty[3:3] = 0x0;
     } FIFO_STATUS @ 0x44;
+    FIFO_STATUS.rx_fifo_full->ispresent = !SDK_VIEW;
+    FIFO_STATUS.rx_fifo_empty->ispresent = !SDK_VIEW;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -399,15 +413,17 @@ addrmap uart_v151_basic_regs {
         } tx_fifo_level[6:0] = 0x0;
     } TX_FIFO_CNT @ 0x48;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
             desc = "Reserved";
         } reserved[6:0] = 0x0;
+        field { sw=r; hw=w; ispresent=SDK_VIEW; desc="Receive FIFO data count"; } rx_fifo_level[6:0];
     } RX_FIFO_CNT @ 0x4C;
+    RX_FIFO_CNT.reserved->ispresent = !SDK_VIEW;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -415,7 +431,7 @@ addrmap uart_v151_basic_regs {
         } halt_tx[0:0] = 0x0;
     } HALT_TX @ 0x50;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = w;
             hw = r;
@@ -423,7 +439,7 @@ addrmap uart_v151_basic_regs {
         } dma_sw_ack[0:0] = 0x0;
     } DMA_SW_ACK @ 0x54;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             enum UART0_BAUD_CTL_baud_div_e7 {
                 Div8 = 7 {
@@ -445,7 +461,7 @@ addrmap uart_v151_basic_regs {
         } sample_phase[7:4] = 0x7;
     } BAUD_CTL @ 0x58;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = rw;
             hw = r;
@@ -463,7 +479,7 @@ addrmap uart_v151_basic_regs {
         } stp_mode[2:2] = 0x0;
     } STP_CTL @ 0x5C;
     reg {
-        regwidth = 0x10;
+        regwidth = MMIO_WIDTH;
         field {
             sw = r;
             hw = r;
@@ -490,4 +506,16 @@ addrmap uart_v151_basic_regs {
             desc = "Shadow feature enable";
         } shadow[12:12] = 0x0;
     } UART_PARAMETER @ 0x60;
+    external reg {
+        regwidth = MMIO_WIDTH;
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal";
+                desc="Pop one byte from RX FIFO; not a passive read"; } data[7:0];
+    } RX @ 0x4;
+    reg {
+        regwidth = MMIO_WIDTH;
+        hisi_svd_alternate_register = "RX";
+        field { sw=w; hw=r; desc="Push one byte into TX FIFO"; } data[7:0];
+    } TX @ 0x4;
+    RX->ispresent = SDK_VIEW;
+    TX->ispresent = SDK_VIEW;
 };

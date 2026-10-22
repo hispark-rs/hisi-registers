@@ -536,3 +536,56 @@ The optional SDK checker covers 17 timing offsets in addition to the existing
 ADC/diagnostic/TSENSOR checks. No board access, RAM takeover or Flash write was
 performed. Updated map: **30 peripherals, 919 register views, 1871 fields,
 20 IRQs**. TCXO behavior modeling and hardware timing validation remain open.
+
+## UART v151 application profile correction (2026-10-23)
+
+Pinned SDK `163d9150ab94a02d09a05f623351f9facee3025e`,
+`drivers/drivers/hal/uart/v151/hal_uart_v151_regs_def.h`,
+`hal_uart_v151.c`, `hal_uart_v151_regs_op.c` and WS53 `uart_porting.c`.
+The selected basic (non-PRO) structure uses **32-bit volatile slots**, not the
+16-bit accesses imported from older PACs. This describes the evidenced SDK
+access width, not a proof that the bus rejects every other width. UART0 is H1
+at 0x52081000/IRQ39, UART1 is H0 at 0x52080000/IRQ41, UART2 is L0 at
+0x57014000/IRQ42. Instance register layouts remain equivalent and derivedFrom.
+
+DATA +4 is split into RX (RO consuming FIFO read) and TX (WO push), forbidding
+misleading read-modify-write. RX_FIFO_WRITE +0x40 is a WO test-injection command,
+not an evidenced receive-count read alias on WS53. RX_FIFO_CNT +0x4c exposes
+its low7 count, not a reserved field. The SDK's misleading FIFO_STATUS field
+names are corrected semantically: bit2 is RX **not empty**, bit3 is RX **full**.
+LINE_STATUS data_available is bit5, TX shift-register-empty is bit7; framing,
+parity and overrun bits1/2/3 clear on reading this status. RX_FIFO_ERR bit0 has
+conditional read side effects, so it is not represented as unconditional clear.
+MODEM_STATUS delta bits clear on read. TX_FIFO_READ consumes test-mode TX data.
+No hardware reset values or parameter-register FIFO-depth value are inferred.
+
+The SDK uses FIFO_CTL reads despite labeling it WO, and writes UART_PARAMETER
+DMA_MODE despite labeling the whole parameter register RO. We retain WO FIFO
+commands and RO parameters pending hardware evidence; a future driver needs an
+explicit FIFO configuration value, not RMW on the command view. The basic
+profile has no PRO UART_BUSY bit. INTR_ID includes busy-detect=7 in operation
+code, but its clearing sequence is only present under PRO; no basic-profile
+clear is invented. Reading INTR_ID is not claimed to acknowledge TX interrupts.
+
+UART clock software defaults to 32 MHz and its setter ignores the bus argument;
+that is not proof of a shared physical clock source. Port reset pulses use
+**16-bit** accesses: H1 bit1/H0 bit0 at 0x52000168 and L0 bit7 at 0x570000b0.
+The debug UART bypasses port reset. Pin routes are H1 MGPIO12/AGPIO4 mode2,
+H0 MGPIO8/9 mode1 or MGPIO17/18 mode2 depending on configuration, L0 AGPIO1/2
+mode1 (RX can be disabled). No pin changes or reset operations were performed.
+The optional cross-core-resume branch routes L0 interrupts to acore; its presence
+does not establish ownership in the installed custom firmware.
+
+Only H0/H1 have DMA request mappings in this port; L0 returns the invalid request
+sentinel. Do not expose UART2 DMA simply because the family API has three UARTs.
+The SDK baud-read helper combines divisor halves with AND and loses fractional
+precision; it is not a valid golden oracle. Future baud configuration must use
+wide arithmetic, explicit 8x/16x oversampling and representability checks.
+
+`scripts/check_ws53_uart_layout.py` compiles the original register header with
+only platform type stubs: **25 register-view offsets/widths and 76 field
+encodings** are checked without MMIO. WS63/BS2X generated SVD bytes are unchanged;
+their existing silicon-specific behavior is not generalized to WS53. Updated
+map: **30 peripherals, 922 register views, 1901 fields, 20 IRQs**. UART HAL
+configuration, full IRQ/error paths, DMA, timing and physical-board validation
+remain incomplete; console output alone proves none of those capabilities.

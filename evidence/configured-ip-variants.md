@@ -9,8 +9,9 @@ each chip map.
 The three SDK definitions have the same offsets and field layout. Their stale
 comments say read-to-clear, but all three operation headers clear EOI by writing
 one. WS63 silicon independently confirms write-one-to-clear and zero-valued
-reads. The active three-chip model is therefore one write-clear variant; the
-BS2X SVD read access was incorrect.
+reads. The write-clear path is shared; WS63 read behavior is not evidence for WS53.
+WS53 omits the common window because C offsets conflict with comments, and
+exposes EOI only as a write acknowledgement (see ws53-source-matrix.md).
 
 ## TCXO v150
 
@@ -33,6 +34,9 @@ All audited WS53, WS63 and BS2X configurations disable
 `CONFIG_UART_IP_VERSION_V151_PRO`. Their active basic register layout is shared
 as `uart_v151_basic_regs`. Differences in FIFO triggers and extension registers
 belong to latent PRO subvariants and must not leak into the current PAC model.
+WS53 selects 32-bit SDK accesses and separate RX/TX views. Legacy 16-bit
+WS63/BS2X access annotations, RX-count aliases and reset values are not imported
+as WS53 facts; chip integration supplies the audited read side effects.
 
 ## I2C and RTC
 

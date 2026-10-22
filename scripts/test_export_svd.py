@@ -7,6 +7,32 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_uart_has_word_access_and_separate_fifo_directions(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            tree = ET.parse(dest)
+            uart = tree.find("./peripherals/peripheral[name='UART0']")
+            regs = {r.findtext("name"): r for r in uart.findall("registers/register")}
+            self.assertNotIn("DATA", regs)
+            self.assertTrue(all(r.findtext("size") == "32" for r in regs.values()))
+            self.assertIsNone(uart.find(".//resetValue"))
+            self.assertEqual(regs["RX"].findtext("access"), "read-only")
+            self.assertEqual(regs["RX"].findtext("fields/field/readAction"), "modifyExternal")
+            self.assertEqual(regs["TX"].findtext("access"), "write-only")
+            self.assertEqual(regs["TX"].findtext("alternateRegister"), "RX")
+            self.assertEqual(regs["RX_FIFO_WRITE"].findtext("access"), "write-only")
+            self.assertEqual(regs["RX_FIFO_CNT"].findtext("fields/field/name"), "RX_FIFO_LEVEL")
+            for field in ("FRAME_ERR", "PARITY_ERR", "OVERRUN_ERR"):
+                self.assertEqual(regs["LINE_STATUS"].findtext(f"fields/field[name='{field}']/readAction"), "clear")
+            for name, offset in (("RX_NOT_EMPTY", 2), ("RX_FULL", 3)):
+                self.assertEqual(regs["FIFO_STATUS"].findtext(f"fields/field[name='{name}']/bitOffset"), str(offset))
+            for i, base, irq in ((1, 0x52080000, 41), (2, 0x57014000, 42)):
+                derived = tree.find(f"./peripherals/peripheral[name='UART{i}']")
+                self.assertEqual(derived.get("derivedFrom"), "UART0")
+                self.assertEqual(int(derived.findtext("baseAddress"), 0), base)
+                self.assertEqual(int(derived.findtext("interrupt/value")), irq)
+
     def test_unverified_inherited_reset_is_omitted_including_arrays(self):
         with tempfile.TemporaryDirectory() as work:
             source = Path(work) / "test.rdl"
