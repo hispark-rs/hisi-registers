@@ -633,3 +633,49 @@ register views/76 fields. Export tests reject writable gates at the conflicting
 bit positions. Legacy WS63/BS2X SVD output is unchanged. Current WS53 map:
 **31 peripherals, 925 register views, 1905 fields, 20 IRQs**. No hardware register
 was accessed, and no full clock-aware UART constructor is claimed.
+
+## GPIO v150 basic-bank audit (2026-10-23)
+
+Pinned SDK `163d9150`, `hal_gpio_v150_regs_def.h`, `hal_gpio_v150_regs_op.h`,
+`hal_gpio_v150.c`, `hal_gpio_v150_comm.c` and WS53 `gpio_porting.{c,h}` establish
+three banks at `0x5700c000`, `0x57028000`, `0x57010000`, with one group each and
+bit spans 23/12/3. Their local IRQs are 34/33/29. The generic menuconfig
+`GPIO0_WIDTH=32`/`GPIO_BANK_NUM=1` is not the three-instance port geometry.
+MULTISYSTEM is disabled. The original C basic group is 0x40 bytes; fourteen
+32-bit slots through +0x34 are now represented, including SW_CTL at +8.
+SW_CTL has bit read/write helpers but no established source-selection encoding.
+It is an opaque bitmap, not a claimed software/hardware selector enum.
+LOCK +0x200 and LP_STATE +0x204 have declarations but no established field
+semantics and remain absent, as do the inactive MULTISYSTEM command windows.
+
+Direction/type/polarity/dual-edge are per-pin bitmaps. A whole-field enum value
+`Input=1` would mean only bit0 is input, not that the entire bank is input.
+The WS53 `RAW_BITMAP` IP parameter exports `PINS` fields without those misleading
+whole-field enums; legacy chips retain their existing output unchanged. No WS53
+GPIO reset values are proven. The integration suppresses inherited resets and
+does not offer Resettable on these registers.
+
+EOI/SET/CLR are command views: write-one clear pending edge, set output latch,
+clear output latch. They remain WO and have explicit modified-write semantics.
+SDK bit helpers read-modify-write these commands, and its suspend/resume copies
+the register block (including commands/status). Neither is a safe template for
+the Rust HAL: do not read command registers or replay snapshots over them.
+The SDK rebase routine instead writes enable=0, mask=all ones, EOI=all ones.
+GPIO input and output reads both use SW_OUT; output direction is 0, input is 1.
+IRQ registration supports low/high/falling/rising/dual edge and enables debounce
+after reconfiguration. Debounce filter timing is not established here.
+
+Bank width is not a physical pad count. GPIO0 positions 1/6/7/11/16 are routed
+through other SDK pad identities, and 14/15/21 belong to SGPIO0/1/2. GPIO2's first
+two bits share SWD physical pins. The SDK range-based pin lookup does not reject
+all these GPIO0 holes. A future typed HAL must canonicalize aliases and reserve
+debug pins; it must not accept arbitrary bank indices just because they fit the
+register width. `gpio_select_core()` and `gpio_ulp_int_en()` are no-op ports,
+not evidence of resource handoff or clock control.
+
+`check_ws53_gpio_layout.py` compiles the original C header, checks **42 register
+view offsets/widths**, basic-group stride and the unmodeled lock/LP offsets,
+and compares bank bases/bit spans to the concrete port. It does not access MMIO.
+The WS53 map is now **31 peripherals, 928 register views, 1908 fields, 20 IRQs**.
+WS63/BS2X SVD bytes remain unchanged. GPIO HAL, pin ownership, pad configuration,
+debounce, clock management and hardware validation remain open.

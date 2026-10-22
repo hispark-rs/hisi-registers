@@ -7,6 +7,32 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_gpio_basic_banks_commands_and_unknown_reset_values(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            tree = ET.parse(dest)
+            for bank, width, irq in ((0, 23, 34), (1, 12, 33), (2, 3, 29)):
+                p = tree.find(f"./peripherals/peripheral[name='GPIO{bank}']")
+                regs = {r.findtext("name"): r for r in p.findall("registers/register")}
+                self.assertEqual(len(regs), 14)
+                self.assertEqual(p.findtext("interrupt/value"), str(irq))
+                self.assertEqual(regs["GPIO_SW_CTL"].findtext("addressOffset"), "0x8")
+                self.assertEqual(regs["GPIO_SW_CTL"].findtext("access"), "read-write")
+                for reg in regs.values():
+                    self.assertEqual(reg.findtext("size"), "32")
+                    self.assertEqual(reg.findtext("fields/field/bitWidth"), str(width))
+                    self.assertIsNone(reg.find("resetValue"))
+                    self.assertIsNone(reg.find("resetMask"))
+                    self.assertIsNone(reg.find(".//enumeratedValues"), "per-pin bitmap must not export a whole-field enum")
+                for name, action in (("GPIO_INT_EOI", "oneToClear"), ("GPIO_DATA_SET", "oneToSet"), ("GPIO_DATA_CLR", "oneToClear")):
+                    self.assertEqual(regs[name].findtext("access"), "write-only")
+                    self.assertEqual(regs[name].findtext("fields/field/modifiedWriteValues"), action)
+                for name in ("GPIO_INT_RAW", "GPIO_INTR"):
+                    self.assertEqual(regs[name].findtext("access"), "read-only")
+                self.assertNotIn("GPIO_LOCK", regs)
+                self.assertNotIn("GPIO_LP_STATE", regs)
+
     def test_ws53_uart_reset_widths_and_restricted_route_command(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"

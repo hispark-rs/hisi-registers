@@ -96,9 +96,24 @@ addrmap ws53 {
     timer.TIMER_EOI0.eoi->desc = "Write one to acknowledge channel 0; read semantics unverified, no read API";
     timer.TIMER_EOI1.eoi->desc = "Write one to acknowledge channel 1; read semantics unverified, no read API";
     // SDK gpio_porting.h: group widths 23/12/3; not WS63's 8-bit banks.
-    gpio_v150_basic_regs #(.WIDTH(23)) gpio0 @ 0x5700C000;
-    gpio_v150_basic_regs #(.WIDTH(12)) gpio1 @ 0x57028000;
-    gpio_v150_basic_regs #(.WIDTH(3)) gpio2 @ 0x57010000;
+    gpio_v150_basic_regs #(.WIDTH(23), .SOURCE_SELECT(true), .RAW_BITMAP(true)) gpio0 @ 0x5700C000;
+    gpio_v150_basic_regs #(.WIDTH(12), .SOURCE_SELECT(true), .RAW_BITMAP(true)) gpio1 @ 0x57028000;
+    gpio_v150_basic_regs #(.WIDTH(3), .SOURCE_SELECT(true), .RAW_BITMAP(true)) gpio2 @ 0x57010000;
+    gpio0->hisi_reset_unverified = true;
+    gpio1->hisi_reset_unverified = true;
+    gpio2->hisi_reset_unverified = true;
+    gpio0->hisi_evidence = "SDK-source 163d9150 GPIO v150 basic 32-bit slots; bank width 23 includes unusable bit positions, not 23 independent pads; reset unknown";
+    gpio1->hisi_evidence = "SDK-source 163d9150 GPIO v150 basic 32-bit slots; AGPIO0..11, physical aliases must be canonicalized; reset unknown";
+    gpio2->hisi_evidence = "SDK-source 163d9150 GPIO v150 basic 32-bit slots; SGPIO0..2 = physical MGPIO14/15/21, debug reservation required; reset unknown";
+    gpio0.GPIO_INT_EOI.gpio_int_eoi->onwrite = woclr;
+    gpio1.GPIO_INT_EOI.gpio_int_eoi->onwrite = woclr;
+    gpio2.GPIO_INT_EOI.gpio_int_eoi->onwrite = woclr;
+    gpio0.GPIO_DATA_SET.gpio_data_set->onwrite = woset;
+    gpio1.GPIO_DATA_SET.gpio_data_set->onwrite = woset;
+    gpio2.GPIO_DATA_SET.gpio_data_set->onwrite = woset;
+    gpio0.GPIO_DATA_CLR.gpio_data_clr->onwrite = woclr;
+    gpio1.GPIO_DATA_CLR.gpio_data_clr->onwrite = woclr;
+    gpio2.GPIO_DATA_CLR.gpio_data_clr->onwrite = woclr;
 
     // acore/chip_core_irq.h: LOCAL_INTERRUPT0 = 26. These are absolute
     // mcause values, not offsets into a PLIC or Cortex-M vector table.

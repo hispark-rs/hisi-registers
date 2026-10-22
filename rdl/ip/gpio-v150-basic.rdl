@@ -1,7 +1,7 @@
 // Active GPIO v150 basic layout shared by WS53, WS63 and BS2X. None of the
 // audited product configurations enables CONFIG_GPIO_SUPPORT_MULTISYSTEM.
 
-addrmap gpio_v150_basic_regs #(longint unsigned WIDTH = 8) {
+addrmap gpio_v150_basic_regs #(longint unsigned WIDTH = 8, boolean SOURCE_SELECT = false, boolean RAW_BITMAP = false) {
     reg {
         field {
             sw = rw;
@@ -22,9 +22,21 @@ addrmap gpio_v150_basic_regs #(longint unsigned WIDTH = 8) {
             sw = rw;
             hw = r;
             encode = GPIO0_GPIO_SW_OEN_gpio_sw_oen_e1;
+            ispresent = !RAW_BITMAP;
             desc = "GPIO direction: 0=output; 1=input (default)";
         } gpio_sw_oen[WIDTH-1:0] = (1 << WIDTH) - 1;
+        field {sw=rw; hw=r; ispresent=RAW_BITMAP;
+            desc="Direction bitmap: each 0 bit selects output, each 1 bit selects input; not a whole-register mode enum";
+        } pins[WIDTH-1:0];
     } GPIO_SW_OEN @ 0x4;
+    reg {
+        ispresent = SOURCE_SELECT;
+        field {
+            sw = rw;
+            hw = r;
+            desc = "Per-pin data source control; SDK supplies bit get/set helpers but does not establish selection encodings";
+        } gpio_sw_ctl[WIDTH-1:0];
+    } GPIO_SW_CTL @ 0x8;
     reg {
         field {
             sw = rw;
@@ -52,8 +64,12 @@ addrmap gpio_v150_basic_regs #(longint unsigned WIDTH = 8) {
             sw = rw;
             hw = r;
             encode = GPIO0_GPIO_INT_TYPE_gpio_int_type_e2;
+            ispresent = !RAW_BITMAP;
             desc = "Interrupt type: 0=level; 1=edge";
         } gpio_int_type[WIDTH-1:0] = 0x0;
+        field {sw=rw; hw=r; ispresent=RAW_BITMAP;
+            desc="Trigger bitmap: each 0 bit selects level, each 1 bit selects edge";
+        } pins[WIDTH-1:0];
     } GPIO_INT_TYPE @ 0x14;
     reg {
         field {
@@ -68,8 +84,12 @@ addrmap gpio_v150_basic_regs #(longint unsigned WIDTH = 8) {
             sw = rw;
             hw = r;
             encode = GPIO0_GPIO_INT_POLARITY_gpio_int_polarity_e3;
+            ispresent = !RAW_BITMAP;
             desc = "Interrupt polarity: 0=low/falling; 1=high/rising";
         } gpio_int_polarity[WIDTH-1:0] = 0x0;
+        field {sw=rw; hw=r; ispresent=RAW_BITMAP;
+            desc="Polarity bitmap: each 0 bit selects low/falling, each 1 bit high/rising";
+        } pins[WIDTH-1:0];
     } GPIO_INT_POLARITY @ 0x18;
     reg {
         field {
@@ -84,8 +104,12 @@ addrmap gpio_v150_basic_regs #(longint unsigned WIDTH = 8) {
             sw = rw;
             hw = r;
             encode = GPIO0_GPIO_INT_DEDGE_gpio_int_dedge_e4;
+            ispresent = !RAW_BITMAP;
             desc = "Dual-edge interrupt enable: 0=disabled; 1=enabled";
         } gpio_int_dedge[WIDTH-1:0] = 0x0;
+        field {sw=rw; hw=r; ispresent=RAW_BITMAP;
+            desc="Dual-edge bitmap: each 1 bit enables detection on both edges of that input";
+        } pins[WIDTH-1:0];
     } GPIO_INT_DEDGE @ 0x1C;
     reg {
         field {
