@@ -121,8 +121,70 @@ and TX (write-only, push) arrays. Clear registers acknowledge interrupts on read
 SDK descriptions say writes have no effect, so no write or modify API is emitted.
 No reset values or FIFO depth are inferred from the number of windows.
 
-The current description has 23 peripheral instances, 668 expanded register
-**views**, 1275 expanded fields and 17 IRQs. RX/TX views count separately despite
-sharing addresses. Validation covers schema, field/layout distinctions, access
+At the SPI milestone (`66e519d`), the description had 23 peripheral instances,
+668 expanded register **views**, 1275 expanded fields and 17 IRQs. RX/TX views
+count separately despite sharing addresses. Validation covers schema, field/layout distinctions, access
 permissions and generation; SPI HAL, behavior models and silicon loopback are
 still pending. Acore routing is SDK evidence, not exclusive runtime ownership.
+
+## Application MDMA v151
+
+The app ROM component selects `hal_dmac_v151_funcs_get()` through its DMA port,
+even though the generic `CONFIG_DMA_USING_V151` menu option is unset. The ROM
+component and binding are stronger evidence than that unused generic selector.
+Paths under `src/drivers/chips/ws53/rom/app/` in the same pinned SDK:
+
+- `drivers/drivers/hal/dma/romable/v151/hal_dmac_v151_regs_def.h` and
+  `hal_dmac_v151_regs_op.h`: offsets and bit fields;
+- `drivers/drivers/hal/dma/CMakeLists.txt`: v151 ROM/flash component split;
+- `drivers/chips/ws53/porting/dma/dma_porting.c` and
+  `drivers/chips/ws53/porting/include/dma_porting.h`: controller, channels, routes;
+- `src/drivers/chips/ws53/include/acore/{platform_core,chip_core_irq}.h`
+  (relative to the SDK root): base `0x52070000`, IRQ 58 (`M_DMA`).
+
+There are eight channels at `+0x100 + channel*0x20`. Within each channel,
+LLI/destination/configuration/source/control are at 0/4/8/16/20. This is not
+the WS63 DMA layout. No reset values are asserted. ACTIVE is exposed only as a
+status reader based on its SDK role; its physical write behavior and timing
+have not been tested. HAL cancellation must still establish hardware quiescence and
+cannot equate clearing ENABLE with completed bus transactions.
+
+On 2026-10-22 A-board J-Link `23121302`, UART `5CB7019921`, a read-only ROM
+capture of `0x1ac60..0x1b3a0` was checked against SDK `rom_config/acore/acore.sym`:
+
+- SHA-256: `0082ef85ff9d4ad0c447d74cc02f0f37ba732a012dc4c343bdf0b5cc3381886a`.
+- `hal_dma_reset` at `0x1accc` loops eight times, clearing channel ENABLE at
+  `base+0x108+(channel<<5)`; this confirms layout, not a safe cancellation protocol.
+- TC/error status functions read `base+4`, bits 8–15 / 16–23 respectively.
+- Clear functions at `0x1b338` and `0x1b358` read `base+8`, OR the selected
+  channel bit (shifted by 8 for errors), and write it back. RDL provides a
+  write-one-to-clear **command-only view**, with no generated read/modify API.
+  This restriction does not claim the physical register is unreadable or that
+  readback is zero. Actual interrupt clearing still needs a DMA transfer test.
+- `hal_dma_regs_data_get_ch_en` reads the low eight bits at `base+0x10`.
+- CPU resume and vendor `AT` responses succeeded before and after capture.
+  No RAM program or DMA operation was run; no Flash was written.
+
+Only 4-bit request values 0–15 are modeled. The port enum explicitly labels
+16 and subsequent entries nonexistent. App routes are:
+
+| Request | SDK route | App instance |
+|---|---|---|
+| 0 / 1 | I2C0 TX / RX | I2C0 |
+| 2 / 3 | I2C1 TX / RX | I2C1 |
+| 4 / 5 | QSPI0_2CS TX / RX | QSPI1 / SPI_BUS_1 |
+| 6 / 7 | SPI_M TX / RX | SPI0 / SPI_BUS_0 |
+| 8 / 9 | UART_H0 TX / RX | UART1 |
+| 10 / 11 | UART_H1 TX / RX | UART0 |
+| 12 / 13 | I2S TX / RX | I2S, integration pending |
+| 14 / 15 | PWM / SPWM | Port declarations; endpoint behavior pending |
+
+The legacy `UART_L` alias points at UART_H1, but the real UART port returns
+an invalid request for UART2. It is not evidence of UART2 DMA support.
+The mux helpers in the DMA port are no-ops, so no invented mux register is
+exported. The separate `SDMA_BASE_ADDR` macro and clock bit still do not
+establish an accessible app instance; SDMA is not generated.
+
+This addition brings the map to 24 peripherals, 716 expanded register views,
+1483 expanded fields and 18 IRQs. It supplies register access and evidence,
+not DMA ownership, a safe HAL, a transfer model or silicon transfer validation.

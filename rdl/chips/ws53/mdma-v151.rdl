@@ -1,0 +1,87 @@
+// SDK 163d9150, ROM app hal_dmac_v151_regs_def.h and dma_porting.h.
+// acore DMA_BASE_ADDR selects this 8-channel controller, not the SDMA macro.
+// ROM evidence: 0x1accc uses 8 channels with 0x20 stride; 0x1b338/0x1b358
+// set completion/error bits at +8. Reset values and runtime ownership unknown.
+
+enum ws53_mdma_request {
+    I2C0_TX = 0; I2C0_RX = 1;
+    I2C1_TX = 2; I2C1_RX = 3;
+    QSPI1_TX = 4; QSPI1_RX = 5;
+    SPI0_TX = 6; SPI0_RX = 7;
+    UART1_TX = 8; UART1_RX = 9;
+    UART0_TX = 10; UART0_RX = 11;
+    I2S_TX = 12; I2S_RX = 13;
+    PWM = 14; SPWM = 15;
+};
+
+addrmap ws53_mdma_v151_regs {
+    hisi_evidence = "SDK-source 163d9150 ROM app v151; ROM-read A-board 23121302 confirms access offsets, 8 channels, clear writes; transfer behavior not silicon tested";
+    reg {
+        field { sw=r; hw=w; } pending[7:0];
+        field { sw=r; hw=w; } transfer_complete[15:8];
+        field { sw=r; hw=w; } error[23:16];
+    } INTERRUPT_STATUS @ 0x4;
+    reg {
+        name = "Command view: write one to acknowledge selected channels. ROM uses RMW, but readback is not specified; deliberately no read/modify API.";
+        field { sw=w; hw=r; onwrite=woclr; } transfer_complete[7:0];
+        field { sw=w; hw=r; onwrite=woclr; } error[15:8];
+    } INTERRUPT_CLEAR @ 0x8;
+    reg {
+        field { sw=r; hw=w; } transfer_complete[7:0];
+        field { sw=r; hw=w; } error[15:8];
+    } RAW_INTERRUPT_STATUS @ 0xc;
+    reg {
+        field { sw=r; hw=w; } channels[7:0];
+    } ENABLED_CHANNELS @ 0x10;
+    reg {
+        field { sw=rw; hw=rw; } last_burst[15:0];
+        field { sw=rw; hw=rw; } burst[31:16];
+    } BURST_REQUEST @ 0x14;
+    reg {
+        field { sw=rw; hw=rw; } last_single[15:0];
+        field { sw=rw; hw=rw; } single[31:16];
+    } SINGLE_REQUEST @ 0x18;
+    reg {
+        field { sw=rw; hw=r; } enable[0:0];
+        field { sw=rw; hw=r; } master1[1:1];
+        field { sw=rw; hw=r; } master2[2:2];
+    } CONFIGURATION @ 0x1c;
+    reg {
+        field { sw=rw; hw=r; } requests[15:0];
+    } SYNC @ 0x20;
+
+    regfile {
+        reg {
+            field { sw=rw; hw=rw; } master[0:0];
+            field { sw=rw; hw=rw; } address[31:2];
+        } LINKED_LIST @ 0x0;
+        reg { field { sw=rw; hw=rw; } address[31:0]; } DESTINATION @ 0x4;
+        reg {
+            field { sw=rw; hw=rw; } enable[0:0];
+            field { sw=rw; hw=r; encode=ws53_mdma_request; } source_request[4:1];
+            field { sw=rw; hw=r; encode=ws53_mdma_request; } destination_request[8:5];
+            field { sw=rw; hw=r; } flow_control[11:9];
+            field { sw=rw; hw=r; } error_interrupt_mask[12:12];
+            field { sw=rw; hw=r; } transfer_interrupt_mask[13:13];
+            field { sw=rw; hw=r; } lock[14:14];
+            field { sw=r; hw=w;
+                desc = "Status-only view of SDK active bit; writable behavior and quiescence timing are not established";
+            } active[15:15];
+            field { sw=rw; hw=r; } halt[16:16];
+        } CONFIGURATION @ 0x8;
+        reg { field { sw=rw; hw=rw; } address[31:0]; } SOURCE @ 0x10;
+        reg {
+            field { sw=rw; hw=rw; } transfer_size[11:0];
+            field { sw=rw; hw=r; } source_burst[14:12];
+            field { sw=rw; hw=r; } destination_burst[17:15];
+            field { sw=rw; hw=r; } source_width[20:18];
+            field { sw=rw; hw=r; } destination_width[23:21];
+            field { sw=rw; hw=r; } source_master[24:24];
+            field { sw=rw; hw=r; } destination_master[25:25];
+            field { sw=rw; hw=r; } source_increment[26:26];
+            field { sw=rw; hw=r; } destination_increment[27:27];
+            field { sw=rw; hw=r; } protection[30:28];
+            field { sw=rw; hw=r; } terminal_interrupt[31:31];
+        } CONTROL @ 0x14;
+    } CHANNEL[8] @ 0x100 += 0x20;
+};

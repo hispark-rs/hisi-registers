@@ -164,6 +164,67 @@ class ExportSemantics(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "invalid alternate"):
                     export(source, Path(work) / "test.svd")
 
+    def test_register_file_array_keeps_nested_offsets_and_dimensions(self):
+        from check_schema import validate
+        with tempfile.TemporaryDirectory() as work:
+            source, dest = Path(work) / "test.rdl", Path(work) / "test.svd"
+            properties = Path(__file__).resolve().parents[1] / "rdl/properties.rdl"
+            source.write_text(f'`include "{properties}"\n' + '''addrmap chip {addrmap {
+                regfile {regfile {
+                    reg {field {sw=r;} value[31:0];} status[2] @ 0x4 += 4;
+                } group[3] @ 0x10 += 0x10;} channels[4] @ 0x100 += 0x40;
+            } controller @ 0x40000000;};''')
+            export(source, dest)
+            validate([dest])
+            cluster = ET.parse(dest).find(".//cluster")
+            self.assertEqual(cluster.findtext("dim"), "4")
+            self.assertEqual(cluster.findtext("dimIncrement"), "0x40")
+            self.assertEqual(cluster.findtext("addressOffset"), "0x100")
+            nested = cluster.find("cluster")
+            self.assertEqual(nested.findtext("dim"), "3")
+            self.assertEqual(nested.findtext("addressOffset"), "0x10")
+            self.assertEqual(nested.findtext("register/addressOffset"), "0x4")
+            self.assertEqual(nested.findtext("register/dim"), "2")
+            source.write_text(source.read_text().replace('channels[4]', 'channels[2][2]'))
+            with self.assertRaisesRegex(ValueError, "multidimensional register-file"):
+                export(source, dest)
+
+    def test_ws53_mdma_channels_and_request_routes(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
+            tree = ET.parse(dest)
+            peripheral = tree.find(".//peripheral[name='MDMA']")
+            self.assertEqual(peripheral.findtext("baseAddress"), "0x52070000")
+            self.assertEqual(peripheral.findtext("interrupt/value"), "58")
+            self.assertIsNone(tree.find(".//peripheral[name='SDMA']"))
+            cluster = peripheral.find("registers/cluster")
+            self.assertEqual(cluster.findtext("name"), "CHANNEL[%s]")
+            self.assertEqual(cluster.findtext("dim"), "8")
+            self.assertEqual(cluster.findtext("dimIncrement"), "0x20")
+            self.assertEqual(cluster.findtext("addressOffset"), "0x100")
+            offsets = {r.findtext("name"): int(r.findtext("addressOffset"), 0)
+                       for r in cluster.findall("register")}
+            self.assertEqual(offsets, {"LINKED_LIST": 0, "DESTINATION": 4,
+                                      "CONFIGURATION": 8, "SOURCE": 16, "CONTROL": 20})
+            clear = peripheral.find("registers/register[name='INTERRUPT_CLEAR']")
+            self.assertEqual(clear.findtext("addressOffset"), "0x8")
+            self.assertEqual(clear.findtext("access"), "write-only")
+            self.assertEqual([f.findtext("modifiedWriteValues") for f in clear.findall("fields/field")],
+                             ["oneToClear", "oneToClear"])
+            fields = {f.findtext("name"): f for f in cluster.findall("register[name='CONFIGURATION']/fields/field")}
+            expected = {"I2C0_TX": 0, "I2C0_RX": 1, "I2C1_TX": 2, "I2C1_RX": 3,
+                        "QSPI1_TX": 4, "QSPI1_RX": 5, "SPI0_TX": 6, "SPI0_RX": 7,
+                        "UART1_TX": 8, "UART1_RX": 9, "UART0_TX": 10, "UART0_RX": 11,
+                        "I2S_TX": 12, "I2S_RX": 13, "PWM": 14, "SPWM": 15}
+            for name, bit in (("SOURCE_REQUEST", "1"), ("DESTINATION_REQUEST", "5")):
+                self.assertEqual(fields[name].findtext("bitOffset"), bit)
+                self.assertEqual(fields[name].findtext("bitWidth"), "4")
+                self.assertEqual({e.findtext("name"): int(e.findtext("value"), 0)
+                                  for e in fields[name].findall("enumeratedValues/enumeratedValue")}, expected)
+            self.assertEqual(fields["ACTIVE"].findtext("access"), "read-only")
+            self.assertTrue(all(r.find("resetValue") is None for r in peripheral.findall(".//register")))
+
 
 if __name__ == "__main__":
     unittest.main()

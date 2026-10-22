@@ -30,8 +30,8 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 23,
-        "interrupts": 17,
+        "peripherals": 24,
+        "interrupts": 18,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
@@ -40,6 +40,7 @@ EXPECTED = {
             "PINMUX_TZPC": 0x5703A000,
             "SPI0": 0x52087000,
             "QSPI1": 0x5208D000,
+            "MDMA": 0x52070000,
             "WDT": 0x5702B000,
             "SFC_CFG": 0x53000000,
             "PWM": 0x52082000,
@@ -59,8 +60,9 @@ EXPECTED = {
         },
         "source_arrays": 0,
         "output_arrays": 4,
-        "registers_expanded": 668,
-        "fields_expanded": 1275,
+        "cluster_arrays": 1,
+        "registers_expanded": 716,
+        "fields_expanded": 1483,
         "write_constraints": 6,
     },
 }
@@ -122,6 +124,18 @@ for filename in ("uart0.rdl", "i2c0.rdl", "rtc.rdl"):
         print(f"bs2x: {filename} would fork a confirmed shared family variant")
         failed = True
 
+def weighted_registers(container, multiplier=1):
+    """Include each cluster dimension when counting expanded register views."""
+    for child in container:
+        if child.tag not in ("register", "cluster"):
+            continue
+        count = multiplier * int(child.findtext("dim", "1"))
+        if child.tag == "cluster":
+            yield from weighted_registers(child, count)
+        else:
+            yield child, count
+
+
 summary = {}
 for filename, expected in EXPECTED.items():
     path = ROOT / "generated" / filename
@@ -155,10 +169,10 @@ for filename, expected in EXPECTED.items():
         if base := p.get("derivedFrom"):
             import copy
             p.append(copy.deepcopy(by_name[base].find("registers")))
-    registers = tree.findall("./peripherals/peripheral/registers/register")
-    fields = tree.findall("./peripherals/peripheral/registers/register/fields/field")
-    register_count = sum(int(r.findtext("dim", "1")) for r in registers)
-    field_count = sum(int(r.findtext("dim", "1")) * len(r.findall("fields/field")) for r in registers)
+    weighted = [item for p in peripheral_nodes for item in weighted_registers(p.find("registers"))]
+    registers = [r for r, _ in weighted]
+    register_count = sum(count for _, count in weighted)
+    field_count = sum(count * len(r.findall("fields/field")) for r, count in weighted)
     if register_count != expected["registers_expanded"]:
         print(
             f"{filename}: expected {expected['registers_expanded']} expanded registers, "
@@ -182,6 +196,10 @@ for filename, expected in EXPECTED.items():
     if len(output_arrays) != expected.get("output_arrays", 0):
         print(f"{filename}: unexpected register array count {len(output_arrays)}")
         failed = True
+    cluster_arrays = tree.findall(".//cluster[dim]")
+    if len(cluster_arrays) != expected.get("cluster_arrays", 0):
+        print(f"{filename}: unexpected cluster array count {len(cluster_arrays)}")
+        failed = True
 
     constraints = tree.findall(".//writeConstraint")
     if len(constraints) != expected["write_constraints"]:
@@ -196,6 +214,7 @@ for filename, expected in EXPECTED.items():
         "registers_expanded": register_count,
         "fields_expanded": field_count,
         "register_arrays": len(output_arrays),
+        "cluster_arrays": len(cluster_arrays),
         "interrupts": irq_count,
         "enumerated_values": len(tree.findall(".//enumeratedValue")),
         "read_actions": len(tree.findall(".//readAction")),

@@ -13,6 +13,7 @@
 `include "ws53/pinctrl.rdl"
 `include "ws53/m-crg.rdl"
 `include "ws53/spi-v151-100.rdl"
+`include "ws53/mdma-v151.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -25,6 +26,7 @@ addrmap ws53 {
     ws53_pinmux_tzpc_regs pinmux_tzpc @ 0x5703A000;
     ws53_spi0_v151_100_regs spi0 @ 0x52087000;
     ws53_qspi1_v151_100_regs qspi1 @ 0x5208D000;
+    ws53_mdma_v151_regs mdma @ 0x52070000;
     watchdog_v151_regs wdt @ 0x5702B000;
     sfc_v150_regs sfc_cfg @ 0x53000000;
     pwm_v151_regs pwm @ 0x52082000;
@@ -58,6 +60,7 @@ addrmap ws53 {
     signal { hisi_irq_number = 50; hisi_irq_owner = "RTC1"; } RTC_1;
     signal { hisi_irq_number = 53; hisi_irq_owner = "TIMER"; } TIMER_0;
     signal { hisi_irq_number = 54; hisi_irq_owner = "TIMER"; } TIMER_1;
+    signal { hisi_irq_number = 58; hisi_irq_owner = "MDMA"; } M_DMA;
     signal { hisi_irq_number = 62; hisi_irq_owner = "I2C0"; } I2C_0;
     signal { hisi_irq_number = 63; hisi_irq_owner = "I2C1"; } I2C_1;
     signal { hisi_irq_number = 65; hisi_irq_owner = "SPI0"; } SPI_3;

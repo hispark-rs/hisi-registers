@@ -31,7 +31,7 @@ SystemRDL becomes canonical after source reconciliation. CMSIS-SVD is a generate
 compatibility interface consumed by `svd2rust` and other tools. The local exporter
 currently supports:
 
-- flat peripheral instances and interrupts;
+- peripheral instances and interrupts;
 - registers and fields;
 - software access type;
 - reset values;
@@ -40,6 +40,7 @@ currently supports:
 - read-clear/read-set and standard modified-write behavior;
 - inclusive write ranges carried by repository UDPs.
 - one-dimensional register arrays with explicit stride;
+- nested register files and one-dimensional register-file arrays as SVD clusters;
 - complementary read-only/write-only alternate register views;
 - explicit FIFO read side effects and checked peripheral derivation.
 
@@ -48,6 +49,12 @@ PAC code cannot perform read-modify-write on a FIFO. Alternate views must match
 offset, width, dimension and stride and have complementary access permissions.
 Multidimensional arrays, split-width accesses and general RDL hardware aliases
 remain unsupported and fail generation.
+
+WS53 MDMA uses one eight-element channel cluster with a 0x20-byte stride,
+including reserved holes. Register offsets stay relative to their immediate
+cluster. The PAC recipe uses `svd2rust --max-cluster-size` so the Rust channel
+type retains that stride as tail padding and the enclosing block contains a
+real eight-element array. Host layout tests cover every channel and register.
 
 The bootstrap importer still expands legacy WS63/BS2X arrays and merges the one
 overlapping reset-register alias, recording that normalization in each import
