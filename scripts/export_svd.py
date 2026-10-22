@@ -203,6 +203,26 @@ def export(source: Path, destination: Path) -> None:
                 add_side_effects(fxml, field)
                 add_enumerated_values(fxml, field)
 
+    # Derivation is opt-in and checked after all register trees have been built,
+    # so declaration/address ordering cannot hide an invalid reference. Compare
+    # every field/access/side-effect, not just the RDL type's name or byte size.
+    by_name = {p.findtext("name"): p for p in peripherals}
+    derivatives = {}
+    for node in peripheral_nodes:
+        base = node.get_property("hisi_svd_derived_from")
+        if base:
+            derivatives[node.inst_name.upper()] = base.upper()
+    for name, base in derivatives.items():
+        if base not in by_name or base == name or base in derivatives:
+            raise ValueError(f"invalid/chained peripheral derivation: {name} -> {base}")
+        own_regs = by_name[name].find("registers")
+        base_regs = by_name[base].find("registers")
+        if ET.tostring(own_regs) != ET.tostring(base_regs):
+            raise ValueError(f"non-equivalent peripheral derivation: {name} -> {base}")
+    for name, base in derivatives.items():
+        by_name[name].set("derivedFrom", base)
+        by_name[name].remove(by_name[name].find("registers"))
+
     ET.indent(device, space="  ")
     destination.write_bytes(ET.tostring(device, encoding="utf-8", xml_declaration=True))
 

@@ -142,6 +142,12 @@ for filename, expected in EXPECTED.items():
             print(f"{filename}: {name} expected {address:#x}, got {actual!r}")
             failed = True
 
+    # Count effective instance registers, including checked derived peripherals.
+    by_name = {p.findtext("name"): p for p in peripheral_nodes}
+    for p in peripheral_nodes:
+        if base := p.get("derivedFrom"):
+            import copy
+            p.append(copy.deepcopy(by_name[base].find("registers")))
     registers = tree.findall("./peripherals/peripheral/registers/register")
     fields = tree.findall("./peripherals/peripheral/registers/register/fields/field")
     if len(registers) != expected["registers_expanded"]:

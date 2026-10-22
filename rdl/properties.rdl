@@ -15,6 +15,13 @@ property hisi_evidence {
     component = addrmap | regfile | reg | field | signal;
 };
 
+// Explicit SVD instance reuse. The exporter proves register equivalence before
+// emitting derivedFrom; IRQs and base addresses remain instance-specific.
+property hisi_svd_derived_from {
+    type = string;
+    component = addrmap;
+};
+
 property hisi_write_min {
     type = longint unsigned;
     component = reg | field;

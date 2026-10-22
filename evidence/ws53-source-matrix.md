@@ -25,6 +25,19 @@ Only confirmed timer channels 0 and 1 are exported for this WS53 profile. The
 64-bit high halves, permissions and low-power registers still need modeling;
 this is not a complete timer peripheral claim.
 
+UART1/UART2 explicitly derive their SVD register layout from UART0. The exporter
+checks the complete expanded register trees (including access, fields and side
+effects) before accepting this property; instances keep their own base and IRQ.
+This supplies one Rust register-block type without unchecked layout casts in HAL.
+
+Clock evidence has two stages: menuconfig initializes the TIMER rate to 30 MHz,
+but `src/application/ws53/ws53_application/main.c:373-385` unconditionally
+changes it to **32 MHz** in `dev_work_clock_init()` (called from `main`, line
+574). The RAM takeover profile uses the post-startup 32 MHz value. This is an
+SDK software rate, not a measured oscillator frequency or a proven match to an
+unidentified installed firmware. Clock gate/selector registers still need their
+own evidence before a HAL may configure them.
+
 The exporter now carries explicit register access and known reset masks. This
 changes generated WS63/BS2X SVD metadata (not their released PACs): read-only and
 write-only registers stop inheriting read-write access, reserved/unknown reset

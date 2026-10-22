@@ -32,6 +32,8 @@ class ExportSemantics(unittest.TestCase):
             export(Path(__file__).resolve().parents[1] / "rdl/chips/ws53.rdl", dest)
             peripherals = {p.findtext("name"): p for p in ET.parse(dest).findall(".//peripheral")}
             self.assertEqual(peripherals["UART2"].findtext("baseAddress"), "0x57014000")
+            self.assertEqual(peripherals["UART2"].get("derivedFrom"), "UART0")
+            self.assertEqual(peripherals["UART2"].findtext("interrupt/value"), "42")
             self.assertEqual(peripherals["TIMER"].findtext("interrupt/value"), "53")
             self.assertEqual(peripherals["GPIO1"].findtext("interrupt/value"), "33")
             registers = peripherals["TIMER"].findall("registers/register")
@@ -42,6 +44,18 @@ class ExportSemantics(unittest.TestCase):
             for bank, width in enumerate((23, 12, 3)):
                 reg = peripherals[f"GPIO{bank}"].find("registers/register")
                 self.assertEqual(int(reg.findtext("fields/field/bitWidth")), width)
+
+    def test_reject_incompatible_derivation(self):
+        with tempfile.TemporaryDirectory() as work:
+            source = Path(work) / "test.rdl"
+            properties = Path(__file__).resolve().parents[1] / "rdl/properties.rdl"
+            source.write_text(f'`include "{properties}"\n' + '''addrmap chip {
+                addrmap { reg { field {sw=rw;} value[7:0]; } data @ 0; } a @ 0x1000;
+                addrmap { reg { field {sw=r;} value[7:0]; } data @ 0; } b @ 0x2000;
+                b->hisi_svd_derived_from = "A";
+            };''')
+            with self.assertRaisesRegex(ValueError, "non-equivalent"):
+                export(source, Path(work) / "test.svd")
 
 
 if __name__ == "__main__":
