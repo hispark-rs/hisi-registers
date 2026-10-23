@@ -130,6 +130,15 @@ It verifies the non-PRO instance layout, FIFO command aliases and clock gates,
 and records contradictory clear helpers instead of guessing selective-clear bits.
 See the WS53 source matrix for remaining timing/ownership limitations.
 
+The companion DMA source oracle executes original configuration, public master-read,
+ISR and failure paths with explicit DMA/semaphore/HAL mocks:
+`uv run --script scripts/check_ws53_i2c_dma_contract.py --sdk /path/to/fbb_ws53`.
+It records byte data versus halfword read commands, distinct TX/RX protection,
+unbounded waits and incomplete error cleanup. The layout oracle also executes
+actual DMA DATA lookup, threshold/enable helpers and master prepare/restore.
+Neither oracle proves peripheral handshake timing, burst tails or silicon support;
+the pinned application configuration disables I2C DMA.
+
 WS53 temperature polling source oracle (host stubs, no hardware):
 `uv run --script scripts/check_ws53_tsensor_contract.py --sdk /path/to/fbb_ws53`.
 It checks the selected application port, six SVD register/access contracts, the

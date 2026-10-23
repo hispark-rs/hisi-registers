@@ -1177,3 +1177,53 @@ Reference `ws53_liteos_app` disables SPI. Full duplex, single-line same-width
 receive-only clock generation, native CS, bursts/ACK, physical master/protection,
 cache/clock/XIP/control-core ownership and bus drain remain unverified.
 Machine-readable hashes and results: `ws53-spi-dma-source-contract.json`.
+
+## I2C MDMA request and command contract (2026-10-23)
+
+`scripts/check_ws53_i2c_dma_contract.py` compiles original pinned port selectors,
+driver configuration, ISR, public master-read and internal write sequences over
+host RAM.60 configurations cover two ports, TX bytes/RX bytes/fixed read commands
+and ten count boundaries;38 driver sequences cover lengths1/3/4/5/17 and injected
+configuration/start/wait/callback/final-command failures. DMA and semaphore
+operations, final commands and HAL dispatch are explicit mocks; no bytes cross a
+bus. Additional checks cover zero-length public-read rejection, stale callback
+channel records and the shared success flag. Reference `ws53_liteos_app` disables
+DMA and slave mode; this is dormant-source evidence, not a shipped-firmware test.
+
+I2C0 DATA0x5208301c uses requests0/1; I2C1 DATA0x5208401c uses2/3. Data TX and RX
+are8-bit with incrementing memory; read generation repeats a static16-bit0x100
+command from a fixed source. Both use burst encoding1 (four beats). TX has
+protection1 (PRIVILEGED), RX has2 (BUFFERABLE); flow1/2 and fixed peripheral DATA.
+The last command/data element is emitted by the CPU with STOP, after preceding
+TX DMA completion. DMA completion alone therefore cannot imply wire completion.
+
+`check_ws53_i2c_contract.py` separately executes the actual DATA-address provider,
+DMA enable/threshold setters and eight master prepare/restore sequences using
+original C structs in host RAM, plus two invalid-address non-mutation checks.
+TX enable is bit1, RX bit0; preparation writes TX threshold4 and RX threshold3.
+Original register comments specify TX count <= threshold, RX count >= threshold+1.
+Thus a remaining RX tail below four entries cannot assert this **threshold-based**
+request by itself. Whether separate single/last request signaling handles tails
+is not established by these sources; do not silently invent such signaling or
+declare physical transfers of all lengths supported. Model and HAL need an
+explicit burst/short-tail policy with finite completion and failure tests.
+
+Executed source hazards to avoid in Rust:
+
+- Length truncates to16 bits;65536 becomes0, while4096 exceeds the MDMA12-bit
+  counter. Public master-read rejects0 before subtracting1; no zero-length
+  underflow is claimed for that public path.
+- DATA lookup errors are ignored. Early allocation/start/wait failures retain
+  peripheral DMA requests and can leave the already-started peer channel active.
+- The wait calls `osal_sem_down`, with no timeout. Injected wait errors in this
+  oracle are **not** proof that a real semaphore wait returns in bounded time.
+- Master-read ignores `trans_succ` and the last READ-command HAL return. In the
+  explicit callback schedule it returns success even for DMA error callbacks.
+  An actual missing final command may instead prevent RX completion indefinitely.
+- Read success retains both software channel records. One ISR flag and semaphore
+  serve both channels; an error does not clear an earlier success. A later callback
+  on the recorded channel can wake the old bus, as exercised by the oracle.
+
+No new RDL/PAC layout is required for these already-described slots. DMA lanes,
+HPROT semantics, burst handshake, cache/coherency, cross-core ownership and safe
+physical drain remain unverified. Evidence: `ws53-i2c-dma-source-contract.json`.
