@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-24",
+  "probe_serial": "23121302",
+  "uart_serial": "5CB7019921",
+  "flash_written": false,
+  "source_commit": "56cbd054c26ebad6c60e1805040c578edbdee37a",
+  "pac_commit": "339f161d5be7b765f42290e5b6360aa562463dac",
+  "qemu_commit": "c5da190748f70a3ff47bd67eb36db8771bbc2f18",
+  "cases": [
+    {
+      "name": "mdma16-fixed-hil-01",
+      "elf_sha256": "536b4eb92cf56477743d43b38b3d8f8de4baa2d1952e5c62bf140ed51bc19cc0",
+      "width_bytes": 2,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma16-fixed-hil-02",
+      "elf_sha256": "536b4eb92cf56477743d43b38b3d8f8de4baa2d1952e5c62bf140ed51bc19cc0",
+      "width_bytes": 2,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma16-fixed-hil-03",
+      "elf_sha256": "536b4eb92cf56477743d43b38b3d8f8de4baa2d1952e5c62bf140ed51bc19cc0",
+      "width_bytes": 2,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma32-fixed-hil-01",
+      "elf_sha256": "1c7239b323baebc2e3471cb6798028beb357c25b0062b83f01d26c50633a8d65",
+      "width_bytes": 4,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma32-fixed-hil-02",
+      "elf_sha256": "1c7239b323baebc2e3471cb6798028beb357c25b0062b83f01d26c50633a8d65",
+      "width_bytes": 4,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma32-fixed-hil-03",
+      "elf_sha256": "1c7239b323baebc2e3471cb6798028beb357c25b0062b83f01d26c50633a8d65",
+      "width_bytes": 4,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma8-fixed-hil-01",
+      "elf_sha256": "5e936ae365d82e29cd5b32e36acc50152a871dc70cb067aa8d5a6efb87ffc065",
+      "width_bytes": 1,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma8-fixed-hil-02",
+      "elf_sha256": "5e936ae365d82e29cd5b32e36acc50152a871dc70cb067aa8d5a6efb87ffc065",
+      "width_bytes": 1,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma8-fixed-hil-03",
+      "elf_sha256": "5e936ae365d82e29cd5b32e36acc50152a871dc70cb067aa8d5a6efb87ffc065",
+      "width_bytes": 1,
+      "channels": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "elements_per_channel": 17,
+      "passed": true,
+      "source_destination_guards_checked_twice": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    }
+  ],
+  "swdbefore_correct": 600,
+  "swdafter_correct": 600,
+  "hal_host_tests": 252,
+  "pac_layout_tests": 27,
+  "observations": [
+    "Channels0..3 copied17 elements with incrementing source/destination; all three equal widths repeated three times.",
+    "Idle transfer_size is status0 rather than the programmed length. Completed addresses point to the last transferred element.",
+    "Both full source and destination including guards checked over AP0 twice after halt; same frozen ELF QEMU output identical.",
+    "Each run verified noncacheable/bufferable DTCM via PMP/MEMATTRL and retained buffers until whole-board reset."
+  ],
+  "limits": [
+    "Counts1/4095 and interrupted transfer behavior are model/host tested, not physically qualified here.",
+    "Slots4..7 read0 on this board; reason and revision coverage unknown. SDK eight-slot profile retained separately.",
+    "No bus drain, safe buffer handback, cache maintenance, peripheral handshake, DMA IRQ, async or SDMA hardware qualification.",
+    "Control core held in reset during RAM experiment. Production shared-resource handoff remains unverified.",
+    "No Flash/eFuse/security writes. Original firmware recovered through whole-board reset and AT after each run."
+  ],
+  "regression": {
+    "qemu_observed_cases": 36,
+    "legacy_qtests": 11,
+    "feature_matrix_passed": true,
+    "ci_remote_run": false,
+    "sdk_profile_rust_scenarios": 24
+  },
+  "evidence_location": "hisi-riscv-rs/docs/plan/evidence/ws53-mdma-fixed-hil-2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e"
+}

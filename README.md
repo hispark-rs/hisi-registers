@@ -194,12 +194,22 @@ Exact synchronization delay, physical clock source and low-power are unqualified
 The header's read-clear comment conflicts with the helper's EOI1 write; this test
 qualifies the write path only, without changing register layout/access metadata.
 
-Initial WS53 MDMA HIL **does not pass the current HAL contract**. Evidence:
+Initial WS53 MDMA HIL **failed the original HAL contract**. Evidence:
 [`evidence/ws53-mdma-initial-hil.json`](evidence/ws53-mdma-initial-hil.json).
 The SDK/ROM eight-slot layout is not proof of eight usable physical channels:
 only slots0..3 retained configuration in this board test. Their count field
 reads0 before enable. A reserved channel0 PAC diagnostic successfully copies17
 u32 elements with intact guards, but final addresses point to the last element,
-not one-past. The source/consumer semantics still need reconciliation; neither
-the eight-channel HAL nor the QEMU memory profile is physically qualified.
+not one-past. These failures are retained as pre-fix evidence.
 No buffers were returned to Rust, and no bus-drain proof is claimed.
+
+The corrected four-channel memory profile is recorded in
+[`evidence/ws53-mdma-four-channel-hil.json`](evidence/ws53-mdma-four-channel-hil.json).
+RDL/PAC descriptions distinguish programmed length from count status and record
+the observed completed addresses. HAL channels0..3 each copy17 elements using
+u8/u16/u32, with three physical repetitions per width. All nine runs pass full
+source/destination/guard checks and exact same-ELF QEMU UART comparison. The SDK
+eight-slot profile remains separate; upper-slot availability is unexplained.
+PMP/MEMATTRL are checked before takeover, buffers remain retained, and original
+firmware is recovered by whole-board reset. Bus drain, peripheral handshakes,
+DMA IRQ/async and production shared-resource handoff remain unqualified.
