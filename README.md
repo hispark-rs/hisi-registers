@@ -360,3 +360,5 @@ H0's alternate packet appears simultaneously on MGPIO17 and MGPIO8 in all three
 captures: selecting a new TX pad does not automatically release the old mux.
 The existing RDL fields need no changes. RX routing, autonomous clocks/ownership
 and the UART alternate-pad QEMU model remain unqualified; no stable API claim.
+
+WS53 TIMER LOAD 的实板读回证据见 `evidence/ws53-timer-load-hil.json`：两通道16种写入模式均读回 `written | 0xF`，并在运行/停止/到期阶段复核。仅更新WS53字段说明，不改变共享IP、写入位宽或重置值；不能据此声称低4位不参与计时或已有精确16tick量化模型。

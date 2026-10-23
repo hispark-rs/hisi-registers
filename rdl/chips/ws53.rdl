@@ -205,6 +205,10 @@ addrmap ws53 {
     timer_v150_regs #(.CHANNELS(2), .COMMON_REGS(false), .LOCAL_MASKED_STATUS(true)) timer @ 0x52002000;
     tcxo_v150_data16_regs tcxo @ 0x57000200;
     timer->hisi_reset_unverified = true;
+    // A-board CPU readback after writes: low nibble reads ones on both channels.
+    // This is not a reset value or proof of effective counting quantization.
+    timer.TIMER_LOAD_COUNT0.load_count->desc = "Full32-bit requested reload. WS53 A-board reads after writes return written_value OR 0xF; low read bits are not a retained write value. Effective sub16-tick timing and POR readback unqualified; see ws53-timer-load-hil.json";
+    timer.TIMER_LOAD_COUNT1.load_count->desc = "Full32-bit requested reload. WS53 A-board reads after writes return written_value OR 0xF; low read bits are not a retained write value. Effective sub16-tick timing and POR readback unqualified; see ws53-timer-load-hil.json";
     tcxo->hisi_reset_unverified = true;
     timer.TIMER_EOI0.eoi->desc = "Write one to acknowledge channel 0; read semantics unverified, no read API";
     timer.TIMER_EOI1.eoi->desc = "Write one to acknowledge channel 1; read semantics unverified, no read API";
