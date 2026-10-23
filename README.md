@@ -76,6 +76,14 @@ records narrowing and missing cleanup, and demonstrates that the SDK DMA flags
 do not provide a request-disable operation. Neither the mocks nor the public
 width fields establish physical DMA lane or stereo packing behavior.
 
+`uv run --script scripts/check_ws53_trng_contract.py --sdk /path/to/fbb_ws53`
+executes the pinned unified-security TRNG HAL and byte driver against explicit
+FIFO/ring/delay stubs: 24 control/read paths and 21 byte-fill cases. It checks
+readiness races, discarded comparison words, rejected output on timeout,
+partial byte fills and ring-control preservation. The bounded SDK loop counts
+polls, not microseconds; this oracle establishes neither entropy quality nor
+cross-core ownership. GCC and Clang produce identical evidence.
+
 `hisi_svd_word_view` explicitly adds a 32-bit little-endian access view of a
 16-bit RW register, retaining one RDL field source. It requires source evidence,
 unknown resets, four-byte alignment and a vacant upper halfword in the existing

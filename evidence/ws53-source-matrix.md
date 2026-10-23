@@ -428,6 +428,40 @@ service or use an explicitly verified handover. No HAL, model, hardware random
 read, statistical/cryptographic-quality test or stable API is claimed here.
 Current map: **29 peripherals, 791 register views, 1612 fields, 20 IRQs**.
 
+### Executed unified-security TRNG source contract
+
+`scripts/check_ws53_trng_contract.py` executes unchanged pinned `hal_trng.c`,
+`hal_trng_reg.h` and `drv_trng.c` with explicitly mocked FIFO accesses, ring
+control, delay, bounded copy and error-code plumbing. The selected application
+configuration is checked; FRO and the undefined CLK_OPEN path stay disabled.
+GCC and Clang agree on 24 control/read paths and 21 byte-fill cases. SVD checks
+retain destructive FIFO reads, two ready flags, 16-bit ring control and no
+invented reset/IRQ. No generated register layout changes are needed.
+
+- Init preserves the ring register's upper 15 bits and waits 200 us even if
+  already enabled. HAL deinit disables it; driver init/deinit skip duplicate
+  calls through their own software flags. No cross-core mutex is introduced.
+- Both flags must be set on two successive status reads. A ready-to-not-ready
+  change consumes no FIFO word. Once admitted, two words are read without
+  another readiness check; source alone does not establish that two are present.
+- Zero/all-ones candidates and candidates equal to their comparison are
+  rejected. The comparison can itself be zero/all-ones, and identical accepted
+  candidates in separate calls are allowed. This is not a continuous entropy
+  health test or a cryptographic quality result.
+- Exhaustion can involve one million loop iterations and two million status
+  reads/FIFO reads, with no polling delay. When candidates are rejected, the
+  caller's output contains the last rejected value even though an error is
+  returned. If readiness never passes, the output is untouched.
+- Byte reads copy native-endian words; a partial tail consumes another whole
+  accepted candidate. Zero-length/non-null returns failure; null is rejected
+  even for zero length. Later failure leaves the successful prefix in place
+  and does not modify the remaining destination, so a Rust fill API must report
+  partial progress or define an explicit rollback/zeroing contract.
+
+The original IPC source is pinned as context but not executed by this oracle.
+There is no proof of the active firmware's random-buffer protocol, handoff,
+FIFO depth, silicon timing or entropy. Evidence: `ws53-trng-source-contract.json`.
+
 ## eFuse v151 read-service subset
 
 SDK `163d9150ab94a02d09a05f623351f9facee3025e`, selected application config:

@@ -1,0 +1,31 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "src/drivers/drivers/hal/security_unified/hal_cipher/trng/hal_trng.c": "d85f5a4f9927c0ca8ba75100424cdfe84994a7843e43a52c211a4f0edf02bacd",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/trng/hal_trng_reg.h": "591c296c911adcffe1d32d537b492f9e355824caccb963cbe14b1cb3f377ef58",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/drv_trng.c": "4e6ce05261b5a81dcffcbdce38675983c28732e37c80a4b33735173bd7fadd9a",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/drivers/chips/ws53/porting/security_unified/security_unified_porting.h": "61fa30fcf837db575d04c57a66cfe814f42f31847957b977f972694f8628018c",
+    "src/drivers/chips/ws53/porting/security_unified/trng_ipc_acore_buffer.c": "554180d67e287b7728cfdeb50960e9e4c54f3b81123ff226519f9d45a6c7c87f"
+  },
+  "hal_driver_paths": 24,
+  "byte_fill_cases": 21,
+  "observations": [
+    "ring RMW preserves upper 15 bits; 200us init delay even if already enabled",
+    "both ready flags checked twice before two destructive FIFO reads; no readiness check between words",
+    "zero/all-ones/equal comparison rejected; comparison discarded",
+    "comparison itself may be zero/all-ones; same candidate in successive calls is accepted",
+    "million loop budget without delay; up to two million status reads and two million FIFO reads",
+    "HAL output can contain rejected data on failure; no write when readiness never passes",
+    "driver fills native-endian words and one extra candidate for a partial tail",
+    "zero-byte non-null fill returns failure; null rejected even for zero length",
+    "later timeout leaves written prefix and untouched suffix; no output rollback"
+  ],
+  "limitations": [
+    "FIFO readiness depth and entropy quality not proven",
+    "no IPC callback execution or ownership handoff",
+    "optional FRO and undefined CLK_OPEN branches not enabled",
+    "return-code plumbing and MMIO/delay/copy are host stubs"
+  ],
+  "hardware_accessed": false
+}
