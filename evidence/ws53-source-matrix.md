@@ -1374,3 +1374,23 @@ TCG boundary cases (1530 failed before the fix), the ROM execution audit and
 existing WS53 plus11 legacy qtests. It does not establish silicon ISA timings.
 No new MMIO register behavior, hardware reset/drain, CIS, voltage switch, interrupt
 acknowledgement semantics or host data transfer is inferred from this audit.
+
+## PWM0P pin routes and observed clock discrepancy (2026-10-23)
+
+`check_ws53_pwm_routes.py` verifies the hardware guide, DAQ configuration and
+PWM port byte-for-byte against SDK163d9150. The three documented PWM0P routes are
+MGPIO10/mode4, MGPIO21/mode1 and AGPIO2/mode2; the DAQ sample selects SDK pin47,
+mode1, channel0, group0. Result: `ws53-pwm-routes-source.json`. This adds source
+route evidence, not a new register layout or reset-value inference.
+
+A-board MIO21/SDK47/DSLogic D11 was measured in the integration repository's
+`docs/plan/evidence/ws53-pwm0-hil-2026-10-23/`. With the existing divider16
+sequence, period200 produced about100us and duty50/100/150 produced25/50/75%.
+Three subsequent runs additionally checked the PAC divider/enable/load and gate
+fields and reproduced the result. Thus the effective counter rate in this
+bounded RAM handoff is about2MHz, not the port's reported32MHz. This does not
+identify the upstream clock source or prove a general input/divider formula.
+The first failed160kHz expectation is retained, not rewritten as a passing case.
+No RDL field is changed from this observation; the existing divider field already
+states that its input/frequency relationship is unproven. QEMU's explicit timing
+profile and HAL documentation must preserve this distinction.
