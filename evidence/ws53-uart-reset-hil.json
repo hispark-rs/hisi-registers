@@ -1,0 +1,323 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "source_contract_commit": "904aed3",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "runs": [
+    {
+      "name": "uart-reset-contrast-hil-01",
+      "passed": true,
+      "recovered": true,
+      "elf_sha256": "04b5893e26cf6380c29b7c1d81e6d661590e8f0b26bbde025566450cc2a6dcbc",
+      "snapshots": [
+        [
+          168,
+          0,
+          0,
+          38,
+          55,
+          2,
+          0,
+          18,
+          0,
+          1,
+          90,
+          3332,
+          224,
+          17
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          127,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3332,
+          192,
+          1
+        ],
+        [
+          168,
+          0,
+          0,
+          38,
+          55,
+          2,
+          0,
+          18,
+          0,
+          1,
+          90,
+          3332,
+          224,
+          17
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          127,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3332,
+          192,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "uart-reset-contrast-hil-02",
+      "passed": true,
+      "recovered": true,
+      "elf_sha256": "04b5893e26cf6380c29b7c1d81e6d661590e8f0b26bbde025566450cc2a6dcbc",
+      "snapshots": [
+        [
+          168,
+          0,
+          0,
+          38,
+          55,
+          2,
+          0,
+          18,
+          0,
+          1,
+          90,
+          3332,
+          224,
+          17
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          127,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3332,
+          192,
+          1
+        ],
+        [
+          168,
+          0,
+          0,
+          38,
+          55,
+          2,
+          0,
+          18,
+          0,
+          1,
+          90,
+          3332,
+          224,
+          17
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          127,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3332,
+          192,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "uart-reset-contrast-hil-03",
+      "passed": true,
+      "recovered": true,
+      "elf_sha256": "04b5893e26cf6380c29b7c1d81e6d661590e8f0b26bbde025566450cc2a6dcbc",
+      "snapshots": [
+        [
+          168,
+          0,
+          0,
+          38,
+          55,
+          2,
+          0,
+          18,
+          0,
+          1,
+          90,
+          3332,
+          224,
+          17
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          127,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3332,
+          192,
+          1
+        ],
+        [
+          168,
+          0,
+          0,
+          38,
+          55,
+          2,
+          0,
+          18,
+          0,
+          1,
+          90,
+          3332,
+          224,
+          17
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          127,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3332,
+          192,
+          1
+        ]
+      ]
+    }
+  ],
+  "swd": {
+    "swd-before-uart-reset": {
+      "passed": true,
+      "correct": 600
+    },
+    "swd-after-uart-reset": {
+      "passed": true,
+      "correct": 600
+    }
+  },
+  "observed_h1_h0_profile": {
+    "UART_CTL": {
+      "before": 168,
+      "after": 0
+    },
+    "DIV_L": {
+      "before": 0,
+      "after": 0
+    },
+    "DIV_H": {
+      "before": 0,
+      "after": 0
+    },
+    "DIV_FRA": {
+      "before": 38,
+      "after": 0
+    },
+    "BAUD_CTL": {
+      "before": 55,
+      "after": 127
+    },
+    "MODEM_CTL": {
+      "before": 2,
+      "after": 0
+    },
+    "INTR_EN": {
+      "before": 0,
+      "after": 0
+    },
+    "FIFO_STATUS": {
+      "before": 18,
+      "after": 2
+    },
+    "TX_FIFO_CNT": {
+      "before": 0,
+      "after": 0
+    },
+    "RX_FIFO_CNT": {
+      "before": 1,
+      "after": 0
+    },
+    "UART_GP_REG": {
+      "before": 90,
+      "after": 0
+    },
+    "UART_PARAMETER": {
+      "before": 3332,
+      "after": 3332
+    },
+    "LINE_STATUS": {
+      "before": 224,
+      "after": 192
+    },
+    "INTR_ID": {
+      "before": 17,
+      "after": 1
+    }
+  },
+  "reset_sequence": "PAC M_CRG.UART_SOFT_RESET, halfword RMW clear then set selected active-low bit: H1 bit1 / H0 bit0; no UART accesses while asserted; 10us release observation margin",
+  "divider_read_condition": "Set DIV_EN then wait10us. With RX FIFO populated DIV_L still reads0; do not infer low-latch clearing or frequency from these reads.",
+  "qemu": {
+    "implemented": false,
+    "reason": "Shared H1/H0 reset is not mapped to UART devices; hardware-only runner rejects QEMU for this mode",
+    "next": "Add separate soft-reset behavior, retaining configured-console machine boot profile"
+  },
+  "checks": {
+    "clippy": true,
+    "readback_faults": true,
+    "oracle_bad_inputs": 36,
+    "python_policy": true,
+    "actionlint": true
+  },
+  "source_sha256": {
+    "examples/ws53/ram_smoke/src/uart_reset.rs": "e16ede40a8fc3204d9739a577e5a573db64184a1399ee8aabc5f63c72fef356e",
+    "examples/ws53/ram_smoke/src/uart_line.rs": "a8418002f0c651f4794f442b1c309cbbb245d359b63385aa85d859d3da0cf728",
+    "hil/ws53-ram-smoke.py": "5287ceddc52d9a98684f767d84865700fc1b0987a82cabd5dceb12814ec4cdcb",
+    "scripts/test-ws53-uart-host.py": "96991e2293e5bd9f4502063e20ea3dc22d5401aa44008526c87fe88816c57184",
+    "scripts/test-ws53-uart-line-samples.py": "8de682b773f54ea59493f83a1d8a41b5bfa2a55a4ae496f4d7c44e7907546391"
+  },
+  "limits": [
+    "Observed reset profile only, not universal power-on defaults",
+    "Only H1/H0 tested; no L0 reset, minimum pulse, held-reset access or IRQ/DMA in-flight qualification",
+    "Neighbor-UART configuration isolation has not been separately measured",
+    "DIV_L/H reset clearing unproven; low latch reads0 while data is queued even before reset",
+    "Inherited clocks/control core reset, residual SDMA quiescence and production handoff remain unqualified",
+    "No HAL reset API or QEMU reset model delivered by this observation fixture"
+  ]
+}

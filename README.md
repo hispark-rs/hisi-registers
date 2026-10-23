@@ -315,3 +315,14 @@ before transmit completion. QEMU passes the same markers using its explicit
 100us serializer hypothesis. UART0/1 stay in internal loopback until board reset;
 physical pads, actual baud timing, clock provisioning, DMA, real receive faults
 and production ownership remain unqualified. No RDL/PAC facts changed.
+
+`evidence/ws53-uart-reset-hil.json` records three identical H1/H0 soft-reset
+observations under the inherited A-board clock profile. A queued loopback byte,
+nondefault frame/sampling configuration and scratch value are compared before
+and after the SDK halfword clear/set sequence; both instances reconfigure and
+receive successfully afterward. BAUD_CTL changes0x37→0x7f, frame/fraction/modem/
+scratch clear, and the RX queue empties with FIFO enable cleared. This is not a
+universal power-on reset declaration: DIV_L reads0 even before reset with RX
+queued, DIV_H was already0, and L0/held-reset/neighbor isolation/IRQ/DMA remain
+unqualified. No PAC reset defaults are inferred. The new observation fixture
+explicitly refuses QEMU until a separate shared soft-reset model is implemented.
