@@ -1,0 +1,223 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "cases": [
+    {
+      "name": "rtc-hil-01",
+      "elf_sha256": "34719dccfc5c9e5e80215e9b17c08a8c67a99c2d637a514d2aef18afdc874d48",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 000003c5\r\nWS53 RTC EVENTS 0000000a\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 000003c5\r\nWS53 RTC EVENTS 0000000a\r\nWS53 FAIL rtc observations\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 000003d7\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 000003d7\r\nWS53 RTC EVENTS 00000004\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "passed": false,
+      "uart_parity": false,
+      "uart_raw_equal": false,
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "rtc": {
+        "passed": false,
+        "ticks_over_30ms": [],
+        "accepted_ticks": [
+          950,
+          1020
+        ],
+        "reference": "TIMER1 32MHz"
+      },
+      "qemu_rtc": {
+        "passed": true,
+        "ticks_over_30ms": [
+          983,
+          983
+        ],
+        "accepted_ticks": [
+          950,
+          1020
+        ],
+        "reference": "TIMER1 32MHz"
+      }
+    },
+    {
+      "name": "rtc-status-hil-01",
+      "elf_sha256": "5c402deba7801f9eef8a6fa25f1abc6f33549724d7a9726d82933c67e3083580",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 000003c5\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000800000000\r\nWS53 RTC EVENTS 0000000a\r\nWS53 RTC ACK 0001000100010001000100010001000100010001000100010001000100010001\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 000003c5\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000800000000\r\nWS53 RTC EVENTS 0000000a\r\nWS53 RTC ACK 0001000100010001000100010001000100010001000100010001000100010001\r\nWS53 FAIL rtc observations\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 000003d7\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000000010000000100000001000000000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 000003d7\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000000010000000100000001000000000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "passed": false,
+      "uart_parity": false,
+      "uart_raw_equal": false,
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "rtc": {
+        "passed": false,
+        "ticks_over_30ms": [],
+        "accepted_ticks": [
+          950,
+          1020
+        ],
+        "reference": "TIMER1 32MHz"
+      },
+      "qemu_rtc": {
+        "passed": false,
+        "ticks_over_30ms": [],
+        "accepted_ticks": [
+          950,
+          1020
+        ],
+        "reference": "TIMER1 32MHz"
+      }
+    },
+    {
+      "name": "rtc-deferred-hil-01",
+      "elf_sha256": "3584fdafb47e0d2e27669fd01789633a16cf7c4b2e38af3b327a98689f84a4d5",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f0a\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f0a\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f5c\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000000010000000100000001000000000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f5c\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000000010000000100000001000000000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "passed": false,
+      "uart_parity": false,
+      "uart_raw_equal": false,
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "rtc": {
+        "passed": false,
+        "ticks_over_30ms": [],
+        "accepted_ticks": [
+          950,
+          1020
+        ],
+        "reference": "TIMER1 32MHz"
+      },
+      "qemu_rtc": {
+        "passed": false,
+        "ticks_over_30ms": [],
+        "accepted_ticks": [
+          950,
+          1020
+        ],
+        "reference": "TIMER1 32MHz"
+      }
+    },
+    {
+      "name": "rtc-fixed-hil-01",
+      "elf_sha256": "3d41b3bee130619281c66738f44f5c3234c6075a3c2e085aa98530ab3c70fc16",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f0b\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f0b\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f00\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f00\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "passed": true,
+      "uart_parity": true,
+      "uart_raw_equal": false,
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "rtc": {
+        "passed": true,
+        "ticks_over_120ms": [
+          3851,
+          3851
+        ],
+        "accepted_ticks": [
+          3800,
+          3900
+        ],
+        "reference": "TIMER1 32MHz"
+      },
+      "qemu_rtc": {
+        "passed": true,
+        "ticks_over_120ms": [
+          3840,
+          3840
+        ],
+        "accepted_ticks": [
+          3800,
+          3900
+        ],
+        "reference": "TIMER1 32MHz"
+      }
+    },
+    {
+      "name": "rtc-fixed-hil-02",
+      "elf_sha256": "3d41b3bee130619281c66738f44f5c3234c6075a3c2e085aa98530ab3c70fc16",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f0b\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f0b\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f00\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f00\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "passed": true,
+      "uart_parity": true,
+      "uart_raw_equal": false,
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "rtc": {
+        "passed": true,
+        "ticks_over_120ms": [
+          3851,
+          3851
+        ],
+        "accepted_ticks": [
+          3800,
+          3900
+        ],
+        "reference": "TIMER1 32MHz"
+      },
+      "qemu_rtc": {
+        "passed": true,
+        "ticks_over_120ms": [
+          3840,
+          3840
+        ],
+        "accepted_ticks": [
+          3800,
+          3900
+        ],
+        "reference": "TIMER1 32MHz"
+      }
+    },
+    {
+      "name": "rtc-fixed-hil-03",
+      "elf_sha256": "3d41b3bee130619281c66738f44f5c3234c6075a3c2e085aa98530ab3c70fc16",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f0a\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f0a\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 RTC BEGIN 00000000\r\nWS53 RTC SAMPLE 00000f00\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 RTC BEGIN 00000001\r\nWS53 RTC SAMPLE 00000f00\r\nWS53 RTC MASK 0000000000000001\r\nWS53 RTC UNMASK 0000000100000000\r\nWS53 RTC EVENTS 00000004\r\nWS53 RTC ACK 0001000100010001000100010001000100000000000000000000000000000000\r\nWS53 PASS rtc channels=2 irq=49,50 mask=1 periodic=1 rearm=1 stop=1\r\n",
+      "passed": true,
+      "uart_parity": true,
+      "uart_raw_equal": false,
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "rtc": {
+        "passed": true,
+        "ticks_over_120ms": [
+          3850,
+          3850
+        ],
+        "accepted_ticks": [
+          3800,
+          3900
+        ],
+        "reference": "TIMER1 32MHz"
+      },
+      "qemu_rtc": {
+        "passed": true,
+        "ticks_over_120ms": [
+          3840,
+          3840
+        ],
+        "accepted_ticks": [
+          3800,
+          3900
+        ],
+        "reference": "TIMER1 32MHz"
+      }
+    }
+  ],
+  "probe_serial": "23121302",
+  "uart_serial": "5CB7019921",
+  "flash_written": false,
+  "observations": [
+    "Both application RTCs mask IRQ49/50 while retaining RAW_INTR1.",
+    "Posted EOI leaves RAW_INTR1 immediately before/after ISR write; subsequent observation finds0. Immediate return caused repeated ISR entry up to8 safety cap.",
+    "ISR disables local delivery then posts EOI. Bounded main-context32us polling re-enables only after raw0 and local pending clear. Each channel delivers4 expected events: masked one-shot, two periodic, rearmed one-shot.",
+    "120ms against TIMER1 nominal32MHz gives approximately3850 ticks versus QEMU32000Hz3840. Nominal32k profile is consistent,32768Hz is outside accepted3800..3900 interval."
+  ],
+  "limits": [
+    "32us model ACK delay is an explicit regression assumption, not a measured synchronization latency.",
+    "No precise frequency calibration, external crystal/source identification, stopped-clock EOI or fast expiry/ACK collision proof.",
+    "Main service loop has finite observation budget; this example does not guarantee lossless high-rate notification.",
+    "Control core held reset; production handoff, low-power wake and shared common RTC bank remain unqualified.",
+    "SDK source helper writes EOI1 despite a header read-clear comment; no EOI read behavior tested."
+  ]
+}

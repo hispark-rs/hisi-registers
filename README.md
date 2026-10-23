@@ -181,3 +181,15 @@ status before re-enabling. Three identical-ELF runs recover valid8/16 pulses.
 The count-error case also sets the configuration-load flag. Exact reassertion
 latency, shadow-write-only recovery and invalid output waveforms are unqualified.
 This adds behavioral evidence; register layout/access definitions are unchanged.
+
+WS53 RTC0/1 RAM evidence is in
+[`evidence/ws53-rtc-hil.json`](evidence/ws53-rtc-hil.json). Both instances retain
+raw status under active-high masking. EOI write completion is asynchronous;
+immediate ISR return can repeatedly enter the same source. Suspend local delivery,
+post EOI, observe raw deassertion in bounded main-context work, then clear local
+pending and restore delivery. Three same-ELF runs qualify masked one-shot,
+periodic and rearmed one-shot notifications. Counter observations support an
+approximately32kHz A-board profile; the source32768Hz remains a distinct profile.
+Exact synchronization delay, physical clock source and low-power are unqualified.
+The header's read-clear comment conflicts with the helper's EOI1 write; this test
+qualifies the write path only, without changing register layout/access metadata.
