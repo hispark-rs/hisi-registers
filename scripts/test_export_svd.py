@@ -73,6 +73,14 @@ addrmap chip {{ addrmap {{
             dest = Path(work)/'ws53.svd'
             export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
             tree = ET.parse(dest)
+            width_fields = tree.findall("./peripherals/peripheral[name='I2S']/registers/register[name='DATA_WIDTH_SET']/fields/field")
+            self.assertEqual(len(width_fields), 2)
+            for field in width_fields:
+                self.assertEqual({v.findtext('name'): int(v.findtext('value'), 0)
+                                  for v in field.findall('enumeratedValues/enumeratedValue')},
+                                 {'Bits16': 1, 'Bits18': 2, 'Bits20': 3, 'Bits24': 4, 'Bits32': 5})
+                self.assertEqual(field.findtext('writeConstraint/range/minimum'), '1')
+                self.assertEqual(field.findtext('writeConstraint/range/maximum'), '5')
             clock = tree.find("./peripherals/peripheral[name='M_CRG']")
             half = clock.find("registers/register[name='M_CLKEN0']")
             word = clock.find("registers/register[name='M_CLKEN0_WORD']")

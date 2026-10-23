@@ -335,6 +335,7 @@
     }
   },
   "additional_clock_fields": 13,
+  "width_encodings_checked_against_original_c_enum": true,
   "clock_rmw_original_macros_preserve_upper_and_neighbor_bits": true,
   "divider_cases": [
     {
@@ -466,5 +467,5 @@
     "src/drivers/chips/ws53/porting/pwm/pwm_porting.c": "3007c81e5c56820139928d5d30622f65b4317ae8161b29ee99bd926a278383a4",
     "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f"
   },
-  "svd_sha256": "0900337a11c462ed78ccc61bff9f8d93ce0867073fe7cf9e97608d46734d73df"
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157"
 }

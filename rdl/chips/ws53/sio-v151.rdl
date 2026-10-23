@@ -1,6 +1,13 @@
 // fbb_ws53 163d9150: hal/sio/hal_sio_v151 registers, operations and HAL.
 // The SDK base points at VERSION (+0x3c), not the start of this block.
 // Source-level layout/commands only: reset values and silicon timing unknown.
+enum ws53_i2s_data_width {
+    Bits16 = 1 { desc="16-bit samples"; };
+    Bits18 = 2 { desc="18-bit samples"; };
+    Bits20 = 3 { desc="20-bit samples"; };
+    Bits24 = 4 { desc="24-bit samples"; };
+    Bits32 = 5 { desc="32-bit samples"; };
+};
 addrmap ws53_sio_v151_regs {
     hisi_evidence = "SDK-source 163d9150 hal_sio_v151_regs_def.h and hal_sio_v151.c; application I2S0; shared audio clocks and runtime ownership unverified";
     default regwidth = 32;
@@ -78,8 +85,8 @@ addrmap ws53_sio_v151_regs {
         field { sw=r; hw=w; } right[15:8];
     } TX_STA @ 0x6c;
     reg {
-        field { sw=rw; hw=r; desc="0/1/2/3/4 encode 16/18/20/24/32 bits"; } tx_mode[2:0];
-        field { sw=rw; hw=r; desc="0/1/2/3/4 encode 16/18/20/24/32 bits"; } rx_mode[5:3];
+        field { sw=rw; hw=r; encode=ws53_i2s_data_width; hisi_write_min=1; hisi_write_max=5; desc="1/2/3/4/5 encode 16/18/20/24/32 bits; zero reserved"; } tx_mode[2:0];
+        field { sw=rw; hw=r; encode=ws53_i2s_data_width; hisi_write_min=1; hisi_write_max=5; desc="1/2/3/4/5 encode 16/18/20/24/32 bits; zero reserved"; } rx_mode[5:3];
     } DATA_WIDTH_SET @ 0x78;
     reg {
         field { sw=rw; hw=r; desc="0 left, 1 right"; } read_right[0:0];

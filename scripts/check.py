@@ -71,7 +71,7 @@ EXPECTED = {
         "cluster_arrays": 1,
         "registers_expanded": 945,
         "fields_expanded": 1994,
-        "write_constraints": 18,
+        "write_constraints": 20,
     },
 }
 

@@ -1015,7 +1015,9 @@ The legacy imported family RDL is substantially incorrect for this SDK:
 - MODE bits0/1 select I2S/PCM and PCM timing; channels are bits5:4 (2/4/8/16),
   edge bit6 (0 falling, 1 rising), master bit7. SDK configure selects rising.
 - CT_SET/CT_CLR use bits8..15; TX/RX enable bits12/13 and reset_n bit15.
-- DATA_WIDTH_SET uses TX bits2:0 and RX bits5:3, with 0..4 =16/18/20/24/32 bits.
+- DATA_WIDTH_SET uses TX bits2:0 and RX bits5:3, with 1..5 =16/18/20/24/32 bits;
+  zero is reserved. The original C enum is compiled against both SVD enums and
+  write constraints, correcting an earlier off-by-one prose description.
 - Interrupt status, clear and mask contain six sources: RX/TX thresholds,
   independent left/right RX overflow and independent left/right TX underflow.
   SDK masks0x3d/0x3e enable TX/RX respectively (one masks).

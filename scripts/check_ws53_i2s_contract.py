@@ -80,6 +80,18 @@ def main():
             '#include ' + json.dumps(str(sdk / (PORT + 'sio/sio_porting.c')))]
     code += [f'_Static_assert(I2S_BUS_0_BASE_ADDR == {int(peri.findtext("baseAddress"), 0)} + 0x3c, "base");',
              f'_Static_assert(I2S_IRQN == {peri.findtext("interrupt/value")}, "IRQ");']
+    width_enum = re.search(r'typedef enum hal_sio_data_width \{.*?\} hal_sio_data_width_t;',
+                           inputs[HAL + 'hal_sio.h'].decode(), re.S).group()
+    code += [width_enum, '_Static_assert(RESERVED == 0, "reserved data width");']
+    variants = dict(zip(['Bits16', 'Bits18', 'Bits20', 'Bits24', 'Bits32'],
+                        ['SIXTEEN_BIT', 'EIGHTEEN_BIT', 'TWENTY_BIT', 'TWENTY_FOUR_BIT', 'THIRTY_TWO_BIT']))
+    for field in peri.findall("registers/register[name='DATA_WIDTH_SET']/fields/field"):
+        values = field.findall('enumeratedValues/enumeratedValue')
+        require({v.findtext('name') for v in values} == set(variants), 'width enum coverage')
+        for value in values:
+            code += [f'_Static_assert({variants[value.findtext("name")]} == {int(value.findtext("value"),0)}, "width encoding");']
+        require(field.findtext('writeConstraint/range/minimum') == '1' and
+                field.findtext('writeConstraint/range/maximum') == '5', 'reserved width must be excluded')
     field_checks, report = [], {}
     rx = {'LEFT_RX', 'RIGHT_RX', 'I2S_DUAL_RX_CHN'}
     tx = {'LEFT_TX', 'RIGHT_TX', 'I2S_DUAL_TX_CHN'}
@@ -215,6 +227,7 @@ static volatile unsigned *clock_ref(unsigned addr) {
     print(json.dumps({'sdk_commit': PIN, 'registers': len(regs),
                       'field_count': sum(map(len, report.values())), 'fields': report,
                       'additional_clock_fields': 13,
+                      'width_encodings_checked_against_original_c_enum': True,
                       'clock_rmw_original_macros_preserve_upper_and_neighbor_bits': True,
                       'divider_cases': [dict(zip(['width', 'channels', 'divider'], map(int, r.split()))) for r in rows.splitlines()],
                       'clock_writes': ['32-bit 0x57008600 bit0 set', '32-bit 0x52000040 bit2 set',
