@@ -251,3 +251,12 @@ the original firmware. The same ELF passes an exact seeded QEMU-data oracle;
 physical random bytes need not match. No silicon ring/FRO/clock writes were
 performed. FIFO depth, IPC ownership, physical failure detection, entropy quality
 and cryptographic RNG suitability remain unqualified. No register layout changed.
+
+WS53 watchdog command/snapshot observations are recorded in
+[`evidence/ws53-wdt-command-hil.json`](evidence/ws53-wdt-command-hil.json).
+Immediate snapshots after control commands can time out or report the previous
+configuration's count. Waiting200us after start/feed/stop in a diagnostic fixture
+passes three bounded RAM runs, including count deltas, feed, stopped snapshots
+and restart. This does not establish a minimum delay or general completion
+protocol; the HAL and immediate QEMU profile remain mismatched. No NMI/expiry
+or reset was deliberately triggered. No register layout/access direction changed.
