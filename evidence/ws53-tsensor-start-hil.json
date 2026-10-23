@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "initial_case": {
+    "name": "tsensor-restart-hil-01",
+    "elf_sha256": "0465827eda1ddce10ec11babd582a7b59c996cc581307c4885c41e1906d9a992",
+    "hardware_snapshots": [
+      [
+        65972,
+        436,
+        436,
+        436,
+        65973
+      ],
+      [
+        65973,
+        437,
+        437,
+        437,
+        65972
+      ]
+    ],
+    "qemu_snapshots": [
+      [
+        66036,
+        0,
+        0,
+        0,
+        66036
+      ],
+      [
+        66036,
+        0,
+        0,
+        0,
+        66036
+      ]
+    ],
+    "recovered": true
+  },
+  "observations": [
+    "START1 on an already READY sensor clears READY but retains CODE at immediate,32us and500us observations; READY is back by10ms. Two repetitions observed.",
+    "CODE while READY0 is stale and not valid sample data; HAL already returns None in this state.",
+    "The original checker asserted READY sequence only. Raw snapshots expose model CODE0 versus retained hardware code; strengthened regression follows."
+  ],
+  "limits": [
+    "START self-clear/readback, stop, status writes and exact conversion timing remain unqualified.",
+    "Source has both32kHz report-period comment and temperature1MHz gate names; this does not establish physical sampling clock frequency."
+  ]
+}

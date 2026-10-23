@@ -2,9 +2,9 @@
 // Application startup calls init; runtime exclusivity is NOT established.
 // Only the polling implementation is evidenced, not the generic header's IRQs.
 addrmap ws53_tsensor_regs {
-    hisi_evidence = "SDK-source 163d9150 WS53 application tsensor port; shared thermal use/ownership and silicon behavior unverified";
+    hisi_evidence = "SDK-source 163d9150 WS53 application tsensor port; bounded A-board HIL confirms initialization/read/reattach. START1 after READY clears READY but retains the previous CODE field at immediate/32us/500us observations; CODE is not a valid sample while READY=0. See evidence/ws53-tsensor-start-hil.json. Production thermal ownership, precision and exact timing remain unqualified";
     reg {
-        name = "Command view: SDK writes 1 to start; stop and self-clear behavior unspecified";
+        name = "Command view: SDK writes 1 to start. A-board repeated START1 clears READY without clearing previous CODE; stop and command self-clear behavior unspecified";
         field { sw=w; hw=r; } value[31:0];
     } START @ 0x0;
     reg {
@@ -14,7 +14,9 @@ addrmap ws53_tsensor_regs {
     reg {
         name = "Polling status subset. Bit 0 named auto_clr has no evidenced write/clear semantics and is omitted";
         field { sw=r; hw=w; } ready[1:1];
-        field { sw=r; hw=w; } code[11:2];
+        field { sw=r; hw=w;
+            desc = "Ten-bit result valid only with READY=1. A-board START1 observation retains the prior code while READY=0; that stale field is not a completed sample";
+        } code[11:2];
     } AUTO_STATUS @ 0x8;
     reg {
         name = "Opaque write view: SDK writes 2 for 0.256 ms per sample; readback unspecified";
