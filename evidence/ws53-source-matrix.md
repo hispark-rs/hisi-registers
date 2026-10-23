@@ -1119,3 +1119,28 @@ interrupt mask polarity, ACTIVE timing, halt/disable drain, cache attributes or
 shared clock handoff. Generic LiteOS cache headers are recorded as source inputs,
 not treated as a physical cache-maintenance acceptance result. No board accessed.
 Evidence: `evidence/ws53-mdma-source-contract.json`.
+
+## UART MDMA request contract (2026-10-23)
+
+`scripts/check_ws53_uart_dma_contract.py` compiles the pinned original UART port
+request selectors and TX/RX configuration functions over host RAM. 126 original
+configuration executions cover three ports, both directions, three widths and
+seven count boundaries; the DATA-address provider is an explicit host stub, not
+hardware. Actual UART register offsets/types remain from the original header.
+UART0 uses requests10/11, UART1 uses8/9; UART2 returns the invalid sentinel even
+though the port header also defines misleading UART_L aliases. DMA-owned flow
+is1/2, peripheral DATA stays fixed, memory increments. Byte widths are explicitly
+used by the SDK raw-RX path; wider CPU APB access does not prove DMA byte lanes.
+
+Two conflicts must remain visible: `DMA_EXTRA` in UART_PARAMETER+0x60 bit11 is
+RO in the original header and SVD, but `hal_uart_set_dmaen()` writes it. The host
+executes18 original setter cases and verifies the write/mask, **not silicon
+writability**. Also UART's local `BUFFERABLE` constant is1, while DMA HAL's
+`HAL_DMA_PROTECTION_CONTROL_BUFFERABLE` enum is2. Do not silently equate them.
+Original length helpers accept4096 despite the MDMA12-bit counter, and truncate
+65536 elements to0 before passing them onward. The Rust API must reject these.
+`ws53_liteos_app` disables UART DMA, so compiled dormant code is not operational
+product evidence. The existing RDL/PAC RO capability and unknown reset policy
+are unchanged. Request thresholds/ack, HPROT, clock/cache/ownership and physical
+bus widths remain unverified; any simulation must opt into explicit assumptions.
+Machine-readable input hashes and outcomes: `ws53-uart-dma-source-contract.json`.

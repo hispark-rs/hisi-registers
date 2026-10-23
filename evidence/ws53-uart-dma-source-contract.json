@@ -1,0 +1,48 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "original_config_executions": 126,
+  "uart_data_offset": 4,
+  "routes": [
+    {
+      "uart": 0,
+      "tx": 10,
+      "rx": 11
+    },
+    {
+      "uart": 1,
+      "tx": 8,
+      "rx": 9
+    },
+    {
+      "uart": 2,
+      "tx": null,
+      "rx": null
+    }
+  ],
+  "source_conflicts": [
+    "DMA_EXTRA header and SVD are RO; original setter writes bit11 of UART_PARAMETER",
+    "UART BUFFERABLE constant=1, DMA HAL BUFFERABLE enum=2; do not silently equate"
+  ],
+  "truncation": "original config retains4096 (exceeds12-bit MDMA count);65536 becomes0 before MDMA",
+  "product_uart_dma_enabled": false,
+  "hardware_verified": false,
+  "unknown": [
+    "DMA_EXTRA physical capability and write behavior",
+    "request level/threshold/ack protocol",
+    "peripheral bus access width/HPROT behavior",
+    "actual cache, clock and ownership"
+  ],
+  "input_sha256": {
+    "src/drivers/chips/ws53/porting/uart/uart_porting.c": "f07aae2c7ec139e6b3eb81cd9b48610700371167eea77551a7f134741e0f071f",
+    "src/drivers/drivers/driver/uart/uart.c": "ecc7ec4af77f0446e8ceec1d89c1010247166ca5bd9e94fe5d4ebe6d803959cf",
+    "src/drivers/drivers/hal/uart/v151/hal_uart_v151_regs_def.h": "d569201c4b5d01d1e50b6cfe0f04dd073b1a9fee687f93f8587571a34d045b87",
+    "src/drivers/drivers/hal/uart/v151/hal_uart_v151_regs_op.c": "73efaf5e3791b59f498a480447e071532dacf5a5e555645e45b6ca1c233a0b05",
+    "src/drivers/drivers/hal/uart/v151/hal_uart_v151.c": "2732976b0de06e07895f5e281646c65f217d59403d0edf6182d6f6355886a397",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/dma_porting.h": "e5cb6842db137e028006e726a931d2fcfdcba9ef9fb4cd8fd4c10327c20f36bb",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/romable/hal_dma.h": "6e6b9fb8b7cfe10d4e288474e8d8493cf36027be86a445a34a47dff5b6e072ed",
+    "src/include/driver/uart.h": "bb186d474d5030fc092ed68e71233792573f0a98608f6588075996669450f1c5",
+    "src/include/driver/dma.h": "65f37374e269dbab87e5cebf1cd2d9bfd7f041cb784f5dabb6afe7f0d4064834",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157"
+}
