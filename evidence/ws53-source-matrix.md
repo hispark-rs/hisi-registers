@@ -1063,3 +1063,39 @@ status. Source deinit only drops the register pointer/semaphore. Future HAL and
 models must distinguish queued data from wire completion, bound waits, handle
 short RX bursts and retain resource ownership if stopping cannot be proven.
 I2S HAL, model, audio waveforms and physical loopback remain outstanding.
+
+## Executed ADC v155 source contract (2026-10-23)
+
+`scripts/check_ws53_adc_contract.py --sdk /path/to/fbb_ws53` now compiles and
+executes the original pinned v155 HAL, inline register operations and WS53 port
+against host RAM and stubbed platform effects. Source files are checked byte for
+byte against SDK `163d9150`; no original driver is rewritten. Only port base
+variables point to host structs, malloc/free use a non-dereferenced test address,
+MMIO helper calls are logged, and delays inject calibration completion. This is
+an optional maintainer check, not an ordinary Cargo build dependency.
+
+The oracle checks35 register offsets,41 C bitfield layouts,7 additional CPU-trace
+field definitions, shared diagnostic absolute addresses,8 channel pad writes,
+16-bit clock gates and32-bit reset accesses, all64 manual offset corrections,
+and all32768 channel/code RAM word combinations. Five command sequences are
+verified as two explicit1/0 writes, with no invented W1C/self-clear semantics.
+Source power-on writes the three analog words, sets analog enable through
+`0x260 -> 0x103f8 -> 0x1ffff`, and delays1/1/5/100/128/160us for reset/preparation
+and calibration. Source scan profile uses average8, sample_count6, start_count26,
+discard_count32. These are source constants, not electrical timing qualification.
+
+Host execution demonstrates why the SDK cannot be copied as a safe Rust capture
+API: missing OFFSET/CAP completion and CAP_ERROR do not abort power-on; missing
+SAMPLE_DONE still results in two RAM reads and a success return. Channel disable
+issues STOP and frees the allocation while SAMPLE_MODE remains`0x300`. Existing
+CPU_TRACE=3 remains enabled during diagnostic setup. The test's eight-byte
+allocation starts at`0x20061000`, but the SDK programs fixed END=`0x20067fff`, not
+the allocation's end. These are observed C behavior under controlled host state,
+not proof that a physical device writes past the allocation.
+
+The Rust implementation must report timeout/errors, reject stale completion,
+retain buffer ownership across failure/drop until bus-writer quiescence is
+proved, and establish cache/trace/core handoff independently. Source facts do
+not justify assuming that a CPU halt or ADC STOP drains MCU_DIAG. No new RDL
+fields were needed for analog preparation; generated SVD/PAC are unchanged.
+Evidence: `evidence/ws53-adc-source-contract.json`. No board access or Flash write.
