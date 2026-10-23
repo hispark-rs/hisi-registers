@@ -1,0 +1,250 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "guard_policy": "max(200us, ceil(2 input-clock periods to us)); validated only at inherited SDK 32000Hz profile",
+  "runs": [
+    {
+      "name": "wdt-guard-hil-01",
+      "guard_us": 63,
+      "elf_sha256": "ab141f8bd7d79d7afd149372d3fe28dc8efd36a592c6b7e5d9c2f8228a41c320",
+      "passed": false,
+      "recovered": true,
+      "uart_parity": false,
+      "wdt": {
+        "passed": false,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          4936,
+          329453,
+          334417,
+          658828,
+          663825,
+          988342,
+          993260,
+          998257
+        ],
+        "counter_ticks": [
+          2048252,
+          32767933,
+          32768253,
+          32767928,
+          32767924,
+          32767924,
+          32767924,
+          32768254
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 324517,
+            "watchdog_ticks": -30719681,
+            "estimated_hz": -3029208922.7991138,
+            "passed": false
+          },
+          {
+            "timer_ticks": 324411,
+            "watchdog_ticks": 325,
+            "estimated_hz": 32058.09913967159,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "qemu_passed": true
+    },
+    {
+      "name": "wdt-guard200-hil-01",
+      "guard_us": 200,
+      "elf_sha256": "5bdebf0abccc9f004d7a848562741df8b70ddbbffd389ee8ba6f596692e06fd3",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "wdt": {
+        "passed": true,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          8875,
+          338393,
+          347295,
+          676813,
+          685749,
+          1015160,
+          1024122,
+          1033163
+        ],
+        "counter_ticks": [
+          32768254,
+          32767924,
+          32768249,
+          32767919,
+          32767915,
+          32767915,
+          32768254,
+          32768250
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 329518,
+            "watchdog_ticks": 330,
+            "estimated_hz": 32046.807761639728,
+            "passed": true
+          },
+          {
+            "timer_ticks": 329518,
+            "watchdog_ticks": 330,
+            "estimated_hz": 32046.807761639728,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "qemu_passed": true
+    },
+    {
+      "name": "wdt-guard200-hil-02",
+      "guard_us": 200,
+      "elf_sha256": "5bdebf0abccc9f004d7a848562741df8b70ddbbffd389ee8ba6f596692e06fd3",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "wdt": {
+        "passed": true,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          9723,
+          339135,
+          348143,
+          677449,
+          686491,
+          1015903,
+          1024866,
+          1033907
+        ],
+        "counter_ticks": [
+          32768253,
+          32767923,
+          32768249,
+          32767919,
+          32767915,
+          32767915,
+          32768254,
+          32768250
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 329412,
+            "watchdog_ticks": 330,
+            "estimated_hz": 32057.11995920003,
+            "passed": true
+          },
+          {
+            "timer_ticks": 329306,
+            "watchdog_ticks": 330,
+            "estimated_hz": 32067.438795527563,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "qemu_passed": true
+    },
+    {
+      "name": "wdt-guard200-hil-03",
+      "guard_us": 200,
+      "elf_sha256": "5bdebf0abccc9f004d7a848562741df8b70ddbbffd389ee8ba6f596692e06fd3",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "wdt": {
+        "passed": true,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          9299,
+          338710,
+          347718,
+          677130,
+          686066,
+          1015478,
+          1024547,
+          1033482
+        ],
+        "counter_ticks": [
+          32768253,
+          32767923,
+          32768249,
+          32767919,
+          32767915,
+          32767915,
+          32768254,
+          32768250
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 329411,
+            "watchdog_ticks": 330,
+            "estimated_hz": 32057.21727568296,
+            "passed": true
+          },
+          {
+            "timer_ticks": 329412,
+            "watchdog_ticks": 330,
+            "estimated_hz": 32057.11995920003,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "qemu_passed": true
+    }
+  ],
+  "swd": {
+    "swd-before-wdt-guard": {
+      "passed": true,
+      "correct": 600,
+      "requested": 600
+    },
+    "swd-after-wdt-guard200": {
+      "passed": true,
+      "correct": 600,
+      "requested": 600
+    }
+  },
+  "qemu_commit": "077f76963a364476006e57a222032c569062810e",
+  "qemu_rearm_ns": 62500,
+  "old_elf_rejected_by_model": true,
+  "hal_host_tests_passed": 255,
+  "limitations": [
+    "Empirical guard, not exact hardware latency or general handshake",
+    "QEMU still does not model stale counts during control-command settlement",
+    "No expiry, CPU NMI, SoC reset, low-power, other input clocks or production handoff qualification",
+    "No additional fixture delay in the three successful wdt-smoke runs"
+  ],
+  "source_files": {
+    "crates/hisi-hal/src/wdt_ws53.rs": "ffbbee289b8bbddd3f9647e8dccefbd329d64dfdafc861379e6c348ed1eab84b",
+    "crates/hisi-hal/src/wdt_ws53/tests.rs": "87b15ffea450d5535a8a1dca1f3b4429fe6feb4aeeac3cd588232dedbb0638d8",
+    "examples/ws53/ram_smoke/src/wdt_probe.rs": "14cd252c4d674f82ebecc66e86b5fa958d3430d61eb032a80e5560ac6739f91e",
+    "scripts/test-ws53-uart-host.py": "02f29d4093dc36d0d2dc5dd8f053ab2480648fca06be4a739603e963f80f3927"
+  }
+}

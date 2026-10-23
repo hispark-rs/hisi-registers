@@ -260,3 +260,11 @@ passes three bounded RAM runs, including count deltas, feed, stopped snapshots
 and restart. This does not establish a minimum delay or general completion
 protocol; the HAL and immediate QEMU profile remain mismatched. No NMI/expiry
 or reset was deliberately triggered. No register layout/access direction changed.
+
+WS53 HAL snapshot guard follow-up is recorded in
+[`evidence/ws53-wdt-guard-hil.json`](evidence/ws53-wdt-guard-hil.json).
+A 63us guard avoided lost requests but still returned stale start/restart counts;
+a 200us floor passed three same-ELF hardware/QEMU runs at the inherited 32000Hz
+profile. This is an empirical software policy, not a new register timing fact or
+qualification of expiry, NMI, reset, low-power, or other clocks. The model's
+configurable rearm window does not reproduce stale control-command counts.
