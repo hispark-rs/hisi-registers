@@ -284,3 +284,12 @@ closed-window diagnostic failed while QEMU originally passed. Source/PAC text
 records this condition without claiming DIV_H/write gating or other instances.
 Clock/reset/pad provisioning, physical baud/frame timing, UART0/1 and production
 resource handoff remain unqualified.
+
+`evidence/ws53-uart-flush-hil.json` records the transmit-completion distinction:
+three UART2 RAM runs observe FIFO empty before the shift register completes,
+48 first nonblocking flushes still busy, and144 good loopback bytes retained.
+HAL uses existing LSR.TX_EMPTY_S semantics; no register definition changes.
+Reading LSR can consume RX errors, so software retains flags and discards only
+a freshly identified corrupt head. Three-port Rust/QEMU tests cover coalesced
+errors and overrun without discarding good bytes. Physical error injection,
+UART0/1 HIL, exact wire timing and asynchronous wakeup integration remain open.

@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "runs": [
+    {
+      "name": "uart-flush-hil-01",
+      "elf_sha256": "0faa617ad6a1ac6fe9381198370b3aee988abe316844e38b825791cccea147f7",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "delayed_flushes": 48,
+      "preserved_bytes": 144,
+      "fifo_empty_gap_observed": true
+    },
+    {
+      "name": "uart-flush-hil-02",
+      "elf_sha256": "0faa617ad6a1ac6fe9381198370b3aee988abe316844e38b825791cccea147f7",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "delayed_flushes": 48,
+      "preserved_bytes": 144,
+      "fifo_empty_gap_observed": true
+    },
+    {
+      "name": "uart-flush-hil-03",
+      "elf_sha256": "0faa617ad6a1ac6fe9381198370b3aee988abe316844e38b825791cccea147f7",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "delayed_flushes": 48,
+      "preserved_bytes": 144,
+      "fifo_empty_gap_observed": true
+    }
+  ],
+  "swd": {
+    "swd-before-uart-flush": {
+      "passed": true,
+      "correct": 600
+    },
+    "swd-after-uart-flush": {
+      "passed": true,
+      "correct": 600
+    }
+  },
+  "hal_host_tests": 261,
+  "feature_matrix_cases": 15,
+  "qemu_commit": "272611e1ead5db5d0b2cf6275bca289a5de099c3",
+  "qemu_uart_serializer_ns": 100000,
+  "qemu_timing_calibrated": false,
+  "fault_test": {
+    "passed": true,
+    "elf_sha256": "6783df37c74eff26700fd156264ba9d6434bfed9fbb01f2512649e20109a3895",
+    "uart": [
+      "WS53 RAM data/bss OK",
+      "WS53 PASS timer_irq=53 count=3",
+      "WS53 PASS uart_errors=3 partial=1 recovery=1"
+    ],
+    "hardware_accessed": false,
+    "ports": [
+      0,
+      1,
+      2
+    ],
+    "checks": [
+      "flush consumes and defers corrupt-head errors",
+      "repeated flush preserves following good byte",
+      "FIFO summary alone preserves good prefix",
+      "partial-read deferred error survives flush",
+      "overrun preserves all64 queued bytes",
+      "two corrupt heads coalesce flags before good successor"
+    ]
+  },
+  "semantics": [
+    "WS53 flush checks LSR.TX_EMPTY_S instead of FIFO empty",
+    "TX status polls retain read-clear RX errors; freshly corrupt heads discarded once; old cached flags never discard a later good head",
+    "Repeated observations may coalesce error flags; not an event counter",
+    "Blocking flush needs a progressing transmitter; deadline callers use the nonblocking query",
+    "Saved errors do not generate a synthetic RX IRQ; interrupt consumers must check reads before waiting"
+  ],
+  "limitations": [
+    "Actual line errors/overrun not physically injected",
+    "No physical baud/frame timing calibration",
+    "UART0/1 transmit-completion HIL not performed",
+    "Shared clock/reset/pad handoff and async wakeup integration remain incomplete"
+  ],
+  "current_source_sha256": {
+    "crates/hisi-hal/src/uart.rs": "85a7159675605a8d847a934d05f7f35c43c6e729a2b3e8814280a20a32796b1d",
+    "crates/hisi-hal/src/uart_ws53.rs": "b59311c9d7823ff7d1db19c3bb55d4de3c865e8723a73374ecab472f4709e892",
+    "examples/ws53/ram_smoke/src/uart_line.rs": "947b2bda2c6a78688c6420bc82668817b6d5fe63e21a79eff493b16dd1384544",
+    "examples/ws53/ram_smoke/src/uart_errors.rs": "8ed1ea9d3cd38b49fb1911af22f36a8513d75d4a761d6d43a0dcbd17140902e0"
+  }
+}
