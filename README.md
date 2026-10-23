@@ -172,3 +172,12 @@ compiling the original pinned C source. `--curve-output /path/to/sdk-curve.txt`
 exports the original C results for independent HAL comparison. The port's loop
 has no timeout and trusts any nonzero CONTROL; neither behavior is a recommended
 HAL contract. Stop, READY clear/freshness, clocks and IRQ semantics remain unknown.
+
+WS53 PWM IRQ71 RAM evidence is recorded in
+[`evidence/ws53-pwm-irq71-hil.json`](evidence/ws53-pwm-irq71-hil.json).
+Invalid count/group configuration continues to assert errors after W1C. Mask
+abnormal-event delivery, correct and commit configuration, then clear and verify
+status before re-enabling. Three identical-ELF runs recover valid8/16 pulses.
+The count-error case also sets the configuration-load flag. Exact reassertion
+latency, shadow-write-only recovery and invalid output waveforms are unqualified.
+This adds behavioral evidence; register layout/access definitions are unchanged.

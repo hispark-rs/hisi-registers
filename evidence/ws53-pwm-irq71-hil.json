@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "cases": [
+    {
+      "name": "pwm-fault-hil-01",
+      "elf_sha256": "5987605512fb21d4e1880b52fb2f3a47ae4f2a57f5befd0f40c84208b1bb62ab",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000800000001000100000001\r\nWS53 PWM FAULT 0001000800010000000000010000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 FAIL pwm_finite observed\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000000000000\r\nWS53 PWM FAULT 0001000100010000000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "passed": false,
+      "uart_parity": false,
+      "raw_sha256": "736d9fe911caa1669a3fc6a478a32b3c56f87897277ddadf4d2a36cb5c182dd2",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    },
+    {
+      "name": "pwm-fault-masked-hil-01",
+      "elf_sha256": "88e07ecd54fad15216f9aee32bee621ea76e7606bfe5f916773662b076ff95e3",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000000000000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000000000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 FAIL pwm_finite observed\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "passed": false,
+      "uart_parity": false,
+      "raw_sha256": "561d89fed279e1143fdbd16927dce25bcb24fccee8d36030d4055ea2e039644e",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    },
+    {
+      "name": "pwm-fault-fixed-hil-01",
+      "elf_sha256": "88e07ecd54fad15216f9aee32bee621ea76e7606bfe5f916773662b076ff95e3",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "passed": true,
+      "uart_parity": true,
+      "raw_sha256": "5cf0b6acabd73730203a4f25b376c0a6048ccccdee0eb7d65e8533adfd190006",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    },
+    {
+      "name": "pwm-fault-fixed-hil-02",
+      "elf_sha256": "88e07ecd54fad15216f9aee32bee621ea76e7606bfe5f916773662b076ff95e3",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "passed": true,
+      "uart_parity": true,
+      "raw_sha256": "8265674383803ecc7cda34e36429411d6cbb37b899cd533180b0c217251eb601",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    },
+    {
+      "name": "pwm-fault-fixed-hil-03",
+      "elf_sha256": "88e07ecd54fad15216f9aee32bee621ea76e7606bfe5f916773662b076ff95e3",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FAULT 0000000100000001000100000001\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FAULT 0001000100010000000000010000\r\nWS53 PWM FAULT RECOVERY 000000000000\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_fault irq=71 faults=2 recovery=8,16 restore=1\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "passed": true,
+      "uart_parity": true,
+      "raw_sha256": "6dc32400e5e32a916749873f772f285074740357e2fa94a4415950026c0d37a0",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    }
+  ],
+  "flash_written": false,
+  "probe_serial": "23121302",
+  "uart_serial": "5CB7019921",
+  "scope": "A-board bounded RAM handoff, PWM0 G0/G1, 2MHz, unrouted invalid configs then MIO21/D11 valid8/16 pulse recovery",
+  "observation": "IRQ71 count/group errors reassert after W1C while invalid configuration persists. Masking event delivery before acknowledgement bounds entry to1 per fault. Repairing configuration, START, then W1C clears status; normal8/16 pulse output recovers. Count error also sets configuration-loaded flag; group-conflict case does not.",
+  "state_words": [
+    "phase",
+    "ISR entries",
+    "seen group errors",
+    "seen count errors",
+    "seen configuration flags",
+    "remaining group errors",
+    "remaining count errors"
+  ],
+  "recovery_words": [
+    "group errors",
+    "count errors",
+    "configuration flags"
+  ],
+  "limits": [
+    "Invalid-output waveform is not physically routed or qualified",
+    "No evidence for exact fault reassertion latency or shadow-write-only recovery",
+    "QEMU conservatively retains active error until corrected START, reasserts at MMIO boundaries",
+    "Multi-channel atomic rejection remains an explicit model assumption, not a silicon conclusion",
+    "Other channels, simultaneous fault combinations and production control-core handoff unqualified"
+  ]
+}
