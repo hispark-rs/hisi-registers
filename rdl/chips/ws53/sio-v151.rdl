@@ -1,0 +1,117 @@
+// fbb_ws53 163d9150: hal/sio/hal_sio_v151 registers, operations and HAL.
+// The SDK base points at VERSION (+0x3c), not the start of this block.
+// Source-level layout/commands only: reset values and silicon timing unknown.
+addrmap ws53_sio_v151_regs {
+    hisi_evidence = "SDK-source 163d9150 hal_sio_v151_regs_def.h and hal_sio_v151.c; application I2S0; shared audio clocks and runtime ownership unverified";
+    default regwidth = 32;
+    default accesswidth = 32;
+    reg {
+        field { sw=r; hw=w; } version[7:0];
+        field { sw=rw; hw=r; } loopback[8:8];
+    } VERSION @ 0x3c;
+    reg {
+        field { sw=rw; hw=r; desc="0 I2S, 1 PCM"; } mode[0:0];
+        field { sw=rw; hw=r; desc="PCM self-defined timing selection"; } pcm_mode[1:1];
+        field { sw=rw; hw=r; } rxws_select[2:2];
+        field { sw=rw; hw=r; } extended_receive[3:3];
+        field { sw=rw; hw=r; desc="0/1/2/3 encode 2/4/8/16 channels"; } channels[5:4];
+        field { sw=rw; hw=r; desc="0 falling, 1 rising; SDK configure selects rising"; } clk_edge[6:6];
+        field { sw=rw; hw=r; desc="0 slave, 1 master"; } master[7:7];
+    } MODE @ 0x40;
+    reg {
+        field { sw=r; hw=w; } rx[0:0];
+        field { sw=r; hw=w; } tx[1:1];
+        field { sw=r; hw=w; } rx_right_overflow[2:2];
+        field { sw=r; hw=w; } rx_left_overflow[3:3];
+        field { sw=r; hw=w; } tx_right_underflow[4:4];
+        field { sw=r; hw=w; } tx_left_underflow[5:5];
+    } INTSTATUS @ 0x44;
+    reg {
+        name="Acknowledge interrupt sources by writing their bits; no readback contract";
+        field { sw=w; hw=r; onwrite=woclr; } rx[0:0];
+        field { sw=w; hw=r; onwrite=woclr; } tx[1:1];
+        field { sw=w; hw=r; onwrite=woclr; } rx_right_overflow[2:2];
+        field { sw=w; hw=r; onwrite=woclr; } rx_left_overflow[3:3];
+        field { sw=w; hw=r; onwrite=woclr; } tx_right_underflow[4:4];
+        field { sw=w; hw=r; onwrite=woclr; } tx_left_underflow[5:5];
+    } INTCLR @ 0x48;
+    reg { field { sw=w; hw=r; } data[31:0]; } LEFT_TX @ 0x4c;
+    reg { field { sw=w; hw=r; } data[31:0]; } RIGHT_TX @ 0x50;
+    external reg {
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal"; } data[31:0];
+    } LEFT_RX @ 0x54;
+    external reg {
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal"; } data[31:0];
+    } RIGHT_RX @ 0x58;
+    reg {
+        name="Set control command view; SDK writes one to enable/release reset; readback and zero-write effects unverified";
+        field { sw=w; hw=r; } tx_merge[8:8];
+        field { sw=w; hw=r; } rx_merge[9:9];
+        field { sw=w; hw=r; } tx_fifo_disable[10:10];
+        field { sw=w; hw=r; } rx_fifo_disable[11:11];
+        field { sw=w; hw=r; } tx_enable[12:12];
+        field { sw=w; hw=r; } rx_enable[13:13];
+        field { sw=w; hw=r; } interrupt_enable[14:14];
+        field { sw=w; hw=r; } reset_n[15:15];
+    } CT_SET @ 0x5c;
+    reg {
+        name="Clear control command view; SDK writes one to disable/assert reset; readback and zero-write effects unverified";
+        field { sw=w; hw=r; } tx_merge[8:8];
+        field { sw=w; hw=r; } rx_merge[9:9];
+        field { sw=w; hw=r; } tx_fifo_disable[10:10];
+        field { sw=w; hw=r; } rx_fifo_disable[11:11];
+        field { sw=w; hw=r; } tx_enable[12:12];
+        field { sw=w; hw=r; } rx_enable[13:13];
+        field { sw=w; hw=r; } interrupt_enable[14:14];
+        field { sw=w; hw=r; } reset_n[15:15];
+    } CT_CLR @ 0x60;
+    reg {
+        field { sw=rw; hw=r; } tx[7:0];
+        field { sw=rw; hw=r; } rx[15:8];
+    } FIFO_THRESHOLD @ 0x64;
+    reg {
+        field { sw=r; hw=w; } left[7:0];
+        field { sw=r; hw=w; } right[15:8];
+    } RX_STA @ 0x68;
+    reg {
+        field { sw=r; hw=w; } left[7:0];
+        field { sw=r; hw=w; } right[15:8];
+    } TX_STA @ 0x6c;
+    reg {
+        field { sw=rw; hw=r; desc="0/1/2/3/4 encode 16/18/20/24/32 bits"; } tx_mode[2:0];
+        field { sw=rw; hw=r; desc="0/1/2/3/4 encode 16/18/20/24/32 bits"; } rx_mode[5:3];
+    } DATA_WIDTH_SET @ 0x78;
+    reg {
+        field { sw=rw; hw=r; desc="0 left, 1 right"; } read_right[0:0];
+        field { sw=rw; hw=r; desc="0 left, 1 right"; } write_right[1:1];
+    } I2S_START_POS @ 0x7c;
+    reg {
+        name="Position flags: SDK writes zero during configure; autonomous behavior unverified";
+        field { sw=rw; hw=rw; } read_right[0:0];
+        field { sw=rw; hw=rw; } write_right[1:1];
+    } I2S_POS_FLAG @ 0x80;
+    reg { field { sw=rw; hw=r; } enable[0:0]; } SIGNED_EXT @ 0x84;
+    reg { field { sw=rw; hw=r; } enable[0:0]; } I2S_POS_MERGE_EN @ 0x88;
+    reg {
+        name="Interrupt mask: one masks, zero enables; SDK write mask 0x3d and read mask 0x3e";
+        field { sw=rw; hw=r; } rx[0:0];
+        field { sw=rw; hw=r; } tx[1:1];
+        field { sw=rw; hw=r; } rx_right_overflow[2:2];
+        field { sw=rw; hw=r; } rx_left_overflow[3:3];
+        field { sw=rw; hw=r; } tx_right_underflow[4:4];
+        field { sw=rw; hw=r; } tx_left_underflow[5:5];
+    } INTMASK @ 0x8c;
+    reg {
+        field { sw=rw; hw=r; } bclk_div_enable[0:0];
+        field { sw=rw; hw=r; } clock_enable[1:1];
+        field { sw=rw; hw=r; } bclk_select[2:2];
+        field { sw=rw; hw=r; } fs_select[4:4];
+    } I2S_CRG @ 0x90;
+    reg { field { sw=rw; hw=r; } divider[6:0]; } I2S_BCLK_DIV_NUM @ 0x94;
+    reg { field { sw=rw; hw=r; } divider[9:0]; } I2S_FS_DIV_NUM @ 0x98;
+    reg { field { sw=rw; hw=r; } ratio[10:0]; } I2S_FS_DIV_RATIO_NUM @ 0x9c;
+    external reg {
+        field { sw=r; hw=w; onread=ruser; hisi_svd_read_action="modifyExternal"; } data[31:0];
+    } I2S_DUAL_RX_CHN @ 0xa0;
+    reg { field { sw=w; hw=r; } data[31:0]; } I2S_DUAL_TX_CHN @ 0xc0;
+};

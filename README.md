@@ -37,8 +37,11 @@ because the two SDKs contain byte-identical v151 register definitions and
 register-operation sources. Chip-specific SPI integration remains in each chip map.
 Watchdog v151 and SFC v150 are confirmed across all three SDKs. PWM v151 is also
 shared after a semantic comparison that ignores comment-only formatting changes.
-Timer v150, TCXO v150 data16, GPIO v150 basic, UART v151 basic and SIO v151 are
+Timer v150, TCXO v150 data16, GPIO v150 basic and UART v151 basic are
 also shared by all three chips. I2C/RTC retain narrower family variants.
+WS53 SIO v151 uses a corrected chip-specific layout: the legacy imported SIO
+model has incorrect MODE/control/width/clock fields and missing registers.
+WS63/BS2X output is preserved pending its own source audit.
 Configuration-selected alternatives are tracked in
 `evidence/configured-ip-variants.md`.
 
@@ -56,6 +59,13 @@ WS53 TIMER/TCXO use this guard; TIMER also omits the disputed common window
 documented in `evidence/ws53-source-matrix.md`.
 
 ## Layout
+
+`uv run --script scripts/check_ws53_i2s_contract.py --sdk /path/to/fbb_ws53`
+compiles the pinned SDK C definitions and port, checks all 25 I2S registers and
+70 fields against the generated SVD, and exercises the original divider over
+20 width/channel combinations. This is host source evidence, not hardware or
+HAL support. See `evidence/ws53-source-matrix.md` for unresolved clock widths,
+ownership and command semantics.
 
 - `rdl/ip/`: reusable IP definitions only after cross-chip equivalence is proven.
 - `rdl/chips/<chip>/peripherals/`: split chip-specific peripheral definitions.

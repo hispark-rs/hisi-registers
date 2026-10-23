@@ -5,7 +5,7 @@
 `include "../ip/i2c-v151-ws53-bs2x.rdl"
 `include "../ip/rtc-v150-ws53-bs2x.rdl"
 `include "../ip/uart-v151-basic.rdl"
-`include "../ip/sio-v151.rdl"
+`include "ws53/sio-v151.rdl"
 `include "../ip/timer-v150.rdl"
 `include "../ip/tcxo-v150-data16.rdl"
 `include "../ip/gpio-v150-basic.rdl"
@@ -175,7 +175,7 @@ addrmap ws53 {
     rtc1.EOI_REN.eoi->hisi_write_max = 1;
     rtc0.EOI_REN.eoi->desc = "SDK acknowledges by writing one. Header claims read-clear but driver never reads; read behavior withheld";
     rtc1.EOI_REN.eoi->desc = "SDK acknowledges by writing one. Header claims read-clear but driver never reads; read behavior withheld";
-    sio_v151_regs i2s @ 0x52030000;
+    ws53_sio_v151_regs i2s @ 0x52030000;
     timer_v150_regs #(.CHANNELS(2), .COMMON_REGS(false), .LOCAL_MASKED_STATUS(true)) timer @ 0x52002000;
     tcxo_v150_data16_regs tcxo @ 0x57000200;
     timer->hisi_reset_unverified = true;

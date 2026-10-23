@@ -46,10 +46,13 @@ separate because its current layout differs.
 
 ## SIO v151
 
-All three active configurations select SIO v151 and share `sio_v151_regs`. The
-shared public HAL enum defines `0=falling` and `1=rising`, agreeing with WS53 and
-BS2X. The inverse WS63 register comment is stale. SDK HAL bases point at offset
-`0x3c`; chip maps use the physical block base (`HAL base - 0x3c`).
+All three active configurations select SIO v151, but the imported
+`sio_v151_regs` does not match the WS53 C layout. The WS53 map now uses
+`ws53_sio_v151_regs`, checked against the original C compiler layout and all
+nonreserved bitfields. Legacy WS63/BS2X outputs are unchanged, not certified by
+this audit. The public HAL enum defines `0=falling` and `1=rising`; the inverse
+WS63 register comment is stale. SDK HAL bases point at offset `0x3c`; chip maps
+use the physical block base (`HAL base - 0x3c`).
 
 ## WS53 SPI
 

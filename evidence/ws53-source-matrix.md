@@ -999,3 +999,59 @@ The RAM-backed test cannot establish the physical read side effect.
 FIFO depth, clock/reset/pad handoff, QSPI XIP conflicts and control-core use
 remain unverified. No device scan, Flash transfer or hardware operation occurs
 in this contract. SPI/QSPI HAL/model implementations are still outstanding.
+
+## I2S/SIO compiled source contract (2026-10-23)
+
+`check_ws53_i2s_contract.py` checks the pinned SDK `163d9150` inputs before
+compiling its original `hal_sio_v151_regs_def.h` and full `sio_porting.c` on the
+host with OS/MMIO stubs. The default application enables I2S v151, one bus,
+with DMA and loopback options disabled. The instance is I2S0 at physical block
+base `0x52030000`, local IRQ67; the SDK's pointer is `0x5203003c` (VERSION).
+All 25 offsets/32-bit slots and 70 fields are compared against SVD, including
+compiler-produced bitfield masks. This does not prove physical behavior.
+
+The legacy imported family RDL is substantially incorrect for this SDK:
+
+- MODE bits0/1 select I2S/PCM and PCM timing; channels are bits5:4 (2/4/8/16),
+  edge bit6 (0 falling, 1 rising), master bit7. SDK configure selects rising.
+- CT_SET/CT_CLR use bits8..15; TX/RX enable bits12/13 and reset_n bit15.
+- DATA_WIDTH_SET uses TX bits2:0 and RX bits5:3, with 0..4 =16/18/20/24/32 bits.
+- Interrupt status, clear and mask contain six sources: RX/TX thresholds,
+  independent left/right RX overflow and independent left/right TX underflow.
+  SDK masks0x3d/0x3e enable TX/RX respectively (one masks).
+- CRG uses bits0/1/2/4, not the imported divider bits7:0 and clock bit8.
+- Added START_POS, POS_FLAG, POS_MERGE_EN and merge RX/TX data registers.
+  Split and merge RX reads consume data; TX and clear commands have no read API.
+  POS_FLAG is writable because configure explicitly writes zero; dynamic
+  flag behavior is not established. No register reset value is assumed.
+
+The WS53-only RDL correction preserves byte-identical WS63/BS2X SVDs. It does
+not certify their old imported model. CT_SET/CLR are exposed as write-only
+command views: the SDK enables/disables TX by writing one to SET/CLR and resets
+with CLR then SET. Generic helpers read both command registers and write zero
+to SET to disable RX, but no evidence establishes that zero works or readback
+is safe to replay. Formal W1S/W1C semantics for these two registers are withheld
+until verified; a future HAL must use explicit commands, not helper RMW.
+
+The compiled port confirms clock order: set `0x57008600` bit0
+(`CMU_DIV_AD_RSTN_SYNC_BIT`), then `0x52000040` bit2 (I2S gate); disabling clears
+in the same order. `common_def.h` implements these as 32-bit RMW. The existing
+M_CRG.M_CLKEN0 view is 16-bit for other ports. The 32-bit view and missing CMU
+register are **not yet integrated**; audio clock/reset ownership, upper-half
+preservation and control-core synchronization require resolution before HAL.
+Do not change the access size or toggle a shared reset without that integration.
+
+Twenty original divider calls (five widths times four channel counts) confirm
+integer division occurs before conversion to float: the result is exactly
+`floor(32000/(25*width*channels))`. The apparent rounding branch cannot recover
+the discarded fractional part. This is a source fact, not proof of clock rate
+or a suitable arbitrary-rate Rust algorithm. The port hardcodes pinmux calls
+for SDK S_MGPIO17/20/19/18, mode3, while application config lists pin values
+13/14/15/16 and modes35..38; those config numbers must not be used as board pads.
+
+The SDK assumes FIFO depth8, TX refill4 and RX threshold7. TX completion follows
+the enqueue semaphore with a fixed295us delay; there is no evidenced BUSY/drain
+status. Source deinit only drops the register pointer/semaphore. Future HAL and
+models must distinguish queued data from wire completion, bound waits, handle
+short RX bursts and retain resource ownership if stopping cannot be proven.
+I2S HAL, model, audio waveforms and physical loopback remain outstanding.
