@@ -1347,3 +1347,30 @@ short-tail behavior, merge packing, supported lanes, shared ownership, cache and
 physical drain still need independent evidence. No new RDL/PAC layout is needed
 for the known registers; no I2S DMA HAL or QEMU support is claimed by this check.
 Machine-readable result: `ws53-i2s-dma-source-contract.json`.
+
+## SDIO descriptor/CMD53 ROM execution audit (2026-10-23)
+
+`ws53-sdio-rom-contract.json` records execution of unmodified, relative-only
+leaf bytes from the same SHA256-pinned capture in QEMU RAM. This is firmware
+software evidence, not a silicon transfer test. Reproduce with QEMU repository
+`2fd1b1cda2613318856f53a4b171d3cc4c0004b8`, its
+`scripts/ws53_sdio_rom_contract.py --qemu /path/to/qemu-system-riscv32 --rom /path/to/sdio-rom.bin`.
+No ROM is redistributed; ordinary generation/builds do not require this check.
+Public headers and acore.sym match SDK commit163d9150 byte for byte (hashes in JSON).
+
+The 101 descriptor cases confirm null table/address and zero-u32-length rejection,
+indices0–128, u16 flags0x21, u16 length and u32 address at8-byte stride. The
+12 accepted overflow cases truncate lengths65536,65537 and0xffffffff. Notably,
+65536 is accepted but stored as zero. An unaligned data address is accepted by
+this helper; that is not proof of valid bus-master alignment. The6144 CMD53 cases
+cover all512 encoded counts, both length modes and six block sizes including0
+and4095: byte-mode count0 gives512, while block-mode zero multiplication gives
+0xffffffff. Neighbor bytes, other descriptors and input records remain unchanged.
+
+The audit exposed a shared QEMU CPU bug: unsigned xlinx branch immediates128–255
+were sign-extended, bypassing the ROM's `bgeui index,129` check. Vendor assembler
+encodings distinguish unsigned129 from signed-127. The fix is supported by16836
+TCG boundary cases (1530 failed before the fix), the ROM execution audit and
+existing WS53 plus11 legacy qtests. It does not establish silicon ISA timings.
+No new MMIO register behavior, hardware reset/drain, CIS, voltage switch, interrupt
+acknowledgement semantics or host data transfer is inferred from this audit.
