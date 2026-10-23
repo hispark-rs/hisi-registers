@@ -325,4 +325,10 @@ scratch clear, and the RX queue empties with FIFO enable cleared. This is not a
 universal power-on reset declaration: DIV_L reads0 even before reset with RX
 queued, DIV_H was already0, and L0/held-reset/neighbor isolation/IRQ/DMA remain
 unqualified. No PAC reset defaults are inferred. The new observation fixture
-explicitly refuses QEMU until a separate shared soft-reset model is implemented.
+supports a separate opt-in QEMU observation run after implementation of the
+shared H1/H0 reset model. The combined HIL parity mode still refuses this case:
+before reset, DIV_L and FIFO_STATUS differ on both ports. The offline comparison
+preserves all differences and exits unsuccessfully until full parity is achieved.
+UART_PARAMETER is now modeled as the observed0xd04 for all three instances,
+independently of the DMA behavior profile. No additional physical measurements
+or RDL/PAC reset defaults are implied by these model changes.
