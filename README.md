@@ -241,3 +241,13 @@ CODE retains the previous value until the next result. HAL rejects the stale
 field while READY is zero. This corrected a model that also cleared CODE.
 Repeat conversion latencies differ from cold initialization and from the model;
 exact sampling phase, conversion clock, stop and self-clear remain unqualified.
+
+WS53 inherited TRNG read observations are recorded in
+[`evidence/ws53-trng-inherited-hil.json`](evidence/ws53-trng-inherited-hil.json).
+Three bounded RAM runs inherit ring1/READY3 and stop vendor CPU clients. Each
+observes16 double-ready/two-word pairs,32 HAL words,0/1/3/4/5/17-byte fills and
+two reads after release/reattach, preserving ring configuration and recovering
+the original firmware. The same ELF passes an exact seeded QEMU-data oracle;
+physical random bytes need not match. No silicon ring/FRO/clock writes were
+performed. FIFO depth, IPC ownership, physical failure detection, entropy quality
+and cryptographic RNG suitability remain unqualified. No register layout changed.
