@@ -219,6 +219,7 @@ for filename, expected in EXPECTED.items():
         assert wregs["LOCK_COMMAND"].findtext("alternateRegister") == "LOCK_STATUS"
         assert wregs["CCVR_REQUEST"].findtext("alternateRegister") == "CCVR_STATUS"
         assert wregs["WDT_EOI"].findtext("readAction") == "modifyExternal"
+        assert wregs["WDT_CNT"].findtext("readAction") == "modifyExternal"
         for name, value in (("WDT_RESTART", 0x5a5a5a5a), ("CCVR_REQUEST", 1)):
             c = wregs[name].find("fields/field/writeConstraint/range")
             assert int(c.findtext("minimum"), 0) == int(c.findtext("maximum"), 0) == value

@@ -65,6 +65,10 @@ addrmap ws53 {
     wdt.WDT_RESTART.wdt_restart->hisi_write_min = 0x5a5a5a5a;
     wdt.WDT_RESTART.wdt_restart->hisi_write_max = 0x5a5a5a5a;
     wdt.WDT_STATUS.wdt_status->desc = "SDK register definition: 0 free, 1 busy";
+    wdt.WDT_CNT.wdt_cnt->onread = ruser;
+    wdt.WDT_CNT.wdt_cnt->hisi_svd_read_action = "modifyExternal";
+    wdt.WDT_CNT.wdt_cnt->desc = "Consume the valid counter snapshot; A-board observation: reading CNT clears CCVR validity. A new request issued too soon after consumption may be lost even when BUSY is zero. Read only once per valid snapshot; rearm latency and command ordering need qualification.";
+    wdt.CCVR_STATUS.valid->desc = "Snapshot valid until CNT is consumed; A-board validity remains set when CNT is not read, and clears after its read. BUSY zero does not prove that another request can be accepted.";
     wdt.WDT_EOI.wdt_eoi->onread = ruser;
     wdt.WDT_EOI.wdt_eoi->hisi_svd_read_action = "modifyExternal";
     wdt.WDT_EOI.wdt_eoi->desc = "Read returns zero and clears interrupt per SDK register comment; SDK clear helper reads then writes 1, independent write-only clear behavior unverified";
