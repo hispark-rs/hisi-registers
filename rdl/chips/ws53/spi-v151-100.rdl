@@ -42,6 +42,7 @@ addrmap ws53_spi0_v151_100_regs {
     reg {
         field { sw=rw; hw=r; } value[15:0];
     } BAUD @ 0x14;
+    BAUD.value->desc = "SDK header: even divider 2..65534, bit0 fixed zero; zero disables SCK. Setter truncates to 16 bits and does not round; silicon behavior unverified";
     reg {
         field { sw=rw; hw=r; } tx_enable[0:0];
         field { sw=rw; hw=r; } rx_enable[1:1];
@@ -166,6 +167,7 @@ addrmap ws53_qspi1_v151_100_regs {
     reg {
         field { sw=rw; hw=r; } value[15:0];
     } BAUD @ 0x14;
+    BAUD.value->desc = "SDK header: even divider 2..65534, bit0 fixed zero; zero disables SCK. Setter truncates to 16 bits and does not round; silicon behavior unverified";
     reg {
         field { sw=rw; hw=r; } value[31:0];
     } TX_THRESHOLD @ 0x18;

@@ -68,8 +68,8 @@ EXPECTED = {
         "source_arrays": 0,
         "output_arrays": 6,
         "cluster_arrays": 1,
-        "registers_expanded": 936,
-        "fields_expanded": 1959,
+        "registers_expanded": 938,
+        "fields_expanded": 1966,
         "write_constraints": 18,
     },
 }
@@ -232,6 +232,11 @@ for filename, expected in EXPECTED.items():
             assert reg.find("resetValue") is None and reg.find("readAction") is None
             assert [(f.findtext("name"), f.findtext("bitOffset")) for f in reg.findall("fields/field")] == [
                 ("WATCHDOG", "1"), ("XIP_CONTROL", "2"), ("XIP_CACHE", "3"), ("MDMA", "4"), ("SMDMA", "5")]
+        for name, offset in (("XIP_QSPI_CLOCK", 0x574), ("XIP_CLOCK_ENABLE", 0x1240)):
+            reg = by_name["M_CRG"].find(f"registers/register[name='{name}']")
+            assert int(reg.findtext("addressOffset"), 0) == offset
+            assert reg.findtext("size") == "16" and reg.findtext("access") == "read-write"
+            assert reg.find("resetValue") is None and reg.find("resetMask") is None
     for p in peripheral_nodes:
         if base := p.get("derivedFrom"):
             import copy

@@ -97,8 +97,9 @@ ambiguous flat map.
 
 ## Application SPI v151_100
 
-The pinned `ws53_liteos_app` product selects `v151_100`. Source paths, relative
-to that SDK checkout:
+The pinned `ws53_liteos_app` disables the optional SPI driver. Its CMake fallback
+selects `v151_100` when no version option is set; the WS53 port includes that
+adaptation layer explicitly. Source paths, relative to that SDK checkout:
 
 - `src/drivers/drivers/hal/spi/v151_100/hal_spi_v151_100_regs_def.h`,
   `hal_spi_v151_100_regs_op.h` and `hal_spi_v151_100_adapt_op.h`;
@@ -110,9 +111,9 @@ to that SDK checkout:
 | SPI0 | SPI_BUS_0 | 0x52087000 | 65 (SPI_3) | 0x00 / 0x04 / 0x2c | 15 | 0 / 1 |
 | QSPI1 | SPI_BUS_1 | 0x5208d000 | 43 (QSPI0_2CS) | 0x08 / 0x00 / 0x60 | 0 | 1 / 0 |
 
-The two layouts are separate RDL types. SPI0's adaptation layer translates
-standard-format port constants to its custom layout; copying those constants
-directly into CONTROL would program different fields. QSPI1's port is master
+The two layouts are separate RDL types. SPI0's field-specific adaptation helpers
+translate semantic settings to its custom layout. Whole-word setters do not
+translate; copying QSPI-format constants into CONTROL programs different fields. QSPI1's port is master
 only. Shared v151 layout names do not establish equivalence to these instances.
 
 Each instance exposes 36 FIFO access windows. All windows access the same FIFO,
@@ -954,3 +955,47 @@ aliases at0x1c, RO status/abort/level fields, WO clear commands, named abort cau
 and no claimed reset values. Both WS53 instances use it. WS63/BS2X generated
 outputs remain byte-identical. No I2C HAL, model, bus timing or HIL support is
 claimed by this source/PAC milestone.
+
+## SPI/QSPI compiled source contract (2026-10-23)
+
+`check_ws53_spi_contract.py` pins every consumed SDK input to `163d9150` and
+compiles the original register/adaptation helpers and SPI port against host RAM.
+The normal `ws53_liteos_app.config` has `CONFIG_DRIVER_SUPPORT_SPI` unset. With
+no explicit version selector, `hal/spi/CMakeLists.txt` falls back to v151_100;
+the oracle explicitly enables the optional SPI port for the test. This is not
+proof the installed firmware has initialized or handed over either bus.
+
+The test checks all modeled fields and 98/99 expanded register views for
+SPI0/QSPI1, 36 shared FIFO windows per direction, IRQ65/43, the mode selector,
+application DMA requests6/7 and4/5, and eight M_CRG field encodings. C structs
+are the offset oracle; compiler bitfield writes are checked against SVD masks.
+SPI0 and QSPI1 cannot share one register struct or status/DMA mask table.
+Field-specific adaptation helpers map each layout; **whole-word setters simply
+write the supplied value**, so they do not translate QSPI-format constants.
+
+SPI0 clock enable writes full halfword1 to0x5200055c and modifies bit11 of
+M_CLKEN1 (the source reads32 then writes16). QSPI1 modifies bits1/3/5 at
+0x52001240, writes1 to the complete nine-bit field at0x52000574, and sets
+GLOBAL_CLKEN bit7 at0x52000548. Disable reverses these. Other bits are preserved
+except SPI0's full SPI_CLOCK halfword assignment. New RDL includes the missing
+QSPI gate chain without inventing a divider formula or claiming XIP ownership.
+Gate enable alone does not establish a32MHz source or released resets.
+
+The original frequency helper produces divider32/3/2 for requested1/10/12MHz
+at32MHz input. The source does not round up to an even divider. Both headers
+say divider bit0 is fixed zero and valid enabled values are2..65534; thus output
+can exceed the request if these hardware semantics hold. The host oracle only
+proves written values, not real clock frequency. Rust must validate wide
+arithmetic, use a legal even divider and report the achieved source-profile rate.
+
+Three source unions have malformed reserved declarations (`spi_wsr_data_t`,
+`spi_enhctl_data_t`, `sr_data_t`) and occupy more than4bytes, while the actual
+MMIO structs use32-bit slots. All modeled nonreserved field positions still
+match the SVD. Do not use these union sizes as register strides. Clear-all SDK
+helpers do a read/modify/write; the headers specify read-clear and ignored
+writes, so the PAC retains read-only clear registers and never emits RMW.
+The RAM-backed test cannot establish the physical read side effect.
+
+FIFO depth, clock/reset/pad handoff, QSPI XIP conflicts and control-core use
+remain unverified. No device scan, Flash transfer or hardware operation occurs
+in this contract. SPI/QSPI HAL/model implementations are still outstanding.

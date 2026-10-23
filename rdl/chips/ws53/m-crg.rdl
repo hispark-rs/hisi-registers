@@ -64,11 +64,16 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r;} codec_channel[9:9];
     } MSUB_SLEEP @ 0x3e4;
     reg {
+        field {sw=rw; hw=r; desc="SPI_BUS_1 port enables the XIP QSPI global path; shared with XIP users";} xip_qspi_enable[7:7];
         field {sw=rw; hw=r; desc="ADC port GLB_CLKEN_LSADC_OFFSET";} lsadc_enable[12:12];
     } GLOBAL_CLKEN @ 0x548;
     reg {
         field {sw=rw; hw=r; desc="SPI_BUS_0 port writes 1 to enable, 0 to disable; other fields unmodeled";} enable[0:0];
     } SPI_CLOCK @ 0x55c;
+    reg {
+        hisi_evidence = "SDK-source 163d9150 spi_porting.h u_xip_qspi_cr and spi_port_clock_enable; 16-bit RMW writes 1/0 to the nine-bit field; no divider formula established";
+        field {sw=rw; hw=r;} control[8:0];
+    } XIP_QSPI_CLOCK @ 0x574;
     // ws53_liteos_app selects the non_os source component, not the bundled
     // non_os_rom/non_os_ram headers. Core NMI entry is separate from local IRQs.
     reg {
@@ -98,6 +103,14 @@ addrmap ws53_m_crg_regs {
     reg {
         field {sw=rw; hw=r; desc="SPI_BUS_0: 0 slave, 1 master; QSPI bus1 is master-only";} master[0:0];
     } SPI_DEVICE_MODE @ 0x950;
+    reg {
+        hisi_evidence = "SDK-source 163d9150 spi_porting.h u_xip_clken_0 and spi_port_clock_enable; halfword RMW; XIP/clock ownership must be coordinated";
+        field {sw=rw; hw=r;} qspi1_divider_enable[1:1];
+        field {sw=rw; hw=r;} qspi1_divider_clock_enable[3:3];
+        field {sw=rw; hw=r;} xip_bus_enable[4:4];
+        field {sw=rw; hw=r;} qspi1_enable[5:5];
+        field {sw=rw; hw=r;} qspi1_xip_enable[9:9];
+    } XIP_CLOCK_ENABLE @ 0x1240;
     reg {
         name = "TRNG_SEC_CFB: volatile shared ring control; SDK waits 200 us after enabling";
         hisi_evidence = "SDK-source 163d9150 security_unified_porting.h TRNG_SEC_CFB and hal_trng.c inner_trng_ring_enable; u16 read/modify/write";
