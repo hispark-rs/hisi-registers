@@ -332,3 +332,12 @@ preserves all differences and exits unsuccessfully until full parity is achieved
 UART_PARAMETER is now modeled as the observed0xd04 for all three instances,
 independently of the DMA behavior profile. No additional physical measurements
 or RDL/PAC reset defaults are implied by these model changes.
+
+`evidence/ws53-uart-access-hil.json` supersedes the SDK FIFO-status comments with
+three same-ELF, three-port RAM runs: FIFO bit2 is full at64 queued bytes, bit3
+is empty with FIFO enabled, and bit4 is set for queued RX. All64 bytes survive.
+DIV_EN set attempts with1/2/64 queued RX bytes do not latch; after draining,
+DIV_EN sets and DIV_L reads the programmed17. The earlier reset-probe zero was
+therefore an access-control failure, not proven divisor loss. SDK bit positions
+remain checked separately from contradicted descriptions; the non-PRO C type
+omits bit4. TX-only busy, nonzero DIV_H and busy divisor writes remain open.

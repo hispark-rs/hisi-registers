@@ -221,7 +221,7 @@ addrmap chip {{ addrmap {{
             self.assertEqual(regs["RX_FIFO_CNT"].findtext("fields/field/name"), "RX_FIFO_LEVEL")
             for field in ("FRAME_ERR", "PARITY_ERR", "OVERRUN_ERR"):
                 self.assertEqual(regs["LINE_STATUS"].findtext(f"fields/field[name='{field}']/readAction"), "clear")
-            for name, offset in (("RX_NOT_EMPTY", 2), ("RX_FULL", 3)):
+            for name, offset in (("RX_FIFO_FULL", 2), ("RX_FIFO_EMPTY", 3), ("UART_BUSY", 4)):
                 self.assertEqual(regs["FIFO_STATUS"].findtext(f"fields/field[name='{name}']/bitOffset"), str(offset))
             for i, base, irq in ((1, 0x52080000, 41), (2, 0x57014000, 42)):
                 derived = tree.find(f"./peripherals/peripheral[name='UART{i}']")

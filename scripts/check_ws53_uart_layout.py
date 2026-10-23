@@ -71,6 +71,7 @@ def main():
     source = ['#include <stddef.h>', '#include <stdint.h>',
               '#include ' + json.dumps(str(sdk / HEADER))]
     fields = []
+    physical_fields = []
     registers = uart.findall("registers/register")
     for reg in registers:
         name = reg.findtext("name")
@@ -82,8 +83,10 @@ def main():
         for field in reg.findall("fields/field"):
             field_name = field.findtext("name").lower()
             sdk_field = field_name
-            if name == "FIFO_STATUS":
-                sdk_field = {"rx_not_empty": "rx_fifo_full", "rx_full": "rx_fifo_empty"}.get(field_name, field_name)
+            if name == "FIFO_STATUS" and field_name == "uart_busy":
+                assert field.findtext("bitOffset") == "4" and field.findtext("bitWidth") == "1"
+                physical_fields.append("FIFO_STATUS.UART_BUSY: A-board queued RX observation, absent in non-PRO C type")
+                continue
             width = int(field.findtext("bitWidth"))
             low = int(field.findtext("bitOffset"))
             value = (1 << width) - 1
@@ -103,6 +106,7 @@ def main():
     print(json.dumps({"sdk_commit": PIN, "source_files": files,
                       "register_offset_and_width_checks": len(registers),
                       "field_encoding_checks": len(fields), "layout_verified": True,
+                      "physical_semantic_overrides": physical_fields + ["FIFO_STATUS bit2=RX full, bit3=enabled RX empty; SDK comments contradicted by all-three-port HIL"],
                       "port_controls": controls,
                       "hardware_verified": False}, indent=2))
 

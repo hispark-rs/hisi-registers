@@ -70,7 +70,7 @@ EXPECTED = {
         "output_arrays": 6,
         "cluster_arrays": 1,
         "registers_expanded": 945,
-        "fields_expanded": 1994,
+        "fields_expanded": 1997,
         "write_constraints": 20,
     },
 }

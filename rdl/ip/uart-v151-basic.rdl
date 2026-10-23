@@ -394,16 +394,15 @@ addrmap uart_v151_basic_regs #(longint unsigned MMIO_WIDTH = 16, bit SDK_VIEW = 
             hw = r;
             desc = "RX FIFO full flag";
         } rx_fifo_full[2:2] = 0x0;
-        field { sw=r; hw=w; ispresent=SDK_VIEW; desc="Receive FIFO contains data"; } rx_not_empty[2:2];
-        field { sw=r; hw=w; ispresent=SDK_VIEW; desc="Receive FIFO full"; } rx_full[3:3];
         field {
             sw = r;
             hw = r;
             desc = "RX FIFO empty flag";
         } rx_fifo_empty[3:3] = 0x0;
+        field { sw=r; hw=w; ispresent=SDK_VIEW;
+            desc="A-board UART0/1/2: high with1/2/64 clean queued RX bytes, low after draining. SDK PRO calls this busy; TX-only and disabled-FIFO behavior unqualified.";
+        } uart_busy[4:4];
     } FIFO_STATUS @ 0x44;
-    FIFO_STATUS.rx_fifo_full->ispresent = !SDK_VIEW;
-    FIFO_STATUS.rx_fifo_empty->ispresent = !SDK_VIEW;
     reg {
         regwidth = MMIO_WIDTH;
         field {
