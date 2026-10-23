@@ -1410,3 +1410,19 @@ source or qualifying other divider values/live glitch-free switching.
 The RDL field description now links the physical evidence. Layout, permissions,
 unknown reset values and the five-bit field width are unchanged. Only the five
 measured values may be exposed by the experimental typed HAL configuration.
+
+## PWM START acceptance contrast (2026-10-24)
+
+`ws53-pwm-start-hil.json` preserves the failed source-order finite8/16 experiment,
+a successful continuous-output control on the same MIO21/D11, and the successful
+finite experiment with a10us delay inserted after initial START and before EN
+is cleared. Original ordering gave no observed edges and no completion flag;
+the guarded ordering gave exactly8/16 pulses at100us period/50% duty, a quiet
+80ms tail, flag1 and successful acknowledgement. All runs recovered vendor AT.
+
+This disproves treating the START write as synchronously accepting the enabled
+configuration in the measured2MHz A-board profile. It establishes a tested guard,
+not an exact hardware latency, a readback-completion protocol or a guarantee for
+all upstream clocks/groups. Only group0's RDL description is updated; layout,
+access directions, command values and unknown reset/self-clear facts are intact.
+The SDK's original ordering remains accurately recorded by its source oracle.

@@ -76,7 +76,7 @@ addrmap ws53 {
     pwm->hisi_evidence = "SDK-source 163d9150 PWM v151 acore profile: 4 groups, 8 channels; no silicon reset, waveform or command readback verified";
     pwm.PWM_INT_MASK.pwm_int_mask->encode = ws53_pwm_interrupt_enable;
     pwm.PWM_INT_MASK.pwm_int_mask->desc = "Event enable despite MASK name: bit0 abnormal, bit1 step end; 1 permits, 0 masks, confirmed by SDK init writing 3";
-    pwm.PWM_START0.pwm_start_0->desc = "Commit group 0 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
+    pwm.PWM_START0.pwm_start_0->desc = "Commit group 0 configuration with 1; do not assume synchronous acceptance. A-board2MHz finite8/16 bursts required guarding the initial enabled configuration before EN-clear;10us guard passed. Exact acceptance latency and command readback unverified; see evidence/ws53-pwm-start-hil.json";
     pwm.PWM_START1.pwm_start_1->desc = "Commit group 1 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START2.pwm_start_2->desc = "Commit group 2 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START3.pwm_start_3->desc = "Commit group 3 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
