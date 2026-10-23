@@ -42,7 +42,8 @@ def main():
                                    'hal_sio_v151_regs_op.c', 'hal_sio_v151.c']]
     paths += [HAL + 'CMakeLists.txt', HAL + 'hal_sio.h', PORT + 'sio/sio_porting.c',
               PORT + 'include/sio_porting.h', CHIP + 'platform_core.h', CHIP + 'chip_core_irq.h',
-              'src/include/common_def.h', CONFIG]
+              'src/include/common_def.h', CONFIG, PORT + 'pwm/pwm_porting.c',
+              'src/drivers/chips/ws53/include/clock_recover.h']
     inputs = {}
     for path in paths:
         data = (sdk / path).read_bytes()
@@ -56,7 +57,8 @@ def main():
     require('hal_sio_v151/hal_sio_v151.c' in inputs[HAL + 'CMakeLists.txt'].decode(),
             'CMake no longer selects v151')
     svd_path = Path(__file__).resolve().parents[1] / 'generated/WS53.experimental.svd'
-    peri = ET.parse(svd_path).find("./peripherals/peripheral[name='I2S']")
+    svd = ET.parse(svd_path)
+    peri = svd.find("./peripherals/peripheral[name='I2S']")
     require(peri is not None, 'I2S absent')
     regs = peri.findall('registers/register')
     require(len(regs) == 25, 'register count')
@@ -116,6 +118,38 @@ def main():
     common = inputs['src/include/common_def.h'].decode()
     require('(*(volatile unsigned int*)(uintptr_t)(addr))' in common and
             '#define uapi_reg_setbit(addr, pos)' in common, 'clock operation width requires re-audit')
+    # Execute the original bit-set/clear macro bodies; only physical addresses
+    # are redirected to host RAM. This checks upper-half preservation as well.
+    macros = '\n'.join(re.findall(r'^#define uapi_reg_(?:setbit|clrbit)\(addr, pos\).*$', common, re.M))
+    require(len(macros.splitlines()) == 2, 'clock macro definitions changed')
+    defines += '\n' + macros
+    require('reg16_setbit(M_CTL_RB_M_CLKEN0, PWM_CLKEN0_OFFSET)' in
+            inputs[PORT + 'pwm/pwm_porting.c'].decode(), 'PWM halfword evidence changed')
+    recovery = clean(inputs['src/drivers/chips/ws53/include/clock_recover.h'].decode('utf-8-sig'))
+    union = re.search(r'typedef union \{.*?\} u_m_cken_0;', recovery, re.S).group()
+    code += [union]
+    cfields = dict(zip('MDIAG_ENABLE I2S_ENABLE MTOP_GLUE_TRIGGER_ENABLE PWM_ENABLE SDIO_DEVICE_ENABLE SECURE_PWM_ENABLE'.split(),
+                      'mdiag_clken i2s_clken mtop_glue_trigger_clken pwm_clken sdio_dev_clken sec_pwm_clken'.split()))
+    clock = svd.find("./peripherals/peripheral[name='M_CRG']")
+    for name, width in [('M_CLKEN0', '16'), ('M_CLKEN0_WORD', '32')]:
+        reg = clock.find(f"registers/register[name='{name}']")
+        require(reg.findtext('size') == width and int(reg.findtext('addressOffset'), 0) == 0x40,
+                f'{name} access width/offset')
+        require(reg.findtext('access') == 'read-write' and reg.find('resetValue') is None, f'{name} semantics')
+        fields = reg.findall('fields/field')
+        require(len(fields) == 6, 'clock field count')
+        for field in fields:
+            mask = 1 << int(field.findtext('bitOffset'))
+            require(field.findtext('bitWidth') == '1', 'clock field width')
+            field_checks += [f'{{ u_m_cken_0 v = {{.u32=0}}; v.bits.{cfields[field.findtext("name")]}=1; assert(v.u32=={mask}u); }}']
+    require(clock.findtext("registers/register[name='M_CLKEN0_WORD']/alternateRegister") == 'M_CLKEN0', 'same slot alias')
+    cmu = svd.find("./peripherals/peripheral[name='AUDIO_CMU']")
+    require(int(cmu.findtext('baseAddress'), 0) == 0x57008600 and not cmu.findall('interrupt'), 'CMU base/IRQ')
+    cfg0 = cmu.find("registers/register[name='NEW_CFG0']")
+    require(cfg0.findtext('size') == '32' and cfg0.findtext('access') == 'read-write' and
+            cfg0.find('resetValue') is None and cfg0.findtext('addressOffset') == '0x0', 'CMU access')
+    require(len(cfg0.findall('fields/field')) == 1 and cfg0.findtext('fields/field/bitOffset') == '0' and
+            cfg0.findtext('fields/field/bitWidth') == '1', 'CMU field')
     with tempfile.TemporaryDirectory(prefix='ws53-i2s-source-') as temp:
         work = Path(temp)
         stub = '''#pragma once
@@ -127,13 +161,15 @@ typedef unsigned sio_bus_t;
 #define SIO_BUS_0 0
 typedef void (*osal_irq_handler)(void);
 void irq_sio0_handler(void);
-static unsigned clock_addr[4], clock_bit[4], clock_set[4], clock_count;
-static void clock_write(unsigned addr, unsigned bit, unsigned set) {
-    assert(clock_count < 4); clock_addr[clock_count]=addr;
-    clock_bit[clock_count]=bit; clock_set[clock_count++]=set;
+_Static_assert(sizeof(unsigned int)==4, "SDK bit macros require word access");
+static unsigned clock_addr[4], clock_count;
+static volatile unsigned cmu_value=0xa55a1230u, mclk_value=0x5aa54081u;
+static volatile unsigned *clock_ref(unsigned addr) {
+    assert(clock_count < 4); clock_addr[clock_count++]=addr;
+    if (addr==0x57008600) return &cmu_value;
+    assert(addr==0x52000040); return &mclk_value;
 }
-#define uapi_reg_setbit(a,b) clock_write(a,b,1)
-#define uapi_reg_clrbit(a,b) clock_write(a,b,0)
+#define uapi_reg_read_val32(addr) (*clock_ref(addr))
 #define hal_sio_register_funcs(...) ((void)0)
 #define hal_sio_unregister_funcs(...) ((void)0)
 #define osal_irq_request(...) ((void)0)
@@ -155,11 +191,13 @@ static void clock_write(unsigned addr, unsigned bit, unsigned set) {
     assert(i2s_porting_rx_right_data_addr_get(0) == 0x52030058);
     assert(i2s_porting_rx_merge_data_addr_get(0) == 0x520300a0);
     assert(i2s_porting_tx_merge_data_addr_get(0) == 0x520300c0);
-    sio_porting_clock_enable(true); sio_porting_clock_enable(false);
+    sio_porting_clock_enable(true);
+    assert(cmu_value==0xa55a1231u && mclk_value==0x5aa54085u);
+    sio_porting_clock_enable(false);
+    assert(cmu_value==0xa55a1230u && mclk_value==0x5aa54081u);
     assert(clock_count == 4);
     for (unsigned i=0; i<4; i++) {
         assert(clock_addr[i] == (i%2 ? 0x52000040 : 0x57008600));
-        assert(clock_bit[i] == (i%2 ? 2 : 0)); assert(clock_set[i] == (i<2));
     }
     const unsigned widths[] = {16,18,20,24,32}, channels[] = {2,4,8,16};
     for (unsigned w=0; w<5; w++) for (unsigned c=0; c<4; c++) {
@@ -176,12 +214,14 @@ static void clock_write(unsigned addr, unsigned bit, unsigned set) {
         rows = subprocess.check_output([str(work / 'check')], text=True)
     print(json.dumps({'sdk_commit': PIN, 'registers': len(regs),
                       'field_count': sum(map(len, report.values())), 'fields': report,
+                      'additional_clock_fields': 13,
+                      'clock_rmw_original_macros_preserve_upper_and_neighbor_bits': True,
                       'divider_cases': [dict(zip(['width', 'channels', 'divider'], map(int, r.split()))) for r in rows.splitlines()],
                       'clock_writes': ['32-bit 0x57008600 bit0 set', '32-bit 0x52000040 bit2 set',
                                        '32-bit 0x57008600 bit0 clear', '32-bit 0x52000040 bit2 clear'],
                       'limitations': ['host C layout and port evidence, not silicon',
                                       'CT_SET/CLR readback and zero-write effects withheld',
-                                      'clock width alias and audio clock ownership require integration',
+                                      'audio clock ownership and upstream frequency require handoff',
                                       'SDK divider floors integer division before float conversion'],
                       'source_sha256': {p: hashlib.sha256(d).hexdigest() for p, d in inputs.items()},
                       'svd_sha256': hashlib.sha256(svd_path.read_bytes()).hexdigest()}, indent=2))

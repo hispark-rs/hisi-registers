@@ -8,6 +8,8 @@ addrmap ws53_m_crg_regs {
     default regwidth = 16;
     default accesswidth = 16;
     reg {
+        hisi_svd_word_view = "M_CLKEN0_WORD";
+        hisi_evidence = "SDK 163d9150: pwm_porting uses halfword access; sio_porting_clock_enable uses uapi_reg_setbit/clrbit with 32-bit unsigned int at the same address; upper bits unmodeled";
         field {sw=rw; hw=r;} mdiag_enable[1:1];
         field {sw=rw; hw=r;} i2s_enable[2:2];
         field {sw=rw; hw=r;} mtop_glue_trigger_enable[6:6];

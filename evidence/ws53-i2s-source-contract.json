@@ -334,6 +334,8 @@
       }
     }
   },
+  "additional_clock_fields": 13,
+  "clock_rmw_original_macros_preserve_upper_and_neighbor_bits": true,
   "divider_cases": [
     {
       "width": 16,
@@ -445,7 +447,7 @@
   "limitations": [
     "host C layout and port evidence, not silicon",
     "CT_SET/CLR readback and zero-write effects withheld",
-    "clock width alias and audio clock ownership require integration",
+    "audio clock ownership and upstream frequency require handoff",
     "SDK divider floors integer division before float conversion"
   ],
   "source_sha256": {
@@ -460,7 +462,9 @@
     "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
     "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
     "src/include/common_def.h": "c8dbb8b2f994793d3a9304cfeda60f5fc40d62bb4e75a4d7fb8e04a4f30a8b6d",
-    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/drivers/chips/ws53/porting/pwm/pwm_porting.c": "3007c81e5c56820139928d5d30622f65b4317ae8161b29ee99bd926a278383a4",
+    "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f"
   },
-  "svd_sha256": "b079565dd377fbd6957aade13af5d86d6fbc0d97c4db42baa46ec15925792a37"
+  "svd_sha256": "0900337a11c462ed78ccc61bff9f8d93ce0867073fe7cf9e97608d46734d73df"
 }

@@ -1036,10 +1036,16 @@ until verified; a future HAL must use explicit commands, not helper RMW.
 The compiled port confirms clock order: set `0x57008600` bit0
 (`CMU_DIV_AD_RSTN_SYNC_BIT`), then `0x52000040` bit2 (I2S gate); disabling clears
 in the same order. `common_def.h` implements these as 32-bit RMW. The existing
-M_CRG.M_CLKEN0 view is 16-bit for other ports. The 32-bit view and missing CMU
-register are **not yet integrated**; audio clock/reset ownership, upper-half
-preservation and control-core synchronization require resolution before HAL.
-Do not change the access size or toggle a shared reset without that integration.
+M_CRG.M_CLKEN0 view is 16-bit for other ports. The additional M_CLKEN0_WORD
+view now provides the same six fields at the same address with 32-bit access;
+the existing 16-bit interface is unchanged. AUDIO_CMU.NEW_CFG0 at0x57008600
+exposes only bit0, with no reset assumption or invented frequency. The source
+oracle executes the original set/clear macros over host RAM and checks that
+upper-half and neighboring bits survive all four operations. Both clock views
+are one shared resource, not separate claimable devices. Audio clock/reset
+ownership and control-core synchronization still require an explicit handoff.
+Enabling must not briefly assert the shared reset; normal release should leave
+shared gates enabled until shutdown ownership is proven.
 
 Twenty original divider calls (five widths times four channel counts) confirm
 integer division occurs before conversion to float: the result is exactly

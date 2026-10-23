@@ -30,7 +30,7 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 31,
+        "peripherals": 32,
         "interrupts": 20,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
@@ -59,6 +59,7 @@ EXPECTED = {
             "RTC0": 0x57029100,
             "RTC1": 0x57029200,
             "I2S": 0x52030000,
+            "AUDIO_CMU": 0x57008600,
             "TIMER": 0x52002000,
             "TCXO": 0x57000200,
             "GPIO0": 0x5700C000,
@@ -68,8 +69,8 @@ EXPECTED = {
         "source_arrays": 0,
         "output_arrays": 6,
         "cluster_arrays": 1,
-        "registers_expanded": 943,
-        "fields_expanded": 1987,
+        "registers_expanded": 945,
+        "fields_expanded": 1994,
         "write_constraints": 18,
     },
 }

@@ -7,6 +7,91 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def word_view_fixture(self, reg_props='', field_props='', name='CTRL_WORD',
+                          bits=16, offset=0, tail=4, array='', evidence='source audit'):
+        properties = Path(__file__).resolve().parents[1] / 'rdl/properties.rdl'
+        return f'''`include "{properties}"
+addrmap chip {{ addrmap {{
+    reg {{ regwidth={bits}; accesswidth={bits};
+        hisi_svd_word_view="{name}"; hisi_evidence="{evidence}"; {reg_props}
+        field {{ sw=rw; hw=rw; {field_props} }} enable[2:2];
+    }} ctrl{array} @ {offset};
+    reg {{ regwidth=16; accesswidth=16; field {{ sw=rw; hw=r; }} value[15:0]; }} next @ {tail};
+}} clock @ 0x1000; }};
+'''
+
+    def test_word_view_preserves_halfword_fields_without_reset_or_new_bits(self):
+        from check_schema import validate
+        with tempfile.TemporaryDirectory() as work:
+            source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+            source.write_text(self.word_view_fixture())
+            export(source, dest)
+            regs = ET.parse(dest).findall('./peripherals/peripheral/registers/register')
+            half, word, neighbor = regs
+            self.assertEqual([r.findtext('name') for r in regs], ['CTRL', 'CTRL_WORD', 'NEXT'])
+            self.assertEqual([r.findtext('size') for r in regs], ['16', '32', '16'])
+            self.assertEqual(half.findtext('addressOffset'), word.findtext('addressOffset'))
+            self.assertEqual(word.findtext('alternateRegister'), 'CTRL')
+            self.assertEqual(ET.tostring(half.find('fields')), ET.tostring(word.find('fields')))
+            self.assertEqual(word.findtext('access'), 'read-write')
+            self.assertIsNone(word.find('resetValue'))
+            self.assertIsNone(word.find('resetMask'))
+            self.assertEqual(neighbor.findtext('addressOffset'), '0x4')
+            validate([dest])
+
+    def test_word_view_rejects_ambiguous_or_unsafe_declarations(self):
+        cases = [dict(name=''), dict(name='NEXT'), dict(name='CTRL'), dict(name='lower'),
+                 dict(bits=32), dict(bits=8), dict(offset=2, tail=8), dict(evidence=''),
+                 dict(field_props='onwrite=woclr;'), dict(field_props='onread=rclr;'),
+                 dict(reg_props='hisi_write_min=0; hisi_write_max=7;'),
+                 dict(array='[2]', tail=8), dict(field_props='reset=0;')]
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as work:
+                source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+                source.write_text(self.word_view_fixture(**case))
+                with self.assertRaisesRegex(ValueError, 'invalid word access view'):
+                    export(source, dest)
+
+    def test_word_view_rejects_neighbor_overlap_and_trailing_extension(self):
+        for tail in (2,):
+            with tempfile.TemporaryDirectory() as work:
+                source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+                source.write_text(self.word_view_fixture(tail=tail))
+                with self.assertRaisesRegex(ValueError, 'exceeds vacant slot'):
+                    export(source, dest)
+        with tempfile.TemporaryDirectory() as work:
+            source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+            # The exporter cannot silently widen the peripheral's extent.
+            body = self.word_view_fixture()
+            body = body[:body.rindex('    reg { regwidth=16;')] + '} clock @ 0x1000; };'
+            source.write_text(body)
+            with self.assertRaisesRegex(ValueError, 'exceeds vacant slot'):
+                export(source, dest)
+
+    def test_ws53_i2s_clock_views_keep_shared_field_encodings(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            tree = ET.parse(dest)
+            clock = tree.find("./peripherals/peripheral[name='M_CRG']")
+            half = clock.find("registers/register[name='M_CLKEN0']")
+            word = clock.find("registers/register[name='M_CLKEN0_WORD']")
+            self.assertEqual(half.findtext('size'), '16')
+            self.assertEqual(word.findtext('size'), '32')
+            self.assertEqual(word.findtext('addressOffset'), '0x40')
+            self.assertEqual(word.findtext('alternateRegister'), 'M_CLKEN0')
+            self.assertEqual(ET.tostring(half.find('fields')), ET.tostring(word.find('fields')))
+            self.assertEqual(word.findtext("fields/field[name='I2S_ENABLE']/bitOffset"), '2')
+            cmu = tree.find("./peripherals/peripheral[name='AUDIO_CMU']")
+            self.assertEqual(cmu.findtext('baseAddress'), '0x57008600')
+            self.assertFalse(cmu.findall('interrupt'))
+            reg = cmu.find('registers/register')
+            self.assertEqual(reg.findtext('size'), '32')
+            self.assertEqual(reg.findtext('access'), 'read-write')
+            self.assertEqual(reg.findtext('fields/field/bitOffset'), '0')
+            self.assertEqual(reg.findtext('fields/field/bitWidth'), '1')
+            self.assertIsNone(reg.find('resetValue'))
+
     def test_ws53_pwm_profile_withholds_resets_and_exposes_event_enable(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"
