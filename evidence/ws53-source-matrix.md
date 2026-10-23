@@ -1442,3 +1442,13 @@ HAL must distinguish initial configuration acceptance from later notifications.
 The pending flag is not an elapsed-time/deadline proof. QEMU's previous
 block-end-only flag model hid this bug and must be corrected. Pulse counter1
 during the first pulse is also observed; other counter phases remain unqualified.
+
+## PWM finite pulse counter phase (2026-10-24)
+
+`ws53-pwm-counter-hil.json` records18 TCXO-timestamped observations and same-run
+DSLogic8/16-pulse waveforms. At roughly40/90/140/240/440/740us the counter
+reads1/1/2/3/5/8. After deferred stop at800/1600us it reads0. The former model
+was one lower only while running. RDL documents channel0's finite-mode evidence
+without extending it to continuous/repeating modes or exact boundary timing.
+The diagnostic extra UART lines intentionally fail the former exact-string
+oracle; RAM readback and original firmware recovery separately passed.

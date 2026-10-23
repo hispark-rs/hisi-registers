@@ -81,6 +81,7 @@ addrmap ws53 {
     pwm.PWM_START2.pwm_start_2->desc = "Commit group 2 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START3.pwm_start_3->desc = "Commit group 3 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_PERIODLOAD_FLAG0.pwm_periodload_flag_0->desc = "Configuration-load notification; A-board flag=1 and count=1 during first pulse after START, before 8/16-pulse block completion. W1C via CFG_INT_CLR0 clears it; deferred stop later asserts it again. Not an unconditional block-end flag. See evidence/ws53-pwm-load-flag-hil.json";
+    pwm.PWM_PERIODCNT0.pwm_periodcnt_0->desc = "A-board finite8/16 PWM0 at2MHz: active pulse index is1-based during each100us period, then0 after deferred stop. Boundary, continuous, repeating and overflow semantics unverified; see evidence/ws53-pwm-counter-hil.json";
     pwm.PWM_START0.pwm_start_0->hisi_write_min = 1;
     pwm.PWM_START0.pwm_start_0->hisi_write_max = 1;
     pwm.PWM_START1.pwm_start_1->hisi_write_min = 1;
