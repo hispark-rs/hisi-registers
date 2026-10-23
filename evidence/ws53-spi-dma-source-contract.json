@@ -1,0 +1,55 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "config_executions": 120,
+  "duplex_sequences": 14,
+  "routes": [
+    {
+      "instance": "SPI0",
+      "tx": 6,
+      "rx": 7,
+      "data": "0x5208702c"
+    },
+    {
+      "instance": "QSPI1",
+      "tx": 4,
+      "rx": 5,
+      "data": "0x5208d060"
+    }
+  ],
+  "source_profile": {
+    "tx_level": 4,
+    "rx_level": 0,
+    "protection": 2,
+    "flow_tx_rx": [
+      1,
+      2
+    ]
+  },
+  "source_hazards": [
+    "length cast to uint16 before shifting: 65536 bytes becomes zero; count4096 survives but exceeds MDMA12-bit",
+    "DATA-provider errors ignored, permitting address zero",
+    "different widths accepted without frame compatibility check",
+    "duplex timeouts request DMA stop but leave peripheral DMA enables set",
+    "TX-start failure ends RX channel but leaves its software channel field recorded"
+  ],
+  "mocks": [
+    "DMA config/start/stop and semaphore completions; no transfer occurs",
+    "HAL DATA provider uses SVD address; injected failure returns no address",
+    "SPI request control records sequence, not bus-level ACK or drain"
+  ],
+  "automatic_width_branch_verified": false,
+  "reference_driver_enabled": false,
+  "hardware_accessed": false,
+  "input_sha256": {
+    "src/drivers/drivers/driver/spi/spi.c": "4c1bd656c310d85e0e077dabbe48b75a6abaa0a24be2e3a71f6bd24f4146c2d6",
+    "src/drivers/chips/ws53/porting/spi/spi_porting.c": "2425ee6bb5348cc626afc61dca9792492dc88d11aa2897c2a4330ff177cee3be",
+    "src/drivers/chips/ws53/porting/include/spi_porting.h": "4cd7533cc1e737c38099005e6622d09297d0692fff3169f39e5427b4f7d1c3ff",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/dma_porting.h": "e5cb6842db137e028006e726a931d2fcfdcba9ef9fb4cd8fd4c10327c20f36bb",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/romable/hal_dma.h": "6e6b9fb8b7cfe10d4e288474e8d8493cf36027be86a445a34a47dff5b6e072ed",
+    "src/drivers/drivers/hal/spi/hal_spi.h": "c1049b39ce33ae194b1c415804fb48974a047f6a143e3451ba8fc30171efd719",
+    "src/include/driver/spi.h": "107045ce1b664ee7b53e95c26d0b1665a34f4e75b010d652ccef8e8078d4dd42",
+    "src/include/driver/dma.h": "65f37374e269dbab87e5cebf1cd2d9bfd7f041cb784f5dabb6afe7f0d4064834",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157"
+}

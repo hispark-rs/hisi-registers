@@ -1144,3 +1144,36 @@ product evidence. The existing RDL/PAC RO capability and unknown reset policy
 are unchanged. Request thresholds/ack, HPROT, clock/cache/ownership and physical
 bus widths remain unverified; any simulation must opt into explicit assumptions.
 Machine-readable input hashes and outcomes: `ws53-uart-dma-source-contract.json`.
+
+## SPI/QSPI MDMA request contract (2026-10-23)
+
+`scripts/check_ws53_spi_dma_contract.py` executes pinned original SPI port and
+driver functions over host RAM:120 configurations (two ports, three equal widths,
+two directions, ten count boundaries) and14 duplex start/failure sequences.
+The manual-width branch is compiled; automatic width conversion is not verified.
+DMA allocation/start/stop, semaphores and HAL DATA lookup are explicit mocks.
+The companion `check_ws53_spi_contract.py` now executes the actual DATA-address
+adapter and threshold setters on original SPI/QSPI register structs in host RAM.
+
+SPI0 uses requests6/7 and DATA0x5208702c; QSPI1 uses4/5 and DATA0x5208d060.
+TX/RX thresholds are4/0. The enable bits differ by instance:SPI0 TXbit0/RXbit1,
+QSPI1 TXbit1/RXbit0. Flow1/2 uses an incrementing memory endpoint and a fixed
+peripheral endpoint; the source protection enum is2 (BUFFERABLE), unlike UART's
+conflicting local constant. This value does not prove actual bus/cache behavior.
+
+Original hazards captured by execution, not copied into the new HAL:
+
+- Length is cast to uint16 **before** shifting by width.65536 bytes becomes0;
+  count4096 survives the driver but exceeds the MDMA12-bit field.
+- DATA lookup failures are ignored; both config helpers can pass address0 onward.
+- Caller-supplied unequal widths are accepted without a frame-size guard.
+- Duplex order is RXconfigure → requests-off → RXstart → TXconfigure → TXstart
+  → requests-on → TXwait → RXwait. Timeout ends both channels but leaves the
+  peripheral request enables on; TXstart failure ends RX but retains its software
+  channel field. None of these mock stops proves physical quiescence.
+
+Reference `ws53_liteos_app` disables SPI. Full duplex, single-line same-width
+8/32-bit simulation is the next integration profile;16-bit/width conversion,
+receive-only clock generation, native CS, bursts/ACK, physical master/protection,
+cache/clock/XIP/control-core ownership and bus drain remain unverified.
+Machine-readable hashes and results: `ws53-spi-dma-source-contract.json`.

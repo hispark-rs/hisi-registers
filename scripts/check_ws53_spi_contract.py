@@ -189,6 +189,13 @@ int main(void) {
         backing[bus][dma/4]=0;
         hal_spi_v151_100_dmacr_set_tdmae(bus,1); assert(backing[bus][dma/4]==(bus?2:1));
         hal_spi_v151_100_dmacr_set_rdmae(bus,1); assert(backing[bus][dma/4]==3);
+        uint32_t data_addr=0;
+        assert(hal_spi_v151_100_ctrl_get_dma_data_addr(bus,0,(uintptr_t)&data_addr)==0);
+        assert(data_addr==(uint32_t)(uintptr_t)&backing[bus][(bus?0x60:0x2c)/4]);
+        hal_spi_v151_100_dmatdlr_set_dmatdl(bus,4);
+        hal_spi_v151_100_dmardlr_set_dmardl(bus,0);
+        assert(backing[bus][(bus?0x50:0x20)/4]==4);
+        assert(backing[bus][(bus?0x54:0x1c)/4]==0);
         hal_spi_v151_100_imr_set_txei(bus,1); assert(backing[bus][(bus?0x2c:0xc4)/4]==(bus?1:128));
         backing[bus][status/4]=1u<<(bus?0:15); assert(hal_spi_v151_100_sr_get_busy(bus)==1);
         backing[bus][status/4]=0; assert(hal_spi_v151_100_sr_get_busy(bus)==0);
@@ -212,7 +219,7 @@ int main(void) {
         work=Path(tmp)
         stubs = {
             'platform_core.h':platform_stub,
-            'hal_spi.h':'', 'hal_spi_v151_100.h':'', 'std_def.h':'', 'pinctrl.h':'',
+            'hal_spi.h':'typedef unsigned hal_spi_ctrl_id_t;', 'hal_spi_v151_100.h':'', 'std_def.h':'', 'pinctrl.h':'',
             'arch_port.h':'#define irq_prio(x) 0\n',
             'common_def.h':'#include <stdint.h>\n#include <stddef.h>\n#include <stdbool.h>\n#define unused(x) ((void)(x))\n#define BIT(x) (1u<<(x))\n',
             'errcode.h':'typedef unsigned errcode_t;\n#define ERRCODE_SUCC 0\n#define ERRCODE_INVALID_PARAM 1\n#define ERRCODE_NOT_SUPPORT 2\n',
@@ -225,7 +232,7 @@ int main(void) {
             (work/name).parent.mkdir(parents=True,exist_ok=True)
             (work/name).write_text('#pragma once\n'+text+'\n')
         (work/'check.c').write_text('\n'.join(code))
-        command=[args.cc,'-std=c11','-Wall','-Wextra','-Werror','-ffunction-sections','-fdata-sections','-DCONFIG_DRIVER_SUPPORT_SPI=1']
+        command=[args.cc,'-std=c11','-Wall','-Wextra','-Werror','-ffunction-sections','-fdata-sections','-DCONFIG_DRIVER_SUPPORT_SPI=1','-DCONFIG_SPI_SUPPORT_DMA=1']
         for inc in (work,sdk/V,sdk/(PORT+'include'),sdk/CHIP,sdk/(CHIP+'acore')):
             command+=['-I',str(inc)]
         subprocess.run([*command,str(work/'check.c'),'-Wl,--gc-sections','-o',str(work/'check')],check=True)
@@ -237,7 +244,7 @@ int main(void) {
         'source_dividers_at_32MHz':{'1MHz':32,'10MHz':3,'12MHz':2},
         'checks':['C offsets, widths and all modeled fields','field helpers translate distinct layouts; whole-word helpers do not',
             'SPI0 gate uses read32/write16; QSPI chain uses three read16/write16 operations',
-            'mode switch and master-only QSPI','different DMA/mask/busy bits','divider truncation and no even rounding',
+            'mode switch and master-only QSPI','different DMA/mask/busy bits; actual DATA-address adapter and threshold setters','divider truncation and no even rounding',
             'SDK clear helper performs RMW; physical read-clear not simulated','malformed reserved fields inflate three unions'],
         'fifo_depth_verified':False,'hardware_accessed':False,'installed_firmware_verified':False},indent=2))
 
