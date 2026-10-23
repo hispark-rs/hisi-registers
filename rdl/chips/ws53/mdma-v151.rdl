@@ -1,7 +1,8 @@
 // SDK 163d9150, ROM app hal_dmac_v151_regs_def.h and dma_porting.h.
-// acore DMA_BASE_ADDR selects this 8-channel controller, not the SDMA macro.
-// ROM evidence: 0x1accc uses 8 channels with 0x20 stride; 0x1b338/0x1b358
-// set completion/error bits at +8. Reset values and runtime ownership unknown.
+// acore DMA_BASE_ADDR selects this SDK eight-slot layout, not the SDMA macro.
+// ROM 0x1accc loops eight slots with0x20 stride; this does not prove silicon
+// presence. A-board only retains configuration in slots0..3 (initial HIL).
+// 0x1b338/0x1b358 set completion/error bits at+8. Reset/ownership unknown.
 
 enum ws53_mdma_request {
     I2C0_TX = 0; I2C0_RX = 1;
@@ -15,7 +16,7 @@ enum ws53_mdma_request {
 };
 
 addrmap ws53_mdma_v151_regs {
-    hisi_evidence = "SDK-source 163d9150 ROM app v151; ROM-read A-board 23121302 confirms access offsets, 8 channels, clear writes; transfer behavior not silicon tested";
+    hisi_evidence = "SDK-source 163d9150 ROM app v151; ROM code confirms eight-slot layout/stride, not hardware presence. Initial HIL23121302: slots0..3 retain configuration,4..7 read zero; channel0 copies17u32 with idle count0 and final-element addresses. See evidence/ws53-mdma-initial-hil.json; other semantics unqualified";
     reg {
         field { sw=r; hw=w; } pending[7:0];
         field { sw=r; hw=w; } transfer_complete[15:8];
@@ -55,7 +56,9 @@ addrmap ws53_mdma_v151_regs {
             field { sw=rw; hw=rw; } master[0:0];
             field { sw=rw; hw=rw; } address[31:2];
         } LINKED_LIST @ 0x0;
-        reg { field { sw=rw; hw=rw; } address[31:0]; } DESTINATION @ 0x4;
+        reg { field { sw=rw; hw=rw;
+            desc = "Program destination address. Initial A-board memory-copy HIL reads the last transferred element after completion, not one-past; peripheral/partial progress remains unqualified.";
+        } address[31:0]; } DESTINATION @ 0x4;
         reg {
             field { sw=rw; hw=rw; } enable[0:0];
             field { sw=rw; hw=r; encode=ws53_mdma_request; } source_request[4:1];
@@ -69,9 +72,13 @@ addrmap ws53_mdma_v151_regs {
             } active[15:15];
             field { sw=rw; hw=r; } halt[16:16];
         } CONFIGURATION @ 0x8;
-        reg { field { sw=rw; hw=rw; } address[31:0]; } SOURCE @ 0x10;
+        reg { field { sw=rw; hw=rw;
+            desc = "Program source address. Initial A-board memory-copy HIL reads the last transferred element after completion, not one-past; peripheral/partial progress remains unqualified.";
+        } address[31:0]; } SOURCE @ 0x10;
         reg {
-            field { sw=rw; hw=rw; } transfer_size[11:0];
+            field { sw=rw; hw=rw;
+                desc = "Write element count. Readback is status, not a programming echo: initial A-board HIL reads zero before enabling and after completion despite a successful17-element transfer. Active/partial readback semantics remain unqualified.";
+            } transfer_size[11:0];
             field { sw=rw; hw=r; } source_burst[14:12];
             field { sw=rw; hw=r; } destination_burst[17:15];
             field { sw=rw; hw=r; } source_width[20:18];
