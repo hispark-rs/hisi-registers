@@ -1,0 +1,36 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "source": "src/drivers/chips/ws53/porting/tsensor/tsensor_porting.c",
+  "source_sha256": "42c26dfe1a5182f3dd1ff62ac5a2412bd555b1e8aaecce069838791051556a8b",
+  "input_sha256": {
+    "src/drivers/chips/ws53/porting/tsensor/tsensor_porting.c": "42c26dfe1a5182f3dd1ff62ac5a2412bd555b1e8aaecce069838791051556a8b",
+    "src/drivers/chips/ws53/porting/tsensor/CMakeLists.txt": "406fd1ae2f40296e73f90c9c0c9dd3a2297010da2c14cbc357f66144f5735eeb",
+    "src/build/config/target_config/ws53/target_config.py": "e03e623efdc8b745b5124be7ee697eec698b8c3261e0603ff1ac3e71916e9a03",
+    "src/application/ws53/ws53_application/main.c": "4511fa9dec6b2c31fe26d53820f7f40fddec23f9841fb0cb5bd8bf28e927d0f7"
+  },
+  "registers": 6,
+  "source_code_cases": 1024,
+  "curve_sha256": "7f931c04a239932753ac12565dfb00ce15071fcc205f5ff89384b834061a9197",
+  "observations": [
+    "five writes in source order",
+    "CONTROL zero initializes",
+    "SDK trusts any nonzero CONTROL",
+    "one coherent READY/code read per poll",
+    "SDK unbounded poll; no delay",
+    "C signed truncation then upper-only saturation",
+    "no stop/IRQ/status-clear source evidence"
+  ],
+  "reference_code_endpoints": [
+    118,
+    933
+  ],
+  "sdk_output_at_endpoints": [
+    -40,
+    125
+  ],
+  "sdk_output_at_code_extremes": [
+    -63,
+    125
+  ],
+  "hardware_accessed": false
+}

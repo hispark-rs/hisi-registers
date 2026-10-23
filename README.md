@@ -111,3 +111,12 @@ The optional WS53 I2C source oracle checks the pinned vendor C against host RAM
 It verifies the non-PRO instance layout, FIFO command aliases and clock gates,
 and records contradictory clear helpers instead of guessing selective-clear bits.
 See the WS53 source matrix for remaining timing/ownership limitations.
+
+WS53 temperature polling source oracle (host stubs, no hardware):
+`uv run --script scripts/check_ws53_tsensor_contract.py --sdk /path/to/fbb_ws53`.
+It checks the selected application port, six SVD register/access contracts, the
+five initialization writes, lazy startup and all 1024 raw-code conversions by
+compiling the original pinned C source. `--curve-output /path/to/sdk-curve.txt`
+exports the original C results for independent HAL comparison. The port's loop
+has no timeout and trusts any nonzero CONTROL; neither behavior is a recommended
+HAL contract. Stop, READY clear/freshness, clocks and IRQ semantics remain unknown.
