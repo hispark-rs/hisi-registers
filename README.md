@@ -306,3 +306,12 @@ The multicore pin helper writes L0's shared interrupt route even for UART0/1,
 release leaves pulls enabled, and this port ignores the product's L0 pin numbers
 19/20 in favor of AGPIO1/2. These are source-profile facts, not evidence of the
 currently flashed firmware's wiring, full reset behavior, or clock ownership.
+
+`evidence/ws53-uart-all-lines-hil.json` extends the UART line/flush experiment
+to all three application instances: the same ELF passes three A-board RAM runs,
+each with216 configurations,432 retained loopback bytes and144 initial flush
+waits, followed by original-firmware recovery. All ports observe FIFO empty
+before transmit completion. QEMU passes the same markers using its explicit
+100us serializer hypothesis. UART0/1 stay in internal loopback until board reset;
+physical pads, actual baud timing, clock provisioning, DMA, real receive faults
+and production ownership remain unqualified. No RDL/PAC facts changed.

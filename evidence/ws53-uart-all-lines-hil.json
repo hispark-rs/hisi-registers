@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "qemu_commit": "272611e1ead5db5d0b2cf6275bca289a5de099c3",
+  "runs": [
+    {
+      "name": "uart-all-lines-hil-01",
+      "elf_sha256": "c16fefcbff502cf5a05521eefe9fb6c713ca00035a9e5cb909f7e1d1d75c4852",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "port_results": [
+        3,
+        0,
+        72,
+        48,
+        144,
+        48,
+        1,
+        72,
+        48,
+        144,
+        48,
+        2,
+        72,
+        48,
+        144,
+        48
+      ]
+    },
+    {
+      "name": "uart-all-lines-hil-02",
+      "elf_sha256": "c16fefcbff502cf5a05521eefe9fb6c713ca00035a9e5cb909f7e1d1d75c4852",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "port_results": [
+        3,
+        0,
+        72,
+        48,
+        144,
+        48,
+        1,
+        72,
+        48,
+        144,
+        48,
+        2,
+        72,
+        48,
+        144,
+        48
+      ]
+    },
+    {
+      "name": "uart-all-lines-hil-03",
+      "elf_sha256": "c16fefcbff502cf5a05521eefe9fb6c713ca00035a9e5cb909f7e1d1d75c4852",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "port_results": [
+        3,
+        0,
+        72,
+        48,
+        144,
+        48,
+        1,
+        72,
+        48,
+        144,
+        48,
+        2,
+        72,
+        48,
+        144,
+        48
+      ]
+    }
+  ],
+  "swd": {
+    "swd-before-uart-allports": {
+      "passed": true,
+      "correct": 600
+    },
+    "swd-after-uart-allports": {
+      "passed": true,
+      "correct": 600
+    }
+  },
+  "source_contract_commit": "904aed3",
+  "current_source_sha256": {
+    "examples/ws53/ram_smoke/src/uart_line.rs": "f15b6e858959ff7eccb06c5e5f0110af4cb7b2a688e397e4aab0c223ec894d50",
+    "examples/ws53/ram_smoke/src/main.rs": "efd974e34619c98aa001eefcaf5a91bdfa0a2c6c000f62e7cba70ba53fd4adcf",
+    "examples/ws53/ram_smoke/Cargo.toml": "398f296ee2654fd06b28762faa4d93ed5b8d832b00bc5ecaa73475b7af2a3484",
+    "hil/ws53-ram-smoke.py": "f0edb4d3e7f489b37e3a137689e70ebd2e91bca1596b8e05d6accee980e58f2a",
+    "scripts/test-ws53-uart-host.py": "b8fe35cd23a9b13d0e44c07d5cbc4e3b466be39c1aee8d199bf8db1461c5b496",
+    "scripts/test-ws53-ram-readback.py": "b6eab838ccd0dea7681be908f44cc9dd4610ef85144ef3c480726c9cf6f4e3db",
+    "scripts/test-ws53-uart-line-samples.py": "b03d749bcd4970b2008feccdc0bd761b6e3ecac0bba1d263c1d808312b33e481"
+  },
+  "source_note": "One comment after HIL clarifies unresolved H1/L0 gates and SDMA; executable fixture unchanged.",
+  "per_round": {
+    "ports": 3,
+    "line_configurations": 216,
+    "loopback_bytes": 432,
+    "first_flush_would_block": 144
+  },
+  "checks": {
+    "target_clippy": true,
+    "readback_faults": true,
+    "rejected_bad_observations": 25,
+    "uart2_model_regression": true,
+    "python_policy": true,
+    "actionlint": true
+  },
+  "limits": [
+    "Inherited clocks and released resets only, no cold-start gate writes",
+    "UART0/1 internal loopback only: no physical pad or external serial acceptance",
+    "No physical baud/frame timing calibration; QEMU serializer fixed100us is an explicit hypothesis",
+    "No physical receive error/overrun injection, no DMA or async qualification",
+    "Control core held reset; residual SDMA quiescence and production handoff remain unproven",
+    "Preliminary AP0 log CTL labels at0x10 refer to DIV_L, not UART_CTL; runner checks actual UART_CTL at0x8"
+  ]
+}
