@@ -1,0 +1,342 @@
+{
+  "date": "2026-10-24",
+  "cases": [
+    {
+      "name": "pwm-finite-fixed-hil-01",
+      "elf_sha256": "0443b05e8f798b6c2e47b9d433eb238de5f9263141ea0b735c4ecbcf15a02e12",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 1\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000000\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 1\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000000\r\nWS53 FAIL pwm_finite observed\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_finite bursts=2 poll=1 restore=1\r\n",
+      "recovered": true,
+      "waveform": {
+        "mode": "pwm-finite",
+        "hil_passed": false,
+        "runner_exit": 1,
+        "capture_exit": 0,
+        "sample_rate": 10000000,
+        "threshold_volts": 1.65,
+        "probe_channel": 11,
+        "pad": "MIO21/MGPIO21/SGPIO2/SDK47",
+        "capture_ready_monotonic": 955767.392209248,
+        "raw_sha256": "9f55175330297ec1e3a9bbd7e74a22ec7321799dad949687f0309d10dd3c0063",
+        "stages": [
+          {
+            "stage": 0,
+            "passed": false,
+            "expected_pulses": 8,
+            "edge_count": 2,
+            "rising_edges": 1,
+            "initial_level": 0,
+            "final_level": 0,
+            "quiet_tail_seconds": 0.0850009,
+            "mean_period_seconds": null,
+            "mean_high_seconds": 1.9e-05,
+            "edges_first128": [
+              [
+                29277687,
+                1
+              ],
+              [
+                29277877,
+                0
+              ]
+            ],
+            "begin_sample": 29175556,
+            "end_sample": 30127886
+          },
+          {
+            "stage": 1,
+            "passed": false,
+            "expected_pulses": 16,
+            "edge_count": 2,
+            "rising_edges": 1,
+            "initial_level": 0,
+            "final_level": 0,
+            "quiet_tail_seconds": 0.0851171,
+            "mean_period_seconds": null,
+            "mean_high_seconds": 1.9e-05,
+            "edges_first128": [
+              [
+                31082641,
+                1
+              ],
+              [
+                31082831,
+                0
+              ]
+            ],
+            "begin_sample": 30980502,
+            "end_sample": 31934002
+          }
+        ],
+        "passed": false
+      }
+    },
+    {
+      "name": "pwm-finite-load-state-hil-01",
+      "elf_sha256": "af864642dd2f4ce42a7f2947358f6367949b8b7e261dc8e0899c9f3138a49883",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM LOAD SAMPLE 00000001000100000000\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM LOAD SAMPLE 00000001000100000000\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_finite bursts=2 poll=1 restore=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM LOAD SAMPLE 00000000000000000000\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM LOAD SAMPLE 00000000000000000000\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_finite bursts=2 poll=1 restore=1\r\n",
+      "recovered": true,
+      "waveform": {
+        "mode": "pwm-finite",
+        "hil_passed": false,
+        "runner_exit": 1,
+        "capture_exit": 0,
+        "sample_rate": 10000000,
+        "threshold_volts": 1.65,
+        "probe_channel": 11,
+        "pad": "MIO21/MGPIO21/SGPIO2/SDK47",
+        "capture_ready_monotonic": 955917.908282593,
+        "raw_sha256": "0a9866fd8890569ec12b1de46491e59850ced8540eabeda6edad646d36baf3e0",
+        "stages": [
+          {
+            "stage": 0,
+            "passed": true,
+            "expected_pulses": 8,
+            "edge_count": 16,
+            "rising_edges": 8,
+            "initial_level": 0,
+            "final_level": 0,
+            "quiet_tail_seconds": 0.0843057,
+            "mean_period_seconds": 0.0001,
+            "mean_high_seconds": 5e-05,
+            "edges_first128": [
+              [
+                29221923,
+                1
+              ],
+              [
+                29222423,
+                0
+              ],
+              [
+                29222923,
+                1
+              ],
+              [
+                29223423,
+                0
+              ],
+              [
+                29223923,
+                1
+              ],
+              [
+                29224423,
+                0
+              ],
+              [
+                29224923,
+                1
+              ],
+              [
+                29225423,
+                0
+              ],
+              [
+                29225923,
+                1
+              ],
+              [
+                29226423,
+                0
+              ],
+              [
+                29226923,
+                1
+              ],
+              [
+                29227423,
+                0
+              ],
+              [
+                29227923,
+                1
+              ],
+              [
+                29228423,
+                0
+              ],
+              [
+                29228923,
+                1
+              ],
+              [
+                29229423,
+                0
+              ]
+            ],
+            "begin_sample": 29118945,
+            "end_sample": 30072480
+          },
+          {
+            "stage": 1,
+            "passed": true,
+            "expected_pulses": 16,
+            "edge_count": 32,
+            "rising_edges": 16,
+            "initial_level": 0,
+            "final_level": 0,
+            "quiet_tail_seconds": 0.0836861,
+            "mean_period_seconds": 9.999333333333334e-05,
+            "mean_high_seconds": 4.9993750000000006e-05,
+            "edges_first128": [
+              [
+                31028923,
+                1
+              ],
+              [
+                31029423,
+                0
+              ],
+              [
+                31029923,
+                1
+              ],
+              [
+                31030423,
+                0
+              ],
+              [
+                31030923,
+                1
+              ],
+              [
+                31031423,
+                0
+              ],
+              [
+                31031923,
+                1
+              ],
+              [
+                31032423,
+                0
+              ],
+              [
+                31032923,
+                1
+              ],
+              [
+                31033423,
+                0
+              ],
+              [
+                31033923,
+                1
+              ],
+              [
+                31034423,
+                0
+              ],
+              [
+                31034923,
+                1
+              ],
+              [
+                31035423,
+                0
+              ],
+              [
+                31035923,
+                1
+              ],
+              [
+                31036423,
+                0
+              ],
+              [
+                31036923,
+                1
+              ],
+              [
+                31037423,
+                0
+              ],
+              [
+                31037923,
+                1
+              ],
+              [
+                31038423,
+                0
+              ],
+              [
+                31038923,
+                1
+              ],
+              [
+                31039423,
+                0
+              ],
+              [
+                31039923,
+                1
+              ],
+              [
+                31040423,
+                0
+              ],
+              [
+                31040923,
+                1
+              ],
+              [
+                31041423,
+                0
+              ],
+              [
+                31041923,
+                1
+              ],
+              [
+                31042423,
+                0
+              ],
+              [
+                31042923,
+                1
+              ],
+              [
+                31043422,
+                0
+              ],
+              [
+                31043922,
+                1
+              ],
+              [
+                31044422,
+                0
+              ]
+            ],
+            "begin_sample": 30925962,
+            "end_sample": 31881283
+          }
+        ],
+        "passed": false
+      }
+    }
+  ],
+  "sample_order": [
+    "after_ack",
+    "10us_after_initial_START",
+    "pulse_counter_at_10us",
+    "after_ack_initial_flag",
+    "10us_after_deferred_START"
+  ],
+  "observed": [
+    0,
+    1,
+    1,
+    0,
+    0
+  ],
+  "conclusion": "Initial START asserts configuration-load flag before the first pulse finishes. It cannot by itself prove finite-block completion. After clearing it and staging stop, exact8/16 pulses and a later flag were observed.",
+  "limits": [
+    "Only channel0/group0 at2MHz measured",
+    "Exact flag assertion latency and counter increment semantics not fully qualified",
+    "Diagnostic UART intentionally differs from production oracle; overall HIL report correctly fails parity"
+  ],
+  "flash_written": false
+}

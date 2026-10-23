@@ -37,7 +37,7 @@ enum ws53_rtc_mode {
 enum ws53_pwm_interrupt_enable {
     Disabled = 0 { desc = "Both event outputs masked"; };
     AbnormalOnly = 1 { desc = "Enable abnormal configuration event"; };
-    PeriodEndOnly = 2 { desc = "Enable step end event"; };
+    ConfigurationLoadedOnly = 2 { desc = "Enable configuration-load notification; initial START can also assert it, not proof that a pulse block ended"; };
     AllEvents = 3 { desc = "Enable both event outputs; SDK initialization value"; };
 };
 addrmap ws53 {
@@ -75,11 +75,12 @@ addrmap ws53 {
     pwm->hisi_reset_unverified = true;
     pwm->hisi_evidence = "SDK-source 163d9150 PWM v151 acore profile: 4 groups, 8 channels; no silicon reset, waveform or command readback verified";
     pwm.PWM_INT_MASK.pwm_int_mask->encode = ws53_pwm_interrupt_enable;
-    pwm.PWM_INT_MASK.pwm_int_mask->desc = "Event enable despite MASK name: bit0 abnormal, bit1 step end; 1 permits, 0 masks, confirmed by SDK init writing 3";
+    pwm.PWM_INT_MASK.pwm_int_mask->desc = "Event enable despite MASK name: bit0 abnormal, bit1 configuration load; 1 permits, 0 masks, confirmed by SDK init writing 3";
     pwm.PWM_START0.pwm_start_0->desc = "Commit group 0 configuration with 1; do not assume synchronous acceptance. A-board2MHz finite8/16 bursts required guarding the initial enabled configuration before EN-clear;10us guard passed. Exact acceptance latency and command readback unverified; see evidence/ws53-pwm-start-hil.json";
     pwm.PWM_START1.pwm_start_1->desc = "Commit group 1 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START2.pwm_start_2->desc = "Commit group 2 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START3.pwm_start_3->desc = "Commit group 3 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
+    pwm.PWM_PERIODLOAD_FLAG0.pwm_periodload_flag_0->desc = "Configuration-load notification; A-board flag=1 and count=1 during first pulse after START, before 8/16-pulse block completion. W1C via CFG_INT_CLR0 clears it; deferred stop later asserts it again. Not an unconditional block-end flag. See evidence/ws53-pwm-load-flag-hil.json";
     pwm.PWM_START0.pwm_start_0->hisi_write_min = 1;
     pwm.PWM_START0.pwm_start_0->hisi_write_max = 1;
     pwm.PWM_START1.pwm_start_1->hisi_write_min = 1;
@@ -90,7 +91,7 @@ addrmap ws53 {
     pwm.PWM_START3.pwm_start_3->hisi_write_max = 1;
     pwm.PWM_ABNOR_STATE_CLR0.pwm_abnor_state_clr0->desc = "SDK writes observed abnormal-group bits to acknowledge their events; command readback/self-clear timing unverified";
     pwm.PWM_ABNOR_STATE_CLR1.pwm_abnor_state_clr1->desc = "SDK writes observed abnormal-count bits to acknowledge their events; command readback/self-clear timing unverified";
-    pwm.PWM_CFG_INT_CLR0.pwm_cfg_int_clr0->desc = "SDK writes channel bit to acknowledge step-end event; command readback/self-clear timing unverified";
+    pwm.PWM_CFG_INT_CLR0.pwm_cfg_int_clr0->desc = "Write channel bit to acknowledge configuration-load notification; initial START also sets this flag on A-board channel0; command readback/self-clear timing unverified";
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart0 @ 0x52081000;
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart1 @ 0x52080000;
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart2 @ 0x57014000;

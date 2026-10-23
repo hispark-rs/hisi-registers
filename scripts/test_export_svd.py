@@ -136,7 +136,7 @@ addrmap chip {{ addrmap {{
                 self.assertEqual(regs[f"PWM_{suffix}"].findtext("access"), "write-only")
             enum = regs["PWM_INT_MASK"].findall("fields/field/enumeratedValues/enumeratedValue")
             self.assertEqual({v.findtext("name"): int(v.findtext("value")) for v in enum},
-                             {"Disabled": 0, "AbnormalOnly": 1, "PeriodEndOnly": 2, "AllEvents": 3})
+                             {"Disabled": 0, "AbnormalOnly": 1, "ConfigurationLoadedOnly": 2, "AllEvents": 3})
             clocks = tree.find("./peripherals/peripheral[name='M_CRG']")
             div = clocks.find("registers/register[name='PWM_M_DIV3']")
             self.assertEqual(int(div.findtext("addressOffset"), 0), 0x7c)

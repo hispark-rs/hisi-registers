@@ -1426,3 +1426,19 @@ not an exact hardware latency, a readback-completion protocol or a guarantee for
 all upstream clocks/groups. Only group0's RDL description is updated; layout,
 access directions, command values and unknown reset/self-clear facts are intact.
 The SDK's original ordering remains accurately recorded by its source oracle.
+
+## PWM configuration-load flag correction (2026-10-24)
+
+`ws53-pwm-load-flag-hil.json` corrects the earlier interpretation of the flag as
+only step-end. With an8/16-pulse burst at100us per pulse, the flag is already1
+after the initial10us guard (counter1). Stopping on that flag truncated the
+first high pulse to19us. A direct-PAC diagnostic reads0 after initial ACK,1
+after START,0 after ACK, and0 shortly after deferred START; complete8/16-pulse
+waveforms and a later flag1 follow. Only channel0 is physically qualified.
+The diagnostic's extra UART samples intentionally fail the old strict parity
+oracle; waveform success does not make its overall report a pass.
+
+HAL must distinguish initial configuration acceptance from later notifications.
+The pending flag is not an elapsed-time/deadline proof. QEMU's previous
+block-end-only flag model hid this bug and must be corrected. Pulse counter1
+during the first pulse is also observed; other counter phases remain unqualified.
