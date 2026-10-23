@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-24",
+  "cases": [
+    {
+      "name": "pwm-irq-hil-01",
+      "elf_sha256": "41080cfa1b872132c4417891976bb75709dbd824273f71fffcf832ddd5c007f6",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM IRQ 0001 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM IRQ 0001 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM IRQ 0002 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_irq bursts=2 irq=72 notifications=2 mask=1 rearm=1 restore=1\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "raw_sha256": "1842835b60930965f1cb48447254d41459521635c2ec8defaf02550203fa97dc",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    },
+    {
+      "name": "pwm-irq-state-hil-01",
+      "elf_sha256": "f86b86679ac182cb404a58eafd06e0e1b0900f620b79d6287ce469eccb28b1fe",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM IRQ STATE 0001000000010000\r\nWS53 PWM IRQ 0001 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM IRQ STATE 0003000100010000\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM IRQ STATE 0001000000010000\r\nWS53 PWM IRQ 0001 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM IRQ STATE 0002000000010000\r\nWS53 PWM IRQ 0002 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_irq bursts=2 irq=72 notifications=2 mask=1 rearm=1 restore=1\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "raw_sha256": "e52da0b7737ec228edac1b7b0f2996e15095235e746c78ea4e21d3645b65d0ca",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    },
+    {
+      "name": "pwm-irq-pending-hil-01",
+      "elf_sha256": "0a3ea2d6f6377b0a7542409f8b6253d20931bcc0c8deef9aac04c526629014fb",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM IRQ STATE 000100000001000000000000\r\nWS53 PWM IRQ 0001 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM IRQ STATE 000300010001000000010000\r\nWS53 PWM IRQ 0003 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_irq bursts=2 irq=72 notifications=2 empty=1 mask=1 rearm=1 restore=1\r\n",
+      "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM IRQ STATE 000100000001000000000000\r\nWS53 PWM IRQ 0001 mask=1 clear=1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM IRQ STATE 000200000001000000000000\r\n",
+      "recovered": true,
+      "ram_verified": true,
+      "post_image_verified": true,
+      "raw_sha256": "9be7fc4ee6b2cf4dfab12d3a74518bb6bc49a0b40cbffff1e79a67bf20dae208",
+      "waveform_passes": [
+        true,
+        true
+      ],
+      "pulses": [
+        8,
+        16
+      ]
+    }
+  ],
+  "conclusion": "PWM_CFG IRQ72 LOCIPD remains1 after the initial peripheral load flag is cleared to0 while delivery is masked. Re-enabling delivery enters one ISR with empty peripheral status, then finite completion enters another with flag1. Peripheral event mask0 retains raw status without delivery.",
+  "state_words": [
+    "ISR entries",
+    "empty snapshots",
+    "aggregate flag",
+    "current peripheral flag",
+    "initial controller pending before unmask",
+    "initial peripheral flag before unmask"
+  ],
+  "physical_scope": "A-board PWM0/G0 at2MHz,8/16 pulses; J-Link23121302;UART5CB7019921",
+  "limits": [
+    "Other local sources not physically qualified",
+    "Trap-entry auto-ack and persistent-high reassertion not established",
+    "No IRQ71 fault injection",
+    "Same-burst output confirmed by DSLogic; not a timing guarantee"
+  ],
+  "flash_written": false
+}

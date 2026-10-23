@@ -1452,3 +1452,21 @@ was one lower only while running. RDL documents channel0's finite-mode evidence
 without extending it to continuous/repeating modes or exact boundary timing.
 The diagnostic extra UART lines intentionally fail the former exact-string
 oracle; RAM readback and original firmware recovery separately passed.
+
+## PWM IRQ72 pending versus peripheral status (2026-10-24)
+
+`ws53-pwm-irq72-hil.json` records independent CPU LOCIPD and PWM status reads.
+With local delivery disabled, initial PWM START raises a configuration event;
+HAL acknowledges its peripheral flag before queuing finite stop. Immediately
+after start, IRQ72 pending is1 but PWM configuration flag is0. Unmasking
+delivery therefore enters an ISR with an empty snapshot. The later real finite
+completion is a separate notification. First-burst peripheral event masking
+retains raw status without ISR entry; unmasking delivers and acknowledges it.
+
+This is controller-source behavior, not a new peripheral address or field.
+No PAC layout change is needed. The existing SDK disable sequence's explicit
+LOCIPCLR and the HAL source-suspension helper's pending-preservation contract
+remain significant. Handlers must distinguish entry count from meaningful
+event bits. Only WS53 IRQ72 is qualified; do not silently change all chip
+interrupt sources from this evidence. Trap-entry auto-ack and persistent-level
+reassertion are not established by these observations.
