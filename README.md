@@ -212,4 +212,13 @@ source/destination/guard checks and exact same-ELF QEMU UART comparison. The SDK
 eight-slot profile remains separate; upper-slot availability is unexplained.
 PMP/MEMATTRL are checked before takeover, buffers remain retained, and original
 firmware is recovered by whole-board reset. Bus drain, peripheral handshakes,
-DMA IRQ/async and production shared-resource handoff remain unqualified.
+DMA async and production shared-resource handoff remain unqualified.
+
+[`evidence/ws53-mdma-irq-hil.json`](evidence/ws53-mdma-irq-hil.json) qualifies
+completion notification on IRQ58 for channels0..3 (17u32, three repeated RAM
+runs). Peripheral masking retains raw TC; selective W1C preserves other channels
+and error-clear does not discard TC. A source held high across LOCIPCLR58 still
+delivers after local unmask, exposing a QEMU pending-clear defect now corrected
+for this source only. The same ELF passes strict UART and buffer comparisons.
+Physical bus-error IRQs, precise reassertion timing, post-deassertion retention,
+buffer handback and peripheral-paced IRQs are not qualified by these tests.
