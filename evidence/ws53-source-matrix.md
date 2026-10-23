@@ -1099,3 +1099,23 @@ proved, and establish cache/trace/core handoff independently. Source facts do
 not justify assuming that a CPU halt or ADC STOP drains MCU_DIAG. No new RDL
 fields were needed for analog preparation; generated SVD/PAC are unchanged.
 Evidence: `evidence/ws53-adc-source-contract.json`. No board access or Flash write.
+
+## MDMA original C helpers and controller selection (2026-10-23)
+
+`scripts/check_ws53_mdma_contract.py` pins SDK163d9150 and compiles the original
+ROM MDMA register/header helpers against host RAM. It checks13 distinct register
+layouts,40 fields, eight0x20-stride channels, IRQ58, both request enums0..15,
+access semantics and unknown resets. Twenty original helpers/getters execute
+133,430 checks across channels/values/initial bits, including preservation of
+all other register words. Original setters silently truncate transfer_size4096
+to0, request16 to0 and request31 to15; Rust must reject invalid raw configuration.
+
+The actual port binds DMA_BASE_ADDR0x52070000 and `hal_dmac_v151_funcs_get()`.
+SDMA's macro alone is insufficient: the SDMA branch depends on V100, which the
+selected app disables, and this port has no SDMA base binding. It remains absent
+from this PAC until a real integration/ownership contract is established.
+Register helper execution does not prove transfer widths, FIFO/arbitration,
+interrupt mask polarity, ACTIVE timing, halt/disable drain, cache attributes or
+shared clock handoff. Generic LiteOS cache headers are recorded as source inputs,
+not treated as a physical cache-maintenance acceptance result. No board accessed.
+Evidence: `evidence/ws53-mdma-source-contract.json`.
