@@ -222,3 +222,14 @@ delivers after local unmask, exposing a QEMU pending-clear defect now corrected
 for this source only. The same ELF passes strict UART and buffer comparisons.
 Physical bus-error IRQs, precise reassertion timing, post-deassertion retention,
 buffer handback and peripheral-paced IRQs are not qualified by these tests.
+
+WS53 temperature initialization/read/reattach hardware observations are recorded
+in [`evidence/ws53-tsensor-initial-hil.json`](evidence/ws53-tsensor-initial-hil.json).
+The source five-write sequence starts from CONTROL/status0; twelve sample
+observations,32 immediate READY reads and reattachment succeed across six bounded
+RAM runs, each followed by board reset and AT recovery. QEMU and hardware pass
+shared transcript/formula/state checks, not raw temperature or exact-time equality.
+Instrumented first READY is4.633875ms on the board versus4.106125ms in the model;
+initialization itself takes1.25us versus0.28125us. This unresolved discrepancy
+must not be presented as timing parity. No calibrated accuracy, freshness per
+read, stop/IRQ/clearREADY, low-power or production thermal ownership is proven.
