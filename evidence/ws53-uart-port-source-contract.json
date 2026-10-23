@@ -1,0 +1,83 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "source_sha256": {
+    "src/drivers/chips/ws53/porting/uart/uart_porting.c": "f07aae2c7ec139e6b3eb81cd9b48610700371167eea77551a7f134741e0f071f",
+    "src/drivers/drivers/driver/uart/uart.c": "ecc7ec4af77f0446e8ceec1d89c1010247166ca5bd9e94fe5d4ebe6d803959cf",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/drivers/chips/ws53/porting/include/pinctrl_porting.h": "a98b2141986c85a507da9b80f334e9a005acffdebd2fc501472c26752be6998b",
+    "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f",
+    "src/drivers/chips/ws53/include/hal_clocks_application_private.h": "2e7ccf6b7d0bbc210cded37071b462632586a818032741d5b1e97c57a6f4c788",
+    "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+  },
+  "hardware_accessed": false,
+  "profiles": [
+    {
+      "profile": "product-hso",
+      "cases": 39
+    },
+    {
+      "profile": "h0-pinset2",
+      "cases": 39
+    },
+    {
+      "profile": "default-h0",
+      "cases": 39
+    },
+    {
+      "profile": "l0-tx-only",
+      "cases": 39
+    },
+    {
+      "profile": "no-pinctrl",
+      "cases": 39
+    }
+  ],
+  "cases": 195,
+  "application_routes": [
+    {
+      "uart": 0,
+      "ip": "H1",
+      "tx_sdk": 12,
+      "rx_sdk": 36,
+      "mode": 2
+    },
+    {
+      "uart": 1,
+      "ip": "H0",
+      "tx_sdk": 17,
+      "rx_sdk": 18,
+      "mode": 2,
+      "profile": "HSO or pinset2"
+    },
+    {
+      "uart": 1,
+      "ip": "H0",
+      "tx_sdk": 8,
+      "rx_sdk": 9,
+      "mode": 1,
+      "profile": "default"
+    },
+    {
+      "uart": 2,
+      "ip": "L0",
+      "tx_sdk": 33,
+      "rx_sdk": 34,
+      "mode": 1
+    }
+  ],
+  "findings": [
+    "Current product disables LPC clock-enable call; port source has no clock-enable implementation",
+    "Clock getter/setter share one software variable across all ports and perform no hardware clock operation",
+    "Reset clears then sets a halfword bit; debug UART skips reset/release",
+    "Release selects mux0 but retains pull-up; it is not restoration of the original pad state",
+    "MULTI_CORE_RESUME pin configuration writes shared route 0x57000048=1 for EVERY bus",
+    "Caller pins and product L0 pin numbers 19/20 do not select routes in this source port",
+    "Generic H1/L0 clock enum conflicts with reserved bits in clock_recover.h"
+  ],
+  "limitations": [
+    "Extracted helper execution, not a linked SDK image or a silicon test",
+    "Effective firmware pin/clock configuration may differ from this source profile",
+    "Clock gate identity, physical frequency, full reset effects and cross-core ownership remain unqualified"
+  ]
+}

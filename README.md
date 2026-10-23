@@ -293,3 +293,16 @@ Reading LSR can consume RX errors, so software retains flags and discards only
 a freshly identified corrupt head. Three-port Rust/QEMU tests cover coalesced
 errors and overrun without discarding good bytes. Physical error injection,
 UART0/1 HIL, exact wire timing and asynchronous wakeup integration remain open.
+
+WS53 UART pad/reset integration is checked with
+`uv run --script scripts/check_ws53_uart_port_contract.py --sdk <SDK>`.
+The pinned original C helpers execute against host event sinks in five compile
+profiles (195 cases): three debug-port choices, all UARTs, reset bit preservation,
+pad selection/release, and the shared software frequency setter/getter.
+`evidence/ws53-uart-port-source-contract.json` records that the selected product
+disables LPC clock provisioning; its generic H1/L0 gate enums conflict with
+reserved fields in the clock-recovery header. No gate identity is inferred.
+The multicore pin helper writes L0's shared interrupt route even for UART0/1,
+release leaves pulls enabled, and this port ignores the product's L0 pin numbers
+19/20 in favor of AGPIO1/2. These are source-profile facts, not evidence of the
+currently flashed firmware's wiring, full reset behavior, or clock ownership.
