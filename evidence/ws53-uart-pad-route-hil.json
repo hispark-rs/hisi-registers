@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "sdk_source": "src/drivers/chips/ws53/porting/uart/uart_porting.c",
+  "sdk_source_sha256": "f07aae2c7ec139e6b3eb81cd9b48610700371167eea77551a7f134741e0f071f",
+  "elf_sha256": "f2f5fb25992a74fdbfadf331c8cf06d94425c5a3f1b3c5602065fc5db57d6540",
+  "runs": [
+    {
+      "label": "uart-pad-route-hil-01",
+      "elf_sha256": "f2f5fb25992a74fdbfadf331c8cf06d94425c5a3f1b3c5602065fc5db57d6540",
+      "waveform_sha256": "b69087355cf4d305e0a69a603f15861f34f1c1a0c61d4f750b8ea0c1dedeb2c3",
+      "passed": true,
+      "recovered": true,
+      "uart1_fanout_start_delta_samples": 0
+    },
+    {
+      "label": "uart-pad-route-hil-02",
+      "elf_sha256": "f2f5fb25992a74fdbfadf331c8cf06d94425c5a3f1b3c5602065fc5db57d6540",
+      "waveform_sha256": "567c1837999c7f45105fd1c0d1c0f15d4b40b08c5a59f969d88c899854e3d50f",
+      "passed": true,
+      "recovered": true,
+      "uart1_fanout_start_delta_samples": 0
+    },
+    {
+      "label": "uart-pad-route-hil-03",
+      "elf_sha256": "f2f5fb25992a74fdbfadf331c8cf06d94425c5a3f1b3c5602065fc5db57d6540",
+      "waveform_sha256": "4855534103d47a7880d7a32730291c6fba261fb740848b301932ea268e6149fc",
+      "passed": true,
+      "recovered": true,
+      "uart1_fanout_start_delta_samples": 0
+    }
+  ],
+  "routes": [
+    {
+      "port": 0,
+      "tx": "MGPIO12",
+      "rx": "AGPIO4",
+      "mux": 2,
+      "channel": 10
+    },
+    {
+      "port": 1,
+      "tx": "MGPIO17",
+      "rx": "MGPIO18",
+      "mux": 2,
+      "channel": 5
+    },
+    {
+      "port": 1,
+      "tx": "MGPIO8",
+      "rx": "MGPIO9",
+      "mux": 1,
+      "channel": 15
+    },
+    {
+      "port": 2,
+      "tx": "AGPIO1",
+      "rx": "AGPIO2",
+      "mux": 1,
+      "channel": "existing USB UART console"
+    }
+  ],
+  "observations": [
+    "Three physical analyzer TX routes each transmit exact route-tagged264bytes at1152008N1 in every run",
+    "UART2 emits exact configured-console marker before restoring pads",
+    "Eight PadControl configurations and GPIO output-enable bits restored with readback assertions",
+    "M17 and M8 simultaneously emit UART1 route2 packet; start edges match within one4MHz sample in all3captures",
+    "No automatic old-TX-route deselection when configuring the alternate pad"
+  ],
+  "limitations": [
+    "Physical TX only: RX signals configured/readback but not externally stimulated",
+    "No analog voltage, precise baud calibration, drive-current or rise-time qualification",
+    "UART2 existing console wiring retained; no new physical mapping proved",
+    "Clocks inherited; resource handoff bounded, residual SDMA still unqualified",
+    "UART alternate pad routing QEMU model and typed UART-owned pad API pending; new HIL scenario explicitly rejects QEMU",
+    "No Flash written and no stable API graduation"
+  ],
+  "rdl_changes_required": false,
+  "flash_written": false,
+  "main_evidence": "docs/plan/evidence/ws53-uart-pad-route-hil-2026-10-24/summary.json"
+}

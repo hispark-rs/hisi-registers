@@ -350,3 +350,13 @@ isolation and return to the inherited console pin path, with exact same-ELF
 QEMU logs and vendor-firmware recovery. Existing RDL/PAC bit placement remains
 unchanged. No universal reset defaults, clock provisioning, live DMA/IRQ abort
 or minimum reset timing is inferred.
+
+`evidence/ws53-uart-pad-route-hil.json` adds three RAM-only physical TX-route
+observations through the existing PadControl/PAC path: H1 MGPIO12 mode2,
+H0 MGPIO17 mode2 and MGPIO8 mode1 each emit a distinct264-byte packet decoded
+by DSLogic at4MHz. L0's AGPIO1/2 mode1 console also survives pad reconfiguration.
+Eight pad configurations and GPIO directions are restored with readback checks.
+H0's alternate packet appears simultaneously on MGPIO17 and MGPIO8 in all three
+captures: selecting a new TX pad does not automatically release the old mux.
+The existing RDL fields need no changes. RX routing, autonomous clocks/ownership
+and the UART alternate-pad QEMU model remain unqualified; no stable API claim.
