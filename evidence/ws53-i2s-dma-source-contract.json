@@ -1,0 +1,76 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "config_executions": 2304,
+  "driver_sequences": 28,
+  "dma_attribute_executions": 196,
+  "routes": {
+    "tx": 12,
+    "rx": 13
+  },
+  "addresses": {
+    "I2S_DUAL_TX_CHN": "0x520300c0",
+    "I2S_DUAL_RX_CHN": "0x520300a0"
+  },
+  "source_profile": {
+    "flow_tx_rx": [
+      1,
+      2
+    ],
+    "protection_tx_rx": [
+      1,
+      1
+    ],
+    "width_burst_priority": "user supplied, no validation by I2S layer",
+    "merge_enable": "set even when both DMA flags are false",
+    "dma_flags": "select threshold and IRQ masking, not a dedicated request-enable register"
+  },
+  "source_hazards": [
+    "uint32 length narrows to uint16; 65536 becomes zero, 4096 exceeds MDMA12-bit count",
+    "semaphore wait is unbounded; no channel stop or peripheral disable on failure/completion",
+    "TX enables CRG after DMA start; RX does not enable CRG here",
+    "completion returns DMA block count without wire-idle or FIFO drain proof",
+    "stale or zero channel records accept callbacks; error does not clear previous success",
+    "DMA cfg unconditionally reinitializes I2S and enables merge; false flags do not implement disable",
+    "DMA cfg lacks a null-attribute guard (source inspection; not dereferenced in host tests)"
+  ],
+  "mocks": [
+    "DMA allocation/config/start capture and immediate scheduled callback; no data movement",
+    "osal_sem_down returns injected error or immediate completion; no real blocking",
+    "clock/TX/RX setters only record calls; no hardware request or FIFO behavior",
+    "hal_i2s_config stub applies source baseline mask/threshold only; reset/divider side effects not executed",
+    "DMA cfg, merge/threshold/mask helpers and port getters execute original C against host RAM"
+  ],
+  "not_verified": [
+    "physical request polarity/threshold relation or burst ACK",
+    "merge data order/packing and legal DMA access widths",
+    "short RX tail and FIFO underrun/overrun",
+    "cache/control-core ownership/physical drain",
+    "safe dynamic switching between PIO and DMA"
+  ],
+  "compiler_flags": [
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-O2",
+    "-fno-strict-aliasing"
+  ],
+  "aliasing_note": "SDK common_config disables strict aliasing; public/HAL attribute structs are distinct types with checked layout",
+  "reference_dma_enabled": false,
+  "hardware_accessed": false,
+  "input_sha256": {
+    "src/drivers/drivers/driver/i2s/i2s.c": "0421d31b98cc129945d7949284f6d3e5634988732ca02faf3d6a3237b16ad764",
+    "src/drivers/chips/ws53/porting/sio/sio_porting.c": "39f666e8d16f5174019a80d607b728b34e7ba416056bcd6e33c2d6cbb1481024",
+    "src/drivers/drivers/hal/sio/hal_sio.h": "af518656e64c778ca34ca3080677b829bce6afb8e07331ced6daa6fe89930ffa",
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151.c": "35ea53bccf3e8cc5b0f99ff0cf2fab669a008de3dbde99eb0f8a1af21388fba0",
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151_regs_op.h": "6eacf03a6a781a580e0d9ab0387fadf59d9eb712809a312b745ce01b09ed2abc",
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151_regs_def.h": "3feeb8dff4c27170c5f297d7698f30779af28504811f2a1ff10c4645708ad8a3",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/include/driver/i2s.h": "ff7bcd2afca42db028f5d3ed24c5141c47945867ca8f0c554bc40750fae290d8",
+    "src/include/driver/dma.h": "65f37374e269dbab87e5cebf1cd2d9bfd7f041cb784f5dabb6afe7f0d4064834",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/dma_porting.h": "e5cb6842db137e028006e726a931d2fcfdcba9ef9fb4cd8fd4c10327c20f36bb",
+    "src/build/config/target_config/common_config.py": "77f0a818969595be7c9129ce98f567e5fe1704b4408fd72a092d877cd3192402"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157"
+}

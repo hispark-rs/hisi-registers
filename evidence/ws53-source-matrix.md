@@ -1227,3 +1227,58 @@ Executed source hazards to avoid in Rust:
 No new RDL/PAC layout is required for these already-described slots. DMA lanes,
 HPROT semantics, burst handshake, cache/coherency, cross-core ownership and safe
 physical drain remain unverified. Evidence: `ws53-i2c-dma-source-contract.json`.
+
+## I2S MDMA merge-port contract (2026-10-23)
+
+`check_ws53_i2s_dma_contract.py` pins SDK `163d9150` and executes the original
+I2S configuration helpers, public merge read/write APIs, callbacks, DMA attribute
+function and merge/threshold/mask setters over host memory. Both GCC and Clang
+pass 2304 parameter combinations, 196 attribute combinations and 28 driver
+sequences. The preceding I2S register contract remains the layout evidence.
+The selected application disables I2S DMA; these are dormant-source facts.
+
+The original port getters agree with the generated SVD: TX merge DATA is
+`0x520300c0`, RX merge DATA is `0x520300a0`; the handshakes are 12/13. Both
+directions use protection 1, DMA flow control 1/2 and a fixed peripheral address.
+The source exposes user-selected width, burst and priority without checking
+them in the I2S layer. The oracle deliberately includes all nine byte/halfword/
+word width pairs and records their forwarding, **not their silicon validity**.
+Count is elements, not a verified byte count or stereo frame count. The 32-bit
+merge register fields do not explain stereo order or packing.
+
+The `dma_cfg` flags do not write a dedicated DMA request-enable register. The
+function calls `hal_i2s_config` (source includes reset, divider and format work),
+sets `I2S_POS_MERGE_EN=1`, then conditionally sets threshold and ORs IRQ mask
+with 0x32 for TX and 0x0d for RX. Even both flags false reinitialize I2S and enable
+merge. A later cancel path must therefore not equate this API with disabling
+requests, nor reconfigure it while another stream owns the peripheral.
+For this oracle, the complex `hal_i2s_config` is explicitly stubbed to its
+baseline 0x3c IRQ mask and TX 4/RX 7 thresholds; its reset/clock work is not executed.
+The actual DMA function and its final register helpers execute unchanged.
+
+Observed source hazards:
+
+- The public 32-bit length narrows to 16 bits: 65536 becomes 0, while 4096 already
+  exceeds the MDMA 12-bit transfer field. Width/burst/priority 255 are forwarded.
+- Blocking APIs use unbounded `osal_sem_down`; timeout/error/success paths have
+  no channel-stop, peripheral-disable or FIFO/serializer drain operation.
+- TX starts DMA before enabling CRG and TX. RX enables RX after DMA start but
+  does not enable CRG in this function. Initialization/pre-existing clock state
+  is therefore a separate requirement for receive.
+- A successful callback results in returning `uapi_dma_get_block_ts`, without
+  proving a complete stereo frame or wire idle. A failed wait leaves the mocked
+  DMA live and the peripheral enabled; nonblocking return retains both too.
+- Channel records remain after completion and initially contain zero; stale or
+  stray callbacks can wake them. Error callbacks do not clear earlier success.
+- `uapi_i2s_dma_config` does not check a null attribute before HAL dereference
+  (inspection only; the host oracle does not deliberately dereference null).
+
+The public/HAL attribute structs are different C types with equal field layout.
+The harness checks offsets/size and uses the SDK common configuration's
+`-fno-strict-aliasing`; it does not silently assume optimized aliasing is valid.
+DMA allocation, starts, clock/enable calls and semaphore completion are mocks;
+there is no actual DMA or audio transfer. Request polarity/threshold comparisons,
+short-tail behavior, merge packing, supported lanes, shared ownership, cache and
+physical drain still need independent evidence. No new RDL/PAC layout is needed
+for the known registers; no I2S DMA HAL or QEMU support is claimed by this check.
+Machine-readable result: `ws53-i2s-dma-source-contract.json`.

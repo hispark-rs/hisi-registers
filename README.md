@@ -68,6 +68,14 @@ macros execute against host RAM and preserve neighboring/upper bits. This is
 source evidence, not hardware or HAL support. See `evidence/ws53-source-matrix.md`
 for unresolved ownership and command semantics.
 
+`uv run --script scripts/check_ws53_i2s_dma_contract.py --sdk /path/to/fbb_ws53`
+executes pinned I2S DMA helpers and public transfer paths with explicit host
+mocks: 2304 parameter combinations, 196 DMA attribute combinations and 28
+normal/error sequences. It checks merge DATA addresses and requests 12/13,
+records narrowing and missing cleanup, and demonstrates that the SDK DMA flags
+do not provide a request-disable operation. Neither the mocks nor the public
+width fields establish physical DMA lane or stereo packing behavior.
+
 `hisi_svd_word_view` explicitly adds a 32-bit little-endian access view of a
 16-bit RW register, retaining one RDL field source. It requires source evidence,
 unknown resets, four-byte alignment and a vacant upper halfword in the existing
