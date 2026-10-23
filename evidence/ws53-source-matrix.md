@@ -1394,3 +1394,19 @@ The first failed160kHz expectation is retained, not rewritten as a passing case.
 No RDL field is changed from this observation; the existing divider field already
 states that its input/frequency relationship is unproven. QEMU's explicit timing
 profile and HAL documentation must preserve this distinction.
+
+### PWM local divider experiment (2026-10-23)
+
+`ws53-pwm-divider-hil.json` records a follow-up RAM-only measurement on the same
+MIO21/SDK47/D11. Each group is stopped before clearing LOAD, writing DIVIDER,
+setting LOAD and verifying its fields. With period200/high50, divisors16/8/4/2/1
+produce periods100/50/25/12.5/6.25us, all25% duty. The divisor is restored to16
+before releasing the pad, and whole-board reset restores the vendor AT service.
+Thus the tested local divider follows effective32MHz/input-divisor in this
+handoff state. The SDK's constant32MHz does not describe the post-divider rate
+at its configured divisor16. This is narrower than identifying the upstream
+source or qualifying other divider values/live glitch-free switching.
+
+The RDL field description now links the physical evidence. Layout, permissions,
+unknown reset values and the five-bit field width are unchanged. Only the five
+measured values may be exposed by the experimental typed HAL configuration.

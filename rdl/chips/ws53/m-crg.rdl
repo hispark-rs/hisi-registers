@@ -35,7 +35,7 @@ addrmap ws53_m_crg_regs {
         hisi_evidence = "SDK-source 163d9150 pwm_porting.c: 16-bit set enable, clear load, set divider=16, set load; clock_recover.h PWM_M_DIV3 address";
         field {sw=rw; hw=r;} enable[0:0];
         field {sw=rw; hw=r; desc="SDK explicitly clears then sets; no autonomous clearing inferred";} load[1:1];
-        field {sw=rw; hw=r; desc="SDK programs 16 and reports 32MHz; input/divider relationship not proven";} divider[6:2];
+        field {sw=rw; hw=r; desc="SDK programs 16 but reports 32MHz. A-board bounded RAM experiment measured effective counter 32MHz/divider for values 1,2,4,8,16; upstream source identity and other values remain unverified. See evidence/ws53-pwm-divider-hil.json";} divider[6:2];
     } PWM_M_DIV3 @ 0x7c;
     reg {
         hisi_evidence = "SDK-source 163d9150 uart_porting.c UART_SOFT_RST_A and uart_port_set_reset; 16-bit clear then set, debug UART bypasses reset";
