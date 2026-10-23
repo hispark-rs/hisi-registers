@@ -341,3 +341,12 @@ DIV_EN sets and DIV_L reads the programmed17. The earlier reset-probe zero was
 therefore an access-control failure, not proven divisor loss. SDK bit positions
 remain checked separately from contradicted descriptions; the non-PRO C type
 omits bit4. TX-only busy, nonzero DIV_H and busy divisor writes remain open.
+
+`evidence/ws53-uart-l0-reset-hil.json` qualifies the separate L0/UART2 halfword
+reset bit7 at0x570000b0 under inherited A-board resources. Three raw observation
+runs match H1/H0's queued-clean-RX reset profile; three HAL runs also prove
+IRQ-enabled/TX-busy refusal, reconfiguration, UART0/1 scratch/frame/modem
+isolation and return to the inherited console pin path, with exact same-ELF
+QEMU logs and vendor-firmware recovery. Existing RDL/PAC bit placement remains
+unchanged. No universal reset defaults, clock provisioning, live DMA/IRQ abort
+or minimum reset timing is inferred.
