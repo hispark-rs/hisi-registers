@@ -84,6 +84,15 @@ partial byte fills and ring-control preservation. The bounded SDK loop counts
 polls, not microseconds; this oracle establishes neither entropy quality nor
 cross-core ownership. GCC and Clang produce identical evidence.
 
+`uv run --script scripts/check_ws53_efuse_contract.py --sdk /path/to/fbb_ws53`
+executes original v151 read paths against protected anonymous host RAM on
+Linux/x86-64. It checks 8192 state/byte combinations, all 32896 nonempty valid
+buffer ranges, 16 partial failures, upper control-bit preservation and IRQ-lock
+cleanup. The simulated OTP page is read-only, programming helpers are never
+called, and no physical eFuse or device mapping is accessed. This complements
+the existing pure-address layout checker; it does not establish read timing,
+identity schemas or exclusive controller ownership.
+
 `hisi_svd_word_view` explicitly adds a 32-bit little-endian access view of a
 16-bit RW register, retaining one RDL field source. It requires source evidence,
 unknown resets, four-byte alignment and a vacant upper halfword in the existing

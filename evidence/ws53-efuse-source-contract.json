@@ -1,0 +1,35 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "src/drivers/drivers/hal/efuse/v151/hal_efuse_v151.c": "45d4aa8c2e3c5a1281044a482c6237cfb8e15d8169d1eed7d3bc278ed1fa8ac9",
+    "src/drivers/drivers/hal/efuse/v151/hal_efuse_v151_reg_def.h": "9aa030eb3aef7d5c3f29d9e07ad2cff60634fcdfb40545ccda07d02b5aad2744",
+    "src/drivers/drivers/hal/efuse/v151/hal_efuse_v151_reg_op.h": "cab76d38ac1fe1173f9baf8ed81ab158fee396eeac2a55fcc16f472d8b371d4e",
+    "src/drivers/drivers/hal/efuse/hal_efuse.h": "4f25ef3c1e2a5ec90fcd0e45564d93b0594c1c011b79c2a4ad0f036dfdaa0d61",
+    "src/drivers/chips/ws53/porting/efuse/efuse_porting.h": "9f5a3eb040b58a0c2720a886a0e92aaf1e1815dfaa4a3bca79629086e3e749bb",
+    "src/drivers/chips/ws53/porting/efuse/efuse_porting.c": "aa903bbc449859f46eb8c40ff1c80552310cc1057592396db98d1a04919e28e5",
+    "src/drivers/drivers/driver/efuse/efuse.c": "df4cf40213cd2cafa130b21c751f8105b5cdcaf44f3bff6e2bb1fc4e2edd362d",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+  },
+  "status_byte_cases": 8192,
+  "valid_buffer_ranges": 32896,
+  "partial_failures": 16,
+  "read_window": "anonymous host RAM populated then mprotect(PROT_READ); not a device mapping",
+  "observations": [
+    "read low/high byte from 32-bit stride4 slots; ignores upper16",
+    "init sets low8 timing to 0x1f preserving upper24; setter silently truncates wider values",
+    "each read selects low16 mode 0x5a5a preserving upper16; no delay",
+    "HAL read ignores all manual/boot status combinations, including boot0_done=0",
+    "SDK buffer read holds one IRQ lock across entire byte loop; all exits restore it",
+    "failed buffer leaves successful prefix and untouched suffix; API does not report prefix length",
+    "invalid/null/zero/out-of-range requests do not issue reads or take IRQ lock",
+    "deinit only clears software init flag; does not remove power or clear register pointers",
+    "OTP window, AVDD and program switch unchanged; no programming delay called"
+  ],
+  "limitations": [
+    "register pointer initialization and IRQ plumbing are host stubs",
+    "host memory does not establish silicon read timing, command completion or ownership",
+    "no identity/MAC schema chosen; no programming function invoked"
+  ],
+  "hardware_accessed": false,
+  "otp_programming_performed": false
+}

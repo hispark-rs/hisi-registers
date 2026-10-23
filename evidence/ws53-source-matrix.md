@@ -464,6 +464,37 @@ FIFO depth, silicon timing or entropy. Evidence: `ws53-trng-source-contract.json
 
 ## eFuse v151 read-service subset
 
+The executable read contract now accompanies the earlier layout audit:
+`scripts/check_ws53_efuse_contract.py` / `ws53-efuse-source-contract.json`.
+It compiles the unchanged original v151 HAL/register helpers and extracts the
+unchanged generic read-buffer and address-selection functions. Only register
+pointer initialization, error constants and IRQ bookkeeping are substituted.
+The data window is anonymous Linux/x86-64 MAP_32BIT memory populated with known
+bytes, then protected with `mprotect(PROT_READ)`; no physical address is mapped.
+Programming callbacks are compiled as context but never invoked; AVDD/switch
+sentinels and the entire data page remain unchanged, and any programming delay
+would fail the test. GCC and Clang agree on all recorded paths.
+
+The audit exercises 8192 combinations (256 bytes × all 32 manual/boot status
+bit patterns), all 32896 nonempty valid ranges and 16 injected mid-buffer failures:
+
+- Each read preserves mode upper16, writes low16=0x5a5a, reads one 32-bit slot
+  and selects its even/odd byte. The upper16 data bits are ignored.
+- Initialization preserves timing upper24 and sets low8=0x1f. The SDK timing
+  setter accepts larger values and the C bitfield silently truncates them.
+- The read function does not inspect manual/boot status, including boot0_done=0,
+  and has no completion wait/delay. That is source behavior, not silicon readiness.
+- Generic bulk reads mask IRQs across the entire byte loop. Invalid/null/zero/
+  out-of-range calls take no lock; success and injected failures restore it.
+  On failure the completed prefix remains, the suffix is unchanged, and the
+  SDK API supplies no completed length.
+- HAL deinit changes only its software init flag. It does not power down the
+  block or clear pointers despite the generic driver's power-removal comment.
+
+These facts support a bounded Rust read-service interface with explicit range,
+partial-progress and profile checks, not automatic timing/power/provisioning.
+No identity schema, active firmware ownership or actual OTP access is proven.
+
 SDK `163d9150ab94a02d09a05f623351f9facee3025e`, selected application config:
 DRIVER_SUPPORT_EFUSE, EFUSE_USING_V151, EFUSE_SWITCH_EN, EFUSE_REGION_NUM=1.
 Sources are `drivers/chips/ws53/porting/efuse/efuse_porting.{c,h}` and
