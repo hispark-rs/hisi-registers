@@ -268,3 +268,19 @@ a 200us floor passed three same-ELF hardware/QEMU runs at the inherited 32000Hz
 profile. This is an empirical software policy, not a new register timing fact or
 qualification of expiry, NMI, reset, low-power, or other clocks. The model's
 configurable rearm window does not reproduce stale control-command counts.
+
+WS53 UART non-PRO line configuration is checked by executing the pinned C baud
+and frame helpers: `uv run --script scripts/check_ws53_uart_config_contract.py
+--sdk <SDK> --vectors <output.txt>`. It covers81 baud/port/clock cases and1944
+frame encodings, with independent register banks. The SDK truncates fractional
+division and can truncate/overflow integer inputs; HAL configurations reject
+zero/out-of-range divisors. STP=1 is1.5 bits for five data bits, two otherwise.
+See `evidence/ws53-uart-config-source-contract.json`.
+
+`evidence/ws53-uart-line-hil.json` records three A-board UART2 RAM runs of72 line
+configurations and144 internally looped bytes each, with console restoration.
+DIV_L readback requires opening DIV_EN in the measured UART2 profile; the first
+closed-window diagnostic failed while QEMU originally passed. Source/PAC text
+records this condition without claiming DIV_H/write gating or other instances.
+Clock/reset/pad provisioning, physical baud/frame timing, UART0/1 and production
+resource handoff remain unqualified.

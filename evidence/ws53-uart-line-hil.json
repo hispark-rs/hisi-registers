@@ -1,0 +1,126 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "runs": [
+    {
+      "elf_sha256": "9b05fd6264c991df1febaadc8349a95da4928b5212df3dd8b83c24581baaca1a",
+      "passed": false,
+      "recovered": true,
+      "uart_parity": false,
+      "uart_line_state": null,
+      "name": "uart-line-hil-01"
+    },
+    {
+      "elf_sha256": "ba9f3a4336ac1d5bb442ca07394481d65ccb13459c7198527579b5361d07e797",
+      "passed": false,
+      "recovered": true,
+      "uart_parity": false,
+      "uart_line_state": [
+        5,
+        0,
+        115200,
+        0,
+        127,
+        0,
+        0,
+        23,
+        0,
+        0,
+        0,
+        0
+      ],
+      "name": "uart-line-diag-hil-01"
+    },
+    {
+      "elf_sha256": "60bd1611849b6d81f8db5fab35f87aae93d15c8c1cf254f250f24a37b48a2ebd",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "uart_line_state": [
+        11,
+        72,
+        4000000,
+        172,
+        55,
+        1,
+        0,
+        0,
+        10,
+        10,
+        1,
+        0
+      ],
+      "name": "uart-line-access-hil-01"
+    },
+    {
+      "elf_sha256": "60bd1611849b6d81f8db5fab35f87aae93d15c8c1cf254f250f24a37b48a2ebd",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "uart_line_state": [
+        11,
+        72,
+        4000000,
+        172,
+        55,
+        1,
+        0,
+        0,
+        10,
+        10,
+        1,
+        0
+      ],
+      "name": "uart-line-access-hil-02"
+    },
+    {
+      "elf_sha256": "60bd1611849b6d81f8db5fab35f87aae93d15c8c1cf254f250f24a37b48a2ebd",
+      "passed": true,
+      "recovered": true,
+      "uart_parity": true,
+      "uart_line_state": [
+        11,
+        72,
+        4000000,
+        172,
+        55,
+        1,
+        0,
+        0,
+        10,
+        10,
+        1,
+        0
+      ],
+      "name": "uart-line-access-hil-03"
+    }
+  ],
+  "swd": {
+    "swd-before-uart-line": {
+      "passed": true,
+      "correct": 600
+    },
+    "swd-after-uart-line": {
+      "passed": true,
+      "correct": 600
+    }
+  },
+  "scope": "UART2 inherited clock/pads; 72 valid frame/baud combinations; 144 bytes internal loopback; console restored to115200 8N1",
+  "baud_values": [
+    115200,
+    2000000,
+    4000000
+  ],
+  "read_condition": "UART2 final4Mbaud DIV_L reads0 with DIV_EN=0,1 with DIV_EN=1; first115200baud diagnostic without opening access fails",
+  "limitations": [
+    "No physical baud/frame waveform measurement",
+    "UART0/1 and clock/reset provisioning not HIL qualified",
+    "DIV_H gating and writes with DIV_EN clear not established",
+    "Internal loopback only, external peer is console recovery at115200",
+    "Production shared-resource handoff not established"
+  ],
+  "host_tests": 259
+}

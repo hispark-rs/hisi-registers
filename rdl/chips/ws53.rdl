@@ -136,6 +136,15 @@ addrmap ws53 {
     uart2.LINE_STATUS.rx_fifo_err->desc = "Read can clear only when the errored character is at FIFO head and no later errors remain";
     uart2.TX_FIFO_READ.tx_fifo_read->onread = ruser;
     uart2.TX_FIFO_READ.tx_fifo_read->hisi_svd_read_action = "modifyExternal";
+    uart0.DIV_L.div_l->desc = "Integer divider low byte. SDK opens DIV_EN before reading; A-board UART2 reads zero with DIV_EN clear and the programmed value with DIV_EN set. Other instances and write gating remain unqualified.";
+    uart0.DIV_H.div_h->desc = "Integer divider high byte. SDK opens DIV_EN before reading; high-byte hardware gating has not been established.";
+    uart0.UART_CTL.stp->desc = "Stop duration: 0=one bit; 1=one-and-a-half bits when DLEN=0 (five data bits), otherwise two bits. Source configuration semantics, not waveform timing proof.";
+    uart1.DIV_L.div_l->desc = "Integer divider low byte. SDK opens DIV_EN before reading; A-board UART2 reads zero with DIV_EN clear and the programmed value with DIV_EN set. Other instances and write gating remain unqualified.";
+    uart1.DIV_H.div_h->desc = "Integer divider high byte. SDK opens DIV_EN before reading; high-byte hardware gating has not been established.";
+    uart1.UART_CTL.stp->desc = "Stop duration: 0=one bit; 1=one-and-a-half bits when DLEN=0 (five data bits), otherwise two bits. Source configuration semantics, not waveform timing proof.";
+    uart2.DIV_L.div_l->desc = "Integer divider low byte. SDK opens DIV_EN before reading; A-board UART2 reads zero with DIV_EN clear and the programmed value with DIV_EN set. Other instances and write gating remain unqualified.";
+    uart2.DIV_H.div_h->desc = "Integer divider high byte. SDK opens DIV_EN before reading; high-byte hardware gating has not been established.";
+    uart2.UART_CTL.stp->desc = "Stop duration: 0=one bit; 1=one-and-a-half bits when DLEN=0 (five data bits), otherwise two bits. Source configuration semantics, not waveform timing proof.";
     uart1->hisi_svd_derived_from = "UART0";
     uart2->hisi_svd_derived_from = "UART0";
     i2c_v151_ws53_bs2x_regs #(.SDK_VIEW(true)) i2c0 @ 0x52083000;

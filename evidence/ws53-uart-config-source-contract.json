@@ -1,0 +1,1323 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "source_sha256": {
+    "src/drivers/drivers/hal/uart/v151/hal_uart_v151.c": "2732976b0de06e07895f5e281646c65f217d59403d0edf6182d6f6355886a397",
+    "src/drivers/drivers/hal/uart/v151/hal_uart_v151_regs_def.h": "d569201c4b5d01d1e50b6cfe0f04dd073b1a9fee687f93f8587571a34d045b87",
+    "src/drivers/drivers/hal/uart/v151/hal_uart_v151_regs_op.h": "0826bfc46053a276800b5878c91fc2958688276c1ce6eeeb226988de6911c4ed",
+    "src/drivers/drivers/hal/uart/hal_uart.h": "5c507e780b0c73215aba3389b35c756aaf6057af685142d74bc11a4ede36e345",
+    "src/drivers/chips/ws53/porting/uart/uart_porting.h": "05c5ba80287360ca49177d0ad75b9198efb98432d18450f401b4abd295ea4312",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+  },
+  "hardware_verified": false,
+  "baud_cases": [
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 48387,
+      "fraction": 6,
+      "register_words": [
+        3,
+        189,
+        6,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 48387,
+      "fraction": 6,
+      "register_words": [
+        3,
+        189,
+        6,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 48387,
+      "fraction": 6,
+      "register_words": [
+        3,
+        189,
+        6,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 5000,
+      "fraction": 0,
+      "register_words": [
+        136,
+        19,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 5000,
+      "fraction": 0,
+      "register_words": [
+        136,
+        19,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 5000,
+      "fraction": 0,
+      "register_words": [
+        136,
+        19,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 156,
+      "fraction": 16,
+      "register_words": [
+        156,
+        0,
+        16,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 156,
+      "fraction": 16,
+      "register_words": [
+        156,
+        0,
+        16,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 156,
+      "fraction": 16,
+      "register_words": [
+        156,
+        0,
+        16,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 13,
+      "fraction": 1,
+      "register_words": [
+        13,
+        0,
+        1,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 13,
+      "fraction": 1,
+      "register_words": [
+        13,
+        0,
+        1,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 13,
+      "fraction": 1,
+      "register_words": [
+        13,
+        0,
+        1,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 40,
+      "register_words": [
+        1,
+        0,
+        40,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 40,
+      "register_words": [
+        1,
+        0,
+        40,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 40,
+      "register_words": [
+        1,
+        0,
+        40,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 1500000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 1500000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 1500000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 1500001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 1500001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 1500001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 3000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 3000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 3000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 24000000,
+      "baud": 3000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 1,
+      "clock_hz": 24000000,
+      "baud": 3000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 2,
+      "clock_hz": 24000000,
+      "baud": 3000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 64516,
+      "fraction": 8,
+      "register_words": [
+        4,
+        252,
+        8,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 64516,
+      "fraction": 8,
+      "register_words": [
+        4,
+        252,
+        8,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 64516,
+      "fraction": 8,
+      "register_words": [
+        4,
+        252,
+        8,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 6666,
+      "fraction": 42,
+      "register_words": [
+        10,
+        26,
+        42,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 6666,
+      "fraction": 42,
+      "register_words": [
+        10,
+        26,
+        42,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 6666,
+      "fraction": 42,
+      "register_words": [
+        10,
+        26,
+        42,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 208,
+      "fraction": 21,
+      "register_words": [
+        208,
+        0,
+        21,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 208,
+      "fraction": 21,
+      "register_words": [
+        208,
+        0,
+        21,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 208,
+      "fraction": 21,
+      "register_words": [
+        208,
+        0,
+        21,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 17,
+      "fraction": 23,
+      "register_words": [
+        17,
+        0,
+        23,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 17,
+      "fraction": 23,
+      "register_words": [
+        17,
+        0,
+        23,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 17,
+      "fraction": 23,
+      "register_words": [
+        17,
+        0,
+        23,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 2,
+      "fraction": 10,
+      "register_words": [
+        2,
+        0,
+        10,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 2,
+      "fraction": 10,
+      "register_words": [
+        2,
+        0,
+        10,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 2,
+      "fraction": 10,
+      "register_words": [
+        2,
+        0,
+        10,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 2000000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 2000000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 2000000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 2000001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 2000001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 2000001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 4000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 4000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 4000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 32000000,
+      "baud": 4000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 1,
+      "clock_hz": 32000000,
+      "baud": 4000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 2,
+      "clock_hz": 32000000,
+      "baud": 4000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 80645,
+      "fraction": 10,
+      "register_words": [
+        5,
+        59,
+        10,
+        42367,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 80645,
+      "fraction": 10,
+      "register_words": [
+        5,
+        59,
+        10,
+        42367,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 31,
+      "sampling": 16,
+      "integer": 80645,
+      "fraction": 10,
+      "register_words": [
+        5,
+        59,
+        10,
+        42367,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 8333,
+      "fraction": 21,
+      "register_words": [
+        141,
+        32,
+        21,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 8333,
+      "fraction": 21,
+      "register_words": [
+        141,
+        32,
+        21,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 300,
+      "sampling": 16,
+      "integer": 8333,
+      "fraction": 21,
+      "register_words": [
+        141,
+        32,
+        21,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 260,
+      "fraction": 26,
+      "register_words": [
+        4,
+        1,
+        26,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 260,
+      "fraction": 26,
+      "register_words": [
+        4,
+        1,
+        26,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 9600,
+      "sampling": 16,
+      "integer": 260,
+      "fraction": 26,
+      "register_words": [
+        4,
+        1,
+        26,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 21,
+      "fraction": 44,
+      "register_words": [
+        21,
+        0,
+        44,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 21,
+      "fraction": 44,
+      "register_words": [
+        21,
+        0,
+        44,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 115200,
+      "sampling": 16,
+      "integer": 21,
+      "fraction": 44,
+      "register_words": [
+        21,
+        0,
+        44,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 2,
+      "fraction": 45,
+      "register_words": [
+        2,
+        0,
+        45,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 2,
+      "fraction": 45,
+      "register_words": [
+        2,
+        0,
+        45,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 921600,
+      "sampling": 16,
+      "integer": 2,
+      "fraction": 45,
+      "register_words": [
+        2,
+        0,
+        45,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 2500000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 2500000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 2500000,
+      "sampling": 16,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42367,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 2500001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 2500001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 2500001,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 63,
+      "register_words": [
+        1,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 5000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 5000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 5000000,
+      "sampling": 8,
+      "integer": 1,
+      "fraction": 0,
+      "register_words": [
+        1,
+        0,
+        0,
+        42295,
+        252
+      ],
+      "valid_divider": true
+    },
+    {
+      "port": 0,
+      "clock_hz": 40000000,
+      "baud": 5000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 1,
+      "clock_hz": 40000000,
+      "baud": 5000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    },
+    {
+      "port": 2,
+      "clock_hz": 40000000,
+      "baud": 5000001,
+      "sampling": 8,
+      "integer": 0,
+      "fraction": 63,
+      "register_words": [
+        0,
+        0,
+        63,
+        42295,
+        252
+      ],
+      "valid_divider": false
+    }
+  ],
+  "frame_case_count": 1944,
+  "conclusions": [
+    "SDK fractional division truncates: round_off uses integer 1/2 == 0",
+    "Use widened arithmetic and reject integer dividers outside 1..65535",
+    "Reject baud above clock/8 rather than programming integer divisor zero",
+    "STP=1 means 1.5 stop bits for five data bits, two otherwise",
+    "Clock gating, pad ownership, idle handoff and reset remain separate requirements"
+  ],
+  "not_proven": [
+    "physical baud accuracy",
+    "safe clock/reset provisioning",
+    "reserved register bits"
+  ]
+}
