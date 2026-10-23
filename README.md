@@ -233,3 +233,11 @@ Instrumented first READY is4.633875ms on the board versus4.106125ms in the model
 initialization itself takes1.25us versus0.28125us. This unresolved discrepancy
 must not be presented as timing parity. No calibrated accuracy, freshness per
 read, stop/IRQ/clearREADY, low-power or production thermal ownership is proven.
+
+WS53 START observations are recorded in
+[`evidence/ws53-tsensor-start-hil.json`](evidence/ws53-tsensor-start-hil.json).
+Three strengthened RAM runs each execute two START1 commands: READY clears but
+CODE retains the previous value until the next result. HAL rejects the stale
+field while READY is zero. This corrected a model that also cleared CODE.
+Repeat conversion latencies differ from cold initialization and from the model;
+exact sampling phase, conversion clock, stop and self-clear remain unqualified.
