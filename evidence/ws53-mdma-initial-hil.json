@@ -1,0 +1,245 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe_serial": "23121302",
+  "uart_serial": "5CB7019921",
+  "flash_written": false,
+  "cases": [
+    {
+      "name": "mdma32-hil-01",
+      "elf_sha256": "230dc207447031dcb9e2801eb96260298fd7b681eeb49e585b438f67818989a7",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 MDMA BEGIN\r\nWS53 MDMA RESULTS 0000000400000004000000040000000400000004000000040000000400000004\r\nWS53 FAIL mdma observations\r\n",
+      "passed": false,
+      "recovered": true,
+      "mdma": {
+        "passed": false,
+        "width": 4,
+        "memory_attributes_verified": true,
+        "physical_drain_proven": false,
+        "buffers_retained": true
+      },
+      "channels": [
+        {
+          "channel": 0,
+          "registers": [
+            "0x0",
+            "0x20050008",
+            "0x10000",
+            "0x0",
+            "0x20050268",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 1,
+          "registers": [
+            "0x0",
+            "0x20050054",
+            "0x10000",
+            "0x0",
+            "0x200502b4",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 2,
+          "registers": [
+            "0x0",
+            "0x200500a0",
+            "0x10000",
+            "0x0",
+            "0x20050300",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 3,
+          "registers": [
+            "0x0",
+            "0x200500ec",
+            "0x10000",
+            "0x0",
+            "0x2005034c",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 4,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "channel": 5,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "channel": 6,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "channel": 7,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        }
+      ],
+      "dump_names": [
+        "WS53_MDMA_SRC",
+        "WS53_MDMA_DST"
+      ]
+    },
+    {
+      "name": "mdma-direct-hil-01",
+      "elf_sha256": "05efff7d9efb4b9ba5a406a57f63362c1d018ce10b9000b6d49a05da943e74ee",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 MDMA BEGIN\r\nWS53 MDMA DIRECT 000000018c48000000000000200502a820050048\r\nWS53 MDMA RESULTS 0000000400000004000000040000000400000004000000040000000400000004\r\nWS53 FAIL mdma observations\r\n",
+      "passed": false,
+      "recovered": true,
+      "mdma": {
+        "passed": false,
+        "width": 4,
+        "memory_attributes_verified": true,
+        "physical_drain_proven": false,
+        "buffers_retained": true
+      },
+      "channels": [
+        {
+          "channel": 0,
+          "registers": [
+            "0x0",
+            "0x20050048",
+            "0x10000",
+            "0x0",
+            "0x200502a8",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 1,
+          "registers": [
+            "0x0",
+            "0x20050054",
+            "0x10000",
+            "0x0",
+            "0x200502b4",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 2,
+          "registers": [
+            "0x0",
+            "0x200500a0",
+            "0x10000",
+            "0x0",
+            "0x20050300",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 3,
+          "registers": [
+            "0x0",
+            "0x200500ec",
+            "0x10000",
+            "0x0",
+            "0x2005034c",
+            "0x8c480000"
+          ]
+        },
+        {
+          "channel": 4,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "channel": 5,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "channel": 6,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "channel": 7,
+          "registers": [
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        }
+      ],
+      "dump_names": [
+        "WS53_MDMA_SRC",
+        "WS53_MDMA_DST"
+      ],
+      "channel0_data_and_guards_correct": true,
+      "other_destinations_unchanged": true,
+      "source_address_after": "0x200502a8",
+      "destination_address_after": "0x20050048"
+    }
+  ],
+  "observations": [
+    "SDK and ROM code describe8 slots, but only0..3 retained configuration in this board experiment. Slots4..7 read0. This does not prove why the upper slots are unavailable.",
+    "Channels0..3 read transfer_size0 before enable, causing current HAL Configuration failure; no normal fixture transfer starts.",
+    "One explicit PAC channel0 diagnostic writes17 and enables without requiring count readback. It copies17u32 with both guards intact, rawTC1, EN0. Final source/destination readback points at element16 (last transferred), not one-past.",
+    "PMP locked TOR region5 spans0x20000000..0x20068000; MEMATTRL region5 nibble3 confirms noncacheable/bufferable SDK profile. Buffers remain reserved; no unsafe release or CPU destination reads."
+  ],
+  "limits": [
+    "Not a passing HAL DMA HIL test. The deliberately failing strict oracle is retained.",
+    "Only channel0 u32 transfer is physically observed. Other channels/widths, upper-slot availability, partial progress and interrupts remain unqualified.",
+    "Neither EN/ACTIVE0 nor elapsed time is a bus drain proof. No production buffer handback/cache protocol is claimed."
+  ],
+  "next_steps": [
+    "Reconcile RDL evidence with programmed length versus count status and completed-address readback.",
+    "Fix HAL and QEMU in dependency order; qualify accessible channel tokens rather than silently treating SDK slots as hardware presence.",
+    "Repeat HAL-based all-supported-channel tests for u8/u16/u32 and keep buffer ownership until drain protocol is proven."
+  ]
+}

@@ -193,3 +193,13 @@ approximately32kHz A-board profile; the source32768Hz remains a distinct profile
 Exact synchronization delay, physical clock source and low-power are unqualified.
 The header's read-clear comment conflicts with the helper's EOI1 write; this test
 qualifies the write path only, without changing register layout/access metadata.
+
+Initial WS53 MDMA HIL **does not pass the current HAL contract**. Evidence:
+[`evidence/ws53-mdma-initial-hil.json`](evidence/ws53-mdma-initial-hil.json).
+The SDK/ROM eight-slot layout is not proof of eight usable physical channels:
+only slots0..3 retained configuration in this board test. Their count field
+reads0 before enable. A reserved channel0 PAC diagnostic successfully copies17
+u32 elements with intact guards, but final addresses point to the last element,
+not one-past. The source/consumer semantics still need reconciliation; neither
+the eight-channel HAL nor the QEMU memory profile is physically qualified.
+No buffers were returned to Rust, and no bus-drain proof is claimed.
