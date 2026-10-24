@@ -1,0 +1,306 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "src/drivers/chips/ws53/porting/security_unified/security_unified_porting.h": "61fa30fcf837db575d04c57a66cfe814f42f31847957b977f972694f8628018c",
+    "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_irq.c": "c523416a92fe4445a6f54af385196feebed44a1e80ece28486a3bfea7f0cb70a",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/drv_hash.c": "b3572ebab5147c67a33687c816cce5f855e8f6bcd8305e9ed8cbc6992363505f",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_spacc_reg.h": "3d4630e695abebcd0e15554c1b74465b60e681f6b5208ce8d8adc186916b5f8e",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_hash.c": "4b23683e9907cc976afad500e59728c4e4f85510a35cbdd6c98a81ab9eba8d4b",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/drv_symc.c": "a251b795e9a7b4cb5bd9de4473e3ba2b2ac658a053f3f1b201feb9e770cff1a6",
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_init.c": "a7a7e1dba8a64f3e55441ebc16ce0ba559386acb9bee00561effbeac94f5047a",
+    "src/application/ws53/ws53_application/main.c": "4511fa9dec6b2c31fe26d53820f7f40fddec23f9841fb0cb5bd8bf28e927d0f7"
+  },
+  "application_config": [
+    "CONFIG_DRIVER_SUPPORT_SECURITY_UNIFIED",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_DEEP_SLEEP",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_SYMC",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_HASH",
+    "CONFIG_SPACC_IRQ_ENABLE",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_TRNG",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_KM",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_FAPC",
+    "CONFIG_SECURITY_UNIFIED_SUPPORT_PKE",
+    "CONFIG_PKE_SUPPORT_ECC_FIPS_P192R",
+    "CONFIG_PKE_SUPPORT_ECC_FIPS_P224R",
+    "CONFIG_PKE_SUPPORT_ECC_FIPS_P256R",
+    "CONFIG_PKE_SUPPORT_ECC_FIPS_P384R",
+    "CONFIG_PKE_SUPPORT_ECC_FIPS_P521R",
+    "CONFIG_PKE_SUPPORT_ECC_BP256R",
+    "CONFIG_PKE_SUPPORT_ECC_BP384R",
+    "CONFIG_PKE_SUPPORT_ECC_BP512R",
+    "CONFIG_PKE_SUPPORT_CURVE",
+    "CONFIG_PKE_SUPPORT_ECC_CURVE_25519",
+    "CONFIG_PKE_SUPPORT_ECC_CURVE_448",
+    "CONFIG_PKE_SUPPORT_EDWARD",
+    "CONFIG_PKE_SUPPORT_ECC_ED25519",
+    "CONFIG_PKE_SUPPORT_SM2",
+    "CONFIG_PKE_SUPPORT_SM2_SIGN",
+    "CONFIG_PKE_SUPPORT_SM2_VERIFY",
+    "CONFIG_PKE_SUPPORT_SM2_CRYPTO",
+    "CONFIG_PKE_SUPPORT_RSA",
+    "CONFIG_PKE_SUPPORT_ECC_SIGN",
+    "CONFIG_PKE_SUPPORT_ECC_VERIFY",
+    "CONFIG_PKE_SUPPORT_ECC_ECDH",
+    "CONFIG_PKE_SUPPORT_ECC_GEN_KEY",
+    "CONFIG_PKE_SUPPORT_ECC_CAL",
+    "CONFIG_PKE_SUPPORT_BIG_NUMBER"
+  ],
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "original_irq_translation_unit": true,
+  "original_allocator_function_sha256": "84f130b90e99ec7d8f42fdc050c5eab0196c9ee1deeab793836154d792c76b3d",
+  "observations": {
+    "bases": [
+      1375797248,
+      1375862784,
+      1375870976,
+      1375879168,
+      1392508928
+    ],
+    "irq": [
+      58,
+      59,
+      60,
+      61,
+      58,
+      59,
+      60,
+      61,
+      70
+    ],
+    "channels": [
+      2,
+      65534,
+      2,
+      65534
+    ],
+    "hash_ctrl_offsets": [
+      20736,
+      20992
+    ],
+    "registration": [
+      59,
+      59,
+      2,
+      2,
+      2,
+      2
+    ],
+    "dispatch": [
+      [
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        2,
+        0,
+        2,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        2,
+        0,
+        2,
+        0,
+        1
+      ],
+      [
+        1,
+        2,
+        2,
+        0,
+        2,
+        0,
+        1
+      ],
+      [
+        2,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        1,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ]
+    ],
+    "allocator": [
+      [
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        0,
+        6
+      ],
+      [
+        0,
+        2,
+        1,
+        0,
+        2
+      ],
+      [
+        0,
+        3,
+        4294967295,
+        -3,
+        6
+      ],
+      [
+        1,
+        0,
+        2,
+        0,
+        4
+      ],
+      [
+        1,
+        1,
+        2,
+        0,
+        4
+      ],
+      [
+        1,
+        2,
+        4294967295,
+        -3,
+        4
+      ],
+      [
+        1,
+        3,
+        4294967295,
+        -3,
+        4
+      ],
+      [
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      [
+        2,
+        1,
+        4294967295,
+        -3,
+        2
+      ],
+      [
+        2,
+        2,
+        1,
+        0,
+        2
+      ],
+      [
+        2,
+        3,
+        4294967295,
+        -3,
+        2
+      ],
+      [
+        3,
+        0,
+        4294967295,
+        -3,
+        0
+      ],
+      [
+        3,
+        1,
+        4294967295,
+        -3,
+        0
+      ],
+      [
+        3,
+        2,
+        4294967295,
+        -3,
+        0
+      ],
+      [
+        3,
+        3,
+        4294967295,
+        -3,
+        0
+      ]
+    ]
+  },
+  "irq_dispatch_cases": 9,
+  "hash_allocator_cases": 16,
+  "findings": [
+    "SPACC IRQ59 matches application SEC_INT1; RKP60/KLAD61 match SEC_INT2/3",
+    "Declared PKE IRQ58 aliases application MDMA58; PKE IRQ disabled in this profile, routing unresolved",
+    "Hash allocator can return channels1/2, but IRQ registration and dispatch visit only channel1",
+    "SYMC IRQ registration/dispatch likewise visit only channel1; its two-channel allocator is source-inspected only",
+    "Application starts control core and IPC before cipher environment init; direct exclusive ownership is not established"
+  ],
+  "hardware_accessed": false,
+  "algorithm_results_tested": false,
+  "rdl_or_pac_generated": false,
+  "limitations": [
+    "OS/wait/lock-result/completion callbacks are host stubs",
+    "No silicon channel count, IRQ wiring, register side effects or reset defaults proven",
+    "No keys, OTP, security settings, Flash or MMIO accessed",
+    "Application ownership/coherence/init and cross-core protocols still require audit"
+  ]
+}
