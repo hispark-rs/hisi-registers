@@ -1,0 +1,12 @@
+// SDK 163d9150 flashboot_ws53/startup/main.c dmmu_set(). Four windows.
+// Readback-only diagnostic view of physical RW registers. Shared mapping is
+// not an application-exclusive resource. Never infer disabled from reset=0.
+addrmap ws53_fama_status_regs {
+    hisi_evidence = "SDK-source 163d9150 flashboot_ws53/startup/main.c; four DMMU windows; source/end inclusive in 4KiB pages; destination is signed page delta; reset and cross-core ownership unverified";
+    reg { field {sw=r; hw=w; desc="Source first address shifted right12";} page[31:0]; }
+        SOURCE[4] @ 0x00 += 4;
+    reg { field {sw=r; hw=w; desc="Source inclusive last address shifted right12";} page[31:0]; }
+        END[4] @ 0x20 += 4;
+    reg { field {sw=r; hw=w; desc="Two's-complement destination minus source page number";} delta[31:0]; }
+        DESTINATION[4] @ 0x40 += 4;
+};

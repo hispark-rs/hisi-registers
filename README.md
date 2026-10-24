@@ -376,3 +376,15 @@ SVD output unchanged. UART0/1 descriptions share SDK semantics but lack this
 physical qualification. `scripts/check_ws53_uart_tx_irq_contract.py --sdk SDK
 --svd WS53.svd` checks384 original-C helper cases and3 acknowledgement paths;
 host RAM cannot emulate IIR read-clear. No reset defaults are inferred.
+
+## WS53 Flash mapping read views (2026-10-24)
+
+`FAMA_STATUS` and WS53-only SFC size/base/alias/FAPC views expose observation
+registers as read-only; no key material or lock-writing API is introduced.
+Unknown reset values are omitted, including the inherited WS53 SFC defaults.
+`scripts/check_ws53_flash_layout.py --sdk SDK --svd WS53.svd` checks30 slots
+against the pinned SDK headers and original C bitfields. CS base occupies
+bits31:16 (byte base when positioned), not a full-word shifted address.
+WS63/BS2X SVD exports are byte-identical to the pre-change commit.
+A-board reads observed CS1 at0x400000/4MiB, zero FAMA deltas and normal FAPC
+region modes. This does not itself prove reset defaults or an SFC write HAL.

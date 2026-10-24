@@ -43,6 +43,10 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r; desc="UART H1/application UART0 reset, active low; shared register, preserve other bits";} uart_h1_reset_n[1:1];
     } UART_SOFT_RESET @ 0x168;
     reg {
+        // Retain the historical halfword API; halfword write qualification is
+        // unresolved. SDK clock/PM helpers actually access this slot as a word.
+        hisi_svd_word_view = "MSUB_NORMAL_WORD";
+        hisi_evidence = "SDK 163d9150: clock_recover.c/acore_clock_recover.c use reg_setbit/reg_clrbit, whose chip_io.h reg() is volatile uint32_t; original halfword write qualification remains unresolved. Historical 16/32-bit SDMA gate attempts both failed readback; this view proves neither gate clearing nor bus drain. See evidence/ws53-msub-word-access.json";
         field {sw=rw; hw=r;} cpu_enable[0:0];
         field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
         field {sw=rw; hw=r;} mdma_enable[3:3];
@@ -54,6 +58,10 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r;} codec_channel[9:9];
     } MSUB_NORMAL @ 0x3e0;
     reg {
+        // Same mixed-access caveat as MSUB_NORMAL; do not infer reset values,
+        // upper-half fields, successful SDMA gating or transaction completion.
+        hisi_svd_word_view = "MSUB_SLEEP_WORD";
+        hisi_evidence = "SDK 163d9150: clock_recover.c/acore_clock_recover.c use 32-bit reg_setbit/reg_clrbit; pm_sleep_porting.c also uses reg32_setbit. chip_io.h defines volatile uint32_t accesses. Original halfword write qualification remains unresolved; both historical SDMA gate widths failed. This is not a bus-drain protocol. See evidence/ws53-msub-word-access.json";
         field {sw=rw; hw=r;} cpu_enable[0:0];
         field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
         field {sw=rw; hw=r;} mcu_bus_enable[2:2];

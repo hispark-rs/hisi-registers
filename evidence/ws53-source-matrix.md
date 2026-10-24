@@ -64,6 +64,21 @@ bit 11 is SPI3_MS (application SPI_BUS_0), bit 0 is TIMER. The generic
 register bits and undocumented selectors are not invented. MSUB gate fields
 come from `hal_clocks.h`; a named SDMA gate does not prove a usable SDMA instance.
 
+MSUB has a separate access-width qualification. `MSUB_NORMAL_WORD` and
+`MSUB_SLEEP_WORD` preserve the original low-half fields while exposing the
+32-bit accesses actually used by `clock_recover.c`, `acore_clock_recover.c`
+and `pm_sleep_porting.c`. `chip_io.h` defines their `reg`/`reg32` lvalues as
+`volatile uint32_t`. The historical halfword views remain for API compatibility;
+their write qualification is unresolved, and the peripheral-port halfword
+evidence above must not be applied to MSUB. Both historical 16- and 32-bit SDMA
+gate-clear attempts retained bit4. Neither this alias nor the host-RAM oracle
+proves successful gate clearing, bus drain, reset semantics or ownership.
+`scripts/check_ws53_msub_access.py --sdk <SDK>` compiles the pinned SDK enums
+and original access helpers against anonymous host RAM: 19 field positions,
+42 RMW scenarios, preserved upper halves and neighboring words. The clock and
+delay dependencies are explicit stubs; no device, timing or power-mode behavior
+is simulated. See [`ws53-msub-word-access.json`](ws53-msub-word-access.json).
+
 All four new blocks have unknown reset values and shared ownership. They have
 SDK-source evidence only: adding a PAC register does not authorize claiming or
 reconfiguring the control core's clocks, reset pad, flash pads, or SWD pins.

@@ -21,6 +21,7 @@
 `include "ws53/sdio-v151.rdl"
 `include "ws53/trng.rdl"
 `include "ws53/efuse-read.rdl"
+`include "ws53/flash-map.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -58,6 +59,7 @@ addrmap ws53 {
     ws53_sdio_v151_regs sdio @ 0x52060000;
     ws53_trng_regs trng @ 0x52024000;
     ws53_efuse_read_regs efuse @ 0x57024000;
+    ws53_fama_status_regs fama_status @ 0x5208f800;
     watchdog_v151_regs #(.SDK_VIEW(true)) wdt @ 0x5702B000;
     wdt->hisi_reset_unverified = true;
     wdt->hisi_evidence = "SDK-source 163d9150 acore watchdog v151, base from acore/platform_core.h; no silicon reset or NMI route validation";
@@ -74,7 +76,9 @@ addrmap ws53 {
     wdt.WDT_EOI.wdt_eoi->desc = "Read returns zero and clears interrupt per SDK register comment; SDK clear helper reads then writes 1, independent write-only clear behavior unverified";
     wdt.WDT_CR.wdt_mode->desc = "0 reset on first expiry interrupt, 1 reset on second expiry interrupt; reset still gated by RST_EN";
     wdt.WDT_CR.wdt_mode->encode = ws53_wdt_expiry_mode;
-    sfc_v150_regs sfc_cfg @ 0x53000000;
+    sfc_v150_regs #(.WS53_READ_VIEW(true)) sfc_cfg @ 0x53000000;
+    sfc_cfg->hisi_reset_unverified = true;
+    sfc_cfg->hisi_evidence = "SDK-source 163d9150 WS53 SFC v150 plus read-only mapping/FAPC views from hal_fapc_reg.h, hal_fapc.c, flash_recover.c and security_unified_porting.h; shared resource; no reset values or writable security API qualified";
     pwm_v151_regs pwm @ 0x52082000;
     pwm->hisi_reset_unverified = true;
     pwm->hisi_evidence = "SDK-source 163d9150 PWM v151 acore profile: 4 groups, 8 channels; no silicon reset, waveform or command readback verified";

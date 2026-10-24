@@ -14,4 +14,9 @@ addrmap ws53_system_memory_regs {
     reg {
         field { sw=rw; hw=r; desc="MCU mode encoded bits: mode1=0, mode2=1, mode3=2, mode4=4"; } mcu_mode[8:6];
     } PLATFORM_ENABLE @ 0x604;
+    reg {
+        name = "Control-core reset observation; no reset command is exposed by this view";
+        hisi_evidence = "SDK 163d9150 acore/platform_core.h HAL_SOFT_RST_2_GLB_B/RESET_CRG_CCORE_VALUE/RESET_CCORE_VALUE; main.c copy_to_ccore: 0 all held, 3 logic/clock released, 7 CPU also released. Physical-SRST app-entry observation 2026-10-24 reads 0; not a silicon reset-value claim";
+        field { sw=r; hw=w; desc="Known domain-release encoding: 0 all held, 3 logic/clock released, 7 CPU also released; other encodings unqualified"; } released_domains[2:0];
+    } CCORE_RESET_STATUS @ 0x96c;
 };

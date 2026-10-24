@@ -7,6 +7,30 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_msub_word_views_preserve_existing_halfword_contract(self):
+        from check_ws53_msub_access import validate_layout
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            layout = validate_layout(dest)
+            self.assertEqual({name: p['address'] for name, p in layout.items()},
+                             {'MSUB_NORMAL': 0x520003e0, 'MSUB_SLEEP': 0x520003e4})
+            self.assertEqual(layout['MSUB_NORMAL']['fields']['MDMA_ENABLE'], 3)
+            self.assertEqual(layout['MSUB_SLEEP']['fields']['SDMA_ENABLE'], 4)
+            original = dest.read_bytes()
+            for tag, value in (('size', '16'), ('alternateRegister', 'MSUB_SLEEP'),
+                               ('addressOffset', '0x3e2'), ('resetValue', '0')):
+                with self.subTest(tag=tag):
+                    root = ET.fromstring(original)
+                    word = root.find("./peripherals/peripheral[name='M_CRG']/registers/register[name='MSUB_NORMAL_WORD']")
+                    node = word.find(tag)
+                    if node is None:
+                        node = ET.SubElement(word, tag)
+                    node.text = value
+                    ET.ElementTree(root).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+
     def word_view_fixture(self, reg_props='', field_props='', name='CTRL_WORD',
                           bits=16, offset=0, tail=4, array='', evidence='source audit'):
         properties = Path(__file__).resolve().parents[1] / 'rdl/properties.rdl'
@@ -436,6 +460,10 @@ addrmap chip {{ addrmap {{
             for reg in peripherals["SYSTEM_MEMORY"].findall("registers/register"):
                 self.assertIsNone(reg.find("resetValue"))
                 self.assertIsNone(reg.find("resetMask"))
+            core_reset = peripherals["SYSTEM_MEMORY"].find("registers/register[name='CCORE_RESET_STATUS']")
+            self.assertEqual(core_reset.findtext("addressOffset"), "0x96C")
+            self.assertEqual(core_reset.findtext("access"), "read-only")
+            self.assertEqual(core_reset.findtext("fields/field/bitWidth"), "3")
             for bank, width in enumerate((23, 12, 3)):
                 reg = peripherals[f"GPIO{bank}"].find("registers/register")
                 self.assertEqual(int(reg.findtext("fields/field/bitWidth")), width)

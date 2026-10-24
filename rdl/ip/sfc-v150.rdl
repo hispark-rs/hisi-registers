@@ -2,7 +2,9 @@
 // Confirmed by byte-identical register definition and operation sources in
 // fbb_ws53, fbb_ws63 and fbb_bs2x.
 
-addrmap sfc_v150_regs {
+// WS53_READ_VIEW adds only source-confirmed readback of shared mapping/security
+// state. No lock/configuration writes are exposed. Other chip output is unchanged.
+addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
     reg {
         field {
             enum SFC_CFG_GLOBAL_CONFIG_mode_e1 {
@@ -415,4 +417,37 @@ addrmap sfc_v150_regs {
             desc = "AES IV value valid (auto-clears after sync)";
         } lea_iv_vld[0:0] = 0x0;
     } LEA_IV_VLD @ 0x1600;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="SDK alias-size encoding; not a JEDEC capacity measurement";} cs0[3:0];
+        field {sw=r; hw=w;} cs1[11:8];
+    } FLASH_SIZE_STATUS @ 0x210;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="Mapping byte address high16; low16 reserved. SDK supplies address shifted right16 to this field";} value[31:16];
+    } FLASH_BASE_STATUS[2] @ 0x214 += 4;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w;} alias_cs[0:0];
+    } FLASH_ALIAS_STATUS @ 0x220;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="SDK writes byte address; bottom8 bits reserved";} address[31:8];
+    } FAPC_START_STATUS[4] @ 0x1000 += 4;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="SDK region end address; bottom8 bits reserved";} address[31:8];
+    } FAPC_END_STATUS[4] @ 0x1040 += 4;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="Two bits per region: 0 normal, 2 decrypt per hal_fapc_set_region_mode; other values unqualified";} modes[7:0];
+    } FAPC_MODE_STATUS @ 0x1180;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="Readback only; no one-way lock writes exposed";} locked[3:0];
+    } FAPC_LOCK_STATUS @ 0x1220;
+    reg {
+        ispresent = WS53_READ_VIEW;
+        field {sw=r; hw=w; desc="ACPU IV start address per region; no IV/key contents exposed";} value[31:0];
+    } FAPC_IV_START_STATUS[4] @ 0x1640 += 4;
 };

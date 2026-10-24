@@ -30,7 +30,7 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 32,
+        "peripherals": 33,
         "interrupts": 20,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
@@ -48,6 +48,7 @@ EXPECTED = {
             "SDIO": 0x52060000,
             "TRNG": 0x52024000,
             "EFUSE": 0x57024000,
+            "FAMA_STATUS": 0x5208F800,
             "WDT": 0x5702B000,
             "SFC_CFG": 0x53000000,
             "PWM": 0x52082000,
@@ -67,10 +68,12 @@ EXPECTED = {
             "GPIO2": 0x57010000,
         },
         "source_arrays": 0,
-        "output_arrays": 6,
+        "output_arrays": 13,
         "cluster_arrays": 1,
-        "registers_expanded": 945,
-        "fields_expanded": 1997,
+        # Flash mapping/read-only status adds 31 views/32 fields; the two
+        # SDK-backed MSUB word access aliases add 2 views/19 fields.
+        "registers_expanded": 978,
+        "fields_expanded": 2048,
         "write_constraints": 20,
     },
 }
