@@ -76,9 +76,15 @@ addrmap ws53 {
     wdt.WDT_EOI.wdt_eoi->desc = "Read returns zero and clears interrupt per SDK register comment; SDK clear helper reads then writes 1, independent write-only clear behavior unverified";
     wdt.WDT_CR.wdt_mode->desc = "0 reset on first expiry interrupt, 1 reset on second expiry interrupt; reset still gated by RST_EN";
     wdt.WDT_CR.wdt_mode->encode = ws53_wdt_expiry_mode;
-    sfc_v150_regs #(.WS53_READ_VIEW(true)) sfc_cfg @ 0x53000000;
+    sfc_v150_regs #(.WS53_READ_VIEW(true), .WS53_COMMAND_VIEW(true)) sfc_cfg @ 0x53000000;
     sfc_cfg->hisi_reset_unverified = true;
-    sfc_cfg->hisi_evidence = "SDK-source 163d9150 WS53 SFC v150 plus read-only mapping/FAPC views from hal_fapc_reg.h, hal_fapc.c, flash_recover.c and security_unified_porting.h; shared resource; no reset values or writable security API qualified";
+    sfc_cfg->hisi_evidence = "SDK-source 163d9150 WS53 SFC v150 command/DMA source contract plus mapping/FAPC read views; evidence/ws53-sfc-command-source-contract.json. Shared boot/control-core resource; no reset defaults, application IRQ route, DMA drain or safe ownership qualified. Legacy interrupt/reset slots absent from pinned SDK are excluded only on WS53";
+    sfc_cfg.CMD_CONFIG.start->desc = "SDK starts SPI transfer by writing 1 and polls until hardware returns 0 after transfer completion per header. Source contract uses repeated volatile reads, not a read-clear operation; silicon side effects/timing, write-while-busy and forced-clear semantics unqualified. Zero does not certify NOR WIP, cache coherence or bus drain";
+    sfc_cfg.BUS_DMA_CTRL.dma_start->desc = "SDK starts bus DMA by writing 1 and polls until hardware returns 0 after transfer completion per header. Source contract uses repeated volatile reads, not a read-clear operation; silicon side effects/timing unqualified. No abort, buffer-ownership or posted-write drain proof follows from zero";
+    sfc_cfg.BUS_DMA_MEM_SADDR.dma_mem_saddr->desc = "SDK writes caller RAM pointer as a 32-bit bus-DMA address. No supported RAM range, alias translation, cache policy or exclusive ownership is established by this register layout";
+    sfc_cfg.CMD_CONFIG.data_cnt->desc = "Six-bit length-minus-one for data-enabled commands: 1..64 bytes. Original SDK helper truncates size-1, including zero/oversize; caller validation is required. With data_en=0 this field is not a data request";
+    sfc_cfg.BUS_DMA_LEN.dma_len->desc = "Thirty-bit DMA length-minus-one; SDK helper preserves upper bits but does not validate zero/oversize. Layout is not a buffer ownership or transfer-range guarantee";
+    sfc_cfg.CMD_DATABUF_0.cmd_databuf_0->desc = "CPU command data buffer, also updated by completed reads. SDK uses ordinary volatile accesses without a source-level FIFO pop/read-clear operation; silicon side effects unverified. A previously buffered value is not a fresh Flash status/WIP observation: SDK issues a status command, waits command START, then reads this word";
     pwm_v151_regs pwm @ 0x52082000;
     pwm->hisi_reset_unverified = true;
     pwm->hisi_evidence = "SDK-source 163d9150 PWM v151 acore profile: 4 groups, 8 channels; no silicon reset, waveform or command readback verified";

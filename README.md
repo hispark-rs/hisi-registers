@@ -388,3 +388,20 @@ bits31:16 (byte base when positioned), not a full-word shifted address.
 WS63/BS2X SVD exports are byte-identical to the pre-change commit.
 A-board reads observed CS1 at0x400000/4MiB, zero FAMA deltas and normal FAPC
 region modes. This does not itself prove reset defaults or an SFC write HAL.
+
+## WS53 SFC command and DMA source contract (2026-10-24)
+
+The pinned SDK's original C structures and helper functions now validate28
+register slots,41 bitfields, command/DMA lengths and addresses, both distinct
+busy-poll loops and fresh-command-before-WIP-read ordering. Run
+`uv run --script scripts/check_ws53_sfc_contract.py --sdk SDK --cc gcc`
+(also checked with Clang). Host memory/stubs establish a source contract, not
+silicon completion timing or cache/bus drain. START=0 and stale DATABUF data
+cannot establish NOR readiness or safe DMA buffer reuse.
+
+Only WS53 corrects START/data hardware-update metadata, adds seven SDK DDR/sample
+layout fields, and excludes five unverified imported IRQ/reset slots at
+0x120–0x130. The control-core SFC IRQ number does not establish an application-core
+route. No unknown reset is emitted; WS63/BS2X output remains byte-identical.
+See [the source contract and API delta](evidence/ws53-sfc-command-source-contract.md).
+This change does not regenerate an installed PAC or modify frozen firmware.

@@ -1,10 +1,11 @@
 // Shared HiSilicon SFC v150 register block.
-// Confirmed by byte-identical register definition and operation sources in
-// fbb_ws53, fbb_ws63 and fbb_bs2x.
+// SDK register definitions/operations shared by fbb_ws53/ws63/bs2x. Imported
+// legacy interrupt/reset slots are NOT present in the pinned WS53 SDK header.
 
 // WS53_READ_VIEW adds only source-confirmed readback of shared mapping/security
 // state. No lock/configuration writes are exposed. Other chip output is unchanged.
-addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
+addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false,
+                      boolean WS53_COMMAND_VIEW = false) {
     reg {
         field {
             enum SFC_CFG_GLOBAL_CONFIG_mode_e1 {
@@ -44,6 +45,9 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
             hw = r;
             desc = "SPI read data delay: 000=0.5~1clk; 001=1~1.5clk; etc.";
         } rd_delay[5:3] = 0x0;
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r;
+            desc="SDK DDR sampling-point selector; layout only, DDR operation unqualified";
+        } sample_test[9:6];
     } GLOBAL_CONFIG @ 0x100;
     reg {
         field {
@@ -63,6 +67,7 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
         } tcsh[14:12] = 0x6;
     } TIMING @ 0x110;
     reg {
+        ispresent = !WS53_COMMAND_VIEW;
         field {
             sw = r;
             hw = r;
@@ -75,6 +80,7 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
         } dma_done_int_raw_status[1:1] = 0x0;
     } INT_RAW_STATUS @ 0x120;
     reg {
+        ispresent = !WS53_COMMAND_VIEW;
         field {
             sw = r;
             hw = r;
@@ -87,6 +93,7 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
         } dma_done_int_status[1:1] = 0x0;
     } INT_STATUS @ 0x124;
     reg {
+        ispresent = !WS53_COMMAND_VIEW;
         field {
             sw = rw;
             hw = r;
@@ -99,6 +106,7 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
         } dma_done_int_mask[1:1] = 0x0;
     } INT_MASK @ 0x128;
     reg {
+        ispresent = !WS53_COMMAND_VIEW;
         field {
             sw = w;
             hw = r;
@@ -111,6 +119,7 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
         } dma_done_int_clr[1:1] = 0x0;
     } INT_CLEAR @ 0x12C;
     reg {
+        ispresent = !WS53_COMMAND_VIEW;
         field {
             sw = rw;
             hw = r;
@@ -171,11 +180,17 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
             hw = r;
             desc = "WIP bit position in Flash status register: 000=bit0; etc.";
         } wip_locate[2:0] = 0x0;
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r;
+            desc="SDK DDR bus-mode bit; layout only, DDR operation unqualified";
+        } bus_ddr_mode[3:3];
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r; } ddr_rd_dummy_bytes[7:4];
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r; } ddr_wr_dummy_bytes[11:8];
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r; } sfc_ddr_tx_delay_enable[12:12];
     } BUS_CONFIG2 @ 0x204;
     reg {
         field {
             sw = rw;
-            hw = r;
+            hw = WS53_COMMAND_VIEW ? rw : r;
             desc = "DMA transfer enable (auto-clears)";
         } dma_start[0:0] = 0x0;
         field {
@@ -230,7 +245,7 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
     reg {
         field {
             sw = rw;
-            hw = r;
+            hw = WS53_COMMAND_VIEW ? rw : r;
             desc = "Command start (auto-clears)";
         } start[0:0] = 0x0;
         field {
@@ -276,6 +291,12 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
             hw = r;
             desc = "Instruction code";
         } reg_ins[7:0] = 0x0;
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r;
+            desc="SDK command DDR bit; layout only, standard-SPI helpers preserve it";
+        } cmd_ddr_mode[8:8];
+        field { ispresent=WS53_COMMAND_VIEW; sw=rw; hw=r;
+            desc="SDK DDR dummy count; layout only, standard-SPI helpers preserve it";
+        } ddr_dummy_byte_cnt[15:12];
     } CMD_INS @ 0x308;
     reg {
         field {
@@ -287,113 +308,113 @@ addrmap sfc_v150_regs #(boolean WS53_READ_VIEW = false) {
     reg {
         field {
             sw = rw;
-            hw = r;
+            hw = WS53_COMMAND_VIEW ? rw : r;
             desc = "Data buffer 0";
         } cmd_databuf_0[31:0] = 0x0;
     } CMD_DATABUF_0 @ 0x400;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 1";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 1; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 1";
         } cmd_databuf_1[31:0] = 0x0;
     } CMD_DATABUF_1 @ 0x404;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 2";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 2; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 2";
         } cmd_databuf_2[31:0] = 0x0;
     } CMD_DATABUF_2 @ 0x408;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 3";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 3; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 3";
         } cmd_databuf_3[31:0] = 0x0;
     } CMD_DATABUF_3 @ 0x40C;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 4";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 4; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 4";
         } cmd_databuf_4[31:0] = 0x0;
     } CMD_DATABUF_4 @ 0x410;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 5";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 5; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 5";
         } cmd_databuf_5[31:0] = 0x0;
     } CMD_DATABUF_5 @ 0x414;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 6";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 6; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 6";
         } cmd_databuf_6[31:0] = 0x0;
     } CMD_DATABUF_6 @ 0x418;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 7";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 7; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 7";
         } cmd_databuf_7[31:0] = 0x0;
     } CMD_DATABUF_7 @ 0x41C;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 8";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 8; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 8";
         } cmd_databuf_8[31:0] = 0x0;
     } CMD_DATABUF_8 @ 0x420;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 9";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 9; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 9";
         } cmd_databuf_9[31:0] = 0x0;
     } CMD_DATABUF_9 @ 0x424;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 10";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 10; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 10";
         } cmd_databuf_10[31:0] = 0x0;
     } CMD_DATABUF_10 @ 0x428;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 11";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 11; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 11";
         } cmd_databuf_11[31:0] = 0x0;
     } CMD_DATABUF_11 @ 0x42C;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 12";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 12; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 12";
         } cmd_databuf_12[31:0] = 0x0;
     } CMD_DATABUF_12 @ 0x430;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 13";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 13; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 13";
         } cmd_databuf_13[31:0] = 0x0;
     } CMD_DATABUF_13 @ 0x434;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 14";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 14; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 14";
         } cmd_databuf_14[31:0] = 0x0;
     } CMD_DATABUF_14 @ 0x438;
     reg {
         field {
             sw = rw;
-            hw = r;
-            desc = "Command data buffer 15";
+            hw = WS53_COMMAND_VIEW ? rw : r;
+            desc = WS53_COMMAND_VIEW ? "Command data word 15; SDK ordinary volatile read/write, hardware-read result after START polling. No source-level FIFO pop/read-clear; silicon side effects unverified. Old data is not fresh WIP" : "Command data buffer 15";
         } cmd_databuf_15[31:0] = 0x0;
     } CMD_DATABUF_15 @ 0x43C;
     reg {

@@ -7,6 +7,73 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_sfc_command_layout_rejects_fabricated_status_contracts(self):
+        from check_ws53_sfc_contract import validate_layout
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_layout(dest)['register_slots'], 28)
+            original = dest.read_bytes()
+            mutations = [
+                ('CMD_CONFIG', 'addressOffset', '0x304'),
+                ('CMD_CONFIG', 'access', 'write-only'),
+                ('CMD_CONFIG', 'readAction', 'clear'),
+                ('CMD_CONFIG', 'fields/field/modifiedWriteValues', 'oneToClear'),
+                ('CMD_CONFIG', 'resetValue', '0'),
+                ('BUS_DMA_CTRL', 'readAction', 'clear'),
+                ('BUS_DMA_CTRL', 'fields/field/access', 'write-only'),
+                ('CMD_DATABUF_0', 'readAction', 'modifyExternal'),
+                ('CMD_DATABUF_15', 'size', '16'),
+                ('CMD_INS', "fields/field[name='CMD_DDR_MODE']/bitOffset", '9'),
+                ('CMD_ADDR', 'fields/field/bitWidth', '32'),
+            ]
+            for reg_name, tag, value in mutations:
+                with self.subTest(reg=reg_name, tag=tag):
+                    tree = ET.fromstring(original)
+                    reg = tree.find(f"./peripherals/peripheral[name='SFC_CFG']/registers/register[name='{reg_name}']")
+                    node = reg.find(tag)
+                    if node is None:
+                        parent_path, _, leaf = tag.rpartition('/')
+                        node = ET.SubElement(reg.find(parent_path) if parent_path else reg, leaf)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+            for kind in ('legacy', 'irq'):
+                tree = ET.fromstring(original)
+                block = tree.find("./peripherals/peripheral[name='SFC_CFG']")
+                if kind == 'legacy':
+                    reg = ET.SubElement(block.find('registers'), 'register')
+                    ET.SubElement(reg, 'name').text = 'INT_STATUS'
+                else:
+                    irq = ET.SubElement(block, 'interrupt')
+                    ET.SubElement(irq, 'name').text = 'SFC'
+                    ET.SubElement(irq, 'value').text = '36'
+                ET.ElementTree(tree).write(dest)
+                with self.assertRaises(ValueError):
+                    validate_layout(dest)
+
+    def test_ws53_sfc_hardware_updates_are_instance_specific(self):
+        from systemrdl import RDLCompiler
+        from systemrdl.rdltypes import AccessType
+        root = Path(__file__).resolve().parents[1]
+        for chip in ('ws53', 'ws63', 'bs2x'):
+            compiler = RDLCompiler()
+            compiler.compile_file(str(root/f'rdl/chips/{chip}.rdl'))
+            sfc = next(node for node in compiler.elaborate().top.children()
+                       if node.inst_name.lower() == 'sfc_cfg')
+            regs = {node.inst_name: node for node in sfc.children()}
+            expected = AccessType.rw if chip == 'ws53' else AccessType.r
+            for reg, field in [('CMD_CONFIG', 'start'), ('BUS_DMA_CTRL', 'dma_start'),
+                               *((f'CMD_DATABUF_{i}', f'cmd_databuf_{i}') for i in range(16))]:
+                f = regs[reg].get_child_by_name(field)
+                self.assertEqual(f.get_property('hw'), expected, (chip, reg))
+                self.assertEqual(f.get_property('sw'), AccessType.rw)
+                self.assertIsNone(f.get_property('onread'))
+                self.assertIsNone(f.get_property('onwrite'))
+            for name in ('INT_RAW_STATUS', 'INT_STATUS', 'INT_MASK', 'INT_CLEAR', 'SOFT_RST_MASK'):
+                self.assertEqual(name in regs, chip != 'ws53', (chip, name))
+
     def test_ws53_msub_word_views_preserve_existing_halfword_contract(self):
         from check_ws53_msub_access import validate_layout
         with tempfile.TemporaryDirectory() as work:

@@ -93,7 +93,12 @@ No PAC SVD baseline is imported. The initial WS53 map contains only IP blocks
 whose register definitions are proven reusable from `fbb_ws53` and the other SDKs:
 
 - watchdog v151 at acore base `0x5702B000`;
-- SFC v150 at `0x53000000`;
+- SFC v150 at `0x53000000`; command/bus-DMA layouts and poll semantics now
+  checked against original SDK C by `check_ws53_sfc_contract.py`. WS53 excludes
+  five imported IRQ/reset slots lacking this SDK's definitions, adds seven
+  source-backed sample/DDR layout fields, and corrects START/data hardware-write
+  metadata. See [source contract](ws53-sfc-command-source-contract.md); no
+  application IRQ, silicon reset, DDR operation or DMA drain is thereby proved;
 - PWM v151 at `0x52082000`;
 - UART v151 at acore `UART0` base `0x52081000`;
 - I2C v151 at acore `I2C0/1` bases `0x52083000` and `0x52084000`;

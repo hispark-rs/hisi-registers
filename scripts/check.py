@@ -72,8 +72,10 @@ EXPECTED = {
         "cluster_arrays": 1,
         # Flash mapping/read-only status adds 31 views/32 fields; the two
         # SDK-backed MSUB word access aliases add 2 views/19 fields.
-        "registers_expanded": 978,
-        "fields_expanded": 2048,
+        # WS53 SFC source audit removes five unverified legacy IRQ/reset slots
+        # (nine fields), adds seven source-defined DDR/sample layout fields.
+        "registers_expanded": 973,
+        "fields_expanded": 2046,
         "write_constraints": 20,
     },
 }
