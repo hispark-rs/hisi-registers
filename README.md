@@ -443,3 +443,25 @@ The ordinary-RAM execution does not establish MMIO access ordering, W1C,
 host-clock readiness, CIS, IRQ delivery or ADMA drain. Clock evidence is static
 object decoding, not a hardware clock or transfer test. No SDIO hardware was
 accessed and neither Flash candidate was rebuilt.
+
+## WS53 SDIO transfer-entry audit (2026-10-25)
+
+`scripts/check_ws53_sdio_transfer.py` executes the retained unmodified ROM read,
+write, complete-send and padding entries against ordinary RAM. The 444 cases
+compare complete register, counter, descriptor-table and callback-trace images.
+The read/write handlers require fixed address zero but do not themselves check
+function or command direction; a zero block length can reach the callback as
+`0xffffffff`. A nonzero callback result publishes the table pointer, including
+values that would look like an error code in a different API.
+
+Despite its name, `hal_sdio_v151_complete_send` appends an ordinary VALID|TRAN
+four-byte entry (flags0x21) referencing the SDK's dummy storage. It does not set
+END. The padding helper also truncates lengths to16 bits. These observations
+do not prove how silicon terminates a descriptor chain or drains a bus master.
+They must not be used to free buffers merely because a completion callback ran.
+
+Reproduce with `uv run --script scripts/check_ws53_sdio_transfer.py --help`,
+supplying the retained private ROM, reviewed QEMU, its scripts and a fresh output
+directory. Reports and synthetic observations are preserved under
+`evidence/ws53-sdio-transfer-{contract,observations}.json`. No register layout
+changed; there is no new PAC generation, board access, transfer or drain claim.

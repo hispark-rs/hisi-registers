@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "cases": 444,
+  "counts": {
+    "write": 192,
+    "read": 192,
+    "complete": 10,
+    "pad": 50
+  },
+  "rom_sha256": "a1ac5c03c613112f973b45bdfbfd399d3f3017b315b61d1f6b0d2a07d2ce4671",
+  "qemu_sha256": "135017be9b89111491ba17b5b46f195f7708cb49b35107ef29e84719ae02955f",
+  "helper_sha256": "15b30177dd26c888b8913e7aa730909e79a08a407f6145773e95e88fc697085f",
+  "script_sha256": "c60ec361f80a8f5039f4a7546190cf1fbe459cf5e46572bc10294e0254f9282b",
+  "svd_sha256": "ebe558ba9fba39fccdccb0461c8926064c52e4315ed26d2890930e89141c681e",
+  "observations_sha256": "3888b53a22c52a9abaef8babc6da6e7cef7736ff76bfa1c6d2b9f315335133d3",
+  "ram_results_sha256": "8a4287429c9b600af29ceab9832200a647dcd2be3082bdc4e37908de0bed2998",
+  "original_rom_unmodified": true,
+  "register_surrogate": "ordinary RAM",
+  "callback_stubbed": true,
+  "hardware_accessed": false,
+  "host_protocol_verified": false,
+  "dma_transfer_or_drain_verified": false,
+  "complete_send_sets_end_bit": false,
+  "complete_send_appends_ordinary_four_byte_transfer": true,
+  "rom_start_handlers_check_function_or_direction": false,
+  "zero_block_length_can_reach_callback_as_u32_max": true
+}
