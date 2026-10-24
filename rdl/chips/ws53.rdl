@@ -20,6 +20,7 @@
 `include "ws53/tsensor.rdl"
 `include "ws53/sdio-v151.rdl"
 `include "ws53/trng.rdl"
+`include "ws53/spacc.rdl"
 `include "ws53/efuse-read.rdl"
 `include "ws53/flash-map.rdl"
 
@@ -58,6 +59,7 @@ addrmap ws53 {
     ws53_tsensor_regs tsensor @ 0x59006300;
     ws53_sdio_v151_regs sdio @ 0x52060000;
     ws53_trng_regs trng @ 0x52024000;
+    ws53_spacc_regs spacc @ 0x52010000;
     ws53_efuse_read_regs efuse @ 0x57024000;
     ws53_fama_status_regs fama_status @ 0x5208f800;
     watchdog_v151_regs #(.SDK_VIEW(true)) wdt @ 0x5702B000;
@@ -271,6 +273,9 @@ addrmap ws53 {
     signal { hisi_irq_number = 53; hisi_irq_owner = "TIMER"; } TIMER_0;
     signal { hisi_irq_number = 54; hisi_irq_owner = "TIMER"; } TIMER_1;
     signal { hisi_irq_number = 58; hisi_irq_owner = "MDMA"; } M_DMA;
+    // Shared SPACC gate, not a per-HASH-channel interrupt. PKE IRQ58 in the
+    // security header conflicts with MDMA and is disabled by this app profile.
+    signal { hisi_irq_number = 59; hisi_irq_owner = "SPACC"; } SEC_INT1;
     signal { hisi_irq_number = 62; hisi_irq_owner = "I2C0"; } I2C_0;
     signal { hisi_irq_number = 63; hisi_irq_owner = "I2C1"; } I2C_1;
     signal { hisi_irq_number = 65; hisi_irq_owner = "SPI0"; } SPI_3;

@@ -1510,3 +1510,19 @@ SVD output unchanged. UART0/1 descriptions share SDK semantics but lack this
 physical qualification. `scripts/check_ws53_uart_tx_irq_contract.py --sdk SDK
 --svd WS53.svd` checks384 original-C helper cases and3 acknowledgement paths;
 host RAM cannot emulate IIR read-clear. No reset defaults are inferred.
+
+## Unified-security SPACC/HASH source subset (2026-10-25)
+
+`ws53/spacc.rdl` adds one shared controller at0x52010000 with SEC_INT1 cause59.
+`check_ws53_spacc_layout.py` compiles pinned product/register/application-IRQ
+headers and verifies34 expanded register views/65 fields/3 arrays against SVD.
+HASH channel/state array indices0/1 select SDK channels1/2; error indices0/1
+select TEE/REE. Commands and status have separate access types, no guessed
+resets, W1C or error-clear operations. See [layout evidence](ws53-spacc-layout.md).
+
+The original-C45-case control audit proves clear timeout is ignored by lock and
+deinit unlocks0/1 while leaving allocated channel2 locked, then frees tables
+without a drain check. These paths must not be copied as a safe Rust lifecycle.
+Source layout does not qualify cross-core ownership, real IRQ delivery, DMA
+drain, algorithm results or silicon channel availability. SYMC/PKE/KM remain
+separate pending work; PKE IRQ58 is not borrowed from MDMA.

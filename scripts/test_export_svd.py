@@ -7,6 +7,47 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_spacc_source_layout_and_command_boundaries(self):
+        import json
+        from check_ws53_spacc_layout import validate_layout
+        root = Path(__file__).resolve().parents[1]
+        observed = json.loads((root / 'evidence/ws53-spacc-layout.json').read_text())['observations']
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / 'ws53.svd'
+            export(root / 'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_layout(dest, observed), {
+                'expanded_register_views': 34, 'expanded_fields': 65, 'clusters': 3})
+            original = dest.read_bytes()
+            paths = [
+                ("baseAddress", "0x52020000"),
+                ("interrupt/value", "58"),
+                ("registers/register[name='HASH_CLEAR_ACK']/access", "read-write"),
+                ("registers/register[name='HASH_CLEAR_ACK']/alternateRegister", "HASH_LOCK"),
+                ("registers/register[name='HASH_LOCK']/resetValue", "0"),
+                ("registers/register[name='HASH_INTERRUPT_STATUS']/readAction", "clear"),
+                ("registers/register[name='HASH_INTERRUPT_ACK']/fields/field/modifiedWriteValues", "oneToClear"),
+                ("registers/register[name='INTERRUPT_ENABLE']/fields/field[name='TEE']/bitOffset", "8"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/dimIncrement", "0x80"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/dim", "3"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='SUBMIT']/access", "read-write"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='SUBMIT']/size", "16"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='ALGORITHM']/bitWidth", "3"),
+                ("registers/cluster[name='HASH_STATE[%s]']/addressOffset", "0xa000"),
+                ("registers/cluster[name='HASH_ERROR[%s]']/register[name='STATUS']/access", "read-write"),
+            ]
+            for path, value in paths:
+                with self.subTest(path=path):
+                    tree = ET.fromstring(original)
+                    block = tree.find("./peripherals/peripheral[name='SPACC']")
+                    node = block.find(path)
+                    if node is None:
+                        parent, _, tag = path.rpartition('/')
+                        node = ET.SubElement(block.find(parent), tag)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(AssertionError):
+                        validate_layout(dest, observed)
+
     def test_ws53_sfc_clock_views_reject_invented_layout_or_frequency(self):
         from check_ws53_sfc_clock import validate_layout
         with tempfile.TemporaryDirectory() as work:

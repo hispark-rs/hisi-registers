@@ -30,8 +30,8 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 33,
-        "interrupts": 20,
+        "peripherals": 34,
+        "interrupts": 21,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
@@ -47,6 +47,7 @@ EXPECTED = {
             "TSENSOR": 0x59006300,
             "SDIO": 0x52060000,
             "TRNG": 0x52024000,
+            "SPACC": 0x52010000,
             "EFUSE": 0x57024000,
             "FAMA_STATUS": 0x5208F800,
             "WDT": 0x5702B000,
@@ -69,7 +70,7 @@ EXPECTED = {
         },
         "source_arrays": 0,
         "output_arrays": 13,
-        "cluster_arrays": 1,
+        "cluster_arrays": 4,
         # Flash mapping/read-only status adds 31 views/32 fields; the two
         # SDK-backed MSUB word access aliases add 2 views/19 fields.
         # WS53 SFC source audit removes five unverified legacy IRQ/reset slots
@@ -78,8 +79,9 @@ EXPECTED = {
         # with the same two low-half fields and no invented frequency/reset.
         # SDIO function1 status/enable split into fourteen ROM-proven events;
         # retain the unknown upper status bits: net 27 additional fields.
-        "registers_expanded": 977,
-        "fields_expanded": 2086,
+        # Shared SPACC HASH subset:34 source-backed views,65 fields,3 arrays.
+        "registers_expanded": 1011,
+        "fields_expanded": 2151,
         "write_constraints": 20,
     },
 }

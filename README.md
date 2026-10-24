@@ -32,6 +32,10 @@ SVD. The BS2X baseline is explicitly provisional: `fbb_bs2x` is its behavioral
 source of truth because the existing BS2X SVD has substantially lower maturity.
 An SDK-first WS53 map starts with confirmed shared IP and expands only after each
 variant and core owner is established from `fbb_ws53`.
+The shared WS53 SPACC block now includes a source-audited HASH subset: two
+software-profile channel arrays, IRQ59, separate status/command views and no
+assumed resets. [The layout evidence](evidence/ws53-spacc-layout.md) describes
+ownership, DMA-drain and algorithm limitations; this is not a crypto HAL.
 Names such as "v151" are not sufficient proof by themselves. SPI is shared only
 because the two SDKs contain byte-identical v151 register definitions and
 register-operation sources. Chip-specific SPI integration remains in each chip map.
