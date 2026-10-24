@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "date": "2026-10-25",
+  "passed": true,
+  "scope": "offline SDK original-function source contract; no new register model",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "rdl_base_commit": "92a3d202e70e305426c18af07158731e7e95e921",
+  "original_tracked_files_unchanged": 161,
+  "source_scripts": {
+    "scripts/check_ws53_sfc_native_mux.py": "dd6655152b3c72dfdb02ca32eedc83092e31c15704a6239ee2a702dc6e39257c",
+    "scripts/test_ws53_sfc_native_mux.py": "188114003dce227d3825b0f866a78dc9833ac82401c2962888c389eb24afd3b9"
+  },
+  "documentation_sha256": "08588b70921cf4301018c9076881dbe18c609984e64ec68e9acfa07e4508e418",
+  "sdk_sources": {
+    "src/bootloader/flashboot_ws53/startup/main.c": "7bd2548c45025683bc20c708bc00bf41b2c95644388a49db4ae831fed7b16f75",
+    "src/drivers/drivers/hal/pinmux/ws53/hal_pinctrl_ws53.c": "0cfe891aa5d51cbb1a331e18d283a618b474dc54bf2ebfe6cccb50675be50eb9",
+    "src/drivers/chips/ws53/porting/pinctrl/pinctrl_porting.c": "50dc337746788bd26f157446f0f1a0e7b84745eaba236cdf0ce146af07549bf4",
+    "src/drivers/chips/ws53/porting/include/pinctrl_porting.h": "a98b2141986c85a507da9b80f334e9a005acffdebd2fc501472c26752be6998b",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/drivers/chips/ws53/include/control_core/platform_core.h": "44e9179c4252b95f1b2e71c0e1b56be21ea8fa2ddad45d3241a042c30dd000de",
+    "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+    "src/include/common_def.h": "c8dbb8b2f994793d3a9304cfeda60f5fc40d62bb4e75a4d7fb8e04a4f30a8b6d",
+    "src/include/errcode.h": "ffdb73297ae7c2565ecb73096ffe6da6f55291d39fe16781b261d29f13cc48ff"
+  },
+  "original_fragments": {
+    "sfc_pin_mode_set": "4b5f43a11d8989c8988c39684a668306e36eb79f1d751900ce22d71be6374aa9",
+    "hal_pin_get_config_map": "54b8d6ec0e33da1d5d58e7a3a94b65b5d150525f21039e116bc04e9a94ffc450",
+    "hal_pin_get_config_group": "c533e3ac4bc74e21fff6cb62f0c4237598dc471b13aafb06ee67ab18445ff32d",
+    "hal_pin_get_config_val": "8cd29ce07e839d37b0fb36e70e131e85319e962b37b4a5b74427648d62888e1e",
+    "hal_pin_ws53_get_mode": "ec46d5c7e6ef1f3028fb7fc4ad5abd5f900b8a529fba62e39b3629bb67c8b5db",
+    "pin_check_mode_is_valid": "a5b97db1159916c4fd9c0b79b0ca067df3bd47ff092655f7b1836b153f775518",
+    "complete_hal_maps": "b0def908c5ada51a4fa70b587b3cc6a1ae80c310f7e76fbf84797673dfe1774f",
+    "port_mode_enum_and_masks": "bbb3d76d45f158d3608058f6e890570413c116b7e765891af2cca5df2bfad3e4",
+    "pin_t": "62b77f3f57da51eb322bc9f46220aab0af23f7c1af87270a72721183383fe745",
+    "pin_mode_t": "41ee52e5009bf000cc0f41b2fca958ee88ff5d78932b6b94ac3a5045a3841f15"
+  },
+  "private_harness_sha256": "da6e2d0afc3aeb3f57b38569dff91d4353dac128e6814887521ca293527aadbb",
+  "compiler_runs": [
+    {
+      "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+      "profiles": [
+        {
+          "optional_ie_st": false,
+          "compiler_options": [
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2"
+          ],
+          "statistics": {
+            "boot_write_count": 12,
+            "getter_read_count": 228,
+            "rejected_pin_count": 10,
+            "native_rejected_pins": [
+              24,
+              25,
+              26,
+              27,
+              28,
+              29
+            ],
+            "native_mode_rejections": 48,
+            "valid_raw_table_slots": 38
+          },
+          "stdout_sha256": "3cece5cb5927e15a020c611ae308d464acdfba7abeb94f54bdc392ec1c453faa"
+        },
+        {
+          "optional_ie_st": true,
+          "compiler_options": [
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DCONFIG_PINCTRL_SUPPORT_IE=1",
+            "-DCONFIG_PINCTRL_SUPPORT_ST=1"
+          ],
+          "statistics": {
+            "boot_write_count": 12,
+            "getter_read_count": 228,
+            "rejected_pin_count": 10,
+            "native_rejected_pins": [
+              24,
+              25,
+              26,
+              27,
+              28,
+              29
+            ],
+            "native_mode_rejections": 48,
+            "valid_raw_table_slots": 38
+          },
+          "stdout_sha256": "3cece5cb5927e15a020c611ae308d464acdfba7abeb94f54bdc392ec1c453faa"
+        }
+      ]
+    },
+    {
+      "compiler": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+      "profiles": [
+        {
+          "optional_ie_st": false,
+          "compiler_options": [
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2"
+          ],
+          "statistics": {
+            "boot_write_count": 12,
+            "getter_read_count": 228,
+            "rejected_pin_count": 10,
+            "native_rejected_pins": [
+              24,
+              25,
+              26,
+              27,
+              28,
+              29
+            ],
+            "native_mode_rejections": 48,
+            "valid_raw_table_slots": 38
+          },
+          "stdout_sha256": "3cece5cb5927e15a020c611ae308d464acdfba7abeb94f54bdc392ec1c453faa"
+        },
+        {
+          "optional_ie_st": true,
+          "compiler_options": [
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DCONFIG_PINCTRL_SUPPORT_IE=1",
+            "-DCONFIG_PINCTRL_SUPPORT_ST=1"
+          ],
+          "statistics": {
+            "boot_write_count": 12,
+            "getter_read_count": 228,
+            "rejected_pin_count": 10,
+            "native_rejected_pins": [
+              24,
+              25,
+              26,
+              27,
+              28,
+              29
+            ],
+            "native_mode_rejections": 48,
+            "valid_raw_table_slots": 38
+          },
+          "stdout_sha256": "3cece5cb5927e15a020c611ae308d464acdfba7abeb94f54bdc392ec1c453faa"
+        }
+      ]
+    }
+  ],
+  "identical_access_transcript": "W 0 52008060 32 00000001\nW 0 52008064 32 00000001\nW 0 52008068 32 00000001\nW 0 5200806c 32 00000001\nW 0 52008070 32 00000001\nW 0 52008074 32 00000001\nW 1 52008060 32 00000001\nW 1 52008064 32 00000001\nW 1 52008068 32 00000001\nW 1 5200806c 32 00000001\nW 1 52008070 32 00000001\nW 1 52008074 32 00000001\nR 0 raw-get 52008000 32 00000000 0\nR 0 mode-get 52008000 32 00000000 0\nR 0 raw-get 52008000 32 ffffffff 7\nR 0 mode-get 52008000 32 ffffffff 7\nR 0 raw-get 52008000 32 a5a55a5d 5\nR 0 mode-get 52008000 32 a5a55a5d 5\nR 1 raw-get 52008004 32 00000000 0\nR 1 mode-get 52008004 32 00000000 0\nR 1 raw-get 52008004 32 ffffffff 7\nR 1 mode-get 52008004 32 ffffffff 7\nR 1 raw-get 52008004 32 a5a55a5d 5\nR 1 mode-get 52008004 32 a5a55a5d 5\nR 2 raw-get 52008008 32 00000000 0\nR 2 mode-get 52008008 32 00000000 0\nR 2 raw-get 52008008 32 ffffffff 7\nR 2 mode-get 52008008 32 ffffffff 7\nR 2 raw-get 52008008 32 a5a55a5d 5\nR 2 mode-get 52008008 32 a5a55a5d 5\nR 3 raw-get 5200800c 32 00000000 0\nR 3 mode-get 5200800c 32 00000000 0\nR 3 raw-get 5200800c 32 ffffffff 7\nR 3 mode-get 5200800c 32 ffffffff 7\nR 3 raw-get 5200800c 32 a5a55a5d 5\nR 3 mode-get 5200800c 32 a5a55a5d 5\nR 4 raw-get 52008010 32 00000000 0\nR 4 mode-get 52008010 32 00000000 0\nR 4 raw-get 52008010 32 ffffffff 7\nR 4 mode-get 52008010 32 ffffffff 7\nR 4 raw-get 52008010 32 a5a55a5d 5\nR 4 mode-get 52008010 32 a5a55a5d 5\nR 5 raw-get 52008014 32 00000000 0\nR 5 mode-get 52008014 32 00000000 0\nR 5 raw-get 52008014 32 ffffffff 7\nR 5 mode-get 52008014 32 ffffffff 7\nR 5 raw-get 52008014 32 a5a55a5d 5\nR 5 mode-get 52008014 32 a5a55a5d 5\nR 6 raw-get 52008018 32 00000000 0\nR 6 mode-get 52008018 32 00000000 0\nR 6 raw-get 52008018 32 ffffffff 7\nR 6 mode-get 52008018 32 ffffffff 7\nR 6 raw-get 52008018 32 a5a55a5d 5\nR 6 mode-get 52008018 32 a5a55a5d 5\nR 7 raw-get 5200801c 32 00000000 0\nR 7 mode-get 5200801c 32 00000000 0\nR 7 raw-get 5200801c 32 ffffffff 7\nR 7 mode-get 5200801c 32 ffffffff 7\nR 7 raw-get 5200801c 32 a5a55a5d 5\nR 7 mode-get 5200801c 32 a5a55a5d 5\nR 8 raw-get 52008020 32 00000000 0\nR 8 mode-get 52008020 32 00000000 0\nR 8 raw-get 52008020 32 ffffffff 7\nR 8 mode-get 52008020 32 ffffffff 7\nR 8 raw-get 52008020 32 a5a55a5d 5\nR 8 mode-get 52008020 32 a5a55a5d 5\nR 9 raw-get 52008024 32 00000000 0\nR 9 mode-get 52008024 32 00000000 0\nR 9 raw-get 52008024 32 ffffffff 7\nR 9 mode-get 52008024 32 ffffffff 7\nR 9 raw-get 52008024 32 a5a55a5d 5\nR 9 mode-get 52008024 32 a5a55a5d 5\nR 10 raw-get 52008028 32 00000000 0\nR 10 mode-get 52008028 32 00000000 0\nR 10 raw-get 52008028 32 ffffffff 7\nR 10 mode-get 52008028 32 ffffffff 7\nR 10 raw-get 52008028 32 a5a55a5d 5\nR 10 mode-get 52008028 32 a5a55a5d 5\nR 11 raw-get 5200802c 32 00000000 0\nR 11 mode-get 5200802c 32 00000000 0\nR 11 raw-get 5200802c 32 ffffffff 7\nR 11 mode-get 5200802c 32 ffffffff 7\nR 11 raw-get 5200802c 32 a5a55a5d 5\nR 11 mode-get 5200802c 32 a5a55a5d 5\nR 12 raw-get 52008030 32 00000000 0\nR 12 mode-get 52008030 32 00000000 0\nR 12 raw-get 52008030 32 ffffffff 7\nR 12 mode-get 52008030 32 ffffffff 7\nR 12 raw-get 52008030 32 a5a55a5d 5\nR 12 mode-get 52008030 32 a5a55a5d 5\nR 13 raw-get 52008034 32 00000000 0\nR 13 mode-get 52008034 32 00000000 0\nR 13 raw-get 52008034 32 ffffffff 7\nR 13 mode-get 52008034 32 ffffffff 7\nR 13 raw-get 52008034 32 a5a55a5d 5\nR 13 mode-get 52008034 32 a5a55a5d 5\nR 14 raw-get 52008038 32 00000000 0\nR 14 mode-get 52008038 32 00000000 0\nR 14 raw-get 52008038 32 ffffffff 7\nR 14 mode-get 52008038 32 ffffffff 7\nR 14 raw-get 52008038 32 a5a55a5d 5\nR 14 mode-get 52008038 32 a5a55a5d 5\nR 15 raw-get 5200803c 32 00000000 0\nR 15 mode-get 5200803c 32 00000000 0\nR 15 raw-get 5200803c 32 ffffffff 7\nR 15 mode-get 5200803c 32 ffffffff 7\nR 15 raw-get 5200803c 32 a5a55a5d 5\nR 15 mode-get 5200803c 32 a5a55a5d 5\nR 16 raw-get 52008040 32 00000000 0\nR 16 mode-get 52008040 32 00000000 0\nR 16 raw-get 52008040 32 ffffffff 7\nR 16 mode-get 52008040 32 ffffffff 7\nR 16 raw-get 52008040 32 a5a55a5d 5\nR 16 mode-get 52008040 32 a5a55a5d 5\nR 17 raw-get 52008044 32 00000000 0\nR 17 mode-get 52008044 32 00000000 0\nR 17 raw-get 52008044 32 ffffffff 7\nR 17 mode-get 52008044 32 ffffffff 7\nR 17 raw-get 52008044 32 a5a55a5d 5\nR 17 mode-get 52008044 32 a5a55a5d 5\nR 18 raw-get 52008048 32 00000000 0\nR 18 mode-get 52008048 32 00000000 0\nR 18 raw-get 52008048 32 ffffffff 7\nR 18 mode-get 52008048 32 ffffffff 7\nR 18 raw-get 52008048 32 a5a55a5d 5\nR 18 mode-get 52008048 32 a5a55a5d 5\nR 19 raw-get 5200804c 32 00000000 0\nR 19 mode-get 5200804c 32 00000000 0\nR 19 raw-get 5200804c 32 ffffffff 7\nR 19 mode-get 5200804c 32 ffffffff 7\nR 19 raw-get 5200804c 32 a5a55a5d 5\nR 19 mode-get 5200804c 32 a5a55a5d 5\nR 20 raw-get 52008050 32 00000000 0\nR 20 mode-get 52008050 32 00000000 0\nR 20 raw-get 52008050 32 ffffffff 7\nR 20 mode-get 52008050 32 ffffffff 7\nR 20 raw-get 52008050 32 a5a55a5d 5\nR 20 mode-get 52008050 32 a5a55a5d 5\nR 21 raw-get 52008054 32 00000000 0\nR 21 mode-get 52008054 32 00000000 0\nR 21 raw-get 52008054 32 ffffffff 7\nR 21 mode-get 52008054 32 ffffffff 7\nR 21 raw-get 52008054 32 a5a55a5d 5\nR 21 mode-get 52008054 32 a5a55a5d 5\nR 22 raw-get 52008058 32 00000000 0\nR 22 mode-get 52008058 32 00000000 0\nR 22 raw-get 52008058 32 ffffffff 7\nR 22 mode-get 52008058 32 ffffffff 7\nR 22 raw-get 52008058 32 a5a55a5d 5\nR 22 mode-get 52008058 32 a5a55a5d 5\nX 23 ffffffff 1 8 0\nX 24 ffffffff 1 8 0\nX 25 ffffffff 1 8 0\nX 26 ffffffff 1 8 0\nX 27 ffffffff 1 8 0\nX 28 ffffffff 1 8 0\nX 29 ffffffff 1 8 0\nX 30 ffffffff 1 8 0\nX 31 ffffffff 1 8 0\nR 32 raw-get 570360bc 32 00000000 0\nR 32 mode-get 570360bc 32 00000000 0\nR 32 raw-get 570360bc 32 ffffffff 7\nR 32 mode-get 570360bc 32 ffffffff 7\nR 32 raw-get 570360bc 32 a5a55a5d 5\nR 32 mode-get 570360bc 32 a5a55a5d 5\nR 33 raw-get 57036004 32 00000000 0\nR 33 mode-get 57036004 32 00000000 0\nR 33 raw-get 57036004 32 ffffffff 7\nR 33 mode-get 57036004 32 ffffffff 7\nR 33 raw-get 57036004 32 a5a55a5d 5\nR 33 mode-get 57036004 32 a5a55a5d 5\nR 34 raw-get 57036008 32 00000000 0\nR 34 mode-get 57036008 32 00000000 0\nR 34 raw-get 57036008 32 ffffffff 7\nR 34 mode-get 57036008 32 ffffffff 7\nR 34 raw-get 57036008 32 a5a55a5d 5\nR 34 mode-get 57036008 32 a5a55a5d 5\nR 35 raw-get 5703600c 32 00000000 0\nR 35 mode-get 5703600c 32 00000000 0\nR 35 raw-get 5703600c 32 ffffffff 7\nR 35 mode-get 5703600c 32 ffffffff 7\nR 35 raw-get 5703600c 32 a5a55a5d 5\nR 35 mode-get 5703600c 32 a5a55a5d 5\nR 36 raw-get 57036010 32 00000000 0\nR 36 mode-get 57036010 32 00000000 0\nR 36 raw-get 57036010 32 ffffffff 7\nR 36 mode-get 57036010 32 ffffffff 7\nR 36 raw-get 57036010 32 a5a55a5d 5\nR 36 mode-get 57036010 32 a5a55a5d 5\nR 37 raw-get 57036014 32 00000000 0\nR 37 mode-get 57036014 32 00000000 0\nR 37 raw-get 57036014 32 ffffffff 7\nR 37 mode-get 57036014 32 ffffffff 7\nR 37 raw-get 57036014 32 a5a55a5d 5\nR 37 mode-get 57036014 32 a5a55a5d 5\nR 38 raw-get 570360b8 32 00000000 0\nR 38 mode-get 570360b8 32 00000000 0\nR 38 raw-get 570360b8 32 ffffffff 7\nR 38 mode-get 570360b8 32 ffffffff 7\nR 38 raw-get 570360b8 32 a5a55a5d 5\nR 38 mode-get 570360b8 32 a5a55a5d 5\nR 39 raw-get 570360c4 32 00000000 0\nR 39 mode-get 570360c4 32 00000000 0\nR 39 raw-get 570360c4 32 ffffffff 7\nR 39 mode-get 570360c4 32 ffffffff 7\nR 39 raw-get 570360c4 32 a5a55a5d 5\nR 39 mode-get 570360c4 32 a5a55a5d 5\nR 40 raw-get 570360c8 32 00000000 0\nR 40 mode-get 570360c8 32 00000000 0\nR 40 raw-get 570360c8 32 ffffffff 7\nR 40 mode-get 570360c8 32 ffffffff 7\nR 40 raw-get 570360c8 32 a5a55a5d 5\nR 40 mode-get 570360c8 32 a5a55a5d 5\nR 41 raw-get 570360c0 32 00000000 0\nR 41 mode-get 570360c0 32 00000000 0\nR 41 raw-get 570360c0 32 ffffffff 7\nR 41 mode-get 570360c0 32 ffffffff 7\nR 41 raw-get 570360c0 32 a5a55a5d 5\nR 41 mode-get 570360c0 32 a5a55a5d 5\nR 42 raw-get 57036018 32 00000000 0\nR 42 mode-get 57036018 32 00000000 0\nR 42 raw-get 57036018 32 ffffffff 7\nR 42 mode-get 57036018 32 ffffffff 7\nR 42 raw-get 57036018 32 a5a55a5d 5\nR 42 mode-get 57036018 32 a5a55a5d 5\nR 43 raw-get 5703601c 32 00000000 0\nR 43 mode-get 5703601c 32 00000000 0\nR 43 raw-get 5703601c 32 ffffffff 7\nR 43 mode-get 5703601c 32 ffffffff 7\nR 43 raw-get 5703601c 32 a5a55a5d 5\nR 43 mode-get 5703601c 32 a5a55a5d 5\nX 44 ffffffff 1 8 0\nR 45 raw-get 52008038 32 00000000 0\nR 45 mode-get 52008038 32 00000000 0\nR 45 raw-get 52008038 32 ffffffff 7\nR 45 mode-get 52008038 32 ffffffff 7\nR 45 raw-get 52008038 32 a5a55a5d 5\nR 45 mode-get 52008038 32 a5a55a5d 5\nR 46 raw-get 5200803c 32 00000000 0\nR 46 mode-get 5200803c 32 00000000 0\nR 46 raw-get 5200803c 32 ffffffff 7\nR 46 mode-get 5200803c 32 ffffffff 7\nR 46 raw-get 5200803c 32 a5a55a5d 5\nR 46 mode-get 5200803c 32 a5a55a5d 5\nR 47 raw-get 52008054 32 00000000 0\nR 47 mode-get 52008054 32 00000000 0\nR 47 raw-get 52008054 32 ffffffff 7\nR 47 mode-get 52008054 32 ffffffff 7\nR 47 raw-get 52008054 32 a5a55a5d 5\nR 47 mode-get 52008054 32 a5a55a5d 5\nM 24 0\nM 25 0\nM 26 0\nM 27 0\nM 28 0\nM 29 0\n",
+  "generation": {
+    "passed": true,
+    "base": "92a3d202e70e305426c18af07158731e7e95e921",
+    "chips": {
+      "WS53": {
+        "sha256": "1a12a7f0f572a1a25d4f4ed51a64c66759a169eb6255c70c4f011e47122e1c89",
+        "bytes": 571675,
+        "equal_to_base": true
+      },
+      "WS63": {
+        "sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+        "bytes": 1141437,
+        "equal_to_base": true
+      },
+      "BS2X": {
+        "sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+        "bytes": 1048096,
+        "equal_to_base": true
+      }
+    }
+  },
+  "host_mutation_rejections": [
+    "write.width",
+    "write.value",
+    "write.address",
+    "write.trial",
+    "read.width",
+    "read.address",
+    "read.result",
+    "read.call",
+    "native.raw_error",
+    "native.output_unchanged",
+    "native.mode_result",
+    "native.accesses",
+    "mode-mask.mask",
+    "mode-mask.rejected_modes",
+    "write-order",
+    "missing-access",
+    "duplicate-access",
+    "added-native-view-0x60",
+    "added-native-view-0x5c",
+    "added-native-view-0x58",
+    "nested-cluster-native-0x60",
+    "derived-peripheral",
+    "derived-register",
+    "missing-registers",
+    "empty-registers",
+    "unknown-container-child",
+    "missing-width",
+    "duplicate-width",
+    "width-",
+    "width-0",
+    "width-7",
+    "width--8",
+    "missing-offset",
+    "negative-offset",
+    "dim-0",
+    "dim--1",
+    "dim-65537",
+    "missing-stride",
+    "negative-stride"
+  ],
+  "legacy_export_tests": 29,
+  "schema_chips": [
+    "WS53",
+    "WS63",
+    "BS2X"
+  ],
+  "parser": {
+    "version": "svd2rust 0.37.1 ( )",
+    "binary_sha256": "ad2523abedfa5e3c6bd17ca57528ca61dccd4eac86e3f509bde7d3df997db318",
+    "target": "riscv",
+    "edition": "2024",
+    "passed": true,
+    "formal_pac_regenerated": false,
+    "warnings": "Existing legacy RISC-V interrupt rendering and MSUB naming notices; no source changes"
+  },
+  "logs_directory": "target/ws53-sfc-native-mux-source-contract",
+  "logs": {
+    "gcc-03.json": "29e679343040661769fb53198df24ff998cf876b3172ce4eeb3f53a69cbf7e16",
+    "gcc-03.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "clang-03.json": "643fdffbb8ad138099e5dbea74a6f9ca8fafcbdcdad5b3abafa40c51d37966ea",
+    "clang-03.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "host-mutations-02.json": "5a6a0d3fe09167dcef8edb752920f994082265877d170e379ed4a51736c3419f",
+    "host-mutations-02.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "generate-01.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "base-generate-01.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "base-source-manifest.json": "c73624705fb615c3210f1a6dce6e672580f7bbef818e01ee58d4eb612ed99299",
+    "generation-comparison.json": "547d747b86a7f35b651bac7e4fe22e93310c9a6ee034952d2159bf4d30f88bb0",
+    "export-tests-01.log": "005561a364e020524a34e01d5bfb4749063f65be59c4eb5a81f3703ba27d21eb",
+    "schema-01.log": "6e9e73991b89bd2aa483b6cdbecd28534432b22f22948bbc0093e16216e7c78a",
+    "pac-parser-01.log": "6a865918c461dccc07c516695026ca425f8355b66c83326a77fac869907d0bc0",
+    "pac-parser-02.log": "45c015d4c7fdf8755edd33d2a90b0c2563787179e3b46890ab97930f57f640e3",
+    "commands.json": "5c8129ef2c55f8eb69cd7eef2ff7c439660316014d12d5e0054b73466bfeb9c7",
+    "gcc-04.json": "29e679343040661769fb53198df24ff998cf876b3172ce4eeb3f53a69cbf7e16",
+    "gcc-04.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "clang-04.json": "643fdffbb8ad138099e5dbea74a6f9ca8fafcbdcdad5b3abafa40c51d37966ea",
+    "clang-04.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "host-mutations-03.json": "52f3931ee1eb5135dbd13f07c4b38a05f3f8a2d594ef985e50e19b34a1a40262",
+    "host-mutations-03.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "history": [
+    {
+      "name": "early-host-input-header",
+      "files": [
+        "gcc-01.json",
+        "gcc-02.json",
+        "clang-02.json",
+        "host-mutations-01.json",
+        "check-before-include-chain-correction.py"
+      ],
+      "meaning": "Earlier host checks used equivalent td_base.h primitive definitions; final03 re-executed actual included common_def.h. Not counted as final runs."
+    },
+    {
+      "name": "parser-output-directory",
+      "log": "pac-parser-01.log",
+      "exit": 101,
+      "meaning": "Missing output directory, not an SVD parse failure; retained separately from successful02."
+    },
+    {
+      "name": "pre-layout-guard-review",
+      "files": {
+        "pre-layout-guard/check_ws53_sfc_native_mux.py": "6b5b831b359feee898444bc185d8a5dde82508f91624a909a8a81b1e003b1ee4",
+        "pre-layout-guard/commands.json": "5336dbb6e9c8855ec9c222aa6dc0c74db5629140a718e08bde353ecf03563cef",
+        "pre-layout-guard/final-validation.json": "07cd4a38c5688660fd00453d0b3efc60660fdbf074f2d8c2e5a54a6c469dbb68",
+        "pre-layout-guard/test_ws53_sfc_native_mux.py": "fc5662030c42947711c19c5b8d01b79ca7d8f43396a7ea1dc042135f40d66deb",
+        "pre-layout-guard/ws53-sfc-native-mux-source-contract.json": "3fb075dae8d1c7d3f450179048d458589e402928046c52daa5105469e03797ff",
+        "pre-layout-guard/ws53-sfc-native-mux-source-contract.md": "7e4b502ece55b9db4d340ef1c1c6e22936ccdad3fd28e07e7bb2f4d9d4d092ae"
+      },
+      "meaning": "First version correct for current flat SVD, but did not reject clusters/inheritance; old files and review remain historical. Final04 compiler runs and39 oracle rejections bind revised scripts."
+    }
+  ],
+  "boundaries": {
+    "hardware_access": false,
+    "model_executed": false,
+    "new_rdl_registers": false,
+    "new_native_read_view": false,
+    "new_reset_values": false,
+    "board_pinout_verified": false,
+    "physical_access_width_verified": false,
+    "ownership_or_drain_verified": false,
+    "primary_source_changed": false,
+    "committed": false,
+    "pushed": false
+  },
+  "native_addresses": [
+    1375764576,
+    1375764580,
+    1375764584,
+    1375764588,
+    1375764592,
+    1375764596
+  ],
+  "conclusion": "Only original six32-bit write1 operations are evidenced. Actual generic getters reject24..29 without reads; mode masks are0 and SDK comments say not pin out. No basis for new read accessor or native field enum.",
+  "final_compiler_reports": [
+    "gcc-04.json",
+    "clang-04.json"
+  ],
+  "final_oracle_report": "host-mutations-03.json",
+  "unsupported_layout_policy": "Reject cluster/derivedFrom and non-explicit/invalid flat geometry; do not infer inherited layout. 8/16/32/64-bit supported geometry, 1..65536 count; count>1 requires stride>=width/8.",
+  "unchanged_input_checks_reused": {
+    "legacy_export_tests": 29,
+    "schema_chips": [
+      "WS53",
+      "WS63",
+      "BS2X"
+    ],
+    "parser": "svd2rust0.37.1 RISC-V",
+    "reason": "No existing tracked file/RDL/exporter/schema or generated SVD changed; hashes rechecked, tests not re-executed for this validator-only correction."
+  }
+}
