@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "evidence_class": "pinned SDK relocatable object and patch config; static audit",
+  "hardware_accessed": false,
+  "vendor_code_executed": false,
+  "reset_waveform_verified": false,
+  "dma_drain_proven": false,
+  "installed_patch_table_verified": false,
+  "archive_sha256": "c519a5330f1327071858324623f02ab8b751679c3238ea63053a3b260d9d91ca",
+  "object_sha256": "4c7337bc5bbafa21d2666315c27431e9e5dc948c89bc34aca862a7da0f9a1671",
+  "config_sha256": "3c61319f4b11739aec68b033a141bb3d4fda9b7c7a4a94cb1698920f4cabde64",
+  "svd_sha256": "0aecc6c1774f37d61f4605926c64835a5feee901e2ab65dbd33bc3a1b05f5cf5",
+  "script_sha256": "b5c523335f28ca86603e0e6ae331b5f0cd9482fe4958091226925ad189f04bff",
+  "reset": {
+    "function_sha256": "6b3bbefca9d4f236031e663af1c4038df8c14ce139e2bb9a30abf2c10f4887fb",
+    "function_bytes": 40,
+    "address": 1459617992,
+    "access_bits": 32,
+    "field_bit": 1,
+    "operation": "read; clear bit1; write; delay_us(5); read; set bit1; write",
+    "call_relocations": [
+      [
+        18,
+        18,
+        "uapi_tcxo_delay_us",
+        0
+      ],
+      [
+        18,
+        51,
+        "",
+        0
+      ]
+    ],
+    "status_poll_or_completion_check": false
+  }
+}

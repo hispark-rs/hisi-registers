@@ -13,4 +13,11 @@ addrmap ws53_glb_ctl_regs {
         hisi_evidence = "uart_porting.c UART_SOFT_RST_C, UART_SOFT_RST_L0_POS; uart_port_set_reset uses 16-bit clear then set; debug UART bypasses reset";
         field {sw=rw; hw=r; desc="UART L0/application UART2 reset, active low; preserve all other bits";} uart_l0_reset_n[7:7];
     } UART_SOFT_RESET @ 0xb0;
+    reg {
+        regwidth = 32;
+        accesswidth = 32;
+        name = "SDK SDIO reset patch control; pulse does not establish bus-master drain";
+        hisi_evidence = "SDK 163d9150 libplat_patch.a sdio_patch.c.obj (4c7337bc5bbafa21d2666315c27431e9e5dc948c89bc34aca862a7da0f9a1671), sdio_port_soft_reset_patch: 32-bit RMW clear bit1; delay_us(5); fresh RMW set bit1. acore.cfg replaces the empty ROM entry. Actual patch activation, reset coverage and completion unverified";
+        field {sw=rw; hw=r; desc="SDK drives low then high; preserve other bits. No reset-state or self-clear inference";} sdio_reset_n[1:1];
+    } SDIO_SOFT_RESET @ 0xc8;
 };

@@ -78,8 +78,8 @@ EXPECTED = {
         # with the same two low-half fields and no invented frequency/reset.
         # SDIO function1 status/enable split into fourteen ROM-proven events;
         # retain the unknown upper status bits: net 27 additional fields.
-        "registers_expanded": 975,
-        "fields_expanded": 2077,
+        "registers_expanded": 976,
+        "fields_expanded": 2078,
         "write_constraints": 20,
     },
 }
