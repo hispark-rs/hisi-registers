@@ -465,3 +465,13 @@ supplying the retained private ROM, reviewed QEMU, its scripts and a fresh outpu
 directory. Reports and synthetic observations are preserved under
 `evidence/ws53-sdio-transfer-{contract,observations}.json`. No register layout
 changed; there is no new PAC generation, board access, transfer or drain claim.
+
+WS53 SDIO prepare-send evidence is replayable with `scripts/check_ws53_sdio_announce.py`
+using the pinned private ROM capture and a local QEMU. It compares168 input cases
+against all192 words of an ordinary-RAM register window: length is masked to21
+bits, the send command writes captured status OR1, and no ADMA table is published.
+Zero length is accepted and overwide length truncated by ROM; drivers must supply
+validated lengths. `scripts/test_ws53_sdio_announce.py` rejects14 ambiguous SVD
+variants and replays the compressed synthetic observations without a ROM image.
+No notification delivery, self-clear, CIS or physical drain is proven. Register
+layout is unchanged; the primary PAC generation input remains10ef24b.
