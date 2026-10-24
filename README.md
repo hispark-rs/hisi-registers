@@ -36,6 +36,9 @@ The shared WS53 SPACC block now includes a source-audited HASH subset: two
 software-profile channel arrays, IRQ59, separate status/command views and no
 assumed resets. [The layout evidence](evidence/ws53-spacc-layout.md) describes
 ownership, DMA-drain and algorithm limitations; this is not a crypto HAL.
+The [unkeyed message audit](evidence/ws53-hash-message.md) executes original C
+state configuration and all 512 padding tails; it produces HAL comparison
+vectors without claiming hardware or algorithm-result qualification.
 Names such as "v151" are not sufficient proof by themselves. SPI is shared only
 because the two SDKs contain byte-identical v151 register definitions and
 register-operation sources. Chip-specific SPI integration remains in each chip map.

@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/drv_hash.c": "b3572ebab5147c67a33687c816cce5f855e8f6bcd8305e9ed8cbc6992363505f",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_hash.c": "4b23683e9907cc976afad500e59728c4e4f85510a35cbdd6c98a81ab9eba8d4b",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/common_include/crypto_hash_struct.h": "3488e4720aded082d35eb1248102ca6888f2ba9a798f59b1cc76fb19baa6105e",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/hal_include/hal_common.h": "23f37b976f331a0f76ef3c67ede71ee1ba24a0bdfc829820594ff0b306451b7a",
+    "src/drivers/chips/ws53/porting/security_unified/security_unified_porting.h": "61fa30fcf837db575d04c57a66cfe814f42f31847957b977f972694f8628018c",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_spacc_reg.h": "3d4630e695abebcd0e15554c1b74465b60e681f6b5208ce8d8adc186916b5f8e"
+  },
+  "original_functions": {
+    "priv_hal_hash_get_cfg": "0e083e9e2b664ea4e0e6cfc295c175c7e2f68fafd7f46cc65187d61b86c0755c",
+    "drv_hash_get_state": "f7b9ca7d7ef57254640c66349166064e3872282a76a5703205feb65010546a5b",
+    "hal_cipher_hash_config": "ca638fa37e8ca27b4fc4a5c43187a4480c8eae9f7687776cc5dbfde87d4e8f7e",
+    "drv_process_tail": "07f917b8293f7082593b32ba1a3efdb09b23117581a52046d09292c4aa7b95b9"
+  },
+  "algorithms": {
+    "Sha1": {
+      "block": 64,
+      "result": 20,
+      "suffix": 8,
+      "algorithm": 10,
+      "mode": 0,
+      "initial_bytes": "67452301efcdab8998badcfe10325476c3d2e1f0"
+    },
+    "Sha224": {
+      "block": 64,
+      "result": 28,
+      "suffix": 8,
+      "algorithm": 11,
+      "mode": 0,
+      "initial_bytes": "c1059ed8367cd5073070dd17f70e5939ffc00b316858151164f98fa7befa4fa4"
+    },
+    "Sha256": {
+      "block": 64,
+      "result": 32,
+      "suffix": 8,
+      "algorithm": 11,
+      "mode": 1,
+      "initial_bytes": "6a09e667bb67ae853c6ef372a54ff53a510e527f9b05688c1f83d9ab5be0cd19"
+    },
+    "Sha384": {
+      "block": 128,
+      "result": 48,
+      "suffix": 16,
+      "algorithm": 11,
+      "mode": 2,
+      "initial_bytes": "cbbb9d5dc1059ed8629a292a367cd5079159015a3070dd17152fecd8f70e593967332667ffc00b318eb44a8768581511db0c2e0d64f98fa747b5481dbefa4fa4"
+    },
+    "Sha512": {
+      "block": 128,
+      "result": 64,
+      "suffix": 16,
+      "algorithm": 11,
+      "mode": 3,
+      "initial_bytes": "6a09e667f3bcc908bb67ae8584caa73b3c6ef372fe94f82ba54ff53a5f1d36f1510e527fade682d19b05688c2b3e6c1f1f83d9abfb41bd6b5be0cd19137e2179"
+    },
+    "Sm3": {
+      "block": 64,
+      "result": 32,
+      "suffix": 8,
+      "algorithm": 12,
+      "mode": 0,
+      "initial_bytes": "7380166f4914b2b9172442d7da8a0600a96f30bc163138aae38dee4db0fb0e4e"
+    }
+  },
+  "padding_cases": 512,
+  "state_window_cases": 12,
+  "sdk_bounce_buffer_size": 256,
+  "node_type_enum_sha256": "47d97e1c46886538ce8bd8619617bbd1ef26aeeb33b311612bab3b697a59d713",
+  "sdk_api_flags": {
+    "first": 1,
+    "last": 4
+  },
+  "descriptor_flags_note": "Original API enum FIRST/LAST is distinct from packed descriptor first/last bits",
+  "vectors_sha256": "a3466547b5eb76dbea359cca07b9b17a7821ee832b837d104e5c94ed0c8b5a32",
+  "state_word_encoding": "four source IV bytes copied as a little-endian u32; output words copied back to bytes",
+  "hardware_accessed": false,
+  "digests_calculated": false,
+  "ubsan_trap_passed": true,
+  "limitations": [
+    "Cache, address translation, DMA start and completion are explicit host stubs",
+    "Only unkeyed source profiles and short-message lengths are exercised",
+    "SDK updates only length[1]; large streaming carry and endian handling are not qualified",
+    "This is input/configuration encoding evidence, not algorithm or hardware acceptance"
+  ]
+}
