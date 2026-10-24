@@ -7,6 +7,64 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_sfc_clock_views_reject_invented_layout_or_frequency(self):
+        from check_ws53_sfc_clock import validate_layout
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            layout = validate_layout(dest)
+            self.assertEqual(layout['address'], 0x52000570)
+            self.assertEqual(layout['access_widths'], [16, 32])
+            original = dest.read_bytes()
+            mutations = [
+                ('XIP_SFC_CLOCK', 'addressOffset', '0x574'),
+                ('XIP_SFC_CLOCK', 'size', '32'),
+                ('XIP_SFC_CLOCK', 'access', 'read-only'),
+                ('XIP_SFC_CLOCK', 'resetValue', '0'),
+                ('XIP_SFC_CLOCK', 'resetMask', '0xf'),
+                ('XIP_SFC_CLOCK', 'readAction', 'clear'),
+                ('XIP_SFC_CLOCK', 'fields/field/modifiedWriteValues', 'oneToClear'),
+                ('XIP_SFC_CLOCK', "fields/field[name='SOURCE_CONFIG']/bitOffset", '2'),
+                ('XIP_SFC_CLOCK', "fields/field[name='SOURCE_CONFIG']/bitWidth", '4'),
+                ('XIP_SFC_CLOCK', "fields/field[name='ENABLE']/access", 'write-only'),
+                ('XIP_SFC_CLOCK', 'fields/field/enumeratedValues', ''),
+                ('XIP_SFC_CLOCK', 'writeConstraint', ''),
+                ('XIP_SFC_CLOCK_WORD', 'alternateRegister', 'XIP_QSPI_CLOCK'),
+                ('XIP_SFC_CLOCK_WORD', 'size', '16'),
+                ('XIP_SFC_CLOCK_WORD', 'addressOffset', '0x572'),
+                ('XIP_SFC_CLOCK_WORD', 'resetValue', '0'),
+            ]
+            for name, tag, value in mutations:
+                with self.subTest(name=name, tag=tag):
+                    tree = ET.fromstring(original)
+                    reg = tree.find(f"./peripherals/peripheral[name='M_CRG']/registers/register[name='{name}']")
+                    node = reg.find(tag)
+                    if node is None:
+                        parent, _, leaf = tag.rpartition('/')
+                        node = ET.SubElement(reg.find(parent) if parent else reg, leaf)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+            for kind in ('wrong-block', 'missing-word', 'invented-upper-field'):
+                with self.subTest(kind=kind):
+                    tree = ET.fromstring(original)
+                    block = tree.find("./peripherals/peripheral[name='M_CRG']")
+                    if kind == 'wrong-block':
+                        block.find('baseAddress').text = '0x57000000'
+                    elif kind == 'missing-word':
+                        regs = block.find('registers')
+                        regs.remove(regs.find("register[name='XIP_SFC_CLOCK_WORD']"))
+                    else:
+                        reg = block.find("registers/register[name='XIP_SFC_CLOCK_WORD']")
+                        field = ET.SubElement(reg.find('fields'), 'field')
+                        for tag, value in (('name', 'UPPER'), ('bitOffset', '16'), ('bitWidth', '16'),
+                                           ('access', 'read-write')):
+                            ET.SubElement(field, tag).text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+
     def test_ws53_sfc_command_layout_rejects_fabricated_status_contracts(self):
         from check_ws53_sfc_contract import validate_layout
         with tempfile.TemporaryDirectory() as work:

@@ -81,6 +81,12 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r; desc="SPI_BUS_0 port writes 1 to enable, 0 to disable; other fields unmodeled";} enable[0:0];
     } SPI_CLOCK @ 0x55c;
     reg {
+        hisi_svd_word_view = "XIP_SFC_CLOCK_WORD";
+        hisi_evidence = "SDK-source 163d9150 clock_recover.c:sfc_switch_clock and flashboot_ws53/startup/main.c:boot_flash_clk_init at 0x52000570; chip_io.h word reg_setbit/reg_clrbit/readl plus halfword reg16_setbits/reg16_clrbits. Both views are the same shared clock resource; no reset, upper-bit semantics, complete frequency formula, safe live switching or ownership proven. See evidence/ws53-sfc-clock-source-contract.json";
+        field {sw=rw; hw=r; desc="SDK clears this bit before changing SOURCE_CONFIG, then sets it and optionally reads the word back. Source-level clock-enable usage only; setting it does not prove upstream clock presence or SFC readiness/drain";} enable[0:0];
+        field {sw=rw; hw=r; desc="Three-bit configuration: sfc_switch_clock(pll=true) writes 6, pll=false writes 0; FlashBoot writes 6. Other encodings and any selector/divider decomposition or frequency are unqualified; this raw field is not a safe clock configuration API";} source_config[3:1];
+    } XIP_SFC_CLOCK @ 0x570;
+    reg {
         hisi_evidence = "SDK-source 163d9150 spi_porting.h u_xip_qspi_cr and spi_port_clock_enable; 16-bit RMW writes 1/0 to the nine-bit field; no divider formula established";
         field {sw=rw; hw=r;} control[8:0];
     } XIP_QSPI_CLOCK @ 0x574;

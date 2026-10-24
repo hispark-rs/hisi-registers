@@ -405,3 +405,16 @@ layout fields, and excludes five unverified imported IRQ/reset slots at
 route. No unknown reset is emitted; WS63/BS2X output remains byte-identical.
 See [the source contract and API delta](evidence/ws53-sfc-command-source-contract.md).
 This change does not regenerate an installed PAC or modify frozen firmware.
+
+## WS53 SFC clock observation (2026-10-25)
+
+`M_CRG.XIP_SFC_CLOCK` and its `_WORD` access view describe the same shared slot
+at0x52000570. They retain the original SDK's halfword source-configuration and
+word enable/readback accesses, with only ENABLE bit0 and SOURCE_CONFIG bits3:1.
+The SDK writes configuration6 for `pll=true` and0 for false; this is not a
+complete frequency/divider formula or a safe live clock-switching API.
+All other bits and reset values remain unknown, and QSPI at0x52000574 is distinct.
+Run `uv run --script scripts/check_ws53_sfc_clock.py --sdk SDK --cc gcc` (or Clang)
+to execute the pinned original helpers/macros on anonymous host RAM. No hardware
+is touched. See [the source contract](evidence/ws53-sfc-clock-source-contract.md)
+for access widths, delay-stub boundaries and ownership limitations.

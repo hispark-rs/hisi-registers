@@ -2,6 +2,12 @@
 
 Status: SDK-first minimal map.
 
+SFC clock access increment (2026-10-25): the fixed SDK's original helper bodies
+and `chip_io.h` macros establish a shared M_CRG slot at0x52000570 with 16/32-bit
+access views, ENABLE bit0 and SOURCE_CONFIG bits3:1. No extra upper bits, reset,
+frequency formula, automatic HAL switching, core handoff or physical clock
+qualification follows. See [source contract](ws53-sfc-clock-source-contract.md).
+
 ## Application-core RAM milestone (2026-10-22)
 
 Pinned evidence: `fbb_ws53` commit

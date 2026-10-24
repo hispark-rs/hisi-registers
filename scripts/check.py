@@ -74,8 +74,10 @@ EXPECTED = {
         # SDK-backed MSUB word access aliases add 2 views/19 fields.
         # WS53 SFC source audit removes five unverified legacy IRQ/reset slots
         # (nine fields), adds seven source-defined DDR/sample layout fields.
-        "registers_expanded": 973,
-        "fields_expanded": 2046,
+        # SFC clock observation adds halfword/word views of one shared slot,
+        # with the same two low-half fields and no invented frequency/reset.
+        "registers_expanded": 975,
+        "fields_expanded": 2050,
         "write_constraints": 20,
     },
 }
