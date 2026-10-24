@@ -418,3 +418,28 @@ Run `uv run --script scripts/check_ws53_sfc_clock.py --sdk SDK --cc gcc` (or Cla
 to execute the pinned original helpers/macros on anonymous host RAM. No hardware
 is touched. See [the source contract](evidence/ws53-sfc-clock-source-contract.md)
 for access widths, delay-stub boundaries and ownership limitations.
+
+## WS53 SDIO initialization and clock correction (2026-10-25)
+
+Executing the retained, unmodified `hal_sdio_comm_base_init` ROM function on
+ordinary QEMU RAM exposed a field error: Function0 enables bits 0–11, not
+bits 0–10 plus bit16. `orshf` rotates the value16 right25 to yield0x800.
+The corrected `EVENT11` replaces the experimental `EVENT16`; no existing HAL
+driver used the erroneous field. The source profile now has explicit partial
+fields for MODE, VOLTAGE_CONTROL, CONFIG_30 and FUNCTION1_CONFIG, preserving
+unknown bits instead of treating them as invented configuration semantics.
+
+The SDK patch uses word accesses for both SDIO clock gates. `M_CLKEN1_WORD`
+adds that alias while retaining the existing halfword view. Check with
+`scripts/check_ws53_sdio_clock.py` (SDK, tool prefix and SVD arguments), and
+`scripts/check_ws53_sdio_init.py` (retained ROM, QEMU, QEMU scripts, SVD and a
+new output directory). The latter checks36 seed states across192 words each;
+`scripts/test_ws53_sdio_init.py` rejects138 inconsistent SVD mutations,
+including the old bit16 description. Reports are in
+`evidence/ws53-sdio-clock-contract.json` and
+`evidence/ws53-sdio-base-init-contract.json`.
+
+The ordinary-RAM execution does not establish MMIO access ordering, W1C,
+host-clock readiness, CIS, IRQ delivery or ADMA drain. Clock evidence is static
+object decoding, not a hardware clock or transfer test. No SDIO hardware was
+accessed and neither Flash candidate was rebuilt.

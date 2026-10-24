@@ -18,6 +18,8 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r;} secure_pwm_enable[14:14];
     } M_CLKEN0 @ 0x40;
     reg {
+        hisi_svd_word_view = "M_CLKEN1_WORD";
+        hisi_evidence = "SDK 163d9150 libplat_patch.a:sdio_patch.c.obj:sdio_clock_set uses word loads/stores at M_CLKEN0/1, changing only SDIO bits11/1. Other peripheral ports retain halfword accesses; upper bits and reset values unknown. See evidence/ws53-sdio-clock-contract.json";
         field {sw=rw; hw=r;} timer_enable[0:0];
         field {sw=rw; hw=r;} sdio_ahb_enable[1:1];
         field {sw=rw; hw=r;} lsadc_apb_enable[2:2];

@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "evidence_class": "pinned SDK object static instruction audit",
+  "hardware_accessed": false,
+  "vendor_code_executed": false,
+  "clock": {
+    "function_sha256": "2d70837f3c1ce4a54ea4f3883bb544cc9ddf20977d819286cbffdb79c3ac48d6",
+    "function_bytes": 32,
+    "access_bits": 32,
+    "accesses": [
+      {
+        "address": 1375731776,
+        "bit": 11
+      },
+      {
+        "address": 1375731780,
+        "bit": 1
+      }
+    ],
+    "operation": "word read/modify/write in listed order; argument bit0 selects gate value",
+    "upstream_clock_or_bus_drain_verified": false
+  },
+  "archive_sha256": "c519a5330f1327071858324623f02ab8b751679c3238ea63053a3b260d9d91ca",
+  "object_sha256": "4c7337bc5bbafa21d2666315c27431e9e5dc948c89bc34aca862a7da0f9a1671",
+  "svd_sha256": "ebe558ba9fba39fccdccb0461c8926064c52e4315ed26d2890930e89141c681e",
+  "script_sha256": "1dfe5395876a7abeb3e9963296e7175fa6958a9d71a03aa8bc97ece5b13f2311"
+}
