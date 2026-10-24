@@ -76,8 +76,10 @@ EXPECTED = {
         # (nine fields), adds seven source-defined DDR/sample layout fields.
         # SFC clock observation adds halfword/word views of one shared slot,
         # with the same two low-half fields and no invented frequency/reset.
+        # SDIO function1 status/enable split into fourteen ROM-proven events;
+        # retain the unknown upper status bits: net 27 additional fields.
         "registers_expanded": 975,
-        "fields_expanded": 2050,
+        "fields_expanded": 2077,
         "write_constraints": 20,
     },
 }

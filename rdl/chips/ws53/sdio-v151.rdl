@@ -84,13 +84,46 @@ addrmap ws53_sdio_v151_regs {
         name = "Opaque function1 configuration: ROM replaces low 24 bits with 0xff8000";
         field { sw=rw; hw=r; } value[31:0];
     } FUNCTION1_CONFIG @ 0x10c;
-    reg { field { sw=r; hw=w; } value[31:0]; } FUNCTION1_INTERRUPT_STATUS @ 0x110;
+    reg {
+        name = "ROM function1 callback/counter event mapping; status does not prove ADMA drain";
+        field { sw=r; hw=w; } host_write_complete[0:0];
+        field { sw=r; hw=w; } host_read_complete[1:1];
+        field { sw=r; hw=w; } host_read_error[2:2];
+        field { sw=r; hw=w; } host_read_start[3:3];
+        field { sw=r; hw=w; } host_write_start[4:4];
+        field { sw=r; hw=w; } adma_end[5:5];
+        field { sw=r; hw=w; } adma_interrupt[6:6];
+        field { sw=r; hw=w; } adma_error[7:7];
+        field { sw=r; hw=w; } function_reset[8:8];
+        field { sw=r; hw=w; } host_message[9:9];
+        field { sw=r; hw=w; } suspend[10:10];
+        field { sw=r; hw=w; } resume[11:11];
+        field { sw=r; hw=w; } device_message_ack[12:12];
+        field { sw=r; hw=w; } function_enable[13:13];
+        field { sw=r; hw=w; } unclassified[31:14];
+    } FUNCTION1_INTERRUPT_STATUS @ 0x110;
     reg {
         hisi_svd_alternate_register = "FUNCTION1_INTERRUPT_STATUS";
         name = "Captured-status acknowledgement command; no automatic RMW or inferred W1C/reset values";
         field { sw=w; hw=r; } value[31:0];
     } FUNCTION1_INTERRUPT_ACK @ 0x110;
-    reg { field { sw=rw; hw=r; } events[13:0]; } FUNCTION1_INTERRUPT_ENABLE @ 0x114;
+    reg {
+        name = "ROM enables all fourteen mapped function1 events; no inferred reset or completion semantics";
+        field { sw=rw; hw=r; } host_write_complete[0:0];
+        field { sw=rw; hw=r; } host_read_complete[1:1];
+        field { sw=rw; hw=r; } host_read_error[2:2];
+        field { sw=rw; hw=r; } host_read_start[3:3];
+        field { sw=rw; hw=r; } host_write_start[4:4];
+        field { sw=rw; hw=r; } adma_end[5:5];
+        field { sw=rw; hw=r; } adma_interrupt[6:6];
+        field { sw=rw; hw=r; } adma_error[7:7];
+        field { sw=rw; hw=r; } function_reset[8:8];
+        field { sw=rw; hw=r; } host_message[9:9];
+        field { sw=rw; hw=r; } suspend[10:10];
+        field { sw=rw; hw=r; } resume[11:11];
+        field { sw=rw; hw=r; } device_message_ack[12:12];
+        field { sw=rw; hw=r; } function_enable[13:13];
+    } FUNCTION1_INTERRUPT_ENABLE @ 0x114;
     reg {
         field { sw=rw; hw=r; } io_device_code[3:0];
         field { sw=rw; hw=r; } csa_support[4:4];
