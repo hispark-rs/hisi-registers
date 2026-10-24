@@ -362,3 +362,17 @@ The existing RDL fields need no changes. RX routing, autonomous clocks/ownership
 and the UART alternate-pad QEMU model remain unqualified; no stable API claim.
 
 WS53 TIMER LOAD 的实板读回证据见 `evidence/ws53-timer-load-hil.json`：两通道16种写入模式均读回 `written | 0xF`，并在运行/停止/到期阶段复核。仅更新WS53字段说明，不改变共享IP、写入位宽或重置值；不能据此声称低4位不参与计时或已有精确16tick量化模型。
+
+## WS53 UART TX IRQ (2026-10-24)
+
+`evidence/ws53-uart-tx-irq-hil.json` records three UART2 RAM runs, each with
+14 observations across PTIM0/1. Reading IIR=2 acknowledges TX; a second read
+returns1, and disabling/re-enabling TX IRQ rearms an empty FIFO. PTIM1 uses
+the inherited two-byte threshold; with FIFO enabled its LSR.THRE_S means full,
+whereas PTIM0 means empty. Neither notification proves serializer completion.
+WS53 RDL marks IIR with conditional `modifyExternal` read side effects and
+documents THRE polarity; shared-IP external qualification leaves WS63/BS2X
+SVD output unchanged. UART0/1 descriptions share SDK semantics but lack this
+physical qualification. `scripts/check_ws53_uart_tx_irq_contract.py --sdk SDK
+--svd WS53.svd` checks384 original-C helper cases and3 acknowledgement paths;
+host RAM cannot emulate IIR read-clear. No reset defaults are inferred.

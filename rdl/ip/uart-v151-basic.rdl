@@ -2,7 +2,7 @@
 // product configurations leave CONFIG_UART_IP_VERSION_V151_PRO disabled.
 
 addrmap uart_v151_basic_regs #(longint unsigned MMIO_WIDTH = 16, bit SDK_VIEW = false) {
-    reg {
+    external reg {
         regwidth = MMIO_WIDTH;
         field {
             sw = r;
