@@ -70,7 +70,7 @@ EXPECTED = {
         },
         "source_arrays": 0,
         "output_arrays": 13,
-        "cluster_arrays": 4,
+        "cluster_arrays": 7,
         # Flash mapping/read-only status adds 31 views/32 fields; the two
         # SDK-backed MSUB word access aliases add 2 views/19 fields.
         # WS53 SFC source audit removes five unverified legacy IRQ/reset slots
@@ -80,8 +80,10 @@ EXPECTED = {
         # SDIO function1 status/enable split into fourteen ROM-proven events;
         # retain the unknown upper status bits: net 27 additional fields.
         # Shared SPACC HASH subset:34 source-backed views,65 fields,3 arrays.
-        "registers_expanded": 1011,
-        "fields_expanded": 2151,
+        # SYMC adds53 views/91 fields/3 arrays; shared error cluster interleaves
+        # SYMC and HASH, retaining old HASH accessors and absolute addresses.
+        "registers_expanded": 1064,
+        "fields_expanded": 2242,
         "write_constraints": 20,
     },
 }

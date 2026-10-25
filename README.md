@@ -454,3 +454,14 @@ The ordinary-RAM execution does not establish MMIO access ordering, W1C,
 host-clock readiness, CIS, IRQ delivery or ADMA drain. Clock evidence is static
 object decoding, not a hardware clock or transfer test. No SDIO hardware was
 accessed and neither Flash candidate was rebuilt.
+
+## WS53 SYMC source and register extension (2026-10-25)
+
+The shared SPACC description now includes SYMC input/output rings, configuration,
+IV readback and separate status/command views. The original HASH register accessors
+retain their addresses; the interleaved diagnostic cluster also exposes SYMC.
+[The source audit](evidence/ws53-symc-control.md) executes20 original C functions,
+checks descriptor ABI on RV32IMFC and records clear-timeout release, keyslot and
+cache-publication constraints. [Layout checks](evidence/ws53-spacc-layout.md) cover
+87 views/156 fields/6 arrays, with original headers cross-compiled for RV32.
+This is not an AES/SM4 driver, algorithm model, key-loading or hardware acceptance.

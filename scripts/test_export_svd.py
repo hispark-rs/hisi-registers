@@ -16,7 +16,7 @@ class ExportSemantics(unittest.TestCase):
             dest = Path(work) / 'ws53.svd'
             export(root / 'rdl/chips/ws53.rdl', dest)
             self.assertEqual(validate_layout(dest, observed), {
-                'expanded_register_views': 34, 'expanded_fields': 65, 'clusters': 3})
+                'expanded_register_views': 87, 'expanded_fields': 156, 'clusters': 6})
             original = dest.read_bytes()
             paths = [
                 ("baseAddress", "0x52020000"),
@@ -34,6 +34,21 @@ class ExportSemantics(unittest.TestCase):
                 ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='ALGORITHM']/bitWidth", "3"),
                 ("registers/cluster[name='HASH_STATE[%s]']/addressOffset", "0xa000"),
                 ("registers/cluster[name='HASH_ERROR[%s]']/register[name='STATUS']/access", "read-write"),
+                ("registers/register[name='SYMC_CLEAR_ACK']/access", "read-write"),
+                ("registers/register[name='SYMC_CLEAR_READ']/access", "read-write"),
+                ("registers/register[name='SYMC_CLEAR_REQUEST']/alternateRegister", "SYMC_LOCK"),
+                ("registers/register[name='SYMC_OUTPUT_INTERRUPT_ACK']/fields/field/modifiedWriteValues", "oneToClear"),
+                ("registers/register[name='SYMC_INPUT_INTERRUPT_STATUS']/readAction", "clear"),
+                ("registers/register[name='SYMC_LOCK']/resetValue", "0"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/dimIncrement", "0x80"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='KEYSLOT']/bitWidth", "4"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='DECRYPT']/bitOffset", "29"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/register[name='NODE_DEPTH']/fields/field[name='LENGTH']/bitWidth", "32"),
+                ("registers/cluster[name='SYMC_OUTPUT[%s]']/register[name='NODE_DEPTH']/addressOffset", "0x2c"),
+                ("registers/cluster[name='SYMC_OUTPUT[%s]']/register[name='SUBMIT']/access", "read-write"),
+                ("registers/cluster[name='SYMC_IV[%s]']/register[name='WORD0']/access", "read-write"),
+                ("registers/cluster[name='HASH_ERROR[%s]']/register[name='SYMC_CAUSE']/addressOffset", "8"),
+                ("registers/cluster[name='HASH_ERROR[%s]']/register[name='SYMC_STATUS']/access", "read-write"),
             ]
             for path, value in paths:
                 with self.subTest(path=path):

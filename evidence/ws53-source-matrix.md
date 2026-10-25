@@ -1544,3 +1544,21 @@ to configure automatic clock gating. Four seeded host runs verify48 writes and
 neighbor preservation, not physical clock state or bus drain. No bitfields,
 read semantics, reset values or SPACC+0x8030 behavior are inferred. No RDL/PAC
 change or new hardware qualification follows from this source-only evidence.
+
+## WS53 SYMC control and register extension (2026-10-25)
+
+SYMC adds53 views/91 fields and3 arrays to the shared SPACC description. Since
+SYMC/HASH errors interleave by security domain, the legacy HASH_ERROR cluster
+now starts8 bytes earlier while its CAUSE/STATUS accessors retain the original
+absolute addresses; SYMC_CAUSE/STATUS occupy the added slots. No overlapping
+cluster exception or duplicate peripheral token was introduced.
+
+The original20-function audit checks48 lock/clear/release cases,1728 config
+encodings,16 rejected configs,700 descriptors,128 submissions,72 IV cases,
+16 ACK cases,16 keyslot selections,10 direct-key rejections and8 pointer waits.
+Input/output descriptors are32/16 bytes on RV32IMFC, not interchangeable.
+Direct set_key always fails; attach selects/truncates a separate9-bit slot ID.
+Unlock releases ownership after clear timeout and output publication precedes
+descriptor cache flush; neither is a safe memory handback recipe. See
+[source evidence](ws53-symc-control.md). AES/SM4 results, KM key loading,
+hardware initialization, DMA/cache/clock handoff and actual IRQ remain unqualified.
