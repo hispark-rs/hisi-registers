@@ -1,6 +1,7 @@
 // fbb_ws53 163d9150: drivers/chips/ws53/dyn_mem/dyn_mem.c and
 // include/clock_recover.h. Shared system state, never an acore-exclusive token.
-// Reset values are unknown. RAM takeover reads these; it does not rewrite them.
+// Reset values are unknown. Domain release is an explicit shared-resource
+// operation; it is not part of the default RAM takeover.
 addrmap ws53_system_memory_regs {
     hisi_evidence = "SDK source: dyn_mem.c bram_share_cfg_t/acore_idtcm_dyn_cfg/acore_dtcm_dyn_cfg; shared acore/ccore; no reset values verified";
     reg {
@@ -19,4 +20,14 @@ addrmap ws53_system_memory_regs {
         hisi_evidence = "SDK 163d9150 acore/platform_core.h HAL_SOFT_RST_2_GLB_B/RESET_CRG_CCORE_VALUE/RESET_CCORE_VALUE; main.c copy_to_ccore: 0 all held, 3 logic/clock released, 7 CPU also released. Physical-SRST app-entry observation 2026-10-24 reads 0; not a silicon reset-value claim";
         field { sw=r; hw=w; desc="Known domain-release encoding: 0 all held, 3 logic/clock released, 7 CPU also released; other encodings unqualified"; } released_domains[2:0];
     } CCORE_RESET_STATUS @ 0x96c;
+    reg {
+        hisi_svd_alternate_register = "CCORE_RESET_STATUS";
+        name = "Restricted full-word logic/clock release command, retaining control CPU reset";
+        hisi_evidence = "SDK 163d9150 acore/platform_core.h HAL_SOFT_RST_2_GLB_B=0x5703096c, RESET_CRG_CCORE_VALUE=3; main.c copy_to_ccore writes the complete word 3 then delays 5us before accessing the domain. Board 2026-10-25 diagnostic 0->3 makes TSENSOR CONTROL/STATUS readable as zero; writing zero again then reading that domain stalled debug. Do not expose generic reset or CPU release from this view";
+        field {
+            sw=w; hw=r;
+            hisi_write_min=3; hisi_write_max=3;
+            desc="Write exactly 3 after exclusive domain handoff from state0, wait at least SDK 5us and verify status3; CPU bit2 stays zero. This is a shared domain, not just TSENSOR. Reset state and other command values are not modeled; SVD constraints do not guard unsafe raw PAC writes";
+        } logic_clock_release[31:0];
+    } CCORE_LOGIC_CLOCK_RELEASE_COMMAND @ 0x96c;
 };

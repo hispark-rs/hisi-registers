@@ -7,6 +7,15 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_ccore_domain_command_boundary(self):
+        from check_ws53_ccore_domain import validate_regressions
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / 'ws53.svd'
+            export(root / 'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_regressions(ET.parse(dest).getroot()),
+                             {'positive': 1, 'negative': 12})
+
     def test_ws53_km_source_layout_and_command_boundaries(self):
         import json
         from check_ws53_km_layout import validate_layout

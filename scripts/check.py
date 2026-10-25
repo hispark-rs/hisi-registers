@@ -84,9 +84,10 @@ EXPECTED = {
         # SYMC adds53 views/91 fields/3 arrays; shared error cluster interleaves
         # SYMC and HASH, retaining old HASH accessors and absolute addresses.
         # Shared KM keyslot/clear loader adds25 views/46 fields/one array.
-        "registers_expanded": 1089,
-        "fields_expanded": 2288,
-        "write_constraints": 20,
+        # Restricted CCORE logic/clock release adds one WO alias and constraint.
+        "registers_expanded": 1090,
+        "fields_expanded": 2289,
+        "write_constraints": 21,
     },
 }
 

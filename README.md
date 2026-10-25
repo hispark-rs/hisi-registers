@@ -471,3 +471,12 @@ checks descriptor ABI on RV32IMFC and records clear-timeout release, keyslot and
 cache-publication constraints. [Layout checks](evidence/ws53-spacc-layout.md) cover
 87 views/156 fields/6 arrays, with original headers cross-compiled for RV32.
 This is not an AES/SM4 driver, algorithm model, key-loading or hardware acceptance.
+
+## WS53 shared logic/clock release command (2026-10-25)
+
+`SYSTEM_MEMORY.CCORE_LOGIC_CLOCK_RELEASE_COMMAND` adds a full-word WO alias at
+`0x5703096c`, restricted in SVD metadata to value3. The existing status remains
+RO; no reset default, generic reset, RMW or CPU-release command is added.
+[The SDK contract and limits](evidence/ws53-ccore-domain.md) distinguish the
+observed 0→3 domain release from the failed diagnostic rollback. Generated PAC
+access does not provide ownership or enforce the write constraint at runtime.

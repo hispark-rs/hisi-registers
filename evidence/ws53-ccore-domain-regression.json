@@ -1,0 +1,50 @@
+{
+  "baseline_commit": "6cda2bbf4297b376aeda509ec7940f2f91425353",
+  "legacy_svd": {
+    "ws63": {
+      "byte_identical": true,
+      "sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0"
+    },
+    "bs2x": {
+      "byte_identical": true,
+      "sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690"
+    }
+  },
+  "ws53_change_only_new_command": true,
+  "semantic_tests": 32,
+  "svd2rust_parse": [
+    "WS63",
+    "BS2X",
+    "WS53"
+  ],
+  "schema_passed": true,
+  "locked_environment_verified": true,
+  "offline_test_run": true,
+  "hardware_accessed": false,
+  "versions": {
+    "antlr4-python3-runtime": "4.13.2",
+    "colorama": "0.4.6",
+    "git-me-the-url": "2.2.0",
+    "gitdb": "4.0.12",
+    "gitpython": "3.1.52",
+    "jinja2": "3.1.6",
+    "lxml": "6.0.2",
+    "markdown": "3.10.2",
+    "markupsafe": "3.0.3",
+    "peakrdl": "1.5.0",
+    "peakrdl-cheader": "1.1.0",
+    "peakrdl-cli": "1.5.0",
+    "peakrdl-html": "2.12.2",
+    "peakrdl-ipxact": "3.5.0",
+    "peakrdl-regblock": "1.3.1",
+    "peakrdl-svd": "0.1.0",
+    "peakrdl-systemrdl": "1.0.1",
+    "peakrdl-uvm": "2.4.0",
+    "python-markdown-math": "0.9",
+    "smmap": "5.0.3",
+    "systemrdl-compiler": "1.32.2",
+    "typing-extensions": "4.16.0"
+  },
+  "check_log_sha256": "84ccc2e7408541cdd6b6aac81e7ab526543541c9bae007cc5f99ea25276cfb45",
+  "svd_sha256": "d86fd771901c697f4e10b17c5c13a55ec4c54da98cacd3898bf0187edcf080ab"
+}
