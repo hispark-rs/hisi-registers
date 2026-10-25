@@ -39,6 +39,10 @@ ownership, DMA-drain and algorithm limitations; this is not a crypto HAL.
 The [unkeyed message audit](evidence/ws53-hash-message.md) executes original C
 state configuration and all 512 padding tails; it produces HAL comparison
 vectors without claiming hardware or algorithm-result qualification.
+The [crypto handoff audit](evidence/ws53-crypto-handoff.md) distinguishes the
+OS aligned-heap/cache/PM callbacks from Boot weak cache hooks and records the
+shared auto-gating writes. Alignment, identity addresses and zero-valued
+auto-gating configuration do not establish coherence, ownership or DMA drain.
 Names such as "v151" are not sufficient proof by themselves. SPI is shared only
 because the two SDKs contain byte-identical v151 register definitions and
 register-operation sources. Chip-specific SPI integration remains in each chip map.

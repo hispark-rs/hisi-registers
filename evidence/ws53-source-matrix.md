@@ -1526,3 +1526,21 @@ without a drain check. These paths must not be copied as a safe Rust lifecycle.
 Source layout does not qualify cross-core ownership, real IRQ delivery, DMA
 drain, algorithm results or silicon channel availability. SYMC/PKE/KM remain
 separate pending work; PKE IRQ58 is not borrowed from MDMA.
+
+## WS53 crypto cache/clock handoff sources (2026-10-25)
+
+[The handoff audit](ws53-crypto-handoff.md) executes25 unchanged source functions
+and the original HAL/driver CMake selectors for five boot/application profiles.
+OS allocation is ordinary LiteOS heap with32-byte alignment; MMZ/SMMU choice is
+ignored by the allocation port. Pointer translation is an identity operation.
+These names and encodings do not prove coherence, bus reachability or ownership.
+OS cache hooks forward to ArchDCache operations; Boot defaults are weak no-ops
+and do not prove which implementation is linked into a board image. Active
+application configuration enables the security sleep veto; its sequential host
+tests do not establish a concurrent/cross-core resource protocol.
+
+Original `system_crg_cfg` whole-word writes include zero at0x52001114/0x5200111c
+to configure automatic clock gating. Four seeded host runs verify48 writes and
+neighbor preservation, not physical clock state or bus drain. No bitfields,
+read semantics, reset values or SPACC+0x8030 behavior are inferred. No RDL/PAC
+change or new hardware qualification follows from this source-only evidence.
