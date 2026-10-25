@@ -1562,3 +1562,23 @@ Unlock releases ownership after clear timeout and output publication precedes
 descriptor cache flush; neither is a safe memory handback recipe. See
 [source evidence](ws53-symc-control.md). AES/SM4 results, KM key loading,
 hardware initialization, DMA/cache/clock handoff and actual IRQ remain unqualified.
+
+## WS53 KM keyslot and clear-loader extension (2026-10-25)
+
+One shared KM block at0x52022000 adds25 views/46 fields, one4-word staging array,
+and SEC_INT3=61 from both port and acore IRQ headers. [Layout evidence](ws53-km-layout.md)
+checks25 offsets and32 masks with original headers on host and RV32IMFC/ilp32f.
+The original kl_int_raw union has an overlong reserved field and sizeof8, but
+the actual u32 member accesses are32-bit; the model does not widen the register.
+
+[Original C audit](ws53-km-control.md) executes34 unchanged functions and3547
+cases. It exposes slot-number truncation, SDK allocation limits8/2, ignored
+flush-timeout status, release without owner reread, clear-loader timeout cleanup,
+and missing attached check at the driver layer. These are source facts, not a
+claim about every higher-level API or silicon completion. Common/root-route
+locking is not assumed to protect the clear-loader path. Rust must own the
+shared selectors, validate types/lengths and retain ambiguous resources.
+
+No hardware access, true cipher results, root derivation, OTP, permanent policy,
+PCPU/AIDSP commands or reset values are added. SYMC/KM HAL and models are still
+required; a register interface alone does not qualify an encryption capability.

@@ -7,6 +7,49 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_km_source_layout_and_command_boundaries(self):
+        import json
+        from check_ws53_km_layout import validate_layout
+        root = Path(__file__).resolve().parents[1]
+        observed = json.loads((root / 'evidence/ws53-km-layout.json').read_text())['observations']
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / 'ws53.svd'
+            export(root / 'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_layout(dest, observed), {
+                'expanded_register_views': 25, 'expanded_fields': 46, 'register_arrays': 1})
+            original = dest.read_bytes()
+            mutations = [('baseAddress', '0x52023000'), ('interrupt/value', '60'),
+                ("registers/register[name='DATA_IN[%s]']/dim", '8'),
+                ("registers/register[name='DATA_IN[%s]']/dimIncrement", '8'),
+                ("registers/register[name='DATA_IN[%s]']/access", 'read-write'),
+                ("registers/register[name='INTERRUPT_STATUS']/size", '64'),
+                ("registers/register[name='KEY_ADDRESS']/fields/field/bitWidth", '9'),
+                ("registers/register[name='REE_FLUSH_STATUS']/fields/field[name='TIMEOUT_ERROR']/bitOffset", '3'),
+                ("registers/register[name='SLOT_SELECT']/fields/field[name='HMAC']/bitOffset", '16'),
+                ("registers/register[name='SLOT_OWNER']/access", 'read-write'),
+                ("registers/register[name='CLEAR_CONTROL']/readAction", 'clear'),
+                ("registers/register[name='CLEAR_SUBMIT']/access", 'read-write'),
+                ("registers/register[name='INTERRUPT_ACK']/fields/field/modifiedWriteValues", 'oneToClear'),
+                ("registers/register[name='KEY_SECURITY']/resetValue", '0'),
+                ("registers/register[name='COMMON_LOCK']/access", 'read-write'),
+                ("registers/register[name='COMMON_UNLOCK']/resetMask", '0xffffffff'),
+                ("registers/register[name='CONTROLLER_ERROR']/access", 'read-write'),
+                ("registers/register[name='TEE_SLOT_COMMAND']/alternateRegister", 'REE_SLOT_READ'),
+                ("registers/register[name='REE_SLOT_READ']/access", 'read-write'),
+                ("registers/register[name='REE_SLOT_COMMAND']/size", '16')]
+            for path, value in mutations:
+                with self.subTest(path=path):
+                    tree = ET.fromstring(original)
+                    block = tree.find("./peripherals/peripheral[name='KM']")
+                    node = block.find(path)
+                    if node is None:
+                        parent, _, tag = path.rpartition('/')
+                        node = ET.SubElement(block.find(parent), tag)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(AssertionError):
+                        validate_layout(dest, observed)
+
     def test_ws53_spacc_source_layout_and_command_boundaries(self):
         import json
         from check_ws53_spacc_layout import validate_layout

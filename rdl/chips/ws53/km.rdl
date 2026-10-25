@@ -1,0 +1,107 @@
+// SDK 163d9150: WS53 security_unified port, hal_keyslot.c, hal_klad.c.
+// One shared resource: slot selection and clear-loader configuration are global.
+// No root derivation, OTP, disable-policy or unaudited PCPU/AIDSP command views.
+addrmap ws53_km_regs {
+    hisi_evidence = "SDK-source 163d9150 WS53 KM base and SEC_INT3 cause61; original keyslot/clear-loader source exercised with host substitutes. Shared application/control/security resource; no exclusive ownership, physical completion, key erasure or reset values established. See evidence/ws53-km-control.md and ws53-km-layout.md";
+    hisi_reset_unverified = true;
+    reg {
+        name = "Clear-key staging write: source writes four little-endian words, zero-pads and clears them afterwards. Readback is not evidenced; zero writes after timeout are not proof of route completion or slot erasure";
+        field { sw=w; hw=r; } value[31:0];
+    } DATA_IN[4] @ 0x1000 += 4;
+    reg {
+        name = "Shared destination selector; MCIPHER slot times2 with parity in bit0, HMAC unshifted slot. Field width is not the available slot count; SDK allocation limits are8/2 respectively";
+        field { sw=rw; hw=r; } address[9:0];
+    } KEY_ADDRESS @ 0x1010;
+    reg {
+        name = "Volatile working-key policy/configuration. SDK ports1 MCIPHER/HMAC,7 Flash; engine codes0x20 AES,0x50 SM4,0xa0/0xa1/0xa2 HMAC. Layout is not chip algorithm availability or authorization to affect live Flash decryption";
+        field { sw=rw; hw=r; } port[2:0];
+        field { sw=rw; hw=r; } engine[11:4];
+        field { sw=rw; hw=r; } encrypt[16:16];
+        field { sw=rw; hw=r; } decrypt[17:17];
+        field { sw=rw; hw=r; } flash_selection[19:18];
+    } KEY_CONFIG @ 0x1014;
+    reg {
+        name = "Volatile working-key buffer/security permissions from SDK; not eFuse or permanent security configuration. Requires explicit ownership and correct CPU/security domain";
+        field { sw=rw; hw=r; } secure_key[0:0];
+        field { sw=rw; hw=r; } source_nonsecure[1:1];
+        field { sw=rw; hw=r; } source_secure[2:2];
+        field { sw=rw; hw=r; } destination_nonsecure[3:3];
+        field { sw=rw; hw=r; } destination_secure[4:4];
+        field { sw=rw; hw=r; } same_master_only[5:5];
+    } KEY_SECURITY @ 0x1018;
+    reg { name = "Opaque KL error read; SDK treats any nonzero as failure. No clear semantics evidenced";
+        field { sw=r; hw=w; } value[31:0]; } LOADER_ERROR @ 0x1038;
+    reg { name = "Opaque key-controller error read; no error-clear semantics evidenced";
+        field { sw=r; hw=w; } value[31:0]; } CONTROLLER_ERROR @ 0x103c;
+    reg {
+        name = "Low32-bit raw interrupt read used by source. Header union has an overlong reserved tail; register access remains32-bit. Interrupt number/delivery and ACK behavior not silicon-qualified";
+        field { sw=r; hw=w; } common[0:0];
+        field { sw=r; hw=w; } index[8:4];
+        field { sw=r; hw=w; } clear_route[14:14];
+    } INTERRUPT_STATUS @ 0x1044;
+    reg {
+        hisi_svd_alternate_register = "INTERRUPT_STATUS";
+        name = "Source writes entire prior raw value OR bit14; not a proven isolated W1C and may acknowledge other pending causes. Command deliberately has no modify/read/reset API";
+        field { sw=w; hw=r; } value[31:0];
+    } INTERRUPT_ACK @ 0x1044;
+    reg {
+        name = "Source common/root-route lock request writes1; this does not establish exclusion of the clear-key loader";
+        field { sw=w; hw=r; } value[31:0];
+    } COMMON_LOCK @ 0x1074;
+    reg {
+        name = "Source common/root-route unlock request writes1; successful request alone is not a reread of owner";
+        field { sw=w; hw=r; } value[31:0];
+    } COMMON_UNLOCK @ 0x1078;
+    reg {
+        field { sw=r; hw=w; } busy[1:0];
+        field { sw=r; hw=w; } lock_failure[3:2];
+        field { sw=r; hw=w; } unlock_failure[5:4];
+        field { sw=r; hw=w; } index[10:8];
+    } COMMON_LOCK_INFO @ 0x107c;
+    reg {
+        name = "Common-route owner; source expects0xaa for ACPU. Clear-route exclusion is not established";
+        field { sw=r; hw=w; } owner[7:0];
+    } COMMON_OWNER @ 0x1080;
+    reg {
+        name = "Clear-route read view; source polls START until zero and then reads both error words. Busy/idle does not certify slot erasure, DMA drain or cross-core handback";
+        field { sw=r; hw=w; } start[0:0];
+        field { sw=r; hw=w; } key_size[3:2];
+        field { sw=r; hw=w; } hmac_block[15:13];
+    } CLEAR_CONTROL @ 0x1438;
+    reg {
+        hisi_svd_alternate_register = "CLEAR_CONTROL";
+        name = "Clear-route command: SYMC preserves readback and writes START1/key-size1,2,3; HMAC sends fresh START1/block0..7. No abort or forced-clear semantics";
+        field { sw=w; hw=r; } value[31:0];
+    } CLEAR_SUBMIT @ 0x1438;
+    reg { field { sw=r; hw=w; } value[31:0]; } TEE_SLOT_READ @ 0x1b00;
+    reg {
+        hisi_svd_alternate_register = "TEE_SLOT_READ";
+        name = "TEE slot lock/flush command readback preserved by SDK. low10 slot, bit15 HMAC, bit20 lock1/unlock0; slot count and completion require independent validation";
+        field { sw=w; hw=r; } value[31:0];
+    } TEE_SLOT_COMMAND @ 0x1b00;
+    reg { field { sw=r; hw=w; } value[31:0]; } REE_SLOT_READ @ 0x1b04;
+    reg {
+        hisi_svd_alternate_register = "REE_SLOT_READ";
+        name = "ACPU/REE slot lock/flush command. Separate write view prevents read-modify-write convenience on a command; construct from validated selection and explicit prior readback";
+        field { sw=w; hw=r; } value[31:0];
+    } REE_SLOT_COMMAND @ 0x1b04;
+    reg {
+        field { sw=r; hw=w; } busy[0:0];
+        field { sw=r; hw=w; } unlock_failure[1:1];
+        field { sw=r; hw=w; } timeout_error[2:2];
+    } TEE_FLUSH_STATUS @ 0x1b10;
+    reg {
+        field { sw=r; hw=w; } busy[0:0];
+        field { sw=r; hw=w; } unlock_failure[1:1];
+        field { sw=r; hw=w; } timeout_error[2:2];
+    } REE_FLUSH_STATUS @ 0x1b14;
+    reg {
+        name = "Global selector for SLOT_OWNER, shared with all CPU/security clients. Selector write/read must remain within an exclusive KM transaction; field width is not capacity";
+        field { sw=rw; hw=r; } slot[9:0];
+        field { sw=rw; hw=r; } hmac[15:15];
+    } SLOT_SELECT @ 0x1b30;
+    reg {
+        name = "Owner of globally selected slot; original enum/call path use1 REE,2 TEE. Contradictory unused header bit-pattern macros are not adopted. No read-clear semantics evidenced";
+        field { sw=r; hw=w; } owner[2:0];
+    } SLOT_OWNER @ 0x1b34;
+};

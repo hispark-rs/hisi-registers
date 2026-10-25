@@ -457,6 +457,12 @@ accessed and neither Flash candidate was rebuilt.
 
 ## WS53 SYMC source and register extension (2026-10-25)
 
+Subsequent KM integration adds one shared keyslot/clear-loader block at
+`0x52022000`, with25 views/46 fields and SEC_INT3=61. [Original C tests](evidence/ws53-km-control.md)
+cover3547 scenarios; [host/RV32 layout checks](evidence/ws53-km-layout.md) verify
+the register and command boundaries. This does not yet supply a SYMC/HMAC HAL,
+prove cross-core exclusion or permit root-key/OTP/permanent-policy operations.
+
 The shared SPACC description now includes SYMC input/output rings, configuration,
 IV readback and separate status/command views. The original HASH register accessors
 retain their addresses; the interleaved diagnostic cluster also exposes SYMC.

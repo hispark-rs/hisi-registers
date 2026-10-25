@@ -30,8 +30,8 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 34,
-        "interrupts": 21,
+        "peripherals": 35,
+        "interrupts": 22,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
@@ -48,6 +48,7 @@ EXPECTED = {
             "SDIO": 0x52060000,
             "TRNG": 0x52024000,
             "SPACC": 0x52010000,
+            "KM": 0x52022000,
             "EFUSE": 0x57024000,
             "FAMA_STATUS": 0x5208F800,
             "WDT": 0x5702B000,
@@ -69,7 +70,7 @@ EXPECTED = {
             "GPIO2": 0x57010000,
         },
         "source_arrays": 0,
-        "output_arrays": 13,
+        "output_arrays": 14,
         "cluster_arrays": 7,
         # Flash mapping/read-only status adds 31 views/32 fields; the two
         # SDK-backed MSUB word access aliases add 2 views/19 fields.
@@ -82,8 +83,9 @@ EXPECTED = {
         # Shared SPACC HASH subset:34 source-backed views,65 fields,3 arrays.
         # SYMC adds53 views/91 fields/3 arrays; shared error cluster interleaves
         # SYMC and HASH, retaining old HASH accessors and absolute addresses.
-        "registers_expanded": 1064,
-        "fields_expanded": 2242,
+        # Shared KM keyslot/clear loader adds25 views/46 fields/one array.
+        "registers_expanded": 1089,
+        "fields_expanded": 2288,
         "write_constraints": 20,
     },
 }
