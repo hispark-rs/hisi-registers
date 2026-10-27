@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
 from pathlib import Path
 import json
 import sys
@@ -31,7 +35,7 @@ EXPECTED = {
     },
     "WS53.experimental.svd": {
         "peripherals": 35,
-        "interrupts": 22,
+        "interrupts": 24,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
@@ -85,9 +89,10 @@ EXPECTED = {
         # SYMC and HASH, retaining old HASH accessors and absolute addresses.
         # Shared KM keyslot/clear loader adds25 views/46 fields/one array.
         # Restricted CCORE logic/clock release adds one WO alias and constraint.
-        "registers_expanded": 1090,
-        "fields_expanded": 2289,
-        "write_constraints": 21,
+        # IPC adds seven views, twelve fields, two IRQs and one constraint.
+        "registers_expanded": 1097,
+        "fields_expanded": 2301,
+        "write_constraints": 22,
     },
 }
 

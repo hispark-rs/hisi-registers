@@ -480,3 +480,8 @@ RO; no reset default, generic reset, RMW or CPU-release command is added.
 [The SDK contract and limits](evidence/ws53-ccore-domain.md) distinguish the
 observed 0→3 domain release from the failed diagnostic rollback. Generated PAC
 access does not provide ownership or enforce the write constraint at runtime.
+
+The [WS53 IPC contract](evidence/ws53-ipc.md) now distinguishes word ACK/status
+from the patched halfword send command, provides IRQ26/27, and records the
+runtime-selected shared-memory layout. Doorbell register descriptions do not
+initialize a peer, establish coherence or grant resource ownership.

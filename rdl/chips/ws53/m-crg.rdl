@@ -7,6 +7,50 @@ addrmap ws53_m_crg_regs {
     hisi_evidence = "SDK-source 163d9150 clock_recover.h and WS53 peripheral ports; shared clock control; reset values unknown";
     default regwidth = 16;
     default accesswidth = 16;
+    // IPC lives in the unused 0x20..0x3b window of this shared register bank.
+    // ROM 163d9150, A-board ROM SHA 2c88c7b2..., and libplat_patch.a ipc_patch.c.obj.
+    // Distinct command/readback views avoid RMW on ACK and SET. No reset values.
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_enable_all_interrupt writes 0xffff at base+0; disable writes zero. Two acore channels are selected by 1<<channel. Upper bits/other sources unknown";
+        field {sw=rw; hw=r;} channel0[0:0];
+        field {sw=rw; hw=r;} channel1[1:1];
+    } IPC_RECEIVE_ENABLE @ 0x20;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_get_x2self_int_status reads word base+8, tests channel mask";
+        field {sw=r; hw=w;} channel0[0:0];
+        field {sw=r; hw=w;} channel1[1:1];
+    } IPC_RECEIVE_STATUS @ 0x28;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_clear_x2self_int writes channel mask at base+12. SDK patched ISR then executes fence and word readback before queue callback. No read/modify or autonomous reset semantics inferred";
+        field {sw=w; hw=r;} channel0[0:0];
+        field {sw=w; hw=r;} channel1[1:1];
+    } IPC_RECEIVE_ACK_COMMAND @ 0x2c;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_svd_alternate_register="IPC_RECEIVE_ACK_COMMAND";
+        hisi_evidence="ipc_patch.c.obj irq_app_int_handler_patch: fence; word read 0x5200002c. Value is discarded; do not interpret as pending, completion or cross-master drain";
+        field {sw=r; hw=w; desc="Discard-only synchronization readback; value unspecified";} unspecified[31:0];
+    } IPC_RECEIVE_ACK_SYNC @ 0x2c;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_clear_self2x_int is a status READ at base+16 despite its misleading name";
+        field {sw=r; hw=w;} channel0[0:0];
+        field {sw=r; hw=w;} channel1[1:1];
+    } IPC_SEND_STATUS @ 0x30;
+    reg {
+        regwidth=16; accesswidth=16;
+        hisi_evidence="SDK 163d9150 ipc_patch.c.obj hal_ipc_set_self2x_int_patch uses SH at 0x52000034 after pending test under local IRQ lock; replaces ROM SW access. Only known two-channel profile modeled";
+        field {sw=w; hw=r;} channel0[0:0];
+        field {sw=w; hw=r;} channel1[1:1];
+    } IPC_SEND_SET_COMMAND @ 0x34;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="acore/platform_core.h HAL_IPC_SOFT_RST_N=0x52000038 and IPC_SOFT_RST_VALUE=1; main ipc_init writes complete word1. Other values, readback and reset coverage unqualified; never reset a live peer";
+        field {sw=w; hw=r; hisi_write_min=1; hisi_write_max=1;} release[31:0];
+    } IPC_RELEASE_COMMAND @ 0x38;
     reg {
         hisi_svd_word_view = "M_CLKEN0_WORD";
         hisi_evidence = "SDK 163d9150: pwm_porting uses halfword access; sio_porting_clock_enable uses uapi_reg_setbit/clrbit with 32-bit unsigned int at the same address; upper bits unmodeled";
