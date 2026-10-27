@@ -28,7 +28,7 @@ ROM_BASE=0x1f220
 PORT='src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/acore'
 DRIVER='src/drivers/chips/ws53/rom/app/drivers/drivers/driver/ipc/ipc'
 MEMORY='src/drivers/boards/ws53/memory_config/include'
-REGS={'IPC_RECEIVE_ENABLE':(0x20,32,'read-write'), 'IPC_RECEIVE_STATUS':(0x28,32,'read-only'),
+REGS={'IPC_RECEIVE_ENABLE':(0x20,32,'write-only'), 'IPC_RECEIVE_STATUS':(0x28,32,'read-only'),
       'IPC_RECEIVE_ACK_COMMAND':(0x2c,32,'write-only'), 'IPC_RECEIVE_ACK_SYNC':(0x2c,32,'read-only'),
       'IPC_SEND_STATUS':(0x30,32,'read-only'), 'IPC_SEND_SET_COMMAND':(0x34,16,'write-only'),
       'IPC_RELEASE_COMMAND':(0x38,32,'write-only')}

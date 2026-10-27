@@ -79,7 +79,7 @@
     "IPC_RELEASE_COMMAND:access",
     "IPC_RELEASE_COMMAND:addressOffset"
   ],
-  "svd_sha256": "ec82e313072751908c6acb4c84ae0f5b077df8a61d5198df8d6bb4e965dcb48c",
+  "svd_sha256": "5cb72ff832a623442a636847b98aeae867edc8f2c6a53c2099bd41fdd746c071",
   "hardware_accessed": false,
   "vendor_code_executed": false,
   "host_header_probe_executed": true,

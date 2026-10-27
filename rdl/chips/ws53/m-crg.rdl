@@ -12,9 +12,9 @@ addrmap ws53_m_crg_regs {
     // Distinct command/readback views avoid RMW on ACK and SET. No reset values.
     reg {
         regwidth=32; accesswidth=32;
-        hisi_evidence="ROM hal_ipc_enable_all_interrupt writes 0xffff at base+0; disable writes zero. Two acore channels are selected by 1<<channel. Upper bits/other sources unknown";
-        field {sw=rw; hw=r;} channel0[0:0];
-        field {sw=rw; hw=r;} channel1[1:1];
+        hisi_evidence="ROM hal_ipc_enable_all_interrupt writes full word0xffff at base+0; disable writes zero. No SDK enable-register read is evidenced: expose write view only, no RMW. Bits0/1 use the channel-mask convention as an explicit integration inference; per-bit enable/IRQ behavior remains unqualified. Other low16 bits must retain the handed-off SDK profile; upper bits unknown";
+        field {sw=w; hw=r;} channel0[0:0];
+        field {sw=w; hw=r;} channel1[1:1];
     } IPC_RECEIVE_ENABLE @ 0x20;
     reg {
         regwidth=32; accesswidth=32;

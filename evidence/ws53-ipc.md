@@ -6,7 +6,7 @@ the unused IPC window of M_CRG; no reset values are asserted.
 
 | Address | Access | Evidence |
 | --- | --- | --- |
-| 0x52000020 | word RW | ROM enable writes 0xffff, disable zero; only channel bits0/1 described |
+| 0x52000020 | word WO | ROM enable writes 0xffff, disable zero; only channel bits0/1 described |
 | 0x52000028 | word RO | incoming channel pending |
 | 0x5200002c | word WO command / RO discard view | ACK mask, then patched ISR fence and readback; value unspecified |
 | 0x52000030 | word RO | outgoing pending; misleading ROM name clear_self2x_int performs no clear |
@@ -50,3 +50,15 @@ encodings and the actual relocatable patch member, checks configured RAM/header
 identity and the SVD, and rejects21 register-layout mutations. It executes no
 vendor ROM/patch code. The included JSON is source/read evidence, not doorbell
 write, IRQ delivery, message exchange, resource handoff or low-power acceptance.
+
+## Enable-mask access correction
+
+The first description at b449799 exposed enable as RW, but its evidence only
+contained whole-word writes0xffff/0. No read helper or physical read qualification
+was demonstrated. The corrected model exposes a write-only source view; this is
+not a claim that hardware reads are forbidden. HAL must not perform an inferred
+RMW. It adopts an explicit disabled/all-SDK-enabled handoff state, owns the full
+application enable word and keeps a shadow mask, preserving the other low16
+SDK bits. Bit0/1 per-channel gating is an integration inference from the channel
+mask convention, requiring the configured profile/physical validation; it is
+not upgraded to a silicon fact by the source/host/model tests.
