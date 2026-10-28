@@ -796,6 +796,11 @@ addrmap chip {{ addrmap {{
                 self.assertEqual(r["RX[%s]"].findtext("access"), "read-only")
                 self.assertEqual(r["TX[%s]"].findtext("access"), "write-only")
                 self.assertEqual(r["STATUS"].findtext("fields/field[name='BUSY']/bitOffset"), busy)
+                self.assertEqual(r["STATUS"].findtext("readAction"), "modify")
+                cleared = {"COLLISION_OR_TX_ERROR"} if name == "SPI0" else {"TX_ERROR", "COLLISION"}
+                for field in r["STATUS"].findall("fields/field"):
+                    self.assertEqual(field.findtext("readAction"), "clear" if field.findtext("name") in cleared else None)
+                    self.assertEqual(field.findtext("access"), "read-only")
                 self.assertEqual(r["DMA_CONTROL"].findtext("fields/field[name='TX_ENABLE']/bitOffset"), tx_enable)
                 self.assertEqual(r["CLEAR_ALL"].findtext("access"), "read-only")
                 self.assertEqual(r["CLEAR_ALL"].findtext("readAction"), "clear")
