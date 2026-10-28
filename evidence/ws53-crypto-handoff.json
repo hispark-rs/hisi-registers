@@ -1,0 +1,454 @@
+{
+  "passed": true,
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "profile": "ws53_liteos_app / acore / MCU_MODE_1",
+  "build_selection": {
+    "app": {
+      "hal": {
+        "environment": "os",
+        "sources": [
+          "crypto_osal/cfbb/os/crypto_osal_lib.c",
+          "crypto_osal/cfbb/crypto_security.c",
+          "hal_cipher/pke/alg/drv_common_pke.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_verify_common.c",
+          "hal_cipher/pke/arch/ecc_data_ram_addr.c",
+          "hal_cipher/pke/arch/rom_lib.c",
+          "hal_cipher/pke/hal_pke.c",
+          "hal_cipher/spacc/hal_hash.c",
+          "hal_cipher/spacc/hal_symc.c",
+          "hal_cipher/trng/hal_trng.c",
+          "hal_fapc/hal_fapc.c",
+          "hal_km/hal_rkp.c",
+          "hal_km/hal_keyslot.c",
+          "hal_km/hal_klad.c",
+          "hal_cipher/pke/arch/curve_data_ram_addr.c",
+          "hal_cipher/pke/alg/curve_ec_fp.c",
+          "hal_cipher/pke/arch/ed_data_ram_addr.c",
+          "hal_cipher/pke/alg/ed_ec_fp.c",
+          "hal_cipher/pke/arch/rsa_data_ram_addr.c",
+          "hal_cipher/pke/alg/rsa.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_sign_verify.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_common.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify_common.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_sign.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_sign_verify.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_common.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify_common.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_sign_verify.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_common.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_crypto.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_common.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=4"
+        ]
+      },
+      "driver": {
+        "environment": "os",
+        "sources": [
+          "drv_cipher/drv_code/drv_symc.c",
+          "drv_cipher/drv_code/drv_symc_mac_hard.c",
+          "drv_cipher/drv_code/crypto_drv_common.c",
+          "drv_cipher/drv_code/drv_hash.c",
+          "drv_cipher/drv_code/drv_pbkdf2_hard.c",
+          "drv_cipher/drv_code/drv_trng.c",
+          "drv_fapc/drv_fapc.c",
+          "drv_km/drv_keyslot.c",
+          "drv_km/drv_klad.c",
+          "init/cfbb/crypto_curve_param.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecdsa.c",
+          "drv_pke_weak_func.c",
+          "kapi/source/kapi_hash.c",
+          "kapi/source/kapi_hash_simple.c",
+          "kapi/source/kapi_init.c",
+          "kapi/source/kapi_pke.c",
+          "kapi/source/kapi_symc.c",
+          "kapi/source/kapi_trng.c",
+          "kapi/source/kapi_km.c",
+          "service_layer/sl_common.c",
+          "service_layer/trng.c",
+          "service_layer/cipher.c",
+          "service_layer/cipher_simple.c",
+          "service_layer/pke.c",
+          "service_layer/km.c",
+          "service_layer/security_init.c",
+          "service_layer/security_sha256.c",
+          "init/cfbb/os/crypto_drv_init.c",
+          "init/cfbb/os/crypto_drv_irq.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecc_cal.c",
+          "kapi/source/kapi_pke_ecc_cal.c",
+          "drv_cipher/drv_pke_v5/drv_pke_eddsa.c",
+          "drv_cipher/drv_pke_v5/drv_pke_cal.c",
+          "drv_cipher/drv_pke_v5/drv_pke_rsa.c",
+          "drv_cipher/drv_pke_v5/ecc/drv_pke_ecc_sign.c",
+          "drv_cipher/drv_pke_v5/ecc/drv_pke_ecc_verify.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_sign.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_dsa_hash.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_verify.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_dsa_hash.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_crypto.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecc_ecdh.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecc_gen_key.c",
+          "drv_cipher/drv_pke_v5/drv_pke_cal.c",
+          "kapi/source/kapi_pke_cal.c"
+        ],
+        "defines": [
+          "-DSM4_CFB_OFB_SUPPORT",
+          "-DCRYPTO_CTR_NON_ALIGN_SUPPORT",
+          "-DCRYPTO_SYMC_ADDR_NOT_ALIGN_SUPPORT",
+          "-DCRYPTO_ERROR_ENV=4"
+        ]
+      }
+    },
+    "romboot": {
+      "hal": {
+        "environment": "boot",
+        "sources": [
+          "crypto_osal/cfbb/boot/crypto_osal_lib.c",
+          "crypto_osal/cfbb/crypto_security.c",
+          "hal_cipher/pke/alg/drv_common_pke.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_verify_common.c",
+          "hal_cipher/pke/arch/ecc_data_ram_addr.c",
+          "hal_cipher/pke/arch/rom_lib.c",
+          "hal_cipher/pke/hal_pke.c",
+          "hal_cipher/spacc/hal_hash.c",
+          "hal_cipher/trng/hal_trng.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify_common.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DCRYPTO_CONFIG_ROMBOOT_ENV",
+          "-DCRYPTO_ROM_ENABLE"
+        ]
+      },
+      "driver": {
+        "environment": "boot",
+        "sources": [
+          "romable/hash_romable.c",
+          "drv_rom_cipher.c",
+          "drv_cipher/drv_code/crypto_drv_common.c",
+          "init/cfbb/crypto_curve_param.c",
+          "drv_cipher/drv_pke_v5/ecc/drv_pke_ecc_verify.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecdsa.c",
+          "drv_pke_weak_func.c",
+          "drv_cipher/drv_pke_v5/ecc/drv_pke_ecc_verify.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DCRYPTO_ROM_ENABLE"
+        ]
+      }
+    },
+    "ssb": {
+      "hal": {
+        "environment": "boot",
+        "sources": [
+          "hal_km/hal_rkp.c",
+          "hal_km/hal_keyslot.c",
+          "hal_km/hal_klad.c",
+          "hal_fapc/hal_fapc.c",
+          "crypto_osal/cfbb/boot/crypto_osal_lib.c",
+          "crypto_osal/cfbb/crypto_security.c",
+          "hal_cipher/pke/alg/drv_common_pke.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_verify_common.c",
+          "hal_cipher/pke/arch/ecc_data_ram_addr.c",
+          "hal_cipher/pke/arch/rom_lib.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify_common.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_sign_verify.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DCRYPTO_CONFIG_ROMBOOT_ENV"
+        ]
+      },
+      "driver": {
+        "environment": "boot",
+        "sources": [
+          "romable/hash_romable.c",
+          "drv_flashboot_cipher.c",
+          "drv_flashboot_symc.c",
+          "drv_cipher/drv_code/crypto_drv_common.c",
+          "drv_km/drv_keyslot.c",
+          "drv_km/drv_klad.c",
+          "drv_fapc/drv_fapc.c",
+          "init/cfbb/crypto_curve_param.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_verify.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecdsa.c",
+          "drv_pke_weak_func.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_verify.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_dsa_hash.c",
+          "rom_drv_api/hal_rom_table.c",
+          "rom_drv_api/drv_rom_table.c",
+          "drv_rom_cipher.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DPKE_SM2_SUPPORT"
+        ]
+      }
+    },
+    "loaderboot": {
+      "hal": {
+        "environment": "boot",
+        "sources": [
+          "hal_km/hal_rkp.c",
+          "hal_km/hal_keyslot.c",
+          "hal_km/hal_klad.c",
+          "hal_fapc/hal_fapc.c",
+          "crypto_osal/cfbb/boot/crypto_osal_lib.c",
+          "crypto_osal/cfbb/crypto_security.c",
+          "hal_cipher/pke/alg/drv_common_pke.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_verify_common.c",
+          "hal_cipher/pke/arch/ecc_data_ram_addr.c",
+          "hal_cipher/pke/arch/rom_lib.c",
+          "hal_cipher/pke/hal_pke.c",
+          "hal_cipher/spacc/hal_hash.c",
+          "hal_cipher/trng/hal_trng.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DCRYPTO_CONFIG_ROMBOOT_ENV"
+        ]
+      },
+      "driver": {
+        "environment": "boot",
+        "sources": [
+          "romable/hash_romable.c",
+          "drv_flashboot_cipher.c",
+          "drv_flashboot_symc.c",
+          "drv_cipher/drv_code/crypto_drv_common.c",
+          "drv_km/drv_keyslot.c",
+          "drv_km/drv_klad.c",
+          "drv_fapc/drv_fapc.c",
+          "init/cfbb/crypto_curve_param.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_verify.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecdsa.c",
+          "drv_pke_weak_func.c",
+          "drv_rom_cipher.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DPKE_SM2_SUPPORT"
+        ]
+      }
+    },
+    "flashboot": {
+      "hal": {
+        "environment": "boot",
+        "sources": [
+          "hal_km/hal_rkp.c",
+          "hal_km/hal_keyslot.c",
+          "hal_km/hal_klad.c",
+          "hal_fapc/hal_fapc.c",
+          "crypto_osal/cfbb/boot/crypto_osal_lib.c",
+          "crypto_osal/cfbb/crypto_security.c",
+          "hal_cipher/pke/alg/drv_common_pke.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_sign_verify_common.c",
+          "hal_cipher/pke/arch/ecc_data_ram_addr.c",
+          "hal_cipher/pke/arch/rom_lib.c",
+          "hal_cipher/pke/alg/ecc_ec_fp_verify_common.c",
+          "hal_cipher/pke/alg/sm2_ec_fp_sign_verify.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DCRYPTO_CONFIG_ROMBOOT_ENV"
+        ]
+      },
+      "driver": {
+        "environment": "boot",
+        "sources": [
+          "romable/hash_romable.c",
+          "drv_flashboot_cipher.c",
+          "drv_flashboot_symc.c",
+          "drv_cipher/drv_code/crypto_drv_common.c",
+          "drv_km/drv_keyslot.c",
+          "drv_km/drv_klad.c",
+          "drv_fapc/drv_fapc.c",
+          "init/cfbb/crypto_curve_param.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_verify.c",
+          "drv_cipher/drv_pke_v5/drv_pke_ecdsa.c",
+          "drv_pke_weak_func.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_verify.c",
+          "drv_cipher/drv_pke_v5/sm2/drv_pke_sm2_dsa_hash.c",
+          "rom_drv_api/hal_rom_table.c",
+          "rom_drv_api/drv_rom_table.c",
+          "drv_rom_cipher.c"
+        ],
+        "defines": [
+          "-DCRYPTO_ERROR_ENV=6",
+          "-DPKE_SM2_SUPPORT"
+        ]
+      }
+    }
+  },
+  "callbacks": {
+    "os": {
+      "allocation_cases": 64,
+      "cache_cases": 48,
+      "cache_callbacks_per_operation": 1,
+      "identity_addresses": 6,
+      "sequential_pm_cases": 11,
+      "security_veto_id": 9
+    },
+    "boot_cache_only": {
+      "allocation_cases": 0,
+      "cache_cases": 48,
+      "cache_callbacks_per_operation": 0,
+      "identity_addresses": 0,
+      "sequential_pm_cases": 0,
+      "security_veto_id": 9
+    }
+  },
+  "source_function_count": 25,
+  "original_functions_sha256": {
+    "src/kernel/osal/src/liteos/osal_addr.c:osal_kmalloc_align": "4eaacd1a22ca046ae302aea1d07ea9d9449c5c551ee24f5ecd83c107c5d29d37",
+    "src/kernel/osal/src/liteos/osal_addr.c:osal_kfree": "bdb5be2800834f8c0e911121670b0f94ea89644432674e0a89723fc0a11adf4b",
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_init.c:inner_malloc_coherent": "82c0c70c0fbb3b25a29d2b202c862621cfd126e7a7ad5834b66daaf71eafb8cc",
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_init.c:inner_free_coherent": "2015abd00f7e73396e097288a8c3431c1ae7dde64c3e8d7b6a7bf0af74a5827a",
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_init.c:inner_get_phys_addr": "9c77f3b5d6c1ab0f1e2cc902b68a2a713da3e3e4b040ba4e56ffc514fa26b14f",
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_init.c:liteos_get_cpu_type": "9ccd574ca72614eac913c0107f0d153020155596fb1e89aec4170bffffa2ded3",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:crypto_smmu_support": "342b9b41b3cdd7f64afdae9f99043bd0b75a107dbc286aadb94b50a9fcf3bf9d",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:crypto_malloc_coherent": "72073fba146f5884186d1108d995d78d138ae9cb24f46b74d7a20a771987d8a8",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:crypto_malloc_mmz": "07a0ca99db5517c267ade6df9a3067eec4d8f7ea3c17a208038c69237a8fe3da",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:crypto_free_coherent": "6f35c3261a75b5742f798b50b5b1df8ddc5844b5c74bb6caf89a718afc086445",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:crypto_get_phys_addr": "20cc62fe4f6e28756f88d61887c9ec607b90da2cf57cef49840bbbaeccc143fb",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:drv_cipher_register_func": "d98aec2f47b0b07bc6395d82f73b4fa477bc2d35477e866b0c9b5524a59a1978",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c:crypto_get_cpu_type": "38311817530dbe4c0497072a4064f7e19cf0799865e86302c15a3625862e9854",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.c:crypto_preprocess": "bb9e0383414055b0ab3e61443ea51ea7a42edf0d3f143b0709dd6e624c0dd8bc",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.c:crypto_postprocess": "1c06fa918ba46129f69ced767d1f082d744297c678ba27b2d42b439beb056f94",
+    "src/kernel/osal/src/liteos/osal_cache.c:osal_dcache_region_clean": "4266944a30e125a2e57b11b94b781efa324a01f1f92dde111271a1b92110da6b",
+    "src/kernel/osal/src/liteos/osal_cache.c:osal_dcache_region_inv": "6e11ccbdf992782f307dcdd81647efb703f72304a85ab241b07c2813e7376bcd",
+    "src/kernel/osal/adapt/liteos/osal_debug_adapt.c:osal_dcache_flush_all": "f96d74e3a239878a8240b9e3e612d7236e42f2ca308cd40c9352b30967cf38fe",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.c:crypto_cache_flush": "631b4a864e3f4ccd5ecacf504cf49a501f2689d48a899ea217bb777ebc572ec9",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.c:crypto_cache_inv": "b4f0f47ee0237d4baab12cbb3e609651faa65a8fc04c73cfd3de26adae9ce176",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.c:crypto_cache_all": "1848763f9d03b8f5d552384360ab2d578bc2565049462932a1c807b0ae31158c",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/boot/crypto_osal_lib.c:crypto_cache_flush": "f5fa5ce7d688f9ac6d2b18e43f6b39dc7406065cc51e5a6a22f911967a3b5414",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/boot/crypto_osal_lib.c:crypto_cache_inv": "7767d30a76baaee93114c604e4f93f2fc5c414c737b0f4a4dce76d88a3406473",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/boot/crypto_osal_lib.c:crypto_cache_all": "379094f5b50c987542c715fd11e5122e921fc985d9ccb3dff0a669ca9496fbe0",
+    "src/drivers/chips/ws53/clock_recover/clock_recover.c:system_crg_cfg": "7c1dbcb557465333049cdc110f9433d498b3d8761cec91f7d9212f677acf8afd"
+  },
+  "auto_gate_writes": [
+    {
+      "symbol": "CHIP_AUTO_CG_CFG_1",
+      "address": 1459618800,
+      "value": 64
+    },
+    {
+      "symbol": "CHIP_AUTO_CG_CFG_2",
+      "address": 1459618804,
+      "value": 2560
+    },
+    {
+      "symbol": "M_CTL_RB_DAP_H2P_AUTOCG_BYPASS_REG",
+      "address": 1375732112,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_COM_BUS_LP_CFG_REG",
+      "address": 1375732736,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_DMA_AUTO_CG_CFG_REG",
+      "address": 1375736064,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_UART_AUTO_CG_CFG_REG",
+      "address": 1375736068,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_SPI_AUTO_CG_CFG_REG",
+      "address": 1375736072,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_SPI_SSI_CLK_AUTO_CG_CFG_REG",
+      "address": 1375736076,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_PWM_AUTO_CG_CFG_REG",
+      "address": 1375736080,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_SEC_AUTO_CG_CFG_REG",
+      "address": 1375736084,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_SDIO_AUTO_CG_CFG_REG",
+      "address": 1375736088,
+      "value": 0
+    },
+    {
+      "symbol": "M_CTL_RB_SPACC_COM_AUTO_CG_CFG_REG",
+      "address": 1375736092,
+      "value": 0
+    }
+  ],
+  "clock_host": {
+    "whole_word_writes": 48,
+    "seeds": 4,
+    "guard_words_per_case": 52
+  },
+  "sm_efuse_check_enabled": false,
+  "deep_sleep_veto_enabled": true,
+  "spacc_calc_crg_used": false,
+  "tools": {
+    "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+    "cmake": "cmake version 4.3.0"
+  },
+  "host_profile": {
+    "ub_sanitizer_trap": true,
+    "allocator_dfx_caller_branch": false,
+    "pm_atomic_operations": "sequential recorders; no concurrent or cross-core test",
+    "boot_audit": "weak cache defaults only; OS allocator is not a boot allocator"
+  },
+  "source_sha256": {
+    "src/drivers/drivers/driver/security_unified/init/cfbb/os/crypto_drv_init.c": "a7a7e1dba8a64f3e55441ebc16ce0ba559386acb9bee00561effbeac94f5047a",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c": "ea4b2bd83921a4e59e0e239704b8a8de161c346c04aad4a2362d18688457cc42",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_include/drv_common.h": "759dd9632489f335c98836d5af0393de87bb1ecf87afdf7a6daef9a8d04452cc",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/hal_include/hal_common.h": "23f37b976f331a0f76ef3c67ede71ee1ba24a0bdfc829820594ff0b306451b7a",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.c": "c84c36fea7622d59705930ea9dff7c73399edc117f1644f7645701749ec5b1ea",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/boot/crypto_osal_lib.c": "8f9b4d63a966b1e8d87da0a5af73895713be66ea703f1d96e594a520fbe6fa31",
+    "src/kernel/osal/src/liteos/osal_addr.c": "e65608c4bdfc214a909db3675d98a4d26ab915d86a83117f75dcd105442fbe00",
+    "src/kernel/osal/src/liteos/osal_cache.c": "4ad51931281b415a5b488926330560abaf94eced5324b387a1efe15a827e526a",
+    "src/kernel/osal/adapt/liteos/osal_debug_adapt.c": "9efc0067cb745e2aa52b11ce37ad112dfac8968837509d55ce480b4143134c68",
+    "src/drivers/chips/ws53/clock_recover/clock_recover.c": "1bc52568dee9ff46c7cdb4d97e67ba8a1a45cee3cd08803e1e84b185ca379507",
+    "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/build/config/target_config/ws53/target_config.py": "e03e623efdc8b745b5124be7ee697eec698b8c3261e0603ff1ac3e71916e9a03",
+    "src/build/config/target_config/ws53/config.py": "11db315747f46f529e8ded034ddc87d1d6a8c21c6b52b6dd192732f7b0eb737d",
+    "src/drivers/drivers/hal/security_unified/CMakeLists.txt": "a164afad4017b8c86191e8fec09b6bd0a811e41938abb3960359771461db546f",
+    "src/drivers/drivers/driver/security_unified/CMakeLists.txt": "4e80c47a3a132e9147015da674be9cc62e89afe511f746ee0f7f42c5d4bd70c5",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_osal_adapt.h": "f0d7fad3b12ebcffa1d5cda5b93f11f83f211d176c92ca80eefb8e64f4a52b33",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_spacc_reg.h": "3d4630e695abebcd0e15554c1b74465b60e681f6b5208ce8d8adc186916b5f8e",
+    "src/application/ws53/ws53_application/main.c": "4511fa9dec6b2c31fe26d53820f7f40fddec23f9841fb0cb5bd8bf28e927d0f7",
+    "src/middleware/chips/ws53/pm/pm_veto/pm_veto_porting.h": "4a8bc55fa1582811ea6ffa9758f933e15089f85ab90477a3fccfbe5902747937",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_romboot.config": "2d493241606d639f673a27842a8e9e40eb5d1d8fa01b179b6daf7c477e4a517a",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_ssb.config": "af46f86b67ba171019d8382833f24f1de1d43759ec94a11ef39e6665aeedd5ee",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_loaderboot.config": "5a2caf7950d5f220d10370caaebb8f6e7bba8f761640240112c3a98eb9897e71",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_flashboot.config": "fa5e18812d38c62fbba0b4b7f9960fa1462df3968787e85adcd4a9cfafabfecf",
+    "src/drivers/drivers/hal/security_unified/crypto_osal/cfbb/os/crypto_osal_lib.h": "37115c4f3930af4223e9cfeabdb4bae982b211f64d0aa94bff9b1d5bd3e6f043"
+  },
+  "host_only": true,
+  "hardware_accessed": false,
+  "physical_coherence_proved": false,
+  "dma_reachability_proved": false,
+  "ownership_proved": false,
+  "reset_or_gate_proved": false,
+  "limitations": [
+    "Allocator is aligned ordinary LiteOS heap, mem_type ignored by port",
+    "Identity pointer translation does not establish DMA reachability",
+    "OS cache callbacks forward to ArchDCache*; actual instruction implementation not executed",
+    "Boot weak no-op cache hooks can be overridden; this is not proof of the linked board image",
+    "Auto-gating zero writes are source-level settings, not stop/drain or gate-disable proof",
+    "No physical memory, secret/key material, eFuse or permanent settings accessed"
+  ]
+}

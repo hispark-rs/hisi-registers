@@ -1,0 +1,749 @@
+{
+  "date": "2026-10-24",
+  "chip": "WS53",
+  "core": "application",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart_serial": "5CB7019921",
+  "flash_written": false,
+  "profile": "MCU_MODE_1/inherited32MHz/UART2",
+  "elf_sha256": "bdcf0d3374610c99c0f207ef0d289a81402b769a2f1cfe7d4399ce5955e8176a",
+  "runs": [
+    {
+      "name": "uart-tx-irq-probe-02",
+      "report_sha256": "e99d42ae3a3dd63330e988ebe07deacb1d23bc9050647a9db8c9e3b8101c69a0",
+      "uart_sha256": "e01e820ad1509132f46b078500394b54f2da3fb606e885a729c302a1e947d20f",
+      "observation": {
+        "passed": true,
+        "observation_only": true,
+        "inherited": [
+          2,
+          0,
+          1,
+          1,
+          0,
+          31,
+          0,
+          5
+        ],
+        "rows": [
+          [
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            1,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            3,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            4,
+            1,
+            1,
+            0,
+            64,
+            0,
+            8
+          ],
+          [
+            0,
+            5,
+            2,
+            1,
+            0,
+            0,
+            64,
+            8
+          ],
+          [
+            0,
+            6,
+            2,
+            1,
+            0,
+            0,
+            64,
+            8
+          ],
+          [
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            3,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            4,
+            1,
+            1,
+            0,
+            64,
+            64,
+            24
+          ],
+          [
+            1,
+            5,
+            2,
+            1,
+            0,
+            2,
+            0,
+            24
+          ],
+          [
+            1,
+            6,
+            2,
+            1,
+            0,
+            0,
+            0,
+            24
+          ]
+        ],
+        "tx_irq_profile_match": true,
+        "fifo_empty_but_line_busy": true,
+        "fields": [
+          "programmable",
+          "phase",
+          "id_first",
+          "id_second",
+          "raw_status",
+          "tx_fifo_count",
+          "line_status",
+          "interrupt_enable"
+        ]
+      }
+    },
+    {
+      "name": "uart-tx-irq-probe-03",
+      "report_sha256": "f1be784c9ae699e66b762c40f220480b1764c7385256ef4054d38bd49020a34c",
+      "uart_sha256": "e01e820ad1509132f46b078500394b54f2da3fb606e885a729c302a1e947d20f",
+      "observation": {
+        "passed": true,
+        "observation_only": true,
+        "inherited": [
+          2,
+          0,
+          1,
+          1,
+          0,
+          31,
+          0,
+          5
+        ],
+        "rows": [
+          [
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            1,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            3,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            4,
+            1,
+            1,
+            0,
+            64,
+            0,
+            8
+          ],
+          [
+            0,
+            5,
+            2,
+            1,
+            0,
+            0,
+            64,
+            8
+          ],
+          [
+            0,
+            6,
+            2,
+            1,
+            0,
+            0,
+            64,
+            8
+          ],
+          [
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            3,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            4,
+            1,
+            1,
+            0,
+            64,
+            64,
+            24
+          ],
+          [
+            1,
+            5,
+            2,
+            1,
+            0,
+            2,
+            0,
+            24
+          ],
+          [
+            1,
+            6,
+            2,
+            1,
+            0,
+            0,
+            0,
+            24
+          ]
+        ],
+        "tx_irq_profile_match": true,
+        "fifo_empty_but_line_busy": true,
+        "fields": [
+          "programmable",
+          "phase",
+          "id_first",
+          "id_second",
+          "raw_status",
+          "tx_fifo_count",
+          "line_status",
+          "interrupt_enable"
+        ]
+      }
+    },
+    {
+      "name": "uart-tx-irq-probe-04",
+      "report_sha256": "40579aa2c44d53db8c00a7818d9347b49f00a143480a0d7267de07ce154d1d4a",
+      "uart_sha256": "e01e820ad1509132f46b078500394b54f2da3fb606e885a729c302a1e947d20f",
+      "observation": {
+        "passed": true,
+        "observation_only": true,
+        "inherited": [
+          2,
+          0,
+          1,
+          1,
+          0,
+          31,
+          0,
+          5
+        ],
+        "rows": [
+          [
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            1,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            3,
+            2,
+            1,
+            0,
+            0,
+            192,
+            8
+          ],
+          [
+            0,
+            4,
+            1,
+            1,
+            0,
+            64,
+            0,
+            8
+          ],
+          [
+            0,
+            5,
+            2,
+            1,
+            0,
+            0,
+            64,
+            8
+          ],
+          [
+            0,
+            6,
+            2,
+            1,
+            0,
+            0,
+            64,
+            8
+          ],
+          [
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            3,
+            2,
+            1,
+            0,
+            0,
+            128,
+            24
+          ],
+          [
+            1,
+            4,
+            1,
+            1,
+            0,
+            64,
+            64,
+            24
+          ],
+          [
+            1,
+            5,
+            2,
+            1,
+            0,
+            2,
+            0,
+            24
+          ],
+          [
+            1,
+            6,
+            2,
+            1,
+            0,
+            0,
+            0,
+            24
+          ]
+        ],
+        "tx_irq_profile_match": true,
+        "fifo_empty_but_line_busy": true,
+        "fields": [
+          "programmable",
+          "phase",
+          "id_first",
+          "id_second",
+          "raw_status",
+          "tx_fifo_count",
+          "line_status",
+          "interrupt_enable"
+        ]
+      }
+    }
+  ],
+  "source_helper_check": {
+    "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+    "source_sha256": {
+      "src/drivers/drivers/hal/uart/v151/hal_uart_v151.c": "2732976b0de06e07895f5e281646c65f217d59403d0edf6182d6f6355886a397",
+      "src/drivers/drivers/hal/uart/v151/hal_uart_v151_regs_def.h": "d569201c4b5d01d1e50b6cfe0f04dd073b1a9fee687f93f8587571a34d045b87",
+      "src/drivers/drivers/hal/uart/v151/hal_uart_v151_regs_op.h": "0826bfc46053a276800b5878c91fc2958688276c1ce6eeeb226988de6911c4ed"
+    },
+    "helper_cases": 384,
+    "acknowledgement_helper_ports": 3,
+    "svd_read_action": "modifyExternal",
+    "hardware_verified": false,
+    "hardware_evidence": "evidence/ws53-uart-tx-irq-hil.json",
+    "not_proven": [
+      "Host RAM does not model IIR read side effects",
+      "UART0/1 TX IRQ and other thresholds need physical tests",
+      "Clock loss, exact interrupt latency and arbitrary concurrent traffic unqualified"
+    ]
+  },
+  "findings": [
+    "IIR read returning2 acknowledges TX notification; second IIR read returns1",
+    "Disable then enable TX interrupt rearms empty-FIFO IRQ without new data",
+    "PTIM0 triggers at empty FIFO; PTIM1 inherited threshold triggers at2 queued bytes",
+    "With FIFO and PTIM enabled LSR.THRE_S reports full; otherwise reports empty",
+    "TX IRQ can precede serializer completion; flush must check TX_EMPTY_S"
+  ],
+  "limitations": [
+    "Only UART2 physically qualified; UART0/1 and other threshold levels model/source only",
+    "Exact interrupt timing, clock faults and production control-core handoff unqualified"
+  ],
+  "initial_failed_attempt": {
+    "name": "uart-tx-irq-probe-01",
+    "reason": "Fixture incorrectly required inherited IER=0; actual inherited RX IER=5. Corrected fixture saves/masks/restores it.",
+    "recovered": true
+  },
+  "same_elf_qemu": {
+    "mode": "tx-irq-probe",
+    "qemu_passed": true,
+    "qemu_clean": true,
+    "qemu_uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 TXIRQ SAMPLE 00000002000000000000000100000001000000000000001f0000000000000005\r\nWS53 TXIRQ SAMPLE 000000000000000000000002000000010000000000000000000000c000000008\r\nWS53 TXIRQ SAMPLE 000000000000000100000002000000010000000000000000000000c000000008\r\nWS53 TXIRQ SAMPLE 000000000000000200000002000000010000000000000000000000c000000008\r\nWS53 TXIRQ SAMPLE 000000000000000300000002000000010000000000000000000000c000000008\r\nWS53 TXIRQ DATA UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU\r\nWS53 TXIRQ SAMPLE 0000000000000004000000010000000100000000000000400000000000000008\r\nWS53 TXIRQ SAMPLE 0000000000000005000000020000000100000000000000000000004000000008\r\nWS53 TXIRQ BYTE Z\r\nWS53 TXIRQ SAMPLE 0000000000000006000000020000000100000000000000000000004000000008\r\nWS53 TXIRQ SAMPLE 0000000100000000000000020000000100000000000000000000008000000018\r\nWS53 TXIRQ SAMPLE 0000000100000001000000020000000100000000000000000000008000000018\r\nWS53 TXIRQ SAMPLE 0000000100000002000000020000000100000000000000000000008000000018\r\nWS53 TXIRQ SAMPLE 0000000100000003000000020000000100000000000000000000008000000018\r\nWS53 TXIRQ DATA UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU\r\nWS53 TXIRQ SAMPLE 0000000100000004000000010000000100000000000000400000004000000018\r\nWS53 TXIRQ SAMPLE 0000000100000005000000020000000100000000000000020000000000000018\r\nWS53 TXIRQ BYTE Z\r\nWS53 TXIRQ SAMPLE 0000000100000006000000020000000100000000000000000000000000000018\r\nWS53 TXIRQ OBSERVED modes=2 samples=14 rearm=6 restored=1\r\n",
+    "qemu_tx_irq": {
+      "passed": true,
+      "observation_only": true,
+      "inherited": [
+        2,
+        0,
+        1,
+        1,
+        0,
+        31,
+        0,
+        5
+      ],
+      "rows": [
+        [
+          0,
+          0,
+          2,
+          1,
+          0,
+          0,
+          192,
+          8
+        ],
+        [
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          192,
+          8
+        ],
+        [
+          0,
+          2,
+          2,
+          1,
+          0,
+          0,
+          192,
+          8
+        ],
+        [
+          0,
+          3,
+          2,
+          1,
+          0,
+          0,
+          192,
+          8
+        ],
+        [
+          0,
+          4,
+          1,
+          1,
+          0,
+          64,
+          0,
+          8
+        ],
+        [
+          0,
+          5,
+          2,
+          1,
+          0,
+          0,
+          64,
+          8
+        ],
+        [
+          0,
+          6,
+          2,
+          1,
+          0,
+          0,
+          64,
+          8
+        ],
+        [
+          1,
+          0,
+          2,
+          1,
+          0,
+          0,
+          128,
+          24
+        ],
+        [
+          1,
+          1,
+          2,
+          1,
+          0,
+          0,
+          128,
+          24
+        ],
+        [
+          1,
+          2,
+          2,
+          1,
+          0,
+          0,
+          128,
+          24
+        ],
+        [
+          1,
+          3,
+          2,
+          1,
+          0,
+          0,
+          128,
+          24
+        ],
+        [
+          1,
+          4,
+          1,
+          1,
+          0,
+          64,
+          64,
+          24
+        ],
+        [
+          1,
+          5,
+          2,
+          1,
+          0,
+          2,
+          0,
+          24
+        ],
+        [
+          1,
+          6,
+          2,
+          1,
+          0,
+          0,
+          0,
+          24
+        ]
+      ],
+      "tx_irq_profile_match": true,
+      "fifo_empty_but_line_busy": true,
+      "fields": [
+        "programmable",
+        "phase",
+        "id_first",
+        "id_second",
+        "raw_status",
+        "tx_fifo_count",
+        "line_status",
+        "interrupt_enable"
+      ]
+    },
+    "qemu_model_assumptions": [
+      "ws53-uart: assumed byte DMA requests, FIFO64 and timed serializer",
+      "ws53-uart: assumed byte DMA requests, FIFO64 and timed serializer",
+      "ws53-uart: assumed byte DMA requests, FIFO64 and timed serializer"
+    ],
+    "qemu_physical_timing_qualified": false,
+    "comparison_scope": "14 observed TX IRQ rows; inherited in-flight console occupancy is timing-dependent",
+    "elf_sha256": "bdcf0d3374610c99c0f207ef0d289a81402b769a2f1cfe7d4399ce5955e8176a",
+    "hardware_accessed": false
+  }
+}

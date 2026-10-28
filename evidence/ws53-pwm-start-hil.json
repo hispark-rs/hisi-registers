@@ -1,0 +1,393 @@
+{
+  "kind": "silicon contrast; single-pad bounded RAM takeover",
+  "date": "2026-10-24",
+  "cases": [
+    {
+      "name": "pwm-finite-hil-01",
+      "elf_sha256": "63da65e7178ef38b5173cd48ce98bbc0871d1bf96a37814851334dfedf656baa",
+      "raw_sha256": "13139c60c9c545aa9d9089426157a5d5ccd769365cd6b364842feac4e39b040e",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000000\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000000\r\nWS53 FAIL pwm_finite observed\r\n",
+      "waveform": [
+        {
+          "stage": 0,
+          "passed": false,
+          "expected_pulses": 8,
+          "edge_count": 0,
+          "rising_edges": 0,
+          "initial_level": 0,
+          "final_level": 0,
+          "quiet_tail_seconds": 0,
+          "mean_period_seconds": null,
+          "mean_high_seconds": null,
+          "edges_first128": [],
+          "begin_sample": 28503187,
+          "end_sample": 29455331
+        },
+        {
+          "stage": 1,
+          "passed": false,
+          "expected_pulses": 16,
+          "edge_count": 0,
+          "rising_edges": 0,
+          "initial_level": 0,
+          "final_level": 0,
+          "quiet_tail_seconds": 0,
+          "mean_period_seconds": null,
+          "mean_high_seconds": null,
+          "edges_first128": [],
+          "begin_sample": 30307599,
+          "end_sample": 31259853
+        }
+      ],
+      "passed": false,
+      "recovered": true
+    },
+    {
+      "name": "pwm0-control-after-finite-01",
+      "elf_sha256": "c170ee7009de810d3b486968269647e29efcad8cbdba8ff100ca02dfa0273549",
+      "raw_sha256": "b009a649991e7a285ae02100dc8e4c92ef5767dc5b7b22e103224e8c5ae5cad6",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM0 STAGE 0\r\nWS53 PWM0 STAGE 1\r\nWS53 PWM0 STAGE 2\r\nWS53 PWM0 STAGE 3\r\nWS53 PWM0 STAGE 4\r\nWS53 PWM0 STAGE 5\r\nWS53 PASS pwm0 pad=47 stages=6 restore=1\r\n",
+      "waveform": [
+        {
+          "stage": 0,
+          "channel": 11,
+          "begin_sample": 28245302,
+          "end_sample": 28547504,
+          "expected_period_seconds": 0.0001,
+          "expected_duty": 0.25,
+          "high_fraction": 0.24982627514046896,
+          "edge_count": 604,
+          "cycles": 301,
+          "mean_period_seconds": 9.999933554817276e-05,
+          "min_period_seconds": 9.99e-05,
+          "max_period_seconds": 0.0001,
+          "mean_high_seconds": 2.499933774834437e-05,
+          "passed": true
+        },
+        {
+          "stage": 1,
+          "channel": 11,
+          "begin_sample": 29149237,
+          "end_sample": 29452351,
+          "expected_period_seconds": 0.0001,
+          "expected_duty": 0.5,
+          "high_fraction": 0.5001847489723339,
+          "edge_count": 606,
+          "cycles": 302,
+          "mean_period_seconds": 9.999933774834438e-05,
+          "min_period_seconds": 9.99e-05,
+          "max_period_seconds": 0.0001,
+          "mean_high_seconds": 4.999900662251656e-05,
+          "passed": true
+        },
+        {
+          "stage": 2,
+          "channel": 11,
+          "begin_sample": 30054771,
+          "end_sample": 30357114,
+          "expected_period_seconds": 0.0001,
+          "expected_duty": 0.75,
+          "high_fraction": 0.7502439282536721,
+          "edge_count": 605,
+          "cycles": 302,
+          "mean_period_seconds": 9.999933774834438e-05,
+          "min_period_seconds": 9.99e-05,
+          "max_period_seconds": 0.0001,
+          "mean_high_seconds": 7.499933774834437e-05,
+          "passed": true
+        },
+        {
+          "stage": 3,
+          "channel": 11,
+          "begin_sample": 30959156,
+          "end_sample": 31261192,
+          "expected_period_seconds": 0.0001,
+          "expected_duty": 0,
+          "high_fraction": 0.0,
+          "edge_count": 0,
+          "cycles": 0,
+          "mean_period_seconds": null,
+          "min_period_seconds": null,
+          "max_period_seconds": null,
+          "mean_high_seconds": null,
+          "passed": true
+        },
+        {
+          "stage": 4,
+          "channel": 11,
+          "begin_sample": 31862585,
+          "end_sample": 32164484,
+          "expected_period_seconds": 0.0001,
+          "expected_duty": 1,
+          "high_fraction": 1.0,
+          "edge_count": 0,
+          "cycles": 0,
+          "mean_period_seconds": null,
+          "min_period_seconds": null,
+          "max_period_seconds": null,
+          "mean_high_seconds": null,
+          "passed": true
+        },
+        {
+          "stage": 5,
+          "channel": 11,
+          "begin_sample": 32766080,
+          "end_sample": 33068155,
+          "expected_period_seconds": 0.0001,
+          "expected_duty": 0,
+          "high_fraction": 0.0,
+          "edge_count": 0,
+          "cycles": 0,
+          "mean_period_seconds": null,
+          "min_period_seconds": null,
+          "max_period_seconds": null,
+          "mean_high_seconds": null,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "recovered": true
+    },
+    {
+      "name": "pwm-finite-delay-hil-01",
+      "elf_sha256": "18519ca56b13f1f14cb1e054e3f6dbcc7633c4d0ae324d0da34e4602e4487656",
+      "raw_sha256": "1d2411a8cfd12989a8f86fb0a913a2e9be01e16698b8b2f5b2693314ebf4b231",
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 PWM FINITE STAGE 0\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 1\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PWM FINITE STAGE 2\r\nWS53 PWM FINITE START 0\r\nWS53 PWM FINITE STAGE 3\r\nWS53 PWM FINITE EVENTS 000000000001\r\nWS53 PASS pwm_finite bursts=2 poll=1 restore=1\r\n",
+      "waveform": [
+        {
+          "stage": 0,
+          "passed": true,
+          "expected_pulses": 8,
+          "edge_count": 16,
+          "rising_edges": 8,
+          "initial_level": 0,
+          "final_level": 0,
+          "quiet_tail_seconds": 0.0843558,
+          "mean_period_seconds": 0.0001,
+          "mean_high_seconds": 5e-05,
+          "edges_first128": [
+            [
+              29217434,
+              1
+            ],
+            [
+              29217934,
+              0
+            ],
+            [
+              29218434,
+              1
+            ],
+            [
+              29218934,
+              0
+            ],
+            [
+              29219434,
+              1
+            ],
+            [
+              29219934,
+              0
+            ],
+            [
+              29220434,
+              1
+            ],
+            [
+              29220934,
+              0
+            ],
+            [
+              29221434,
+              1
+            ],
+            [
+              29221934,
+              0
+            ],
+            [
+              29222434,
+              1
+            ],
+            [
+              29222934,
+              0
+            ],
+            [
+              29223434,
+              1
+            ],
+            [
+              29223934,
+              0
+            ],
+            [
+              29224434,
+              1
+            ],
+            [
+              29224934,
+              0
+            ]
+          ],
+          "begin_sample": 29115465,
+          "end_sample": 30068492
+        },
+        {
+          "stage": 1,
+          "passed": true,
+          "expected_pulses": 16,
+          "edge_count": 32,
+          "rising_edges": 16,
+          "initial_level": 0,
+          "final_level": 0,
+          "quiet_tail_seconds": 0.0836049,
+          "mean_period_seconds": 0.0001,
+          "mean_high_seconds": 5e-05,
+          "edges_first128": [
+            [
+              31024578,
+              1
+            ],
+            [
+              31025078,
+              0
+            ],
+            [
+              31025578,
+              1
+            ],
+            [
+              31026078,
+              0
+            ],
+            [
+              31026578,
+              1
+            ],
+            [
+              31027078,
+              0
+            ],
+            [
+              31027578,
+              1
+            ],
+            [
+              31028078,
+              0
+            ],
+            [
+              31028578,
+              1
+            ],
+            [
+              31029078,
+              0
+            ],
+            [
+              31029578,
+              1
+            ],
+            [
+              31030078,
+              0
+            ],
+            [
+              31030578,
+              1
+            ],
+            [
+              31031078,
+              0
+            ],
+            [
+              31031578,
+              1
+            ],
+            [
+              31032078,
+              0
+            ],
+            [
+              31032578,
+              1
+            ],
+            [
+              31033078,
+              0
+            ],
+            [
+              31033578,
+              1
+            ],
+            [
+              31034078,
+              0
+            ],
+            [
+              31034578,
+              1
+            ],
+            [
+              31035078,
+              0
+            ],
+            [
+              31035578,
+              1
+            ],
+            [
+              31036078,
+              0
+            ],
+            [
+              31036578,
+              1
+            ],
+            [
+              31037078,
+              0
+            ],
+            [
+              31037578,
+              1
+            ],
+            [
+              31038078,
+              0
+            ],
+            [
+              31038578,
+              1
+            ],
+            [
+              31039078,
+              0
+            ],
+            [
+              31039578,
+              1
+            ],
+            [
+              31040078,
+              0
+            ]
+          ],
+          "begin_sample": 30922239,
+          "end_sample": 31876127
+        }
+      ],
+      "passed": true,
+      "recovered": true
+    }
+  ],
+  "conclusion": "Immediate EN-clear after first START lost both finite bursts; inserting10us before EN-clear restored exact8/16 pulses and sticky completion flags. Continuous control on the same pad passed.",
+  "limits": [
+    "No exact acceptance latency measured",
+    "Only group0/channel0/MIO21 at2MHz counter tested",
+    "Guard is not a general upstream clock or hardware-completion guarantee"
+  ],
+  "flash_written": false
+}

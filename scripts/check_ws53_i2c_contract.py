@@ -12,6 +12,7 @@ import re
 import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
+from check_ws53_uart_dma_contract import function
 
 PIN = '163d9150ab94a02d09a05f623351f9facee3025e'
 HAL = 'src/drivers/drivers/hal/i2c/'
@@ -62,6 +63,16 @@ def main():
         '#include <stdbool.h>', '#include <string.h>']
     source += ['#include '+json.dumps(str(sdk/p)) for p in
         (HAL+'v151/hal_i2c_v151_regs_op.c', HAL+'v151/hal_i2c_v151_master.c', PORT+'i2c/i2c_porting.c')]
+    common = inputs[HAL+'v151/hal_i2c_v151_comm.c'].decode()
+    require('# CONFIG_I2C_ADDR_VALID_CHECK is not set' in cfg, 'address permission profile changed')
+    source += [re.search(r'^#define HAL_I2C_VALID_ADDR_VALUE_MASK\s+.*$', common, re.M).group(),
+               re.search(r'^static hal_i2c_v151_ctrl_info_t g_hal_i2c_ctrl_info.*?;', common, re.M).group()]
+    for name in ('hal_i2c_v151_get_data_addr', 'hal_i2c_v151_get_address_attr',
+                 'hal_i2c_v151_get_address_cfg', 'hal_i2c_v151_get_ctrl_info',
+                 'hal_i2c_v151_com_clr_int', 'hal_i2c_v151_com_prepare_int',
+                 'hal_i2c_v151_com_restore_int', 'hal_i2c_v151_prepare_int_tx',
+                 'hal_i2c_v151_prepare_int_rx', 'hal_i2c_v151_restore_int_rx'):
+        source += [function(common, name)]
     field_checks = []
     count = 0
     # Parse original C unions to find member spellings (including ss_b/fs_b).
@@ -131,6 +142,43 @@ int main(void) {
     }
     hal_i2c_v151_regs_init();
     for (unsigned bus=0;bus<2;bus++) {
+        uint32_t data_addr=0;
+        assert(hal_i2c_v151_get_data_addr(bus,(uintptr_t)&data_addr)==ERRCODE_SUCC);
+        assert(data_addr==(uint32_t)(uintptr_t)&backing[bus].data_cmd);
+        // Original RMW helpers, including preservation of the other enable.
+        backing[bus].dma_cr=0xa5a50000;
+        hal_i2c_v151_set_receive_dma_en(bus,true); assert(backing[bus].dma_cr==0xa5a50001);
+        hal_i2c_v151_set_transmit_dma_en(bus,true); assert(backing[bus].dma_cr==0xa5a50003);
+        hal_i2c_v151_set_receive_dma_en(bus,false); assert(backing[bus].dma_cr==0xa5a50002);
+        hal_i2c_v151_set_transmit_dma_en(bus,false); assert(backing[bus].dma_cr==0xa5a50000);
+        hal_i2c_v151_set_transmit_dma_level(bus,HAL_I2C_V151_TX_DMA_TL);
+        hal_i2c_v151_set_receive_dma_level(bus,HAL_I2C_V151_RX_DMA_TL-1);
+        assert(backing[bus].dma_tdlr==4 && backing[bus].dma_rdlr==3);
+        // Actual master prepare/restore, including address configuration.
+        // Ordinary target addresses permit both source permission values;
+        // the read helper's SLAVE spelling does not switch controller role.
+        for(unsigned ten=0;ten<2;ten++) {
+            hal_i2c_prepare_config_t cfg={.operation_type=I2C_DATA_OPERATION_TYPE_DMA,
+                                         .addr=ten?0x7a50:0x50};
+            backing[bus].dma_cr=0x80000000;
+            assert(hal_i2c_v151_master_write_prepeare(bus,(uintptr_t)&cfg)==ERRCODE_SUCC);
+            assert(backing[bus].dma_cr==0x80000002 && backing[bus].dma_tdlr==4);
+            assert((backing[bus].tar&0x3ff)==(ten?0x250:0x50));
+            assert(((backing[bus].con>>4)&1)==ten && (backing[bus].enable&1));
+            assert(hal_i2c_v151_get_ctrl_info(bus)->write_operate_type==I2C_DATA_OPERATION_TYPE_DMA);
+            assert(hal_i2c_v151_master_write_restore(bus,0)==ERRCODE_SUCC);
+            assert(backing[bus].dma_cr==0x80000000);
+            assert(hal_i2c_v151_master_read_prepeare(bus,(uintptr_t)&cfg)==ERRCODE_SUCC);
+            assert(backing[bus].dma_cr==0x80000003 && backing[bus].dma_tdlr==4 && backing[bus].dma_rdlr==3);
+            assert((backing[bus].tar&0x3ff)==(ten?0x250:0x50));
+            assert(hal_i2c_v151_get_ctrl_info(bus)->read_operate_type==I2C_DATA_OPERATION_TYPE_DMA);
+            assert(hal_i2c_v151_master_read_restore(bus,0)==ERRCODE_SUCC);
+            assert(backing[bus].dma_cr==0x80000000);
+        }
+        hal_i2c_prepare_config_t bad={.operation_type=I2C_DATA_OPERATION_TYPE_DMA,.addr=0x8000};
+        i2c_v151_regs_t before=backing[bus];
+        assert(hal_i2c_v151_master_read_prepeare(bus,(uintptr_t)&bad)==ERRCODE_I2C_PERMISSION_INVALID);
+        assert(memcmp(&before,&backing[bus],sizeof(before))==0);
         hal_i2c_v151_clr_all_int(bus); assert(backing[bus].clr_int==1);
         hal_i2c_v151_unmask_int(bus,I2C_V151_INT_TX_ABRT);
         assert(backing[bus].intr_mask==64);
@@ -208,6 +256,10 @@ int main(void) {
                   'all restart/stop command flag combinations','write-one clear-all command',
                   'malformed selective clear masks','wrong-slot selective clear helper',
                   'enable RMW replays abort','out-of-range speed/16-bit count truncation'],
+        'dma_helpers':{'data_offset':'0x1c','tx_enable_bit':1,'rx_enable_bit':0,
+                       'tx_threshold':4,'rx_threshold':3,'other_enable_preserved':True,
+                       'master_prepare_restore_sequences':8,'address_permission_failures':2,
+                       'physical_handshake_verified':False},
         'selective_clear_layout_verified':False,'hardware_accessed':False,
         'rom_or_installed_firmware_verified':False},indent=2))
 

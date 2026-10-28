@@ -1,0 +1,242 @@
+// SDK 163d9150 security_unified_porting.h, hal_spacc_reg.h, hal_hash.c and
+// hal_symc.c::inner_spacc_interrupt_enable. Source/ABI, not silicon evidence.
+// One shared controller: register definitions do not assign SYMC or control-core
+// resources to the application. No reset values or transaction-drain promises.
+addrmap ws53_spacc_regs {
+    hisi_reset_unverified = true;
+    hisi_evidence = "SDK-source 163d9150 unified-security SPACC HASH/SYMC subset; evidence/ws53-hash-control.json, ws53-symc-control.json and ws53-spacc-layout.json; shared application/control-core ownership, clock and DMA drain unqualified";
+    reg {
+        name = "Shared SPACC interrupt gates; SDK SYMC initialization selects REE or TEE. HPP is a header field, not an established WS53 IRQ route";
+        field { sw=rw; hw=r; } ree[0:0];
+        field { sw=rw; hw=r; } tee[4:4];
+        field { sw=rw; hw=r; } hpp[8:8];
+    } INTERRUPT_ENABLE @ 0x4;
+    reg {
+        name = "SDK polls the selected channel clear-finish bit; does not prove outstanding bus writes have drained";
+        field { sw=r; hw=w; } channel1[1:1];
+        field { sw=r; hw=w; } channel2[2:2];
+    } HASH_CLEAR_STATUS @ 0x14;
+    reg {
+        hisi_svd_alternate_register = "HASH_CLEAR_STATUS";
+        name = "SDK writes the selected clear-finish bit to acknowledge; silicon W1C and reset semantics unknown";
+        field { sw=w; hw=r; } channel1[1:1];
+        field { sw=w; hw=r; } channel2[2:2];
+    } HASH_CLEAR_ACK @ 0x14;
+    reg {
+        name = "Hardware channel owner nibbles: SDK requests 1 REE or 2 TEE and checks readback. Preserve other channels; not a software-only lock or a single-hart critical section";
+        field { sw=rw; hw=rw; } channel1_owner[7:4];
+        field { sw=rw; hw=rw; } channel2_owner[11:8];
+    } HASH_LOCK @ 0x40;
+    reg {
+        name = "Request channel clear. SDK lock incorrectly ignores timeout; no subsequent publication/reclamation is justified by a timed-out request";
+        field { sw=w; hw=r; } channel1[1:1];
+        field { sw=w; hw=r; } channel2[2:2];
+    } HASH_CLEAR_REQUEST @ 0x68;
+    regfile {
+        name = "HASH software profile: array index0 is SDK channel1, index1 is channel2. SDK counts do not establish silicon availability or exclusive ownership";
+        reg {
+            name = "Channel control: SDK writes a full word with enable and security selector 0xa nonsecure or 0x5 secure; transitions and drain are unqualified";
+            field { sw=rw; hw=r; } security[11:8];
+            field { sw=rw; hw=r; } enable[31:31];
+        } CONTROL @ 0;
+        reg {
+            name = "SDK state configuration: algorithm0xa SHA1,0xb SHA2,0xc SM3; mode0/1/2/3 for SHA2 224/256/384/512. Layout does not validate algorithms or grant a keyslot";
+            field { sw=rw; hw=r; } keyslot[3:0];
+            field { sw=rw; hw=r; } hmac[9:9];
+            field { sw=rw; hw=r; } algorithm[19:16];
+            field { sw=rw; hw=r; } mode[23:20];
+        } KEY_CONTROL @ 0x10;
+        reg {
+            name = "Descriptor base high word; SDK writes zero. Implemented address width and nonzero high addresses are unknown";
+            field { sw=rw; hw=r; } value[31:0];
+        } NODE_BASE_HIGH @ 0x20;
+        reg { field { sw=rw; hw=r; } address[31:0]; } NODE_BASE_LOW @ 0x24;
+        reg {
+            name = "SDK programs two16-byte descriptors; this full-word source access is not a validated depth range";
+            field { sw=rw; hw=r; } value[31:0];
+        } NODE_DEPTH @ 0x2c;
+        reg {
+            name = "Submission pointer read view. SDK increments low8 bits modulo its configured depth; preserve unmodeled upper bits when constructing a submission";
+            field { sw=r; hw=w; } pointer[7:0];
+        } WRITE_POINTER @ 0x30;
+        reg {
+            hisi_svd_alternate_register = "WRITE_POINTER";
+            name = "DMA submission command, not ordinary mutable storage: SDK writes preserved readback with updated low8-bit pointer after barrier/cache-flush. No stop/drain/ownership guarantee";
+            field { sw=w; hw=r; } value[31:0];
+        } SUBMIT @ 0x30;
+        reg { field { sw=r; hw=w; } pointer[7:0]; } READ_POINTER @ 0x34;
+        reg {
+            name = "SDK polls remaining data after pointers match and a delay; zero alone is not a bus-drain or safe-memory-reclamation proof";
+            field { sw=r; hw=w; } value[31:0];
+        } DATA_LENGTH @ 0xc0;
+    } HASH_CHANNEL[2] @ 0x5100 += 0x100;
+    regfile {
+        name = "Read-only interleaved security-domain diagnostics: legacy HASH_ERROR accessor name retained; index0 TEE,index1 REE. HASH CAUSE/STATUS addresses unchanged; SYMC views occupy preceding eight bytes. No error-clear commands";
+        reg {
+            field { sw=r; hw=w; } destination_security[0:0];
+            field { sw=r; hw=w; } source_security[1:1];
+            field { sw=r; hw=w; } algorithm[2:2];
+            field { sw=r; hw=w; } invalid_algorithm[3:3];
+            field { sw=r; hw=w; } decrypt[4:4];
+            field { sw=r; hw=w; } sc[6:6];
+            field { sw=r; hw=w; } key_size[7:7];
+            field { sw=r; hw=w; } key_information[16:16];
+            field { sw=r; hw=w; } tee_only[17:17];
+            field { sw=r; hw=w; } aidsp[18:18];
+        } SYMC_CAUSE @ 0;
+        reg { field { sw=r; hw=w; } channel[19:16]; } SYMC_STATUS @ 4;
+        reg {
+            field { sw=r; hw=w; } security[1:1];
+            field { sw=r; hw=w; } algorithm[2:2];
+            field { sw=r; hw=w; } invalid_algorithm[3:3];
+            field { sw=r; hw=w; } sc[6:6];
+            field { sw=r; hw=w; } sm3_disabled[13:13];
+            field { sw=r; hw=w; } sha1_disabled[14:14];
+            field { sw=r; hw=w; } tee_only[17:17];
+            field { sw=r; hw=w; } aidsp[18:18];
+        } CAUSE @ 8;
+        reg {
+            name = "Error channel indication; header bit0 clear command intentionally withheld without an audited application write path";
+            field { sw=r; hw=w; } channel[19:16];
+        } STATUS @ 0xc;
+    } HASH_ERROR[2] @ 0x8060 += 0x10;
+    reg {
+        name = "Known application HASH completion bits. Raw read still returns the whole word; other channel availability unqualified";
+        field { sw=r; hw=w; } channel1[1:1];
+        field { sw=r; hw=w; } channel2[2:2];
+    } HASH_INTERRUPT_STATUS @ 0x8600;
+    reg {
+        hisi_svd_alternate_register = "HASH_INTERRUPT_STATUS";
+        name = "SDK writes only the selected pending bit, including zero if absent; no inferred W1C, self-clear or reset value";
+        field { sw=w; hw=r; } channel1[1:1];
+        field { sw=w; hw=r; } channel2[2:2];
+    } HASH_INTERRUPT_ACK @ 0x8600;
+    reg {
+        name = "Known application HASH completion gates; preserve every other bit on modification";
+        field { sw=rw; hw=r; } channel1[1:1];
+        field { sw=rw; hw=r; } channel2[2:2];
+    } HASH_INTERRUPT_ENABLE @ 0x8604;
+    regfile {
+        name = "HASH indexed state window: index0 is SDK channel1, index1 is channel2. State word count depends on algorithm; not key material ownership";
+        reg { field { sw=rw; hw=rw; } value[31:0]; } DATA @ 0;
+        reg {
+            name = "SDK writes word index before each state read or write; not an auto-increment or ordinary RMW register";
+            field { sw=w; hw=r; } value[31:0];
+        } INDEX @ 4;
+    } HASH_STATE[2] @ 0xa080 += 0x80;
+    reg {
+        name = "SYMC clear completion read view; SDK masks selected channel. Completion alone does not prove bus drain";
+        field { sw=r; hw=w; } channel1[1:1];
+        field { sw=r; hw=w; } channel2[2:2];
+    } SYMC_CLEAR_STATUS @ 0x8;
+    reg {
+        hisi_svd_alternate_register = "SYMC_CLEAR_STATUS";
+        name = "Full-word clear acknowledgement command. SDK reuses the clear-request word including other bits; no W1C/reset semantics inferred and no implicit RMW interface";
+        field { sw=w; hw=r; } value[31:0];
+    } SYMC_CLEAR_ACK @ 0x8;
+    reg {
+        name = "SYMC owner nibbles: SDK requests REE1/TEE2 and checks readback. SDK unlock drops owner even on clear timeout; that is not a valid memory reclamation proof";
+        field { sw=rw; hw=rw; } channel1_owner[7:4];
+        field { sw=rw; hw=rw; } channel2_owner[11:8];
+    } SYMC_LOCK @ 0x20;
+    reg {
+        name = "SDK reads this full word before ORing the requested channel. Readback is not idle or completion";
+        field { sw=r; hw=w; } value[31:0];
+    } SYMC_CLEAR_READ @ 0x60;
+    reg {
+        hisi_svd_alternate_register = "SYMC_CLEAR_READ";
+        name = "Full-word clear request command; no software-only clear/RMW/reset semantics";
+        field { sw=w; hw=r; } value[31:0];
+    } SYMC_CLEAR_REQUEST @ 0x60;
+    regfile {
+        name = "SYMC input configuration: index0 is SDK channel1, index1 channel2. Software contexts do not establish silicon availability or ownership";
+        reg {
+            field { sw=rw; hw=r; } source_security[11:8];
+            field { sw=rw; hw=r; } destination_security[15:12];
+            field { sw=rw; hw=r; } enable[31:31];
+        } CONTROL @ 0;
+        reg {
+            name = "SDK writes 1 for DMA copy, 0 for cipher; other two-bit encodings unqualified";
+            field { sw=rw; hw=r; } copy_mode[1:0];
+        } OUTPUT_CONTROL @ 4;
+        reg {
+            name = "Separate keyslot selector, not key bytes. Source table maps AES2/SM4=5, ECB1/CBC3/CTR6, width128=0 unlike unused BIT_WIDTH_128_REG macro. Valid encoding does not validate algorithm/key combinations";
+            field { sw=rw; hw=r; } keyslot[8:0];
+            field { sw=rw; hw=r; } algorithm[19:16];
+            field { sw=rw; hw=r; } mode[23:20];
+            field { sw=rw; hw=r; } key_length[25:24];
+            field { sw=rw; hw=r; } data_width[27:26];
+            field { sw=rw; hw=r; } decrypt[28:28];
+        } KEY_CONTROL @ 0x10;
+        reg {
+            name = "SDK writes zero high descriptor address. No nonzero high address support established";
+            field { sw=rw; hw=r; } value[31:0];
+        } NODE_BASE_HIGH @ 0x20;
+        reg { field { sw=rw; hw=r; } address[31:0]; } NODE_BASE_LOW @ 0x24;
+        reg {
+            name = "Source RMW low8 bits to two 32-byte input descriptors; silicon depth range unqualified";
+            field { sw=rw; hw=r; } length[7:0];
+        } NODE_DEPTH @ 0x2c;
+        reg { field { sw=r; hw=w; } pointer[7:0]; } WRITE_POINTER @ 0x30;
+        reg {
+            hisi_svd_alternate_register = "WRITE_POINTER";
+            name = "Input submission command; SDK publishes after output pointer, barriers and cache callbacks. Completion, timeout and pointer equality do not grant memory ownership";
+            field { sw=w; hw=r; } value[31:0];
+        } SUBMIT @ 0x30;
+        reg { field { sw=r; hw=w; } pointer[7:0]; } READ_POINTER @ 0x34;
+    } SYMC_CHANNEL[2] @ 0x4100 += 0x100;
+    reg {
+        name = "Source RAW input/no-output completion path; actual IRQ/ACK behavior not proved by header";
+        field { sw=r; hw=w; } channel1[1:1];
+        field { sw=r; hw=w; } channel2[2:2];
+    } SYMC_INPUT_INTERRUPT_STATUS @ 0x8610;
+    reg {
+        hisi_svd_alternate_register = "SYMC_INPUT_INTERRUPT_STATUS";
+        name = "SDK masks low16 to selected channel but preserves upper16 read bits in full-word acknowledgement. No inferred W1C or read-modify-write API";
+        field { sw=w; hw=r; } value[31:0];
+    } SYMC_INPUT_INTERRUPT_ACK @ 0x8610;
+    reg {
+        name = "Header field and optional CONFIG_SYMC_RAW_INT_SUPPORT path. Availability of optional IRQ route unqualified";
+        field { sw=rw; hw=r; } channel1[1:1];
+        field { sw=rw; hw=r; } channel2[2:2];
+    } SYMC_INPUT_INTERRUPT_ENABLE @ 0x8614;
+    regfile {
+        name = "CPU-read IV output state. SDK copies four little-endian words regardless of caller iv_len; this is not key storage";
+        reg { field { sw=r; hw=w; } value[31:0]; } WORD0 @ 0;
+        reg { field { sw=r; hw=w; } value[31:0]; } WORD1 @ 4;
+        reg { field { sw=r; hw=w; } value[31:0]; } WORD2 @ 8;
+        reg { field { sw=r; hw=w; } value[31:0]; } WORD3 @ 0xc;
+    } SYMC_IV[2] @ 0x9080 += 0x80;
+    reg {
+        name = "Last output-node completion used by original polling and IRQ dispatch; no physical drain guarantee";
+        field { sw=r; hw=w; } channel1[1:1];
+        field { sw=r; hw=w; } channel2[2:2];
+    } SYMC_OUTPUT_INTERRUPT_STATUS @ 0xc000;
+    reg {
+        hisi_svd_alternate_register = "SYMC_OUTPUT_INTERRUPT_STATUS";
+        name = "Full-word last-node acknowledgement; source retains reserved upper16 read bits, no W1C/reset inference";
+        field { sw=w; hw=r; } value[31:0];
+    } SYMC_OUTPUT_INTERRUPT_ACK @ 0xc000;
+    reg {
+        field { sw=rw; hw=r; } channel1[1:1];
+        field { sw=rw; hw=r; } channel2[2:2];
+    } SYMC_OUTPUT_INTERRUPT_ENABLE @ 0xc004;
+    regfile {
+        name = "SYMC output descriptor ring: index0 SDK channel1,index1 channel2. Receives device writes into separately reserved DMA memory";
+        reg { field { sw=rw; hw=r; } value[31:0]; } NODE_BASE_HIGH @ 0x20;
+        reg { field { sw=rw; hw=r; } address[31:0]; } NODE_BASE_LOW @ 0x24;
+        reg {
+            name = "Source programs two 16-byte output descriptors, not the 32-byte input format";
+            field { sw=rw; hw=r; } length[7:0];
+        } NODE_DEPTH @ 0x28;
+        reg { field { sw=r; hw=w; } pointer[7:0]; } WRITE_POINTER @ 0x30;
+        reg {
+            hisi_svd_alternate_register = "WRITE_POINTER";
+            name = "Output descriptor publication command; must not expose read/modify as ordinary storage";
+            field { sw=w; hw=r; } value[31:0];
+        } SUBMIT @ 0x30;
+        reg { field { sw=r; hw=w; } pointer[7:0]; } READ_POINTER @ 0x34;
+    } SYMC_OUTPUT[2] @ 0xd000 += 0x100;
+    // SPACC_CALC_CRG_CFG is only an unused macro in the available source.
+    // PKE/KM, DFA commands, channel0 and unsupported routes are not guessed.
+};

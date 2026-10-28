@@ -1,0 +1,347 @@
+{
+  "date": "2026-10-24",
+  "status": "source-contract-and-host-tests-passed",
+  "base_registers_commit": "c56a24dc54be1698caa7dbcebda1c38f1a7e5fb6",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "sdk_inputs_sha256": {
+    "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_def.h": "793e58b990f75fccd5690c73d242a49593e4f9c79a7633fb36cedc7a3d10f308",
+    "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_op.h": "4c0d20ed90ffeac0528ec1f28a06f341e2163134008787ea1b5992197710309d",
+    "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_op.c": "3df80dae1d58891818f66505755ff5493f8256da06093f19ac7260ed1d8e3ebb",
+    "src/drivers/drivers/hal/sfc/hal_sfc_v150.c": "cec6a75acb0a7a091f294402ec56e47364651b8722a54445acb62ba3a93bf43d",
+    "src/drivers/chips/ws53/porting/sfc/flash_config_info.h": "b1931f627e9053878103d7670efd8451d7b188ec6c9650beea899021287d035b",
+    "src/drivers/chips/ws53/porting/sfc/sfc_porting.c": "c98c99344898b9ce50d59c015e037b4b4e0075b2cf81eeea5f350af55e0f9995",
+    "src/drivers/chips/ws53/porting/sfc/sfc_porting.h": "c624c31e7a7fe454f9c11976f3cb44af3d75fb4564ca90dce3e280193d94185f",
+    "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+    "src/drivers/chips/ws53/include/control_core/chip_core_irq.h": "2355b55b9f1ae176c17a5149da0eb726ac2b4ebf4106140d28d178f824d9b9e1",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+  },
+  "source_sha256": {
+    "rdl/chips/ws53.rdl": "54c1e24d10d2271bb683a0fdf66267ebc7f78a5d9c0f67b9557fd7f7b2e4efa0",
+    "rdl/ip/sfc-v150.rdl": "f007ac0c02191558d7828fd52e93b2e5ec571a4682f703961eb1fa93d5017cc5",
+    "scripts/check_ws53_sfc_contract.py": "7a456ca941043ea21d2702cc09e0f0203ccffd2a42299b8f6b2ba7b281e31e08",
+    "scripts/check.py": "e300aca9d410ee8b6f3d57155931d173b36c0735086532a4e2e8676dbd70bd07",
+    "scripts/test_export_svd.py": "0587c5e7ef3370c679321aa638676bae6b3cc3f9344e91fdbfb148a38e016b37",
+    "scripts/export_svd.py": "100f4721fcc844ab1cac31559715c65e6d12e84f745de2c801c50a9ab05bed35",
+    "evidence/ws53-sfc-command-source-contract.md": "d6bbfbfed1a6b3db05ac600d8ea49a93966c0f4e67c5501f73e42e67b88afaf0",
+    "README.md": "18021e9c4d369040230a62c6d46f2e42c02b19bb04d7572ee25d0b553f6636a7",
+    "evidence/ws53-source-matrix.md": "87f9004e3cea6040b52f565bfb81e8157b25daa4ae34c2f3b37dc3a83bfb89a4",
+    "uv.lock": "752f78ac0439495ded6fa0474621e652d4ff7c1f64f09aa74061a709cb6648f7",
+    "pyproject.toml": "3bf21307596a0753b6897c450668a3bf1ffbdfa57ca18705239d98724a09365a"
+  },
+  "checks": {
+    "gcc": {
+      "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+      "input_sha256": {
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_def.h": "793e58b990f75fccd5690c73d242a49593e4f9c79a7633fb36cedc7a3d10f308",
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_op.h": "4c0d20ed90ffeac0528ec1f28a06f341e2163134008787ea1b5992197710309d",
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_op.c": "3df80dae1d58891818f66505755ff5493f8256da06093f19ac7260ed1d8e3ebb",
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150.c": "cec6a75acb0a7a091f294402ec56e47364651b8722a54445acb62ba3a93bf43d",
+        "src/drivers/chips/ws53/porting/sfc/flash_config_info.h": "b1931f627e9053878103d7670efd8451d7b188ec6c9650beea899021287d035b",
+        "src/drivers/chips/ws53/porting/sfc/sfc_porting.c": "c98c99344898b9ce50d59c015e037b4b4e0075b2cf81eeea5f350af55e0f9995",
+        "src/drivers/chips/ws53/porting/sfc/sfc_porting.h": "c624c31e7a7fe454f9c11976f3cb44af3d75fb4564ca90dce3e280193d94185f",
+        "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+        "src/drivers/chips/ws53/include/control_core/chip_core_irq.h": "2355b55b9f1ae176c17a5149da0eb726ac2b4ebf4106140d28d178f824d9b9e1",
+        "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+      },
+      "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+      "layout": {
+        "register_slots": 28,
+        "union_fields": 41,
+        "excluded_legacy_slots": {
+          "INT_RAW_STATUS": 288,
+          "INT_STATUS": 292,
+          "INT_MASK": 296,
+          "INT_CLEAR": 300,
+          "SOFT_RST_MASK": 304
+        },
+        "application_irq": null
+      },
+      "results": {
+        "helpers": {
+          "layout_field_cases": 41,
+          "helper_cases": 12757,
+          "poll_checks": 10
+        },
+        "wait-ready": {
+          "wait_ready_paths": 32,
+          "budget": 2,
+          "max_busy_samples": 3
+        }
+      },
+      "original_wait_ready_function_sha256": "cff36c1df52cb2b472d4fda16558312c36ec2f2af6eb28f13842f2f14092b8fe",
+      "host_harness_sha256": {
+        "helpers": "4a6d7c55cd5f40748054ba89ca823a6bd3a2232b26bec927a1cf1b252e2cc13b",
+        "wait_ready": "674d3228aba3952f009d555d79b287cf67a91b61aca144f64ec8b591a857914c"
+      },
+      "observations": [
+        "CMD_CONFIG/DMA_START are volatile pollable busy bits, hardware self-clear per SDK comment, not read-clear",
+        "set_opt overwrites command configuration but preserves other CMD_INS bits; set_opt_attr RMW sets CS1/START",
+        "command length zero/65 wraps to 63/0; DMA length zero/oversize also truncates, not validated by helpers",
+        "30-bit command address RMW preserves upper two bits; DMA address helpers write full words without range validation",
+        "16 words/64 bytes of ordinary command data; old data is not fresh WIP; each SDK WIP sample issues 0x05, waits command completion, then reads data",
+        "polling waits change no hardware register in original C; shared host actor cleared busy, not the read",
+        "control-core local IRQ36 is named; no application-core SFC IRQ or interrupt register layout is established by these SDK inputs",
+        "application config inherits SFC init and disables optional SFC DMA API"
+      ],
+      "limitations": [
+        "host memory does not establish silicon read side effects, self-clear timing, abort, restart while busy, or completion ordering",
+        "START zero is not NOR WIP clear, posted-write drain, cache coherence, exclusive ownership, or safe buffer reuse",
+        "WIP response values/command completion/delay in wait_ready harness are explicit stubs, not a NOR model",
+        "DDR fields are layout-only; no exact NOR identity, status-bit semantics, physical capacity or reset values inferred",
+        "control-core IRQ identifier does not prove route to the application core or register IRQ acknowledgement semantics"
+      ],
+      "hardware_accessed": false,
+      "firmware_or_qemu_executed": false
+    },
+    "clang": {
+      "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+      "input_sha256": {
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_def.h": "793e58b990f75fccd5690c73d242a49593e4f9c79a7633fb36cedc7a3d10f308",
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_op.h": "4c0d20ed90ffeac0528ec1f28a06f341e2163134008787ea1b5992197710309d",
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_op.c": "3df80dae1d58891818f66505755ff5493f8256da06093f19ac7260ed1d8e3ebb",
+        "src/drivers/drivers/hal/sfc/hal_sfc_v150.c": "cec6a75acb0a7a091f294402ec56e47364651b8722a54445acb62ba3a93bf43d",
+        "src/drivers/chips/ws53/porting/sfc/flash_config_info.h": "b1931f627e9053878103d7670efd8451d7b188ec6c9650beea899021287d035b",
+        "src/drivers/chips/ws53/porting/sfc/sfc_porting.c": "c98c99344898b9ce50d59c015e037b4b4e0075b2cf81eeea5f350af55e0f9995",
+        "src/drivers/chips/ws53/porting/sfc/sfc_porting.h": "c624c31e7a7fe454f9c11976f3cb44af3d75fb4564ca90dce3e280193d94185f",
+        "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+        "src/drivers/chips/ws53/include/control_core/chip_core_irq.h": "2355b55b9f1ae176c17a5149da0eb726ac2b4ebf4106140d28d178f824d9b9e1",
+        "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3"
+      },
+      "compiler": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+      "layout": {
+        "register_slots": 28,
+        "union_fields": 41,
+        "excluded_legacy_slots": {
+          "INT_RAW_STATUS": 288,
+          "INT_STATUS": 292,
+          "INT_MASK": 296,
+          "INT_CLEAR": 300,
+          "SOFT_RST_MASK": 304
+        },
+        "application_irq": null
+      },
+      "results": {
+        "helpers": {
+          "layout_field_cases": 41,
+          "helper_cases": 12757,
+          "poll_checks": 10
+        },
+        "wait-ready": {
+          "wait_ready_paths": 32,
+          "budget": 2,
+          "max_busy_samples": 3
+        }
+      },
+      "original_wait_ready_function_sha256": "cff36c1df52cb2b472d4fda16558312c36ec2f2af6eb28f13842f2f14092b8fe",
+      "host_harness_sha256": {
+        "helpers": "4a6d7c55cd5f40748054ba89ca823a6bd3a2232b26bec927a1cf1b252e2cc13b",
+        "wait_ready": "674d3228aba3952f009d555d79b287cf67a91b61aca144f64ec8b591a857914c"
+      },
+      "observations": [
+        "CMD_CONFIG/DMA_START are volatile pollable busy bits, hardware self-clear per SDK comment, not read-clear",
+        "set_opt overwrites command configuration but preserves other CMD_INS bits; set_opt_attr RMW sets CS1/START",
+        "command length zero/65 wraps to 63/0; DMA length zero/oversize also truncates, not validated by helpers",
+        "30-bit command address RMW preserves upper two bits; DMA address helpers write full words without range validation",
+        "16 words/64 bytes of ordinary command data; old data is not fresh WIP; each SDK WIP sample issues 0x05, waits command completion, then reads data",
+        "polling waits change no hardware register in original C; shared host actor cleared busy, not the read",
+        "control-core local IRQ36 is named; no application-core SFC IRQ or interrupt register layout is established by these SDK inputs",
+        "application config inherits SFC init and disables optional SFC DMA API"
+      ],
+      "limitations": [
+        "host memory does not establish silicon read side effects, self-clear timing, abort, restart while busy, or completion ordering",
+        "START zero is not NOR WIP clear, posted-write drain, cache coherence, exclusive ownership, or safe buffer reuse",
+        "WIP response values/command completion/delay in wait_ready harness are explicit stubs, not a NOR model",
+        "DDR fields are layout-only; no exact NOR identity, status-bit semantics, physical capacity or reset values inferred",
+        "control-core IRQ identifier does not prove route to the application core or register IRQ acknowledgement semantics"
+      ],
+      "hardware_accessed": false,
+      "firmware_or_qemu_executed": false
+    }
+  },
+  "generation_delta": {
+    "WS53": {
+      "before_sha256": "038a78211377eaeb658006be3547afc307e00c0e9e80ae7fde09865f53b20248",
+      "after_sha256": "8f07cfd1f221db7f5fdf4e502de3ed19c0ac9bbfe0367e7405f28367498c2e39",
+      "byte_identical": false,
+      "changed_peripherals": [
+        "SFC_CFG"
+      ],
+      "removed_registers": [
+        "INT_CLEAR",
+        "INT_MASK",
+        "INT_RAW_STATUS",
+        "INT_STATUS",
+        "SOFT_RST_MASK"
+      ],
+      "added_fields": {
+        "GLOBAL_CONFIG": [
+          "SAMPLE_TEST"
+        ],
+        "BUS_CONFIG2": [
+          "BUS_DDR_MODE",
+          "DDR_RD_DUMMY_BYTES",
+          "DDR_WR_DUMMY_BYTES",
+          "SFC_DDR_TX_DELAY_ENABLE"
+        ],
+        "CMD_INS": [
+          "CMD_DDR_MODE",
+          "DDR_DUMMY_BYTE_CNT"
+        ]
+      },
+      "existing_retained_fields_layout_and_access_unchanged": true
+    },
+    "WS63": {
+      "before_sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+      "after_sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+      "byte_identical": true
+    },
+    "BS2X": {
+      "before_sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+      "after_sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+      "byte_identical": true
+    }
+  },
+  "export_tests": {
+    "passed": true,
+    "tests": 28,
+    "sfc_negative_mutations": 13,
+    "log_sha256": "958e64a766ba5932394d609f136275175cb526b27f2f6defcaa91ff164636b99"
+  },
+  "schema_and_map_checks": {
+    "chips": 3,
+    "passed": true,
+    "schema_log_sha256": "6e9e73991b89bd2aa483b6cdbecd28534432b22f22948bbc0093e16216e7c78a",
+    "maps_log_sha256": "60abe542fa044f8040ec23d140933fc8505098fd9b431d9df56b5b08d5354005",
+    "ws53": {
+      "peripherals": 33,
+      "registers_expanded": 973,
+      "fields_expanded": 2046,
+      "interrupts": 20,
+      "register_arrays": 13,
+      "cluster_arrays": 1
+    }
+  },
+  "existing_flash_read_views_regression": {
+    "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+    "register_slot_checks": 30,
+    "readonly_mapping_views": true,
+    "hardware_verified": false,
+    "sources": {
+      "src/drivers/drivers/hal/security_unified/hal_fapc/hal_fapc_reg.h": "b7479dd6d06950a86bf5c792b2ee67f4f374a2f50efecf56bc60474faf1f9315",
+      "src/drivers/drivers/hal/security_unified/hal_fapc/hal_fapc.c": "e8a87a484767e8b69237a9a573b8311c3362e4a531e7f56d3ac52fa8d335a5c5",
+      "src/drivers/chips/ws53/porting/security_unified/security_unified_porting.h": "61fa30fcf837db575d04c57a66cfe814f42f31847957b977f972694f8628018c",
+      "src/bootloader/flashboot_ws53/startup/main.c": "7bd2548c45025683bc20c708bc00bf41b2c95644388a49db4ae831fed7b16f75",
+      "src/drivers/drivers/hal/sfc/hal_sfc_v150.c": "cec6a75acb0a7a091f294402ec56e47364651b8722a54445acb62ba3a93bf43d",
+      "src/drivers/drivers/hal/sfc/hal_sfc_v150_regs_def.h": "793e58b990f75fccd5690c73d242a49593e4f9c79a7633fb36cedc7a3d10f308"
+    }
+  },
+  "parser_smoke": {
+    "tool": "/tmp/ws53-tools/bin/svd2rust",
+    "version": "0.37.1",
+    "target": "riscv",
+    "tool_sha256": "ad2523abedfa5e3c6bd17ca57528ca61dccd4eac86e3f509bde7d3df997db318",
+    "chips": [
+      {
+        "chip": "ws53",
+        "log_sha256": "45c015d4c7fdf8755edd33d2a90b0c2563787179e3b46890ab97930f57f640e3",
+        "generated_lib_sha256": "b9c6cb1f775861aa9d8f771c7542124c6c3f98e3d0dd66489e5eb90c8ca15252"
+      },
+      {
+        "chip": "ws63",
+        "log_sha256": "9dbbcd37b92b067b0be7d879657f133ef63391b056d6dc0e5bb8f29d0b517807",
+        "generated_lib_sha256": "6e2b28aa5ee1e2ba799d73adfcfd0f4e9da440f0f858e8454384977b168177d1"
+      },
+      {
+        "chip": "bs2x",
+        "log_sha256": "9dbbcd37b92b067b0be7d879657f133ef63391b056d6dc0e5bb8f29d0b517807",
+        "generated_lib_sha256": "6c2a5428d622c523e2ee79efb07f7e6197eeadef9ea22d90e83e3d8231f1f153"
+      }
+    ]
+  },
+  "source_locations": {
+    "hal_sfc_v150_regs_def.h": {
+      "global_bus_layout": [
+        36,
+        181
+      ],
+      "dma_and_command_layout": [
+        188,
+        349
+      ]
+    },
+    "hal_sfc_v150_regs_op.c": {
+      "command_setup": [
+        21,
+        44
+      ],
+      "two_busy_poll_loops": [
+        47,
+        65
+      ],
+      "mapped_bus_helpers": [
+        68,
+        86
+      ]
+    },
+    "hal_sfc_v150_regs_op.h": {
+      "dma_helpers": [
+        92,
+        139
+      ],
+      "databuf": [
+        147,
+        158
+      ],
+      "command_address": [
+        189,
+        194
+      ]
+    },
+    "hal_sfc_v150.c": {
+      "fresh_WIP_sample": [
+        48,
+        72
+      ],
+      "optional_dma": [
+        147,
+        193
+      ]
+    },
+    "control_core/chip_core_irq.h": [
+      11,
+      25
+    ],
+    "acore/chip_core_irq.h": "no SFC IRQ entry",
+    "ws53_liteos_app.config": [
+      436,
+      438
+    ]
+  },
+  "commands": {
+    "helper_gcc": "uv run --offline --script scripts/check_ws53_sfc_contract.py --sdk /home/sanchuanhehe/Documents/hispark/fbb_ws53 --cc /usr/bin/gcc",
+    "helper_clang": "uv run --offline --script scripts/check_ws53_sfc_contract.py --sdk /home/sanchuanhehe/Documents/hispark/fbb_ws53 --cc /usr/bin/clang",
+    "generate_each": "uv run --offline --no-sync --locked python scripts/export_svd.py rdl/chips/<chip>.rdl generated/<CHIP>.experimental.svd",
+    "export_tests": "uv run --offline --no-sync --locked python scripts/test_export_svd.py",
+    "schema": "uv run --offline --no-sync --locked python scripts/check_schema.py",
+    "maps": "uv run --offline --no-sync --locked python scripts/check.py",
+    "parser_each": "/tmp/ws53-tools/bin/svd2rust --target riscv -i generated/<CHIP>.experimental.svd -o target/ws53-sfc-command/parser/<chip>",
+    "baseline": "git archive c56a24dc54be1698caa7dbcebda1c38f1a7e5fb6 rdl scripts/export_svd.py | tar -x -C target/ws53-sfc-command/baseline-source; invoke baseline exporter for all three chips",
+    "environment": {
+      "UV_CACHE_DIR": "/tmp/ws53-uv-cache",
+      "CCACHE_DISABLE": "1",
+      "TMPDIR": "this worktree/target/ws53-sfc-command/tmp",
+      "generator_UV_PROJECT_ENVIRONMENT": "/home/sanchuanhehe/Documents/hispark-rs/hisi-registers/.venv",
+      "generator_no_sync": true
+    }
+  },
+  "hardware_accessed": false,
+  "qemu_or_target_firmware_executed": false,
+  "main_pac_or_frozen_candidates_changed": false,
+  "remote_pushed": false,
+  "qualification_limits": [
+    "C host layout/ordinary volatile accesses and SDK comments only; not silicon read side effects or completion timing",
+    "No application IRQ, exact NOR response, reset default, DDR mode, abort, cache coherence, DMA quiescence/drain or safe ownership qualification",
+    "The mock parent clearing busy and fake NOR responses are explicit test inputs, not a hardware/model execution",
+    "Generated parser output is local smoke only; installed/frozen PAC and released interfaces are untouched"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "sdk_sources": {
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/acore/ipc_porting.h": "9c5415d92cc3f0c7b9277f4d01c89b25195ea033032f15ce97e608325fd67abc",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/driver/ipc/ipc/ipc.h": "4b121d50807609aeac0a2fa34793f4c91b6c1e5cb809dd72643b334ad26f4de8",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/driver/ipc/ipc/ipc_ring.h": "2ee1ca62ec6cd681d28b62205af70c4491e3e4ddcd977ceb72a4e3ff070274fd",
+    "src/middleware/utils/common_headers/platform_types.h": "9816f8bed756a7c8d33f7793ced917d785bd27d7aecd64ccfe8743d5910f3c51",
+    "src/drivers/boards/ws53/memory_config/include/memory_config_common.h": "5e8464443afb25a8fbb98c7d392f35a7904a792279999c22b091a060b3f8dbe5",
+    "src/middleware/utils/common_headers/chip_definitions.h": "40d48c0044db9447be1e4d763896f4f1d7d5cc48195d5495dc891ced06f51065",
+    "src/include/errcode.h": "ffdb73297ae7c2565ecb73096ffe6da6f55291d39fe16781b261d29f13cc48ff",
+    "src/application/ws53/ws53_application/main.c": "4511fa9dec6b2c31fe26d53820f7f40fddec23f9841fb0cb5bd8bf28e927d0f7",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/build/config/target_config/ws53/patch_config/acore.cfg": "3c61319f4b11739aec68b033a141bb3d4fda9b7c7a4a94cb1698920f4cabde64",
+    "src/drivers/chips/ws53/porting/patch/ws53_liteos_app/libplat_patch.a": "c519a5330f1327071858324623f02ab8b751679c3238ea63053a3b260d9d91ca"
+  },
+  "header_constants": [
+    2,
+    0,
+    2,
+    2,
+    60,
+    18,
+    19,
+    0,
+    1,
+    1280,
+    256,
+    1280,
+    256,
+    3072,
+    268435456,
+    268959744,
+    2048
+  ],
+  "rom_sha256": "2c88c7b2090d64db73307fbd45005b27882308443b092fbedc85be63586a662a",
+  "rom_instructions_checked": 13,
+  "patch_object_sha256": "64157e0fdede2d946f74d19b2c6476cfd1e93a0c4afa52116b03fdf2d1abf58e",
+  "patch_symbols": {
+    "irq_app_int_handler_patch": {
+      "offset": 0,
+      "bytes": 74
+    },
+    "hal_ipc_set_self2x_int_patch": {
+      "offset": 94,
+      "bytes": 62
+    }
+  },
+  "observed_profile_sha256": "e0c5c8d8ebb4503a604a6271e77db6c478b0be4a6a962bd845a7329ffaaaf625",
+  "observed_header_sha256": "d3d5d22cbf5607f91c8a416766c8690ce7e5934b42ccb20b616274e61ad0d801",
+  "irq": [
+    26,
+    27
+  ],
+  "ring_header_bytes": 12,
+  "message_header_bytes": 4,
+  "message_max_bytes": 60,
+  "register_views": 7,
+  "mutations_refused": [
+    "IPC_RECEIVE_ENABLE:size",
+    "IPC_RECEIVE_ENABLE:access",
+    "IPC_RECEIVE_ENABLE:addressOffset",
+    "IPC_RECEIVE_STATUS:size",
+    "IPC_RECEIVE_STATUS:access",
+    "IPC_RECEIVE_STATUS:addressOffset",
+    "IPC_RECEIVE_ACK_COMMAND:size",
+    "IPC_RECEIVE_ACK_COMMAND:access",
+    "IPC_RECEIVE_ACK_COMMAND:addressOffset",
+    "IPC_RECEIVE_ACK_SYNC:size",
+    "IPC_RECEIVE_ACK_SYNC:access",
+    "IPC_RECEIVE_ACK_SYNC:addressOffset",
+    "IPC_SEND_STATUS:size",
+    "IPC_SEND_STATUS:access",
+    "IPC_SEND_STATUS:addressOffset",
+    "IPC_SEND_SET_COMMAND:size",
+    "IPC_SEND_SET_COMMAND:access",
+    "IPC_SEND_SET_COMMAND:addressOffset",
+    "IPC_RELEASE_COMMAND:size",
+    "IPC_RELEASE_COMMAND:access",
+    "IPC_RELEASE_COMMAND:addressOffset"
+  ],
+  "svd_sha256": "5cb72ff832a623442a636847b98aeae867edc8f2c6a53c2099bd41fdd746c071",
+  "hardware_accessed": false,
+  "vendor_code_executed": false,
+  "host_header_probe_executed": true,
+  "doorbell_hardware_writes_verified": false,
+  "ring_concurrency_verified": false,
+  "cache_coherence_verified": false,
+  "resource_handoff_verified": false
+}

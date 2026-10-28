@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "subject": "WS53 MSUB explicit 32-bit SDK access views",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "source_class": "SDK-source",
+  "registers": {
+    "MSUB_NORMAL_WORD": {
+      "address": "0x520003e0",
+      "alternate_register": "MSUB_NORMAL"
+    },
+    "MSUB_SLEEP_WORD": {
+      "address": "0x520003e4",
+      "alternate_register": "MSUB_SLEEP"
+    }
+  },
+  "source_facts": [
+    "clock_recover.h defines MSUB_NOR_CFG and MSUB_SLP_CFG at these addresses.",
+    "clock_recover.c ccore_switch_pll_clock and acore_clock_recover.c switch_clock_from_ch0_to_ch1, switch_clock_from_ch1_to_ch0 and ccore_switch_xo_clock call reg_setbit/reg_clrbit on these slots.",
+    "chip_io.h defines reg(base, offset) and reg32(register) as volatile uint32_t lvalues; the original macros perform word read-modify-write.",
+    "pm_sleep_porting.c has two reg32_setbit(MSUB_SLP_CFG, 0x0) calls; the oracle executes that original access statement with an anonymous-host-RAM address.",
+    "Application normal/sleep gate and selector positions come from the compiled hal_clocks.h application enums. The normal enum has no MBUS_CLKEN member; no normal bit2 field is invented."
+  ],
+  "export_contract": [
+    "Existing 16-bit register names, fields, addresses, access and unknown reset metadata remain unchanged.",
+    "Only two alternateRegister views are added, both size32 with the same low-half fields. Upper-half fields are not invented and RMW preserves sampled upper bits.",
+    "The exporter requires explicit evidence, aligned vacant upper halfwords, RW fields, unknown resets, no side effects and no arrays; both slots satisfy these checks.",
+    "The exporter does not require both access widths to have independently qualified silicon writes. Historical halfword views are retained for compatibility, not newly qualified."
+  ],
+  "host_validation": {
+    "passed": true,
+    "hardware_access": false,
+    "compilers": [
+      "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+      "clang version 22.1.8 (Fedora 22.1.8-4.fc44)"
+    ],
+    "source_identity": "Every input equals git show of the pinned SDK commit before compiling.",
+    "allocation": "Anonymous MAP_PRIVATE|MAP_ANONYMOUS|MAP_32BIT host RAM only; no /dev/mem, device or physical fixed mapping.",
+    "cases_per_compiler": 42,
+    "field_positions": 19,
+    "assertions": [
+      "sizeof original reg and reg32 lvalues equals4",
+      "SDK addresses equal SVD addresses",
+      "19 original SDK enum field positions equal both SVD views",
+      "42 helper cases preserve all unrelated low/upper bits and neighboring words",
+      "CCORE clock helper clears selector before the two stub delays and restores it afterward"
+    ],
+    "limits": [
+      "switch_ch_clock and cpu32m_udelay are explicit stubs; no clock timing or hardware behavior is inferred",
+      "SDMA/MDMA gate writes are not exercised by these host helper cases"
+    ]
+  },
+  "sdk_sources_sha256": {
+    "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f",
+    "src/drivers/chips/ws53/include/hal_clocks.h": "47cebea66a9e24089b6cd98167a97e3987b371867579f19d704d3dc9d08ce3dc",
+    "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+    "src/drivers/chips/ws53/clock_recover/acore/acore_clock_recover.c": "b57254b08607d666a72690bffdbbdd9793196bdea3539f99ebaba351ce6df2f4",
+    "src/drivers/chips/ws53/clock_recover/clock_recover.c": "1bc52568dee9ff46c7cdb4d97e67ba8a1a45cee3cd08803e1e84b185ca379507",
+    "src/middleware/chips/ws53/pm/pm_sleep/pm_sleep_porting.c": "8b6c894644790f345d94a99fbfc9d6f9a23191a449a9b9c235741187211d459c"
+  },
+  "generation_delta": {
+    "ws53": {
+      "before_sha256": "857af81ba902c49da76aa66bc663498fcdb66ff057949bbd29b4d4049c71f73f",
+      "after_sha256": "038a78211377eaeb658006be3547afc307e00c0e9e80ae7fde09865f53b20248",
+      "only_added_registers": [
+        "MSUB_NORMAL_WORD",
+        "MSUB_SLEEP_WORD"
+      ]
+    },
+    "ws63": {
+      "before_sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+      "after_sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+      "byte_identical": true
+    },
+    "bs2x": {
+      "before_sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+      "after_sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+      "byte_identical": true
+    }
+  },
+  "generation_baseline": "Immediately preceding local RDL snapshot already contains the separate uncommitted Flash mapping work; this delta does not attribute those changes to MSUB.",
+  "historical_readback_context": {
+    "measurement_performed_this_change": false,
+    "halfword": {
+      "run": "ram-probe-01",
+      "register": "0x520003e0",
+      "requested": "0xeb",
+      "observed": "0xfb",
+      "log_sha256": "bf26b12959e0498b31c3c5aaf5737e5972ae468395c2b7cd95cc4d2928cef49d",
+      "script_sha256": "e992a6253c9d32768a169349317e85ddc544b2aa437b2e5334c38b005a487eff"
+    },
+    "word": {
+      "run": "ram-probe-02-word-msub",
+      "register": "0x520003e0",
+      "requested": "0xeb",
+      "observed": "0xfb",
+      "log_sha256": "bf26b12959e0498b31c3c5aaf5737e5972ae468395c2b7cd95cc4d2928cef49d",
+      "script_sha256": "dc464ae6616b0c9bb66d921705d19299fa5512b023b91ff9f506573cf8cd15a6"
+    },
+    "conclusion": "Both earlier accesses retained SDMA bit4. This is not evidence that changing access width clears the gate, and the cause remains unqualified."
+  },
+  "checks": {
+    "export_unittests": {
+      "passed": true,
+      "tests": 26,
+      "added_rejection_cases": 4
+    },
+    "cmsis_svd_1_3_9_schema": {
+      "passed": true,
+      "chips": [
+        "ws53",
+        "ws63",
+        "bs2x"
+      ]
+    },
+    "svd2rust": {
+      "passed": true,
+      "version": "0.37.1",
+      "target": "riscv",
+      "output": "temporary parser output only; maintained PAC unchanged"
+    },
+    "aggregate_check": {
+      "passed": false,
+      "reason": "Pre-existing Flash mapping additions and the new aliases are not yet reflected in scripts/check.py expected counts. No failure is hidden.",
+      "expected": {
+        "peripherals": 32,
+        "registers": 945,
+        "fields": 1997,
+        "arrays": 6
+      },
+      "actual": {
+        "peripherals": 33,
+        "registers": 978,
+        "fields": 2048,
+        "arrays": 13
+      },
+      "msub_delta_only": {
+        "registers": 2,
+        "fields": 19,
+        "peripherals": 0,
+        "arrays": 0
+      }
+    }
+  },
+  "commands": [
+    "./scripts/generate.sh",
+    "uv run --locked python scripts/test_export_svd.py",
+    "uv run --script scripts/check_ws53_msub_access.py --sdk <pinned-sdk> --cc gcc",
+    "uv run --script scripts/check_ws53_msub_access.py --sdk <pinned-sdk> --cc clang",
+    "./scripts/check.sh",
+    "svd2rust --target riscv -i generated/WS53.experimental.svd -o <temporary-parser-directory>"
+  ],
+  "unqualified": [
+    "halfword writes",
+    "upper-half register meaning",
+    "hardware successful SDMA/MDMA gate clearing",
+    "reset values and reset sequence",
+    "posted-transaction drain",
+    "DMA/control-core ownership or Flash MDMA safety",
+    "low-power/WFI clock behavior"
+  ],
+  "source_sha256": {
+    "rdl/chips/ws53/m-crg.rdl": "b26004ed244fc47a171ab4cab7da0382965b0295aecb34cffe4f2bd6b5637588",
+    "scripts/check_ws53_msub_access.py": "cc98b836b1e6e99b158e597f6ef05e64ec67ae2f90c1e662e8f5358352e3a7a3",
+    "scripts/test_export_svd.py": "99638bd622d29dd4f233152e5aea4acedfa1784088546b8626c03a04d61acd2f",
+    "scripts/export_svd.py": "100f4721fcc844ab1cac31559715c65e6d12e84f745de2c801c50a9ab05bed35"
+  },
+  "pac_modified": false,
+  "hardware_access": false
+}

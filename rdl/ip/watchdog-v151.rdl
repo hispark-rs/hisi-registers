@@ -79,7 +79,7 @@ addrmap watchdog_v151_regs #(bit SDK_VIEW = false) {
             desc = "Mode: 0=one interrupt then reset; 1=two interrupts then reset";
         } wdt_mode[7:7] = 0x0;
     } WDT_CR @ 0x10;
-    reg {
+    external reg {
         field {
             sw = r;
             hw = r;

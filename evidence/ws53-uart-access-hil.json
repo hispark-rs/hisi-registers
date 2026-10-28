@@ -1,0 +1,580 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "date": "2026-10-24",
+  "hardware": "A board; VDDIO3.3V; J-Link23121302; UART5CB7019921",
+  "flash_written": false,
+  "elf_sha256": "f4be8ad5dbc4bfd37008f0fc5770b9388d0ccf09f21bf7dbec6a436887d02e56",
+  "ports": [
+    0,
+    1,
+    2
+  ],
+  "phases": [
+    "empty",
+    "one RX",
+    "two RX",
+    "drained",
+    "64 RX",
+    "drained full"
+  ],
+  "words": [
+    "CTL_BEFORE",
+    "CTL_READBACK",
+    "DIV_L",
+    "DIV_H",
+    "FIFO_STATUS",
+    "RX_FIFO_CNT",
+    "TX_FIFO_CNT",
+    "LINE_STATUS",
+    "DIV_FRA"
+  ],
+  "snapshots": [
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      1,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      1,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      2,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      2,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      22,
+      64,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      22,
+      64,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      1,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      1,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      2,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      2,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      22,
+      64,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      22,
+      64,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      1,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      1,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      2,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      18,
+      2,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      22,
+      64,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      22,
+      64,
+      0,
+      224,
+      23
+    ],
+    [
+      12,
+      12,
+      0,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ],
+    [
+      12,
+      13,
+      17,
+      0,
+      10,
+      0,
+      0,
+      192,
+      23
+    ]
+  ],
+  "repeat_runs": [
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-access-three-hil-01/report.json",
+      "sha256": "35e3483bf3e0cef7ea6e23e024bbbc120c3b7116b2439b0337958de0a7d71f90",
+      "passed": true,
+      "recovered": true
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-access-three-hil-02/report.json",
+      "sha256": "8f50924098eb81c77544e831aa3f5de090a9386a2b81af1a81ad1a6e744054af",
+      "passed": true,
+      "recovered": true
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-access-three-hil-03/report.json",
+      "sha256": "4535accbd7980ab83c8b929eba30ead5a5d24851118603ce80a818727724fdfd",
+      "passed": true,
+      "recovered": true
+    }
+  ],
+  "swd": {
+    "swd-before-uart-access": {
+      "wiring_user_report": "User reports VDDIO now powered and remaining analyzer signals connected; mapping not yet revalidated.",
+      "probe": "23121302",
+      "flash_written": false,
+      "reset_requested": false,
+      "scope": "No scope capture this run; previous scope wiring not newly confirmed",
+      "dpidr": [
+        {
+          "requested_speed_khz": 100,
+          "requested": 200,
+          "received": 200,
+          "correct": 200,
+          "wrong": 0,
+          "read_failed": 0,
+          "wrong_only_1_to_0": 0,
+          "wrong_samples": [],
+          "rc": 0
+        },
+        {
+          "requested_speed_khz": 10,
+          "requested": 200,
+          "received": 200,
+          "correct": 200,
+          "wrong": 0,
+          "read_failed": 0,
+          "wrong_only_1_to_0": 0,
+          "wrong_samples": [],
+          "rc": 0
+        },
+        {
+          "requested_speed_khz": 1000,
+          "requested": 200,
+          "received": 200,
+          "correct": 200,
+          "wrong": 0,
+          "read_failed": 0,
+          "wrong_only_1_to_0": 0,
+          "wrong_samples": [],
+          "rc": 0
+        }
+      ],
+      "openocd_command": [
+        "/tmp/github-openocd-build/src/openocd",
+        "-s",
+        "/home/sanchuanhehe/Documents/hispark/openocd/tcl",
+        "-f",
+        "interface/jlink.cfg",
+        "-c",
+        "adapter serial 23121302; bindto 127.0.0.1; gdb_port disabled; tcl_port disabled; telnet_port disabled; set ADAPTER_SPEED 100",
+        "-f",
+        "target/ws53.cfg",
+        "-c",
+        "init; set rc [catch {halt; puts \"BEFORE_STEP\"; reg pc; step; puts \"AFTER_STEP\"; reg pc} err]; puts \"DEBUG_CHECK_RC=$rc $err\"; set rr [catch {resume} re]; puts \"RESUME_RC=$rr $re\"; puts [WS53.cpu curstate]; shutdown"
+      ],
+      "openocd_rc": 0,
+      "openocd_log": "swd-before-uart-access-openocd.log",
+      "passed": true
+    },
+    "swd-after-uart-access": {
+      "wiring_user_report": "User reports VDDIO now powered and remaining analyzer signals connected; mapping not yet revalidated.",
+      "probe": "23121302",
+      "flash_written": false,
+      "reset_requested": false,
+      "scope": "No scope capture this run; previous scope wiring not newly confirmed",
+      "dpidr": [
+        {
+          "requested_speed_khz": 100,
+          "requested": 200,
+          "received": 200,
+          "correct": 200,
+          "wrong": 0,
+          "read_failed": 0,
+          "wrong_only_1_to_0": 0,
+          "wrong_samples": [],
+          "rc": 0
+        },
+        {
+          "requested_speed_khz": 10,
+          "requested": 200,
+          "received": 200,
+          "correct": 200,
+          "wrong": 0,
+          "read_failed": 0,
+          "wrong_only_1_to_0": 0,
+          "wrong_samples": [],
+          "rc": 0
+        },
+        {
+          "requested_speed_khz": 1000,
+          "requested": 200,
+          "received": 200,
+          "correct": 200,
+          "wrong": 0,
+          "read_failed": 0,
+          "wrong_only_1_to_0": 0,
+          "wrong_samples": [],
+          "rc": 0
+        }
+      ],
+      "openocd_command": [
+        "/tmp/github-openocd-build/src/openocd",
+        "-s",
+        "/home/sanchuanhehe/Documents/hispark/openocd/tcl",
+        "-f",
+        "interface/jlink.cfg",
+        "-c",
+        "adapter serial 23121302; bindto 127.0.0.1; gdb_port disabled; tcl_port disabled; telnet_port disabled; set ADAPTER_SPEED 100",
+        "-f",
+        "target/ws53.cfg",
+        "-c",
+        "init; set rc [catch {halt; puts \"BEFORE_STEP\"; reg pc; step; puts \"AFTER_STEP\"; reg pc} err]; puts \"DEBUG_CHECK_RC=$rc $err\"; set rr [catch {resume} re]; puts \"RESUME_RC=$rr $re\"; puts [WS53.cpu curstate]; shutdown"
+      ],
+      "openocd_rc": 0,
+      "openocd_log": "swd-after-uart-access-openocd.log",
+      "passed": true
+    }
+  },
+  "observations": [
+    "All three ports FIFO enabled and empty:0x0a;1/2bytes:0x12;64bytes:0x16; all64bytes read back in order",
+    "FIFO bit2=full at64; bit3=empty with FIFO enabled; bit4 high while RX queued",
+    "DIV_EN set attempts while1/2/64RX queued read back0, DIV_L reads0. Draining restores DIV_EN set and programmed low17",
+    "The prior reset discrepancy was ineffective DIV_EN enable with pending RX, not evidence of divisor loss"
+  ],
+  "limitations": [
+    "FIFO disabled byte mode and TX-only busy bit behavior unqualified",
+    "No nonzero DIV_H test or divisor writes while busy",
+    "Other UART_CTL bits acceptance while RX pending unqualified",
+    "Internal loopback, no physical pad or baud timing claim",
+    "No Flash, clock provisioning or production ownership qualification"
+  ]
+}

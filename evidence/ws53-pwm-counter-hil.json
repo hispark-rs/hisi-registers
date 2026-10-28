@@ -1,0 +1,476 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "elf_sha256": "3abd0aecfd7df7d254d1936ec1b0ef046857c46fd10c7558dd943e4bda488d3b",
+  "scope": "PWM0/G0,2MHz,100us periods,50% duty,finite8/16,TCXO relative samples",
+  "hardware": [
+    {
+      "ticks": 1526,
+      "microseconds": 47.6875,
+      "flag": 0,
+      "count": 1
+    },
+    {
+      "ticks": 2913,
+      "microseconds": 91.03125,
+      "flag": 0,
+      "count": 1
+    },
+    {
+      "ticks": 4512,
+      "microseconds": 141.0,
+      "flag": 0,
+      "count": 2
+    },
+    {
+      "ticks": 7701,
+      "microseconds": 240.65625,
+      "flag": 0,
+      "count": 3
+    },
+    {
+      "ticks": 14176,
+      "microseconds": 443.0,
+      "flag": 0,
+      "count": 5
+    },
+    {
+      "ticks": 23725,
+      "microseconds": 741.40625,
+      "flag": 0,
+      "count": 8
+    },
+    {
+      "ticks": 26914,
+      "microseconds": 841.0625,
+      "flag": 1,
+      "count": 0
+    },
+    {
+      "ticks": 49289,
+      "microseconds": 1540.28125,
+      "flag": 1,
+      "count": 0
+    },
+    {
+      "ticks": 55764,
+      "microseconds": 1742.625,
+      "flag": 1,
+      "count": 0
+    },
+    {
+      "ticks": 1524,
+      "microseconds": 47.625,
+      "flag": 0,
+      "count": 1
+    },
+    {
+      "ticks": 2911,
+      "microseconds": 90.96875,
+      "flag": 0,
+      "count": 1
+    },
+    {
+      "ticks": 4510,
+      "microseconds": 140.9375,
+      "flag": 0,
+      "count": 2
+    },
+    {
+      "ticks": 7699,
+      "microseconds": 240.59375,
+      "flag": 0,
+      "count": 3
+    },
+    {
+      "ticks": 14174,
+      "microseconds": 442.9375,
+      "flag": 0,
+      "count": 5
+    },
+    {
+      "ticks": 23723,
+      "microseconds": 741.34375,
+      "flag": 0,
+      "count": 8
+    },
+    {
+      "ticks": 26912,
+      "microseconds": 841.0,
+      "flag": 0,
+      "count": 9
+    },
+    {
+      "ticks": 49287,
+      "microseconds": 1540.21875,
+      "flag": 0,
+      "count": 16
+    },
+    {
+      "ticks": 55762,
+      "microseconds": 1742.5625,
+      "flag": 1,
+      "count": 0
+    }
+  ],
+  "previous_qemu": [
+    {
+      "ticks": 1290,
+      "microseconds": 40.3125,
+      "flag": 0,
+      "count": 0
+    },
+    {
+      "ticks": 2883,
+      "microseconds": 90.09375,
+      "flag": 0,
+      "count": 0
+    },
+    {
+      "ticks": 4489,
+      "microseconds": 140.28125,
+      "flag": 0,
+      "count": 1
+    },
+    {
+      "ticks": 7682,
+      "microseconds": 240.0625,
+      "flag": 0,
+      "count": 2
+    },
+    {
+      "ticks": 14087,
+      "microseconds": 440.21875,
+      "flag": 0,
+      "count": 4
+    },
+    {
+      "ticks": 23680,
+      "microseconds": 740.0,
+      "flag": 0,
+      "count": 7
+    },
+    {
+      "ticks": 26886,
+      "microseconds": 840.1875,
+      "flag": 1,
+      "count": 0
+    },
+    {
+      "ticks": 49291,
+      "microseconds": 1540.34375,
+      "flag": 1,
+      "count": 0
+    },
+    {
+      "ticks": 55684,
+      "microseconds": 1740.125,
+      "flag": 1,
+      "count": 0
+    },
+    {
+      "ticks": 1291,
+      "microseconds": 40.34375,
+      "flag": 0,
+      "count": 0
+    },
+    {
+      "ticks": 2884,
+      "microseconds": 90.125,
+      "flag": 0,
+      "count": 0
+    },
+    {
+      "ticks": 4490,
+      "microseconds": 140.3125,
+      "flag": 0,
+      "count": 1
+    },
+    {
+      "ticks": 7682,
+      "microseconds": 240.0625,
+      "flag": 0,
+      "count": 2
+    },
+    {
+      "ticks": 14088,
+      "microseconds": 440.25,
+      "flag": 0,
+      "count": 4
+    },
+    {
+      "ticks": 23681,
+      "microseconds": 740.03125,
+      "flag": 0,
+      "count": 7
+    },
+    {
+      "ticks": 26886,
+      "microseconds": 840.1875,
+      "flag": 0,
+      "count": 8
+    },
+    {
+      "ticks": 49292,
+      "microseconds": 1540.375,
+      "flag": 0,
+      "count": 15
+    },
+    {
+      "ticks": 55685,
+      "microseconds": 1740.15625,
+      "flag": 1,
+      "count": 0
+    }
+  ],
+  "waveform": {
+    "mode": "pwm-finite",
+    "hil_passed": false,
+    "runner_exit": 1,
+    "capture_exit": 0,
+    "sample_rate": 10000000,
+    "threshold_volts": 1.65,
+    "probe_channel": 11,
+    "pad": "MIO21/MGPIO21/SGPIO2/SDK47",
+    "capture_ready_monotonic": 956954.178966344,
+    "raw_sha256": "dc97cb3f38f37c6373c5853c4da745c3f8f72d55cdaee4c6c1b2a90dc4ede7fa",
+    "stages": [
+      {
+        "stage": 0,
+        "passed": true,
+        "expected_pulses": 8,
+        "edge_count": 16,
+        "rising_edges": 8,
+        "initial_level": 0,
+        "final_level": 0,
+        "quiet_tail_seconds": 0.0844745,
+        "mean_period_seconds": 0.0001,
+        "mean_high_seconds": 5e-05,
+        "edges_first128": [
+          [
+            29692113,
+            1
+          ],
+          [
+            29692613,
+            0
+          ],
+          [
+            29693113,
+            1
+          ],
+          [
+            29693613,
+            0
+          ],
+          [
+            29694113,
+            1
+          ],
+          [
+            29694613,
+            0
+          ],
+          [
+            29695113,
+            1
+          ],
+          [
+            29695613,
+            0
+          ],
+          [
+            29696113,
+            1
+          ],
+          [
+            29696613,
+            0
+          ],
+          [
+            29697113,
+            1
+          ],
+          [
+            29697613,
+            0
+          ],
+          [
+            29698113,
+            1
+          ],
+          [
+            29698613,
+            0
+          ],
+          [
+            29699113,
+            1
+          ],
+          [
+            29699613,
+            0
+          ]
+        ],
+        "begin_sample": 29590064,
+        "end_sample": 30544358
+      },
+      {
+        "stage": 1,
+        "passed": true,
+        "expected_pulses": 16,
+        "edge_count": 32,
+        "rising_edges": 16,
+        "initial_level": 0,
+        "final_level": 0,
+        "quiet_tail_seconds": 0.083569,
+        "mean_period_seconds": 0.0001,
+        "mean_high_seconds": 5e-05,
+        "edges_first128": [
+          [
+            31502212,
+            1
+          ],
+          [
+            31502712,
+            0
+          ],
+          [
+            31503212,
+            1
+          ],
+          [
+            31503712,
+            0
+          ],
+          [
+            31504212,
+            1
+          ],
+          [
+            31504712,
+            0
+          ],
+          [
+            31505212,
+            1
+          ],
+          [
+            31505712,
+            0
+          ],
+          [
+            31506212,
+            1
+          ],
+          [
+            31506712,
+            0
+          ],
+          [
+            31507212,
+            1
+          ],
+          [
+            31507712,
+            0
+          ],
+          [
+            31508212,
+            1
+          ],
+          [
+            31508712,
+            0
+          ],
+          [
+            31509212,
+            1
+          ],
+          [
+            31509712,
+            0
+          ],
+          [
+            31510212,
+            1
+          ],
+          [
+            31510712,
+            0
+          ],
+          [
+            31511212,
+            1
+          ],
+          [
+            31511712,
+            0
+          ],
+          [
+            31512212,
+            1
+          ],
+          [
+            31512712,
+            0
+          ],
+          [
+            31513212,
+            1
+          ],
+          [
+            31513712,
+            0
+          ],
+          [
+            31514212,
+            1
+          ],
+          [
+            31514712,
+            0
+          ],
+          [
+            31515212,
+            1
+          ],
+          [
+            31515712,
+            0
+          ],
+          [
+            31516212,
+            1
+          ],
+          [
+            31516712,
+            0
+          ],
+          [
+            31517212,
+            1
+          ],
+          [
+            31517712,
+            0
+          ]
+        ],
+        "begin_sample": 31399620,
+        "end_sample": 32353402
+      }
+    ],
+    "passed": false
+  },
+  "recovered": true,
+  "ram_verified": true,
+  "post_image_verified": true,
+  "flash_written": false,
+  "conclusion": "During finite output the readable count denotes the active1-based pulse index; after deferred stop it is0. Model formerly returned completed-period count, one lower while running.",
+  "limits": [
+    "Single channel/group/clock profile",
+    "No observations at exact boundaries",
+    "Continuous/repeating/offset/polarity/overflow modes not qualified",
+    "Old generic strict UART oracle rejects diagnostic sample lines as expected"
+  ]
+}

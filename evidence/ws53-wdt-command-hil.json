@@ -1,0 +1,500 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "diagnosis": [
+    "Immediate snapshot after feed timed out at index2, CCVR0; cleanup stop succeeds.",
+    "200us after feed advances to stopped snapshot failure index4.",
+    "200us after feed and stop advances to restart snapshot failure index6. Earlier first count0x001f40fe reflects previous64s setup rather than new1024s LOAD.",
+    "200us after initial start/feed/stop/restart passes3runs, sameELF functional contract passes QEMU; command-completion semantics and minimum interval unresolved.",
+    "Current immediate QEMU profile does not reproduce silicon command/snapshot ordering; model pass is not proof of hardware compatibility."
+  ],
+  "limits": [
+    "HAL command completion and snapshot freshness remain unresolved; diagnostic200us is not a production fix",
+    "NMI/expiry/reset not intentionally exercised; no Flash writes",
+    "LOAD lowbyte hardware0xff versus model0 reported without asserting equal reserved-bit behavior",
+    "~32kHz count deltas checked against TIMER1; no exact oscillator accuracy or reset-stage timing qualification",
+    "No shared-clock change or production control-core ownership handoff; boundedRAM takeover only",
+    "CI draft only, no remote run/push"
+  ],
+  "runs": [
+    {
+      "name": "wdt-hil-01",
+      "elf_sha256": "481b8c5b40d70af2eb1a2d01882a843e8eb230ae83f1447e40ee2096873198c7",
+      "passed": false,
+      "recovered": true,
+      "post_image_verified": false,
+      "wdt": {
+        "passed": false,
+        "error": "unexpected WDT transcript"
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\n",
+      "qemu_passed": true,
+      "qemu_wdt": {
+        "passed": true,
+        "load_readback": 32768000,
+        "control_readback": 61,
+        "timer_ticks": [
+          32,
+          320112,
+          320124,
+          640204,
+          640222,
+          960302,
+          960332,
+          960350
+        ],
+        "counter_ticks": [
+          32768255,
+          32767935,
+          32768255,
+          32767935,
+          32767935,
+          32767935,
+          32768255,
+          32768255
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 320080,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31992.001999500124,
+            "passed": true
+          },
+          {
+            "timer_ticks": 320080,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31992.001999500124,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      }
+    },
+    {
+      "name": "wdt-diag-hil-01",
+      "elf_sha256": "dc459d097a4bdb93ac6a82ec592e57ce5d61b2d144d0227c4dc38ec4ad755a2e",
+      "passed": false,
+      "recovered": true,
+      "post_image_verified": true,
+      "wdt": {
+        "passed": false,
+        "error": "unexpected WDT transcript"
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 WDT SNAPSHOT FAIL 00000002000000030000000000000001\r\n",
+      "qemu_passed": null,
+      "qemu_wdt": null
+    },
+    {
+      "name": "wdt-settle-hil-01",
+      "elf_sha256": "8f852dbbfaae978bc684bde0afc2f0fe707737086dbacd110b2f5b4345ae619c",
+      "passed": false,
+      "recovered": true,
+      "post_image_verified": true,
+      "wdt": {
+        "passed": false,
+        "error": "unexpected WDT transcript"
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 WDT SNAPSHOT FAIL 00000004000000030000000000000001\r\n",
+      "qemu_passed": true,
+      "qemu_wdt": {
+        "passed": true,
+        "load_readback": 32768000,
+        "control_readback": 61,
+        "timer_ticks": [
+          33,
+          320113,
+          326580,
+          646660,
+          646679,
+          966759,
+          966790,
+          966810
+        ],
+        "counter_ticks": [
+          32768255,
+          32767935,
+          32768249,
+          32767929,
+          32767929,
+          32767929,
+          32768255,
+          32768255
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 320080,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31992.001999500124,
+            "passed": true
+          },
+          {
+            "timer_ticks": 320080,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31992.001999500124,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      }
+    },
+    {
+      "name": "wdt-stop-settle-hil-01",
+      "elf_sha256": "ebea486ea9357051503c4064d4a56c6c6269ad02617e371bc6dda5e19ff9b2c4",
+      "passed": false,
+      "recovered": true,
+      "post_image_verified": true,
+      "wdt": {
+        "passed": false,
+        "error": "unexpected WDT transcript"
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 WDT SNAPSHOT FAIL 00000006000000030000000000000001\r\nWS53 WDT PARTIAL 0000000000000d0b001f40fe\r\nWS53 WDT PARTIAL 000000010004f8cb01f3ffc0\r\nWS53 WDT PARTIAL 0000000200051b8801f400f9\r\nWS53 WDT PARTIAL 00000003000a074801f3ffb6\r\nWS53 WDT PARTIAL 00000004000a2a9301f3ffb2\r\nWS53 WDT PARTIAL 00000005000f15e801f3ffb2\r\n",
+      "qemu_passed": true,
+      "qemu_wdt": {
+        "passed": true,
+        "load_readback": 32768000,
+        "control_readback": 61,
+        "timer_ticks": [
+          33,
+          320113,
+          326580,
+          646660,
+          653133,
+          973213,
+          973244,
+          979717
+        ],
+        "counter_ticks": [
+          32768255,
+          32767935,
+          32768249,
+          32767929,
+          32767929,
+          32767929,
+          32768255,
+          32768255
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 320080,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31992.001999500124,
+            "passed": true
+          },
+          {
+            "timer_ticks": 320080,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31992.001999500124,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      }
+    },
+    {
+      "name": "wdt-all-settle-hil-01",
+      "elf_sha256": "cb29628160bc08f0d4fbdcbe87ca591fc8f9986f713da901a6606a7caa8d84fb",
+      "passed": true,
+      "recovered": true,
+      "post_image_verified": true,
+      "wdt": {
+        "passed": true,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          9286,
+          331679,
+          340680,
+          663179,
+          672215,
+          994608,
+          1003664,
+          1012594
+        ],
+        "counter_ticks": [
+          32768253,
+          32767930,
+          32768249,
+          32767926,
+          32767922,
+          32767922,
+          32768254,
+          32768250
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 322393,
+            "watchdog_ticks": 323,
+            "estimated_hz": 32060.24944710338,
+            "passed": true
+          },
+          {
+            "timer_ticks": 322499,
+            "watchdog_ticks": 323,
+            "estimated_hz": 32049.711782052036,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 WDT SETTLE 000000c8\r\nWS53 WDT CONFIG 01f400ff0000003d\r\nWS53 WDT SAMPLE 0000244601f400fd\r\nWS53 WDT SAMPLE 00050f9f01f3ffba\r\nWS53 WDT SAMPLE 000532c801f400f9\r\nWS53 WDT SAMPLE 000a1e8b01f3ffb6\r\nWS53 WDT SAMPLE 000a41d701f3ffb2\r\nWS53 WDT SAMPLE 000f2d3001f3ffb2\r\nWS53 WDT SAMPLE 000f509001f400fe\r\nWS53 WDT SAMPLE 000f737201f400fa\r\nWS53 PASS wdt samples=8 feed=1 stop=2 restart=1 pending=0\r\n",
+      "qemu_passed": true,
+      "qemu_wdt": {
+        "passed": true,
+        "load_readback": 32768000,
+        "control_readback": 61,
+        "timer_ticks": [
+          6491,
+          326572,
+          333039,
+          653124,
+          659598,
+          979679,
+          986164,
+          992642
+        ],
+        "counter_ticks": [
+          32768249,
+          32767929,
+          32768249,
+          32767929,
+          32767929,
+          32767929,
+          32768249,
+          32768249
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 320081,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31991.902049793647,
+            "passed": true
+          },
+          {
+            "timer_ticks": 320085,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31991.502257212927,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      }
+    },
+    {
+      "name": "wdt-all-settle-hil-02",
+      "elf_sha256": "cb29628160bc08f0d4fbdcbe87ca591fc8f9986f713da901a6606a7caa8d84fb",
+      "passed": true,
+      "recovered": true,
+      "post_image_verified": true,
+      "wdt": {
+        "passed": true,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          9710,
+          332209,
+          341210,
+          663603,
+          672639,
+          995138,
+          1004088,
+          1013124
+        ],
+        "counter_ticks": [
+          32768253,
+          32767930,
+          32768249,
+          32767926,
+          32767922,
+          32767922,
+          32768254,
+          32768250
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 322499,
+            "watchdog_ticks": 323,
+            "estimated_hz": 32049.711782052036,
+            "passed": true
+          },
+          {
+            "timer_ticks": 322393,
+            "watchdog_ticks": 323,
+            "estimated_hz": 32060.24944710338,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 WDT SETTLE 000000c8\r\nWS53 WDT CONFIG 01f400ff0000003d\r\nWS53 WDT SAMPLE 000025ee01f400fd\r\nWS53 WDT SAMPLE 000511b101f3ffba\r\nWS53 WDT SAMPLE 000534da01f400f9\r\nWS53 WDT SAMPLE 000a203301f3ffb6\r\nWS53 WDT SAMPLE 000a437f01f3ffb2\r\nWS53 WDT SAMPLE 000f2f4201f3ffb2\r\nWS53 WDT SAMPLE 000f523801f400fe\r\nWS53 WDT SAMPLE 000f758401f400fa\r\nWS53 PASS wdt samples=8 feed=1 stop=2 restart=1 pending=0\r\n",
+      "qemu_passed": true,
+      "qemu_wdt": {
+        "passed": true,
+        "load_readback": 32768000,
+        "control_readback": 61,
+        "timer_ticks": [
+          6491,
+          326572,
+          333039,
+          653124,
+          659598,
+          979679,
+          986164,
+          992642
+        ],
+        "counter_ticks": [
+          32768249,
+          32767929,
+          32768249,
+          32767929,
+          32767929,
+          32767929,
+          32768249,
+          32768249
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 320081,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31991.902049793647,
+            "passed": true
+          },
+          {
+            "timer_ticks": 320085,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31991.502257212927,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      }
+    },
+    {
+      "name": "wdt-all-settle-hil-03",
+      "elf_sha256": "cb29628160bc08f0d4fbdcbe87ca591fc8f9986f713da901a6606a7caa8d84fb",
+      "passed": true,
+      "recovered": true,
+      "post_image_verified": true,
+      "wdt": {
+        "passed": true,
+        "load_readback": 32768255,
+        "control_readback": 61,
+        "timer_ticks": [
+          9286,
+          331785,
+          340786,
+          663179,
+          672215,
+          994714,
+          1003664,
+          1012700
+        ],
+        "counter_ticks": [
+          32768253,
+          32767930,
+          32768249,
+          32767926,
+          32767922,
+          32767922,
+          32768254,
+          32768250
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 322499,
+            "watchdog_ticks": 323,
+            "estimated_hz": 32049.711782052036,
+            "passed": true
+          },
+          {
+            "timer_ticks": 322393,
+            "watchdog_ticks": 323,
+            "estimated_hz": 32060.24944710338,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      },
+      "uart": "WS53 RAM data/bss OK\r\nWS53 PASS timer_irq=53 count=3\r\nWS53 WDT SETTLE 000000c8\r\nWS53 WDT CONFIG 01f400ff0000003d\r\nWS53 WDT SAMPLE 0000244601f400fd\r\nWS53 WDT SAMPLE 0005100901f3ffba\r\nWS53 WDT SAMPLE 0005333201f400f9\r\nWS53 WDT SAMPLE 000a1e8b01f3ffb6\r\nWS53 WDT SAMPLE 000a41d701f3ffb2\r\nWS53 WDT SAMPLE 000f2d9a01f3ffb2\r\nWS53 WDT SAMPLE 000f509001f400fe\r\nWS53 WDT SAMPLE 000f73dc01f400fa\r\nWS53 PASS wdt samples=8 feed=1 stop=2 restart=1 pending=0\r\n",
+      "qemu_passed": true,
+      "qemu_wdt": {
+        "passed": true,
+        "load_readback": 32768000,
+        "control_readback": 61,
+        "timer_ticks": [
+          6491,
+          326572,
+          333039,
+          653124,
+          659598,
+          979679,
+          986164,
+          992642
+        ],
+        "counter_ticks": [
+          32768249,
+          32767929,
+          32768249,
+          32767929,
+          32767929,
+          32767929,
+          32768249,
+          32768249
+        ],
+        "count_deltas": [
+          {
+            "timer_ticks": 320081,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31991.902049793647,
+            "passed": true
+          },
+          {
+            "timer_ticks": 320085,
+            "watchdog_ticks": 320,
+            "estimated_hz": 31991.502257212927,
+            "passed": true
+          }
+        ],
+        "stopped_count_preserved": true,
+        "expiry_verified": false,
+        "nmi_verified": false,
+        "reset_verified": false,
+        "precise_clock_verified": false
+      }
+    }
+  ]
+}

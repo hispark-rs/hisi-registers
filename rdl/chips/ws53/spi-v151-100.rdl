@@ -105,7 +105,9 @@ addrmap ws53_spi0_v151_100_regs {
         field { sw=r; hw=w; onread=rclr; desc="Read acknowledges the corresponding interrupt; writes have no effect"; } clear[0:0];
     } CLEAR_RX_UNDERFLOW @ 0xe0;
     reg {
-        field { sw=r; hw=w; } collision_or_tx_error[0:0];
+        field { sw=r; hw=w; onread=rclr;
+            desc="SDK spi_wsr_data_t: master collision status clears on read. Retain the existing field name for API compatibility; the SDK documentation establishes master collision, not TX FIFO overflow. Relation to RAW_INTERRUPT acknowledgement is not established; do not use STATUS as an IRQ acknowledgement. SDK documentation, not silicon-qualified.";
+        } collision_or_tx_error[0:0];
         field { sw=r; hw=w; } rx_not_empty[4:4];
         field { sw=r; hw=w; } rx_full[5:5];
         field { sw=r; hw=w; } tx_not_full[11:11];
@@ -186,8 +188,12 @@ addrmap ws53_qspi1_v151_100_regs {
         field { sw=r; hw=w; } tx_empty[2:2];
         field { sw=r; hw=w; } rx_not_empty[3:3];
         field { sw=r; hw=w; } rx_full[4:4];
-        field { sw=r; hw=w; } tx_error[5:5];
-        field { sw=r; hw=w; } collision[6:6];
+        field { sw=r; hw=w; onread=rclr;
+            desc="SDK sr_data_t: transmit FIFO empty when a slave transfer starts; clears on read. Only a slave can set this flag; the WS53 QSPI1 port is master-only. This is not TX FIFO overflow. SDK documentation, not silicon-qualified.";
+        } tx_error[5:5];
+        field { sw=r; hw=w; onread=rclr;
+            desc="SDK sr_data_t: master collision status clears on read. Relation to RAW_INTERRUPT acknowledgement is not established; do not use STATUS as an IRQ acknowledgement. SDK documentation, not silicon-qualified.";
+        } collision[6:6];
     } STATUS @ 0x28;
     reg {
         field { sw=rw; hw=r; } tx_empty[0:0];

@@ -1,0 +1,1149 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_hash.c": "4b23683e9907cc976afad500e59728c4e4f85510a35cbdd6c98a81ab9eba8d4b",
+    "src/drivers/chips/ws53/porting/security_unified/security_unified_porting.h": "61fa30fcf837db575d04c57a66cfe814f42f31847957b977f972694f8628018c",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_spacc_reg.h": "3d4630e695abebcd0e15554c1b74465b60e681f6b5208ce8d8adc186916b5f8e"
+  },
+  "selected_original_function_sha256": {
+    "inner_hash_irq_enable": "b17baef503c201d90768fdf38f1496988550cbee48107da22fe2d0e227976e78",
+    "hal_hash_clear_channel": "f31260d217139f62e7325243e602a463e5f6eea05a10ac1f6c5fc6ac45d70543",
+    "hal_cipher_hash_init": "adbc7fabd5092b9883d94c59f28987648b928c87f673bedbf87752905b74a998",
+    "hal_cipher_hash_deinit": "721c70fd3a1f1a8e04658b258f8db587edbc50a2c3fea19ea6757e9681b5d105",
+    "hal_hash_lock": "b94124b39c781931702606d13200f6c03f7fa1371cf91ec8204450e6254ebad1",
+    "hal_hash_unlock": "f5cbc4a1e710dac65c9fee562a7d0c5525c65080d3c589e227ff6ff6d7c4bcb5",
+    "hal_cipher_hash_done_try": "a7b9fb6af5126da81f560ad3cfcdf5b5e640f8e89362d4120e316d131d44d232"
+  },
+  "original_declarations_sha256": "4eb2f143e41533c70b2d52d26f96e59f23d6554f2eb54135eb334d12ef1d1774",
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "target_compiler": "riscv64-linux-gnu-gcc (GCC) 16.2.1 20260819 (Red Hat Cross 16.2.1-1)",
+  "target_abi": "RV32IMFC ilp32f",
+  "target_layout_words": [
+    3,
+    305419896,
+    536945472,
+    15,
+    2147487488,
+    16712207,
+    255,
+    255
+  ],
+  "target_layout_sha256": "84fc86559d404f32385f47022a995f019105b99f5a41b23fe8567d72f4e3dea8",
+  "undefined_behavior_sanitizer": true,
+  "sanitizer_failure_mode": "trap",
+  "observations": {
+    "descriptor_bytes": 16,
+    "node_depth": 2,
+    "context_count": 2,
+    "clear_timeout_polls": 10000000,
+    "layout_words": [
+      2147487488,
+      16712207,
+      255,
+      255
+    ],
+    "cases": [
+      {
+        "name": "lock-ready",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 5,
+        "clear_reads": 1,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 2684354576,
+        "writes": [
+          [
+            64,
+            2684354576
+          ],
+          [
+            34308,
+            2774139133
+          ],
+          [
+            104,
+            2
+          ],
+          [
+            20,
+            2
+          ],
+          [
+            20736,
+            2147486208
+          ],
+          [
+            20772,
+            537198592
+          ],
+          [
+            20768,
+            0
+          ],
+          [
+            20780,
+            2
+          ],
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-delayed-clear",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 8,
+        "clear_reads": 4,
+        "delay_calls": 3,
+        "frees": 0,
+        "lock": 2684354576,
+        "writes": [
+          [
+            64,
+            2684354576
+          ],
+          [
+            34308,
+            2774139133
+          ],
+          [
+            104,
+            2
+          ],
+          [
+            20,
+            2
+          ],
+          [
+            20736,
+            2147486208
+          ],
+          [
+            20772,
+            537198592
+          ],
+          [
+            20768,
+            0
+          ],
+          [
+            20780,
+            2
+          ],
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-clear-timeout-ignored",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 10000004,
+        "clear_reads": 10000000,
+        "delay_calls": 10000000,
+        "frees": 0,
+        "lock": 2684354576,
+        "writes": [
+          [
+            64,
+            2684354576
+          ],
+          [
+            34308,
+            2774139133
+          ],
+          [
+            104,
+            2
+          ],
+          [
+            20736,
+            2147486208
+          ],
+          [
+            20772,
+            537198592
+          ],
+          [
+            20768,
+            0
+          ],
+          [
+            20780,
+            2
+          ],
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-ready",
+        "channel": 1,
+        "secure_stub": 1,
+        "return": 0,
+        "reads": 5,
+        "clear_reads": 1,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 2684354592,
+        "writes": [
+          [
+            64,
+            2684354592
+          ],
+          [
+            34308,
+            2774139133
+          ],
+          [
+            104,
+            2
+          ],
+          [
+            20,
+            2
+          ],
+          [
+            20736,
+            2147484928
+          ],
+          [
+            20772,
+            537198592
+          ],
+          [
+            20768,
+            0
+          ],
+          [
+            20780,
+            2
+          ],
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-delayed-clear",
+        "channel": 1,
+        "secure_stub": 1,
+        "return": 0,
+        "reads": 8,
+        "clear_reads": 4,
+        "delay_calls": 3,
+        "frees": 0,
+        "lock": 2684354592,
+        "writes": [
+          [
+            64,
+            2684354592
+          ],
+          [
+            34308,
+            2774139133
+          ],
+          [
+            104,
+            2
+          ],
+          [
+            20,
+            2
+          ],
+          [
+            20736,
+            2147484928
+          ],
+          [
+            20772,
+            537198592
+          ],
+          [
+            20768,
+            0
+          ],
+          [
+            20780,
+            2
+          ],
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-clear-timeout-ignored",
+        "channel": 1,
+        "secure_stub": 1,
+        "return": 0,
+        "reads": 10000004,
+        "clear_reads": 10000000,
+        "delay_calls": 10000000,
+        "frees": 0,
+        "lock": 2684354592,
+        "writes": [
+          [
+            64,
+            2684354592
+          ],
+          [
+            34308,
+            2774139133
+          ],
+          [
+            104,
+            2
+          ],
+          [
+            20736,
+            2147484928
+          ],
+          [
+            20772,
+            537198592
+          ],
+          [
+            20768,
+            0
+          ],
+          [
+            20780,
+            2
+          ],
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-ready",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 5,
+        "clear_reads": 1,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 2684354816,
+        "writes": [
+          [
+            64,
+            2684354816
+          ],
+          [
+            34308,
+            2774139131
+          ],
+          [
+            104,
+            4
+          ],
+          [
+            20,
+            4
+          ],
+          [
+            20992,
+            2147486208
+          ],
+          [
+            21028,
+            537198624
+          ],
+          [
+            21024,
+            0
+          ],
+          [
+            21036,
+            2
+          ],
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-delayed-clear",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 8,
+        "clear_reads": 4,
+        "delay_calls": 3,
+        "frees": 0,
+        "lock": 2684354816,
+        "writes": [
+          [
+            64,
+            2684354816
+          ],
+          [
+            34308,
+            2774139131
+          ],
+          [
+            104,
+            4
+          ],
+          [
+            20,
+            4
+          ],
+          [
+            20992,
+            2147486208
+          ],
+          [
+            21028,
+            537198624
+          ],
+          [
+            21024,
+            0
+          ],
+          [
+            21036,
+            2
+          ],
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-clear-timeout-ignored",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 10000004,
+        "clear_reads": 10000000,
+        "delay_calls": 10000000,
+        "frees": 0,
+        "lock": 2684354816,
+        "writes": [
+          [
+            64,
+            2684354816
+          ],
+          [
+            34308,
+            2774139131
+          ],
+          [
+            104,
+            4
+          ],
+          [
+            20992,
+            2147486208
+          ],
+          [
+            21028,
+            537198624
+          ],
+          [
+            21024,
+            0
+          ],
+          [
+            21036,
+            2
+          ],
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-ready",
+        "channel": 2,
+        "secure_stub": 1,
+        "return": 0,
+        "reads": 5,
+        "clear_reads": 1,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 2684355072,
+        "writes": [
+          [
+            64,
+            2684355072
+          ],
+          [
+            34308,
+            2774139131
+          ],
+          [
+            104,
+            4
+          ],
+          [
+            20,
+            4
+          ],
+          [
+            20992,
+            2147484928
+          ],
+          [
+            21028,
+            537198624
+          ],
+          [
+            21024,
+            0
+          ],
+          [
+            21036,
+            2
+          ],
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-delayed-clear",
+        "channel": 2,
+        "secure_stub": 1,
+        "return": 0,
+        "reads": 8,
+        "clear_reads": 4,
+        "delay_calls": 3,
+        "frees": 0,
+        "lock": 2684355072,
+        "writes": [
+          [
+            64,
+            2684355072
+          ],
+          [
+            34308,
+            2774139131
+          ],
+          [
+            104,
+            4
+          ],
+          [
+            20,
+            4
+          ],
+          [
+            20992,
+            2147484928
+          ],
+          [
+            21028,
+            537198624
+          ],
+          [
+            21024,
+            0
+          ],
+          [
+            21036,
+            2
+          ],
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-clear-timeout-ignored",
+        "channel": 2,
+        "secure_stub": 1,
+        "return": 0,
+        "reads": 10000004,
+        "clear_reads": 10000000,
+        "delay_calls": 10000000,
+        "frees": 0,
+        "lock": 2684355072,
+        "writes": [
+          [
+            64,
+            2684355072
+          ],
+          [
+            34308,
+            2774139131
+          ],
+          [
+            104,
+            4
+          ],
+          [
+            20992,
+            2147484928
+          ],
+          [
+            21028,
+            537198624
+          ],
+          [
+            21024,
+            0
+          ],
+          [
+            21036,
+            2
+          ],
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-busy",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 16,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 32,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 48,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 64,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 80,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 256,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 512,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 768,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 1024,
+        "writes": []
+      },
+      {
+        "name": "lock-busy",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 1280,
+        "writes": []
+      },
+      {
+        "name": "lock-readback-rejected",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 2,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            64,
+            16
+          ]
+        ]
+      },
+      {
+        "name": "direct-clear-timeout",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": -1,
+        "reads": 10000001,
+        "clear_reads": 10000000,
+        "delay_calls": 10000000,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34308,
+            0
+          ],
+          [
+            104,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "lock-readback-rejected",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -3,
+        "reads": 2,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            64,
+            256
+          ]
+        ]
+      },
+      {
+        "name": "direct-clear-timeout",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": -1,
+        "reads": 10000001,
+        "clear_reads": 10000000,
+        "delay_calls": 10000000,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34308,
+            0
+          ],
+          [
+            104,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "lock-invalid",
+        "channel": 0,
+        "secure_stub": 0,
+        "return": -1,
+        "reads": 0,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": []
+      },
+      {
+        "name": "lock-invalid",
+        "channel": 3,
+        "secure_stub": 0,
+        "return": -1,
+        "reads": 0,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": []
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 2,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 2,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 2,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 1,
+        "secure_stub": 0,
+        "return": 2,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            2
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            0
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 4,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 4,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 4,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "done-mask-and-ack",
+        "channel": 2,
+        "secure_stub": 0,
+        "return": 4,
+        "reads": 1,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 0,
+        "lock": 0,
+        "writes": [
+          [
+            34304,
+            4
+          ]
+        ]
+      },
+      {
+        "name": "deinit-unlocks-0-and-1-retains-2",
+        "channel": 0,
+        "secure_stub": 0,
+        "return": 0,
+        "reads": 2,
+        "clear_reads": 0,
+        "delay_calls": 0,
+        "frees": 1,
+        "lock": 512,
+        "writes": [
+          [
+            64,
+            528
+          ],
+          [
+            64,
+            512
+          ]
+        ]
+      }
+    ],
+    "case_count": 45
+  },
+  "hardware_accessed": false,
+  "algorithm_results_tested": false,
+  "rdl_or_pac_generated": false,
+  "findings": [
+    "Original direct clear reports timeout after 10000000 reads/delay calls; original lock ignores that failure and still enables/publishes the descriptor table and returns success",
+    "Original deinit unlocks channels0/1 and leaves channel2 owner set, then zeroes/frees both context tables without issuing clear or checking drain",
+    "Original done_try writes only the selected raw status bit back, including a zero write when not pending",
+    "Original descriptor is16 bytes and tables contain2 entries; RV32IMFC ilp32f object bytes match the host field probe"
+  ],
+  "limitations": [
+    "Reads, ACK effects, lock arbitration, allocation, physical mapping and CPU identity are explicit host stubs",
+    "Zero-filled stub MMIO is a test input, not a hardware reset value",
+    "No silicon channels, cross-core exclusion, bus drain, IRQ routing, algorithms or security settings qualified",
+    "Cross-compiled layout does not establish silicon DMA addressability, cache behavior or safe reclamation"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "irq_cases": 37,
+  "recovery_calls": 2,
+  "events": {
+    "0": {
+      "name": "host_write_complete",
+      "counter": "fn1_wr_over",
+      "counter_offset": 16
+    },
+    "1": {
+      "name": "host_read_complete",
+      "counter": "fn1_rd_over",
+      "counter_offset": 18
+    },
+    "2": {
+      "name": "host_read_error",
+      "counter": "fn1_rd_error",
+      "counter_offset": 20
+    },
+    "3": {
+      "name": "host_read_start",
+      "counter": "fn1_rd_start",
+      "counter_offset": 22
+    },
+    "4": {
+      "name": "host_write_start",
+      "counter": "fn1_wr_start",
+      "counter_offset": 24
+    },
+    "5": {
+      "name": "adma_end",
+      "counter": "fn1_adma_end_int",
+      "counter_offset": 32
+    },
+    "6": {
+      "name": "adma_interrupt",
+      "counter": "fn1_adma_int",
+      "counter_offset": 38
+    },
+    "7": {
+      "name": "adma_error",
+      "counter": "fn1_adma_err",
+      "counter_offset": 40
+    },
+    "8": {
+      "name": "function_reset",
+      "counter": "fn1_rst",
+      "counter_offset": 26
+    },
+    "9": {
+      "name": "host_message",
+      "counter": "fn1_msg_rdy",
+      "counter_offset": 28
+    },
+    "10": {
+      "name": "suspend",
+      "counter": "fn1_suspend",
+      "counter_offset": 34
+    },
+    "11": {
+      "name": "resume",
+      "counter": "fn1_resume",
+      "counter_offset": 36
+    },
+    "12": {
+      "name": "device_message_ack",
+      "counter": "fn1_ack_to_arm_int_cnt",
+      "counter_offset": 30
+    },
+    "13": {
+      "name": "function_enable",
+      "counter": "fn1_en_int",
+      "counter_offset": 42
+    }
+  },
+  "recovery": {
+    "deinit": {
+      "base_pointer_cleared": true,
+      "surrogate_registers_unchanged": true,
+      "info_and_callbacks_unchanged": true,
+      "bus_drain_proven": false
+    },
+    "soft_reset": {
+      "base_pointer_cleared": false,
+      "surrogate_registers_unchanged": true,
+      "info_and_callbacks_unchanged": true,
+      "bus_drain_proven": false
+    }
+  },
+  "rom_sha256": "a1ac5c03c613112f973b45bdfbfd399d3f3017b315b61d1f6b0d2a07d2ce4671",
+  "sdk_header_sha256": "9f01eda40115173ba3cfa5b5097f74b859601943218fd38fab87f754f4b5ccea",
+  "qemu_sha256": "9c53a6171ee203f7b4dc2c36d4b2c012d267c19c3c710de39a8258b28431b942",
+  "script_sha256": "ac31dcc7d59d4f7146410b2d3cd9c497f00ed8a87c706106db780ccf723652fc",
+  "helper_sha256": "15b30177dd26c888b8913e7aa730909e79a08a407f6145773e95e88fc697085f",
+  "observations_sha256": "1e219c7d26d2d3ff65425036351c6e57a12d2a84d583d5ff717a0ba5bd0e5572",
+  "svd_sha256": "b4e5e13d9973735bdcabfb31526a5ea469cde15f60ffb2724de06691ebbd3987",
+  "source_layout_validated": true,
+  "original_rom_bytes_unmodified": true,
+  "register_surrogate": "ordinary RAM; no W1C emulation",
+  "hardware_accessed": false,
+  "hardware_irq_verified": false,
+  "dma_transfer_or_drain_verified": false
+}

@@ -2,6 +2,12 @@
 
 Status: SDK-first minimal map.
 
+SFC clock access increment (2026-10-25): the fixed SDK's original helper bodies
+and `chip_io.h` macros establish a shared M_CRG slot at0x52000570 with 16/32-bit
+access views, ENABLE bit0 and SOURCE_CONFIG bits3:1. No extra upper bits, reset,
+frequency formula, automatic HAL switching, core handoff or physical clock
+qualification follows. See [source contract](ws53-sfc-clock-source-contract.md).
+
 ## Application-core RAM milestone (2026-10-22)
 
 Pinned evidence: `fbb_ws53` commit
@@ -64,6 +70,21 @@ bit 11 is SPI3_MS (application SPI_BUS_0), bit 0 is TIMER. The generic
 register bits and undocumented selectors are not invented. MSUB gate fields
 come from `hal_clocks.h`; a named SDMA gate does not prove a usable SDMA instance.
 
+MSUB has a separate access-width qualification. `MSUB_NORMAL_WORD` and
+`MSUB_SLEEP_WORD` preserve the original low-half fields while exposing the
+32-bit accesses actually used by `clock_recover.c`, `acore_clock_recover.c`
+and `pm_sleep_porting.c`. `chip_io.h` defines their `reg`/`reg32` lvalues as
+`volatile uint32_t`. The historical halfword views remain for API compatibility;
+their write qualification is unresolved, and the peripheral-port halfword
+evidence above must not be applied to MSUB. Both historical 16- and 32-bit SDMA
+gate-clear attempts retained bit4. Neither this alias nor the host-RAM oracle
+proves successful gate clearing, bus drain, reset semantics or ownership.
+`scripts/check_ws53_msub_access.py --sdk <SDK>` compiles the pinned SDK enums
+and original access helpers against anonymous host RAM: 19 field positions,
+42 RMW scenarios, preserved upper halves and neighboring words. The clock and
+delay dependencies are explicit stubs; no device, timing or power-mode behavior
+is simulated. See [`ws53-msub-word-access.json`](ws53-msub-word-access.json).
+
 All four new blocks have unknown reset values and shared ownership. They have
 SDK-source evidence only: adding a PAC register does not authorize claiming or
 reconfiguring the control core's clocks, reset pad, flash pads, or SWD pins.
@@ -78,7 +99,12 @@ No PAC SVD baseline is imported. The initial WS53 map contains only IP blocks
 whose register definitions are proven reusable from `fbb_ws53` and the other SDKs:
 
 - watchdog v151 at acore base `0x5702B000`;
-- SFC v150 at `0x53000000`;
+- SFC v150 at `0x53000000`; command/bus-DMA layouts and poll semantics now
+  checked against original SDK C by `check_ws53_sfc_contract.py`. WS53 excludes
+  five imported IRQ/reset slots lacking this SDK's definitions, adds seven
+  source-backed sample/DDR layout fields, and corrects START/data hardware-write
+  metadata. See [source contract](ws53-sfc-command-source-contract.md); no
+  application IRQ, silicon reset, DDR operation or DMA drain is thereby proved;
 - PWM v151 at `0x52082000`;
 - UART v151 at acore `UART0` base `0x52081000`;
 - I2C v151 at acore `I2C0/1` bases `0x52083000` and `0x52084000`;
@@ -428,7 +454,72 @@ service or use an explicitly verified handover. No HAL, model, hardware random
 read, statistical/cryptographic-quality test or stable API is claimed here.
 Current map: **29 peripherals, 791 register views, 1612 fields, 20 IRQs**.
 
+### Executed unified-security TRNG source contract
+
+`scripts/check_ws53_trng_contract.py` executes unchanged pinned `hal_trng.c`,
+`hal_trng_reg.h` and `drv_trng.c` with explicitly mocked FIFO accesses, ring
+control, delay, bounded copy and error-code plumbing. The selected application
+configuration is checked; FRO and the undefined CLK_OPEN path stay disabled.
+GCC and Clang agree on 24 control/read paths and 21 byte-fill cases. SVD checks
+retain destructive FIFO reads, two ready flags, 16-bit ring control and no
+invented reset/IRQ. No generated register layout changes are needed.
+
+- Init preserves the ring register's upper 15 bits and waits 200 us even if
+  already enabled. HAL deinit disables it; driver init/deinit skip duplicate
+  calls through their own software flags. No cross-core mutex is introduced.
+- Both flags must be set on two successive status reads. A ready-to-not-ready
+  change consumes no FIFO word. Once admitted, two words are read without
+  another readiness check; source alone does not establish that two are present.
+- Zero/all-ones candidates and candidates equal to their comparison are
+  rejected. The comparison can itself be zero/all-ones, and identical accepted
+  candidates in separate calls are allowed. This is not a continuous entropy
+  health test or a cryptographic quality result.
+- Exhaustion can involve one million loop iterations and two million status
+  reads/FIFO reads, with no polling delay. When candidates are rejected, the
+  caller's output contains the last rejected value even though an error is
+  returned. If readiness never passes, the output is untouched.
+- Byte reads copy native-endian words; a partial tail consumes another whole
+  accepted candidate. Zero-length/non-null returns failure; null is rejected
+  even for zero length. Later failure leaves the successful prefix in place
+  and does not modify the remaining destination, so a Rust fill API must report
+  partial progress or define an explicit rollback/zeroing contract.
+
+The original IPC source is pinned as context but not executed by this oracle.
+There is no proof of the active firmware's random-buffer protocol, handoff,
+FIFO depth, silicon timing or entropy. Evidence: `ws53-trng-source-contract.json`.
+
 ## eFuse v151 read-service subset
+
+The executable read contract now accompanies the earlier layout audit:
+`scripts/check_ws53_efuse_contract.py` / `ws53-efuse-source-contract.json`.
+It compiles the unchanged original v151 HAL/register helpers and extracts the
+unchanged generic read-buffer and address-selection functions. Only register
+pointer initialization, error constants and IRQ bookkeeping are substituted.
+The data window is anonymous Linux/x86-64 MAP_32BIT memory populated with known
+bytes, then protected with `mprotect(PROT_READ)`; no physical address is mapped.
+Programming callbacks are compiled as context but never invoked; AVDD/switch
+sentinels and the entire data page remain unchanged, and any programming delay
+would fail the test. GCC and Clang agree on all recorded paths.
+
+The audit exercises 8192 combinations (256 bytes × all 32 manual/boot status
+bit patterns), all 32896 nonempty valid ranges and 16 injected mid-buffer failures:
+
+- Each read preserves mode upper16, writes low16=0x5a5a, reads one 32-bit slot
+  and selects its even/odd byte. The upper16 data bits are ignored.
+- Initialization preserves timing upper24 and sets low8=0x1f. The SDK timing
+  setter accepts larger values and the C bitfield silently truncates them.
+- The read function does not inspect manual/boot status, including boot0_done=0,
+  and has no completion wait/delay. That is source behavior, not silicon readiness.
+- Generic bulk reads mask IRQs across the entire byte loop. Invalid/null/zero/
+  out-of-range calls take no lock; success and injected failures restore it.
+  On failure the completed prefix remains, the suffix is unchanged, and the
+  SDK API supplies no completed length.
+- HAL deinit changes only its software init flag. It does not power down the
+  block or clear pointers despite the generic driver's power-removal comment.
+
+These facts support a bounded Rust read-service interface with explicit range,
+partial-progress and profile checks, not automatic timing/power/provisioning.
+No identity schema, active firmware ownership or actual OTP access is proven.
 
 SDK `163d9150ab94a02d09a05f623351f9facee3025e`, selected application config:
 DRIVER_SUPPORT_EFUSE, EFUSE_USING_V151, EFUSE_SWITCH_EN, EFUSE_REGION_NUM=1.
@@ -999,3 +1090,495 @@ The RAM-backed test cannot establish the physical read side effect.
 FIFO depth, clock/reset/pad handoff, QSPI XIP conflicts and control-core use
 remain unverified. No device scan, Flash transfer or hardware operation occurs
 in this contract. SPI/QSPI HAL/model implementations are still outstanding.
+
+## I2S/SIO compiled source contract (2026-10-23)
+
+`check_ws53_i2s_contract.py` checks the pinned SDK `163d9150` inputs before
+compiling its original `hal_sio_v151_regs_def.h` and full `sio_porting.c` on the
+host with OS/MMIO stubs. The default application enables I2S v151, one bus,
+with DMA and loopback options disabled. The instance is I2S0 at physical block
+base `0x52030000`, local IRQ67; the SDK's pointer is `0x5203003c` (VERSION).
+All 25 offsets/32-bit slots and 70 fields are compared against SVD, including
+compiler-produced bitfield masks. This does not prove physical behavior.
+
+The legacy imported family RDL is substantially incorrect for this SDK:
+
+- MODE bits0/1 select I2S/PCM and PCM timing; channels are bits5:4 (2/4/8/16),
+  edge bit6 (0 falling, 1 rising), master bit7. SDK configure selects rising.
+- CT_SET/CT_CLR use bits8..15; TX/RX enable bits12/13 and reset_n bit15.
+- DATA_WIDTH_SET uses TX bits2:0 and RX bits5:3, with 1..5 =16/18/20/24/32 bits;
+  zero is reserved. The original C enum is compiled against both SVD enums and
+  write constraints, correcting an earlier off-by-one prose description.
+- Interrupt status, clear and mask contain six sources: RX/TX thresholds,
+  independent left/right RX overflow and independent left/right TX underflow.
+  SDK masks0x3d/0x3e enable TX/RX respectively (one masks).
+- CRG uses bits0/1/2/4, not the imported divider bits7:0 and clock bit8.
+- Added START_POS, POS_FLAG, POS_MERGE_EN and merge RX/TX data registers.
+  Split and merge RX reads consume data; TX and clear commands have no read API.
+  POS_FLAG is writable because configure explicitly writes zero; dynamic
+  flag behavior is not established. No register reset value is assumed.
+
+The WS53-only RDL correction preserves byte-identical WS63/BS2X SVDs. It does
+not certify their old imported model. CT_SET/CLR are exposed as write-only
+command views: the SDK enables/disables TX by writing one to SET/CLR and resets
+with CLR then SET. Generic helpers read both command registers and write zero
+to SET to disable RX, but no evidence establishes that zero works or readback
+is safe to replay. Formal W1S/W1C semantics for these two registers are withheld
+until verified; a future HAL must use explicit commands, not helper RMW.
+
+The compiled port confirms clock order: set `0x57008600` bit0
+(`CMU_DIV_AD_RSTN_SYNC_BIT`), then `0x52000040` bit2 (I2S gate); disabling clears
+in the same order. `common_def.h` implements these as 32-bit RMW. The existing
+M_CRG.M_CLKEN0 view is 16-bit for other ports. The additional M_CLKEN0_WORD
+view now provides the same six fields at the same address with 32-bit access;
+the existing 16-bit interface is unchanged. AUDIO_CMU.NEW_CFG0 at0x57008600
+exposes only bit0, with no reset assumption or invented frequency. The source
+oracle executes the original set/clear macros over host RAM and checks that
+upper-half and neighboring bits survive all four operations. Both clock views
+are one shared resource, not separate claimable devices. Audio clock/reset
+ownership and control-core synchronization still require an explicit handoff.
+Enabling must not briefly assert the shared reset; normal release should leave
+shared gates enabled until shutdown ownership is proven.
+
+Twenty original divider calls (five widths times four channel counts) confirm
+integer division occurs before conversion to float: the result is exactly
+`floor(32000/(25*width*channels))`. The apparent rounding branch cannot recover
+the discarded fractional part. This is a source fact, not proof of clock rate
+or a suitable arbitrary-rate Rust algorithm. The port hardcodes pinmux calls
+for SDK S_MGPIO17/20/19/18, mode3, while application config lists pin values
+13/14/15/16 and modes35..38; those config numbers must not be used as board pads.
+
+The SDK assumes FIFO depth8, TX refill4 and RX threshold7. TX completion follows
+the enqueue semaphore with a fixed295us delay; there is no evidenced BUSY/drain
+status. Source deinit only drops the register pointer/semaphore. Future HAL and
+models must distinguish queued data from wire completion, bound waits, handle
+short RX bursts and retain resource ownership if stopping cannot be proven.
+I2S HAL, model, audio waveforms and physical loopback remain outstanding.
+
+## Executed ADC v155 source contract (2026-10-23)
+
+`scripts/check_ws53_adc_contract.py --sdk /path/to/fbb_ws53` now compiles and
+executes the original pinned v155 HAL, inline register operations and WS53 port
+against host RAM and stubbed platform effects. Source files are checked byte for
+byte against SDK `163d9150`; no original driver is rewritten. Only port base
+variables point to host structs, malloc/free use a non-dereferenced test address,
+MMIO helper calls are logged, and delays inject calibration completion. This is
+an optional maintainer check, not an ordinary Cargo build dependency.
+
+The oracle checks35 register offsets,41 C bitfield layouts,7 additional CPU-trace
+field definitions, shared diagnostic absolute addresses,8 channel pad writes,
+16-bit clock gates and32-bit reset accesses, all64 manual offset corrections,
+and all32768 channel/code RAM word combinations. Five command sequences are
+verified as two explicit1/0 writes, with no invented W1C/self-clear semantics.
+Source power-on writes the three analog words, sets analog enable through
+`0x260 -> 0x103f8 -> 0x1ffff`, and delays1/1/5/100/128/160us for reset/preparation
+and calibration. Source scan profile uses average8, sample_count6, start_count26,
+discard_count32. These are source constants, not electrical timing qualification.
+
+Host execution demonstrates why the SDK cannot be copied as a safe Rust capture
+API: missing OFFSET/CAP completion and CAP_ERROR do not abort power-on; missing
+SAMPLE_DONE still results in two RAM reads and a success return. Channel disable
+issues STOP and frees the allocation while SAMPLE_MODE remains`0x300`. Existing
+CPU_TRACE=3 remains enabled during diagnostic setup. The test's eight-byte
+allocation starts at`0x20061000`, but the SDK programs fixed END=`0x20067fff`, not
+the allocation's end. These are observed C behavior under controlled host state,
+not proof that a physical device writes past the allocation.
+
+The Rust implementation must report timeout/errors, reject stale completion,
+retain buffer ownership across failure/drop until bus-writer quiescence is
+proved, and establish cache/trace/core handoff independently. Source facts do
+not justify assuming that a CPU halt or ADC STOP drains MCU_DIAG. No new RDL
+fields were needed for analog preparation; generated SVD/PAC are unchanged.
+Evidence: `evidence/ws53-adc-source-contract.json`. No board access or Flash write.
+
+## MDMA original C helpers and controller selection (2026-10-23)
+
+`scripts/check_ws53_mdma_contract.py` pins SDK163d9150 and compiles the original
+ROM MDMA register/header helpers against host RAM. It checks13 distinct register
+layouts,40 fields, eight0x20-stride channels, IRQ58, both request enums0..15,
+access semantics and unknown resets. Twenty original helpers/getters execute
+133,430 checks across channels/values/initial bits, including preservation of
+all other register words. Original setters silently truncate transfer_size4096
+to0, request16 to0 and request31 to15; Rust must reject invalid raw configuration.
+
+The actual port binds DMA_BASE_ADDR0x52070000 and `hal_dmac_v151_funcs_get()`.
+SDMA's macro alone is insufficient: the SDMA branch depends on V100, which the
+selected app disables, and this port has no SDMA base binding. It remains absent
+from this PAC until a real integration/ownership contract is established.
+Register helper execution does not prove transfer widths, FIFO/arbitration,
+interrupt mask polarity, ACTIVE timing, halt/disable drain, cache attributes or
+shared clock handoff. Generic LiteOS cache headers are recorded as source inputs,
+not treated as a physical cache-maintenance acceptance result. No board accessed.
+Evidence: `evidence/ws53-mdma-source-contract.json`.
+
+## UART MDMA request contract (2026-10-23)
+
+`scripts/check_ws53_uart_dma_contract.py` compiles the pinned original UART port
+request selectors and TX/RX configuration functions over host RAM. 126 original
+configuration executions cover three ports, both directions, three widths and
+seven count boundaries; the DATA-address provider is an explicit host stub, not
+hardware. Actual UART register offsets/types remain from the original header.
+UART0 uses requests10/11, UART1 uses8/9; UART2 returns the invalid sentinel even
+though the port header also defines misleading UART_L aliases. DMA-owned flow
+is1/2, peripheral DATA stays fixed, memory increments. Byte widths are explicitly
+used by the SDK raw-RX path; wider CPU APB access does not prove DMA byte lanes.
+
+Two conflicts must remain visible: `DMA_EXTRA` in UART_PARAMETER+0x60 bit11 is
+RO in the original header and SVD, but `hal_uart_set_dmaen()` writes it. The host
+executes18 original setter cases and verifies the write/mask, **not silicon
+writability**. Also UART's local `BUFFERABLE` constant is1, while DMA HAL's
+`HAL_DMA_PROTECTION_CONTROL_BUFFERABLE` enum is2. Do not silently equate them.
+Original length helpers accept4096 despite the MDMA12-bit counter, and truncate
+65536 elements to0 before passing them onward. The Rust API must reject these.
+`ws53_liteos_app` disables UART DMA, so compiled dormant code is not operational
+product evidence. The existing RDL/PAC RO capability and unknown reset policy
+are unchanged. Request thresholds/ack, HPROT, clock/cache/ownership and physical
+bus widths remain unverified; any simulation must opt into explicit assumptions.
+Machine-readable input hashes and outcomes: `ws53-uart-dma-source-contract.json`.
+
+## SPI/QSPI MDMA request contract (2026-10-23)
+
+`scripts/check_ws53_spi_dma_contract.py` executes pinned original SPI port and
+driver functions over host RAM:120 configurations (two ports, three equal widths,
+two directions, ten count boundaries) and14 duplex start/failure sequences.
+The manual-width branch is compiled; automatic width conversion is not verified.
+DMA allocation/start/stop, semaphores and HAL DATA lookup are explicit mocks.
+The companion `check_ws53_spi_contract.py` now executes the actual DATA-address
+adapter and threshold setters on original SPI/QSPI register structs in host RAM.
+
+SPI0 uses requests6/7 and DATA0x5208702c; QSPI1 uses4/5 and DATA0x5208d060.
+TX/RX thresholds are4/0. The enable bits differ by instance:SPI0 TXbit0/RXbit1,
+QSPI1 TXbit1/RXbit0. Flow1/2 uses an incrementing memory endpoint and a fixed
+peripheral endpoint; the source protection enum is2 (BUFFERABLE), unlike UART's
+conflicting local constant. This value does not prove actual bus/cache behavior.
+
+Original hazards captured by execution, not copied into the new HAL:
+
+- Length is cast to uint16 **before** shifting by width.65536 bytes becomes0;
+  count4096 survives the driver but exceeds the MDMA12-bit field.
+- DATA lookup failures are ignored; both config helpers can pass address0 onward.
+- Caller-supplied unequal widths are accepted without a frame-size guard.
+- Duplex order is RXconfigure → requests-off → RXstart → TXconfigure → TXstart
+  → requests-on → TXwait → RXwait. Timeout ends both channels but leaves the
+  peripheral request enables on; TXstart failure ends RX but retains its software
+  channel field. None of these mock stops proves physical quiescence.
+
+Reference `ws53_liteos_app` disables SPI. Full duplex, single-line same-width
+8/32-bit simulation is the next integration profile;16-bit/width conversion,
+receive-only clock generation, native CS, bursts/ACK, physical master/protection,
+cache/clock/XIP/control-core ownership and bus drain remain unverified.
+Machine-readable hashes and results: `ws53-spi-dma-source-contract.json`.
+
+## I2C MDMA request and command contract (2026-10-23)
+
+`scripts/check_ws53_i2c_dma_contract.py` compiles original pinned port selectors,
+driver configuration, ISR, public master-read and internal write sequences over
+host RAM.60 configurations cover two ports, TX bytes/RX bytes/fixed read commands
+and ten count boundaries;38 driver sequences cover lengths1/3/4/5/17 and injected
+configuration/start/wait/callback/final-command failures. DMA and semaphore
+operations, final commands and HAL dispatch are explicit mocks; no bytes cross a
+bus. Additional checks cover zero-length public-read rejection, stale callback
+channel records and the shared success flag. Reference `ws53_liteos_app` disables
+DMA and slave mode; this is dormant-source evidence, not a shipped-firmware test.
+
+I2C0 DATA0x5208301c uses requests0/1; I2C1 DATA0x5208401c uses2/3. Data TX and RX
+are8-bit with incrementing memory; read generation repeats a static16-bit0x100
+command from a fixed source. Both use burst encoding1 (four beats). TX has
+protection1 (PRIVILEGED), RX has2 (BUFFERABLE); flow1/2 and fixed peripheral DATA.
+The last command/data element is emitted by the CPU with STOP, after preceding
+TX DMA completion. DMA completion alone therefore cannot imply wire completion.
+
+`check_ws53_i2c_contract.py` separately executes the actual DATA-address provider,
+DMA enable/threshold setters and eight master prepare/restore sequences using
+original C structs in host RAM, plus two invalid-address non-mutation checks.
+TX enable is bit1, RX bit0; preparation writes TX threshold4 and RX threshold3.
+Original register comments specify TX count <= threshold, RX count >= threshold+1.
+Thus a remaining RX tail below four entries cannot assert this **threshold-based**
+request by itself. Whether separate single/last request signaling handles tails
+is not established by these sources; do not silently invent such signaling or
+declare physical transfers of all lengths supported. Model and HAL need an
+explicit burst/short-tail policy with finite completion and failure tests.
+
+Executed source hazards to avoid in Rust:
+
+- Length truncates to16 bits;65536 becomes0, while4096 exceeds the MDMA12-bit
+  counter. Public master-read rejects0 before subtracting1; no zero-length
+  underflow is claimed for that public path.
+- DATA lookup errors are ignored. Early allocation/start/wait failures retain
+  peripheral DMA requests and can leave the already-started peer channel active.
+- The wait calls `osal_sem_down`, with no timeout. Injected wait errors in this
+  oracle are **not** proof that a real semaphore wait returns in bounded time.
+- Master-read ignores `trans_succ` and the last READ-command HAL return. In the
+  explicit callback schedule it returns success even for DMA error callbacks.
+  An actual missing final command may instead prevent RX completion indefinitely.
+- Read success retains both software channel records. One ISR flag and semaphore
+  serve both channels; an error does not clear an earlier success. A later callback
+  on the recorded channel can wake the old bus, as exercised by the oracle.
+
+No new RDL/PAC layout is required for these already-described slots. DMA lanes,
+HPROT semantics, burst handshake, cache/coherency, cross-core ownership and safe
+physical drain remain unverified. Evidence: `ws53-i2c-dma-source-contract.json`.
+
+## I2S MDMA merge-port contract (2026-10-23)
+
+`check_ws53_i2s_dma_contract.py` pins SDK `163d9150` and executes the original
+I2S configuration helpers, public merge read/write APIs, callbacks, DMA attribute
+function and merge/threshold/mask setters over host memory. Both GCC and Clang
+pass 2304 parameter combinations, 196 attribute combinations and 28 driver
+sequences. The preceding I2S register contract remains the layout evidence.
+The selected application disables I2S DMA; these are dormant-source facts.
+
+The original port getters agree with the generated SVD: TX merge DATA is
+`0x520300c0`, RX merge DATA is `0x520300a0`; the handshakes are 12/13. Both
+directions use protection 1, DMA flow control 1/2 and a fixed peripheral address.
+The source exposes user-selected width, burst and priority without checking
+them in the I2S layer. The oracle deliberately includes all nine byte/halfword/
+word width pairs and records their forwarding, **not their silicon validity**.
+Count is elements, not a verified byte count or stereo frame count. The 32-bit
+merge register fields do not explain stereo order or packing.
+
+The `dma_cfg` flags do not write a dedicated DMA request-enable register. The
+function calls `hal_i2s_config` (source includes reset, divider and format work),
+sets `I2S_POS_MERGE_EN=1`, then conditionally sets threshold and ORs IRQ mask
+with 0x32 for TX and 0x0d for RX. Even both flags false reinitialize I2S and enable
+merge. A later cancel path must therefore not equate this API with disabling
+requests, nor reconfigure it while another stream owns the peripheral.
+For this oracle, the complex `hal_i2s_config` is explicitly stubbed to its
+baseline 0x3c IRQ mask and TX 4/RX 7 thresholds; its reset/clock work is not executed.
+The actual DMA function and its final register helpers execute unchanged.
+
+Observed source hazards:
+
+- The public 32-bit length narrows to 16 bits: 65536 becomes 0, while 4096 already
+  exceeds the MDMA 12-bit transfer field. Width/burst/priority 255 are forwarded.
+- Blocking APIs use unbounded `osal_sem_down`; timeout/error/success paths have
+  no channel-stop, peripheral-disable or FIFO/serializer drain operation.
+- TX starts DMA before enabling CRG and TX. RX enables RX after DMA start but
+  does not enable CRG in this function. Initialization/pre-existing clock state
+  is therefore a separate requirement for receive.
+- A successful callback results in returning `uapi_dma_get_block_ts`, without
+  proving a complete stereo frame or wire idle. A failed wait leaves the mocked
+  DMA live and the peripheral enabled; nonblocking return retains both too.
+- Channel records remain after completion and initially contain zero; stale or
+  stray callbacks can wake them. Error callbacks do not clear earlier success.
+- `uapi_i2s_dma_config` does not check a null attribute before HAL dereference
+  (inspection only; the host oracle does not deliberately dereference null).
+
+The public/HAL attribute structs are different C types with equal field layout.
+The harness checks offsets/size and uses the SDK common configuration's
+`-fno-strict-aliasing`; it does not silently assume optimized aliasing is valid.
+DMA allocation, starts, clock/enable calls and semaphore completion are mocks;
+there is no actual DMA or audio transfer. Request polarity/threshold comparisons,
+short-tail behavior, merge packing, supported lanes, shared ownership, cache and
+physical drain still need independent evidence. No new RDL/PAC layout is needed
+for the known registers; no I2S DMA HAL or QEMU support is claimed by this check.
+Machine-readable result: `ws53-i2s-dma-source-contract.json`.
+
+## SDIO descriptor/CMD53 ROM execution audit (2026-10-23)
+
+`ws53-sdio-rom-contract.json` records execution of unmodified, relative-only
+leaf bytes from the same SHA256-pinned capture in QEMU RAM. This is firmware
+software evidence, not a silicon transfer test. Reproduce with QEMU repository
+`2fd1b1cda2613318856f53a4b171d3cc4c0004b8`, its
+`scripts/ws53_sdio_rom_contract.py --qemu /path/to/qemu-system-riscv32 --rom /path/to/sdio-rom.bin`.
+No ROM is redistributed; ordinary generation/builds do not require this check.
+Public headers and acore.sym match SDK commit163d9150 byte for byte (hashes in JSON).
+
+The 101 descriptor cases confirm null table/address and zero-u32-length rejection,
+indices0–128, u16 flags0x21, u16 length and u32 address at8-byte stride. The
+12 accepted overflow cases truncate lengths65536,65537 and0xffffffff. Notably,
+65536 is accepted but stored as zero. An unaligned data address is accepted by
+this helper; that is not proof of valid bus-master alignment. The6144 CMD53 cases
+cover all512 encoded counts, both length modes and six block sizes including0
+and4095: byte-mode count0 gives512, while block-mode zero multiplication gives
+0xffffffff. Neighbor bytes, other descriptors and input records remain unchanged.
+
+The audit exposed a shared QEMU CPU bug: unsigned xlinx branch immediates128–255
+were sign-extended, bypassing the ROM's `bgeui index,129` check. Vendor assembler
+encodings distinguish unsigned129 from signed-127. The fix is supported by16836
+TCG boundary cases (1530 failed before the fix), the ROM execution audit and
+existing WS53 plus11 legacy qtests. It does not establish silicon ISA timings.
+No new MMIO register behavior, hardware reset/drain, CIS, voltage switch, interrupt
+acknowledgement semantics or host data transfer is inferred from this audit.
+
+## PWM0P pin routes and observed clock discrepancy (2026-10-23)
+
+`check_ws53_pwm_routes.py` verifies the hardware guide, DAQ configuration and
+PWM port byte-for-byte against SDK163d9150. The three documented PWM0P routes are
+MGPIO10/mode4, MGPIO21/mode1 and AGPIO2/mode2; the DAQ sample selects SDK pin47,
+mode1, channel0, group0. Result: `ws53-pwm-routes-source.json`. This adds source
+route evidence, not a new register layout or reset-value inference.
+
+A-board MIO21/SDK47/DSLogic D11 was measured in the integration repository's
+`docs/plan/evidence/ws53-pwm0-hil-2026-10-23/`. With the existing divider16
+sequence, period200 produced about100us and duty50/100/150 produced25/50/75%.
+Three subsequent runs additionally checked the PAC divider/enable/load and gate
+fields and reproduced the result. Thus the effective counter rate in this
+bounded RAM handoff is about2MHz, not the port's reported32MHz. This does not
+identify the upstream clock source or prove a general input/divider formula.
+The first failed160kHz expectation is retained, not rewritten as a passing case.
+No RDL field is changed from this observation; the existing divider field already
+states that its input/frequency relationship is unproven. QEMU's explicit timing
+profile and HAL documentation must preserve this distinction.
+
+### PWM local divider experiment (2026-10-23)
+
+`ws53-pwm-divider-hil.json` records a follow-up RAM-only measurement on the same
+MIO21/SDK47/D11. Each group is stopped before clearing LOAD, writing DIVIDER,
+setting LOAD and verifying its fields. With period200/high50, divisors16/8/4/2/1
+produce periods100/50/25/12.5/6.25us, all25% duty. The divisor is restored to16
+before releasing the pad, and whole-board reset restores the vendor AT service.
+Thus the tested local divider follows effective32MHz/input-divisor in this
+handoff state. The SDK's constant32MHz does not describe the post-divider rate
+at its configured divisor16. This is narrower than identifying the upstream
+source or qualifying other divider values/live glitch-free switching.
+
+The RDL field description now links the physical evidence. Layout, permissions,
+unknown reset values and the five-bit field width are unchanged. Only the five
+measured values may be exposed by the experimental typed HAL configuration.
+
+## PWM START acceptance contrast (2026-10-24)
+
+`ws53-pwm-start-hil.json` preserves the failed source-order finite8/16 experiment,
+a successful continuous-output control on the same MIO21/D11, and the successful
+finite experiment with a10us delay inserted after initial START and before EN
+is cleared. Original ordering gave no observed edges and no completion flag;
+the guarded ordering gave exactly8/16 pulses at100us period/50% duty, a quiet
+80ms tail, flag1 and successful acknowledgement. All runs recovered vendor AT.
+
+This disproves treating the START write as synchronously accepting the enabled
+configuration in the measured2MHz A-board profile. It establishes a tested guard,
+not an exact hardware latency, a readback-completion protocol or a guarantee for
+all upstream clocks/groups. Only group0's RDL description is updated; layout,
+access directions, command values and unknown reset/self-clear facts are intact.
+The SDK's original ordering remains accurately recorded by its source oracle.
+
+## PWM configuration-load flag correction (2026-10-24)
+
+`ws53-pwm-load-flag-hil.json` corrects the earlier interpretation of the flag as
+only step-end. With an8/16-pulse burst at100us per pulse, the flag is already1
+after the initial10us guard (counter1). Stopping on that flag truncated the
+first high pulse to19us. A direct-PAC diagnostic reads0 after initial ACK,1
+after START,0 after ACK, and0 shortly after deferred START; complete8/16-pulse
+waveforms and a later flag1 follow. Only channel0 is physically qualified.
+The diagnostic's extra UART samples intentionally fail the old strict parity
+oracle; waveform success does not make its overall report a pass.
+
+HAL must distinguish initial configuration acceptance from later notifications.
+The pending flag is not an elapsed-time/deadline proof. QEMU's previous
+block-end-only flag model hid this bug and must be corrected. Pulse counter1
+during the first pulse is also observed; other counter phases remain unqualified.
+
+## PWM finite pulse counter phase (2026-10-24)
+
+`ws53-pwm-counter-hil.json` records18 TCXO-timestamped observations and same-run
+DSLogic8/16-pulse waveforms. At roughly40/90/140/240/440/740us the counter
+reads1/1/2/3/5/8. After deferred stop at800/1600us it reads0. The former model
+was one lower only while running. RDL documents channel0's finite-mode evidence
+without extending it to continuous/repeating modes or exact boundary timing.
+The diagnostic extra UART lines intentionally fail the former exact-string
+oracle; RAM readback and original firmware recovery separately passed.
+
+## PWM IRQ72 pending versus peripheral status (2026-10-24)
+
+`ws53-pwm-irq72-hil.json` records independent CPU LOCIPD and PWM status reads.
+With local delivery disabled, initial PWM START raises a configuration event;
+HAL acknowledges its peripheral flag before queuing finite stop. Immediately
+after start, IRQ72 pending is1 but PWM configuration flag is0. Unmasking
+delivery therefore enters an ISR with an empty snapshot. The later real finite
+completion is a separate notification. First-burst peripheral event masking
+retains raw status without ISR entry; unmasking delivers and acknowledges it.
+
+This is controller-source behavior, not a new peripheral address or field.
+No PAC layout change is needed. The existing SDK disable sequence's explicit
+LOCIPCLR and the HAL source-suspension helper's pending-preservation contract
+remain significant. Handlers must distinguish entry count from meaningful
+event bits. Only WS53 IRQ72 is qualified; do not silently change all chip
+interrupt sources from this evidence. Trap-entry auto-ack and persistent-level
+reassertion are not established by these observations.
+
+## WS53 UART TX IRQ (2026-10-24)
+
+`evidence/ws53-uart-tx-irq-hil.json` records three UART2 RAM runs, each with
+14 observations across PTIM0/1. Reading IIR=2 acknowledges TX; a second read
+returns1, and disabling/re-enabling TX IRQ rearms an empty FIFO. PTIM1 uses
+the inherited two-byte threshold; with FIFO enabled its LSR.THRE_S means full,
+whereas PTIM0 means empty. Neither notification proves serializer completion.
+WS53 RDL marks IIR with conditional `modifyExternal` read side effects and
+documents THRE polarity; shared-IP external qualification leaves WS63/BS2X
+SVD output unchanged. UART0/1 descriptions share SDK semantics but lack this
+physical qualification. `scripts/check_ws53_uart_tx_irq_contract.py --sdk SDK
+--svd WS53.svd` checks384 original-C helper cases and3 acknowledgement paths;
+host RAM cannot emulate IIR read-clear. No reset defaults are inferred.
+
+## Unified-security SPACC/HASH source subset (2026-10-25)
+
+`ws53/spacc.rdl` adds one shared controller at0x52010000 with SEC_INT1 cause59.
+`check_ws53_spacc_layout.py` compiles pinned product/register/application-IRQ
+headers and verifies34 expanded register views/65 fields/3 arrays against SVD.
+HASH channel/state array indices0/1 select SDK channels1/2; error indices0/1
+select TEE/REE. Commands and status have separate access types, no guessed
+resets, W1C or error-clear operations. See [layout evidence](ws53-spacc-layout.md).
+
+The original-C45-case control audit proves clear timeout is ignored by lock and
+deinit unlocks0/1 while leaving allocated channel2 locked, then frees tables
+without a drain check. These paths must not be copied as a safe Rust lifecycle.
+Source layout does not qualify cross-core ownership, real IRQ delivery, DMA
+drain, algorithm results or silicon channel availability. SYMC/PKE/KM remain
+separate pending work; PKE IRQ58 is not borrowed from MDMA.
+
+## WS53 crypto cache/clock handoff sources (2026-10-25)
+
+[The handoff audit](ws53-crypto-handoff.md) executes25 unchanged source functions
+and the original HAL/driver CMake selectors for five boot/application profiles.
+OS allocation is ordinary LiteOS heap with32-byte alignment; MMZ/SMMU choice is
+ignored by the allocation port. Pointer translation is an identity operation.
+These names and encodings do not prove coherence, bus reachability or ownership.
+OS cache hooks forward to ArchDCache operations; Boot defaults are weak no-ops
+and do not prove which implementation is linked into a board image. Active
+application configuration enables the security sleep veto; its sequential host
+tests do not establish a concurrent/cross-core resource protocol.
+
+Original `system_crg_cfg` whole-word writes include zero at0x52001114/0x5200111c
+to configure automatic clock gating. Four seeded host runs verify48 writes and
+neighbor preservation, not physical clock state or bus drain. No bitfields,
+read semantics, reset values or SPACC+0x8030 behavior are inferred. No RDL/PAC
+change or new hardware qualification follows from this source-only evidence.
+
+## WS53 SYMC control and register extension (2026-10-25)
+
+SYMC adds53 views/91 fields and3 arrays to the shared SPACC description. Since
+SYMC/HASH errors interleave by security domain, the legacy HASH_ERROR cluster
+now starts8 bytes earlier while its CAUSE/STATUS accessors retain the original
+absolute addresses; SYMC_CAUSE/STATUS occupy the added slots. No overlapping
+cluster exception or duplicate peripheral token was introduced.
+
+The original20-function audit checks48 lock/clear/release cases,1728 config
+encodings,16 rejected configs,700 descriptors,128 submissions,72 IV cases,
+16 ACK cases,16 keyslot selections,10 direct-key rejections and8 pointer waits.
+Input/output descriptors are32/16 bytes on RV32IMFC, not interchangeable.
+Direct set_key always fails; attach selects/truncates a separate9-bit slot ID.
+Unlock releases ownership after clear timeout and output publication precedes
+descriptor cache flush; neither is a safe memory handback recipe. See
+[source evidence](ws53-symc-control.md). AES/SM4 results, KM key loading,
+hardware initialization, DMA/cache/clock handoff and actual IRQ remain unqualified.
+
+## WS53 KM keyslot and clear-loader extension (2026-10-25)
+
+One shared KM block at0x52022000 adds25 views/46 fields, one4-word staging array,
+and SEC_INT3=61 from both port and acore IRQ headers. [Layout evidence](ws53-km-layout.md)
+checks25 offsets and32 masks with original headers on host and RV32IMFC/ilp32f.
+The original kl_int_raw union has an overlong reserved field and sizeof8, but
+the actual u32 member accesses are32-bit; the model does not widen the register.
+
+[Original C audit](ws53-km-control.md) executes34 unchanged functions and3547
+cases. It exposes slot-number truncation, SDK allocation limits8/2, ignored
+flush-timeout status, release without owner reread, clear-loader timeout cleanup,
+and missing attached check at the driver layer. These are source facts, not a
+claim about every higher-level API or silicon completion. Common/root-route
+locking is not assumed to protect the clear-loader path. Rust must own the
+shared selectors, validate types/lengths and retain ambiguous resources.
+
+No hardware access, true cipher results, root derivation, OTP, permanent policy,
+PCPU/AIDSP commands or reset values are added. SYMC/KM HAL and models are still
+required; a register interface alone does not qualify an encryption capability.

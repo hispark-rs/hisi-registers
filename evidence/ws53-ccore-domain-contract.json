@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "hardware_accessed": false,
+  "positive": 1,
+  "negative": 12,
+  "sdk_sources": {
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/application/ws53/ws53_application/main.c": "4511fa9dec6b2c31fe26d53820f7f40fddec23f9841fb0cb5bd8bf28e927d0f7",
+    "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052"
+  },
+  "svd_sha256": "d86fd771901c697f4e10b17c5c13a55ec4c54da98cacd3898bf0187edcf080ab",
+  "control_cpu_released": false,
+  "reset_value_known": false,
+  "ownership_granted_by_pac": false,
+  "raw_pac_writes_constrained_at_runtime": false
+}

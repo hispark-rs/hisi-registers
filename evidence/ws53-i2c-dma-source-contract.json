@@ -1,0 +1,69 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "config_executions": 60,
+  "driver_sequences": 38,
+  "routes": [
+    {
+      "instance": "I2C0",
+      "tx": 0,
+      "rx": 1,
+      "data": "0x5208301c"
+    },
+    {
+      "instance": "I2C1",
+      "tx": 2,
+      "rx": 3,
+      "data": "0x5208401c"
+    }
+  ],
+  "source_profile": {
+    "tx_width_bits": 8,
+    "rx_width_bits": 8,
+    "read_command_width_bits": 16,
+    "read_command": "0x100",
+    "read_command_storage": "static, fixed address",
+    "burst_encoding": 1,
+    "burst_beats": 4,
+    "tx_protection": 1,
+    "rx_protection": 2,
+    "flow_tx_rx": [
+      1,
+      2
+    ]
+  },
+  "source_hazards": [
+    "length cast to uint16: 65536 becomes zero; 4096 exceeds MDMA12-bit counter",
+    "DATA-provider errors ignored, permitting address zero",
+    "DMA semaphore wait uses unbounded osal_sem_down, not timeout",
+    "early setup/start/wait failures leave requests enabled; started peer channel is not stopped",
+    "master read returns success after DMA error callbacks and ignores final READ-command HAL failure",
+    "master read leaves channel records after success; shared ISR success flag does not distinguish channel or clear earlier success on error"
+  ],
+  "zero_length_public_read_rejected": true,
+  "mocks": [
+    "DMA allocation/config/start and scheduled completion callbacks; no actual transfer",
+    "semaphore returns injected error or scheduled callback immediately; no real wait",
+    "HAL prepare/restore and final read/write commands record sequencing, not FIFO or wire behavior",
+    "HAL DATA address uses SVD; actual provider and DMA register setters checked separately by check_ws53_i2c_contract.py"
+  ],
+  "not_verified": [
+    "slave API",
+    "physical DMA byte/halfword lanes and HPROT",
+    "burst ACK and short RX tail handshake",
+    "cache/clock/control-core ownership or bus quiescence"
+  ],
+  "reference_dma_enabled": false,
+  "hardware_accessed": false,
+  "input_sha256": {
+    "src/drivers/drivers/driver/i2c/i2c.c": "af989945a0c496f0624ac6185eb1fb5fe6684279f4d3818a9551f5007c3154e9",
+    "src/drivers/drivers/hal/i2c/hal_i2c.h": "b70865d5fa87ea420dac36a588c6c3d2e85f9caa933497d51d820396de9f2067",
+    "src/drivers/chips/ws53/porting/i2c/i2c_porting.c": "b4f3248490074080657dee0d18c7a2c286cc2b787a309851f2b3a8b5febc90f9",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/include/driver/i2c.h": "34887046fe6e8a2a613dc0601d0ee67c306ee2060487fc5629b30c4c4d416ec8",
+    "src/include/driver/dma.h": "65f37374e269dbab87e5cebf1cd2d9bfd7f041cb784f5dabb6afe7f0d4064834",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/dma_porting.h": "e5cb6842db137e028006e726a931d2fcfdcba9ef9fb4cd8fd4c10327c20f36bb",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/romable/hal_dma.h": "6e6b9fb8b7cfe10d4e288474e8d8493cf36027be86a445a34a47dff5b6e072ed"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157"
+}

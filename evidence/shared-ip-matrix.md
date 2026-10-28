@@ -17,7 +17,7 @@ SDK revisions used for this snapshot:
 | UART v151 basic | WS53, WS63, BS2X | All active configs disable PRO; basic layout agrees | instances, base, IRQ, DMA/pinmux |
 | I2C v151 | WS53, BS2X | Register headers semantically identical; both product configs select v151 | instances, base, IRQ, clock/reset |
 | RTC v150 family variant | WS53, BS2X | Register headers semantically identical | channel instances, base, IRQ, clock domain |
-| SIO v151 | WS53, WS63, BS2X | All target configs select v151; layout and public edge enum agree | base, IRQ, clock/divider, DMA |
+| SIO v151 | WS63, BS2X legacy; WS53 corrected separately | All target configs select v151, but imported fields do not match WS53 C; WS53-specific layout has compiled field/offset checks | base, IRQ, clock/divider, DMA; legacy correction requires separate audit |
 | Timer v150 | WS53, WS63, BS2X | Layout agrees; all SDK operation layers write one to clear, confirmed on WS63 silicon | base, IRQ, clock/reset |
 | TCXO v150 data16 | WS53, WS63, BS2X | Active configs use four 16-bit chunks | base, clock domain |
 | GPIO v150 basic | WS53, WS63, BS2X | Active configs disable multisystem extension | instances, width, base, IRQ/core routing |

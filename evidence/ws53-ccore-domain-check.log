@@ -1,0 +1,66 @@
+WS53.experimental.svd: CMSIS-SVD 1.3.9 schema PASS
+WS63.experimental.svd: CMSIS-SVD 1.3.9 schema PASS
+BS2X.experimental.svd: CMSIS-SVD 1.3.9 schema PASS
+{
+  "BS2X.experimental.svd": {
+    "cluster_arrays": 0,
+    "enumerated_values": 350,
+    "fields_expanded": 2154,
+    "interrupts": 52,
+    "known_source_arrays_not_yet_compacted": 11,
+    "modified_write_values": 4,
+    "peripherals": 32,
+    "read_actions": 0,
+    "register_arrays": 0,
+    "registers_expanded": 1017,
+    "write_constraints": 6
+  },
+  "WS53.experimental.svd": {
+    "cluster_arrays": 7,
+    "enumerated_values": 160,
+    "fields_expanded": 2289,
+    "interrupts": 22,
+    "known_source_arrays_not_yet_compacted": 0,
+    "modified_write_values": 19,
+    "peripherals": 35,
+    "read_actions": 88,
+    "register_arrays": 14,
+    "registers_expanded": 1090,
+    "write_constraints": 21
+  },
+  "WS63.experimental.svd": {
+    "cluster_arrays": 0,
+    "enumerated_values": 356,
+    "fields_expanded": 2104,
+    "interrupts": 46,
+    "known_source_arrays_not_yet_compacted": 39,
+    "modified_write_values": 12,
+    "peripherals": 38,
+    "read_actions": 0,
+    "register_arrays": 0,
+    "registers_expanded": 1248,
+    "write_constraints": 6
+  }
+}
+generated register maps match the full-chip bootstrap contract
+..test.svd: CMSIS-SVD 1.3.9 schema PASS
+.....test.svd: CMSIS-SVD 1.3.9 schema PASS
+.........................
+----------------------------------------------------------------------
+Ran 32 tests in 18.611s
+
+OK
+[INFO  svd2rust] Parsing device from SVD file
+[INFO  svd2rust] Rendering device
+[INFO  svd2rust] Parsing device from SVD file
+[INFO  svd2rust] Rendering device
+[INFO  svd2rust] Parsing device from SVD file
+[INFO  svd2rust] Rendering device
+[WARN  svd2rust::generate::device] No settings file provided for RISC-V target. Using legacy interrupts rendering
+[WARN  svd2rust::generate::device] Please, consider migrating your PAC to riscv 0.12.0 or later
+[WARN  svd2rust::generate::peripheral] Found type name conflict with region Some("m_clken"), renamed to Some("m_clken0")
+[WARN  svd2rust::generate::peripheral] Found type name conflict with region Some("m_clken"), renamed to Some("m_clken1")
+[WARN  svd2rust::generate::peripheral] Found type name conflict with region Some("msub_"), renamed to Some("msub_normal")
+[WARN  svd2rust::generate::peripheral] Found type name conflict with region Some("msub_"), renamed to Some("msub_sleep")
+[WARN  svd2rust::generate::peripheral] Found type name conflict with region Some("symc_clear"), renamed to Some("symc_clear_ack")
+[WARN  svd2rust::generate::peripheral] Found type name conflict with region Some("symc_clear"), renamed to Some("symc_clear_read")

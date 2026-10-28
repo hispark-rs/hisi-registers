@@ -1,0 +1,260 @@
+{
+  "schema": "ws53-sfc-clock-source-contract-v1",
+  "date": "2026-10-25",
+  "passed": true,
+  "evidence_class": "SDK-source-host-RAM-and-generated-layout",
+  "base_commit": "a5f81ca3cb6349fd651be57c27209d6bc7f2a354",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "sdk_sources": {
+    "src/drivers/chips/ws53/clock_recover/clock_recover.c": "1bc52568dee9ff46c7cdb4d97e67ba8a1a45cee3cd08803e1e84b185ca379507",
+    "src/bootloader/flashboot_ws53/startup/main.c": "7bd2548c45025683bc20c708bc00bf41b2c95644388a49db4ae831fed7b16f75",
+    "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f",
+    "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+    "src/drivers/chips/ws53/clock_recover/acore/acore_clock_recover.c": "b57254b08607d666a72690bffdbbdd9793196bdea3539f99ebaba351ce6df2f4"
+  },
+  "original_helpers": {
+    "sfc_switch_clock": "aa997fd207d3576f8205f5ca8a9c050bd67985a9aba4a965b733a9b4efe6443e",
+    "boot_flash_clk_init": "26830e87cd24e9de45f4220c65499b0a8208edccd93c158eb713e27be1b6ce86"
+  },
+  "layout": {
+    "address": 1375733104,
+    "fields": {
+      "ENABLE": [
+        0,
+        1
+      ],
+      "SOURCE_CONFIG": [
+        1,
+        3
+      ]
+    },
+    "access_widths": [
+      16,
+      32
+    ],
+    "distinct_qspi_address": 1375733108
+  },
+  "compiler_results": {
+    "gcc": {
+      "passed": true,
+      "evidence_class": "SDK-source-host-RAM",
+      "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+      "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+      "sdk_sources": {
+        "src/drivers/chips/ws53/clock_recover/clock_recover.c": "1bc52568dee9ff46c7cdb4d97e67ba8a1a45cee3cd08803e1e84b185ca379507",
+        "src/bootloader/flashboot_ws53/startup/main.c": "7bd2548c45025683bc20c708bc00bf41b2c95644388a49db4ae831fed7b16f75",
+        "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f",
+        "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+        "src/drivers/chips/ws53/clock_recover/acore/acore_clock_recover.c": "b57254b08607d666a72690bffdbbdd9793196bdea3539f99ebaba351ce6df2f4"
+      },
+      "original_helpers": {
+        "sfc_switch_clock": "aa997fd207d3576f8205f5ca8a9c050bd67985a9aba4a965b733a9b4efe6443e",
+        "boot_flash_clk_init": "26830e87cd24e9de45f4220c65499b0a8208edccd93c158eb713e27be1b6ce86"
+      },
+      "svd_sha256": "1a12a7f0f572a1a25d4f4ed51a64c66759a169eb6255c70c4f011e47122e1c89",
+      "layout": {
+        "address": 1375733104,
+        "fields": {
+          "ENABLE": [
+            0,
+            1
+          ],
+          "SOURCE_CONFIG": [
+            1,
+            3
+          ]
+        },
+        "access_widths": [
+          16,
+          32
+        ],
+        "distinct_qspi_address": 1375733108
+      },
+      "helper_cases": 288,
+      "delay_stub_observation_points": 480,
+      "macro_access_type_assertions": 5,
+      "field_masks": {
+        "ENABLE": 1,
+        "SOURCE_CONFIG": 14
+      },
+      "shared_memory_host_only": true,
+      "hardware_access": false,
+      "physical_delays_verified": false,
+      "physical_access_widths_verified": false,
+      "frequency_formula_verified": false,
+      "reset_values_verified": false,
+      "safe_live_switching_verified": false,
+      "ownership_verified": false,
+      "physical_bus_drain_proven": false
+    },
+    "clang": {
+      "passed": true,
+      "evidence_class": "SDK-source-host-RAM",
+      "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+      "compiler": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+      "sdk_sources": {
+        "src/drivers/chips/ws53/clock_recover/clock_recover.c": "1bc52568dee9ff46c7cdb4d97e67ba8a1a45cee3cd08803e1e84b185ca379507",
+        "src/bootloader/flashboot_ws53/startup/main.c": "7bd2548c45025683bc20c708bc00bf41b2c95644388a49db4ae831fed7b16f75",
+        "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f",
+        "src/middleware/utils/common_headers/chip_io.h": "c521dd05509ae79a75d4babe492a69a7f19785f0167c4fd1f294295f29732052",
+        "src/drivers/chips/ws53/clock_recover/acore/acore_clock_recover.c": "b57254b08607d666a72690bffdbbdd9793196bdea3539f99ebaba351ce6df2f4"
+      },
+      "original_helpers": {
+        "sfc_switch_clock": "aa997fd207d3576f8205f5ca8a9c050bd67985a9aba4a965b733a9b4efe6443e",
+        "boot_flash_clk_init": "26830e87cd24e9de45f4220c65499b0a8208edccd93c158eb713e27be1b6ce86"
+      },
+      "svd_sha256": "1a12a7f0f572a1a25d4f4ed51a64c66759a169eb6255c70c4f011e47122e1c89",
+      "layout": {
+        "address": 1375733104,
+        "fields": {
+          "ENABLE": [
+            0,
+            1
+          ],
+          "SOURCE_CONFIG": [
+            1,
+            3
+          ]
+        },
+        "access_widths": [
+          16,
+          32
+        ],
+        "distinct_qspi_address": 1375733108
+      },
+      "helper_cases": 288,
+      "delay_stub_observation_points": 480,
+      "macro_access_type_assertions": 5,
+      "field_masks": {
+        "ENABLE": 1,
+        "SOURCE_CONFIG": 14
+      },
+      "shared_memory_host_only": true,
+      "hardware_access": false,
+      "physical_delays_verified": false,
+      "physical_access_widths_verified": false,
+      "frequency_formula_verified": false,
+      "reset_values_verified": false,
+      "safe_live_switching_verified": false,
+      "ownership_verified": false,
+      "physical_bus_drain_proven": false
+    }
+  },
+  "export_tests": {
+    "passed": true,
+    "unittest_methods": 29,
+    "new_clock_negative_mutations": 19
+  },
+  "generation": {
+    "repeat_identical": true,
+    "chip_comparisons": {
+      "ws53": {
+        "before_sha256": "8f07cfd1f221db7f5fdf4e502de3ed19c0ac9bbfe0367e7405f28367498c2e39",
+        "after_sha256": "1a12a7f0f572a1a25d4f4ed51a64c66759a169eb6255c70c4f011e47122e1c89",
+        "byte_identical": false,
+        "only_additions": [
+          "M_CRG.XIP_SFC_CLOCK",
+          "M_CRG.XIP_SFC_CLOCK_WORD"
+        ]
+      },
+      "ws63": {
+        "before_sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+        "after_sha256": "9f3b41eacee23183ba2a48a8f1164d1e2fddd827735a9f7fcc636a3d69ad80c0",
+        "byte_identical": true
+      },
+      "bs2x": {
+        "before_sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+        "after_sha256": "a75c364a8718904185c55810e2ad4428bd558c69b2ff33a46d978120f2df9690",
+        "byte_identical": true
+      }
+    },
+    "ws53_register_views": 975,
+    "ws53_fields": 2050,
+    "source_hashes": {
+      "rdl/chips/ws53/m-crg.rdl": "ee0365b73351dd1245d4b28f6c210795b3bdf6b6b8f25aa0bac68aa9d5d8ba48",
+      "scripts/check_ws53_sfc_clock.py": "53f9e4f7f36e21d9bef600499e47f4629046b1866a8a6a030b777c8f1782011b",
+      "scripts/check.py": "22490b7d549786ff37b5a089537e3973a3f4247c27884922c174a33da2e1ff32",
+      "scripts/test_export_svd.py": "ba06c2ffb6b3c262a16dd940148573fcc91ab5eedf42d3ec6ba7105733e3a7cf",
+      "scripts/export_svd.py": "100f4721fcc844ab1cac31559715c65e6d12e84f745de2c801c50a9ab05bed35",
+      "rdl/properties.rdl": "dc176c0a134e765644e06ccd5f35a374f49d27d9dc78519b74e3ec8c93bdbb51",
+      "pyproject.toml": "3bf21307596a0753b6897c450668a3bf1ffbdfa57ca18705239d98724a09365a",
+      "uv.lock": "752f78ac0439495ded6fa0474621e652d4ff7c1f64f09aa74061a709cb6648f7"
+    }
+  },
+  "parser": {
+    "version": "svd2rust 0.37.1 ( )",
+    "executable_sha256": "ad2523abedfa5e3c6bd17ca57528ca61dccd4eac86e3f509bde7d3df997db318",
+    "chips": [
+      "WS53",
+      "WS63",
+      "BS2X"
+    ],
+    "ws53_target": "riscv",
+    "passed": true,
+    "u16_and_u32_same_address_accessors": true,
+    "unknown_reset_api_absent": true
+  },
+  "schema_and_map_checks": {
+    "passed": true,
+    "chips": [
+      "WS53",
+      "WS63",
+      "BS2X"
+    ]
+  },
+  "tool_environment": {
+    "mode": "offline copied existing locked dependency environment; no network",
+    "project_versions": {
+      "systemrdl-compiler": "1.32.2",
+      "lxml": "6.0.2",
+      "peakrdl": "1.5.0",
+      "peakrdl-svd": "0.1.0",
+      "peakrdl-systemrdl": "1.0.1"
+    }
+  },
+  "preparation_failures": [
+    {
+      "log": "generate.log",
+      "reason": "offline cache lacked dependency; no export executed"
+    },
+    {
+      "log": "generate-ws63.log",
+      "reason": "first copied candidate environment lacked systemrdl; no export executed"
+    }
+  ],
+  "boundary": {
+    "hardware_access": false,
+    "physical_clock_measurement": false,
+    "safe_live_switching": false,
+    "automatic_hal_clock_initialization": false,
+    "ownership_proven": false,
+    "physical_bus_drain": false,
+    "reset_values_known": false,
+    "complete_frequency_formula": false,
+    "generated_pac_installed": false,
+    "old_worktree_modified": false,
+    "committed": false,
+    "pushed": false
+  },
+  "validation_logs": {
+    "generate.log": "76af812089b8fc4aa41b9bcde272af6944a991ebb52b843accab022ed2d629cb",
+    "generate-ws63.log": "357462864a9f80ae4fad2fba02f41313e22bc34c65e4694afaea2997a212876c",
+    "generate-ws63-02.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "generate-ws53.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "generate-bs2x.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gcc.json": "37362dea42f3dbedccdcf9f00f85726ff549aa574368a31eb6f3cac6e483a59d",
+    "gcc.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "clang.json": "9f3483f6ba3f3c3bf9da3e41b75e46bcc707e157cf2d6d8e272284944ead4ad1",
+    "clang.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "export-tests.log": "d9027b7bc64ce6953ec29eeec90765ccfa31f49be806543b64f200fef9d97213",
+    "schema.log": "6e9e73991b89bd2aa483b6cdbecd28534432b22f22948bbc0093e16216e7c78a",
+    "maps.log": "4a3f2f9ac048284b80d7cd5294c7dd7534ea6d17d53b96584efac06a136ea432",
+    "parser-ws53.log": "45c015d4c7fdf8755edd33d2a90b0c2563787179e3b46890ab97930f57f640e3",
+    "parser-ws63.log": "993fbaf5f93481b3d4bf64b6857500ebf59d0b73d980b542e006d7141af99d8b",
+    "parser-bs2x.log": "993fbaf5f93481b3d4bf64b6857500ebf59d0b73d980b542e006d7141af99d8b",
+    "baseline-ws53.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "baseline-ws63.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "baseline-bs2x.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "repeat-ws53.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

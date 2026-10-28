@@ -1,0 +1,34 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "docs/zh-CN/hardware/SoC Wi-Fi\u3001BLE\u548cSLE Combo\u82af\u7247 \u786c\u4ef6\u7528\u6237\u6307\u5357/SoC Wi-Fi\u3001BLE\u548cSLE Combo\u82af\u7247 \u786c\u4ef6\u7528\u6237\u6307\u5357.md": "280934afd81644d913daa7f2c9de4c570fae79607c5fb2a8f5f8c51f7b5c1f2c",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_daq.config": "56793ef512c0d1161eebf7c3e777d070a4c853b3c89d72bddc9feab1fcd65871",
+    "src/drivers/chips/ws53/porting/pwm/pwm_porting.c": "3007c81e5c56820139928d5d30622f65b4317ae8161b29ee99bd926a278383a4"
+  },
+  "routes": [
+    {
+      "chip_pad": "MGPIO10",
+      "mux_mode": 4,
+      "signal": "PWM0P"
+    },
+    {
+      "chip_pad": "MGPIO21",
+      "mux_mode": 1,
+      "signal": "PWM0P"
+    },
+    {
+      "chip_pad": "AGPIO2",
+      "mux_mode": 2,
+      "signal": "PWM0P"
+    }
+  ],
+  "sample": {
+    "sdk_pin": 47,
+    "mux_mode": 1,
+    "channel": 0,
+    "group": 0
+  },
+  "hardware_accessed": false,
+  "clock_tree_proven": false,
+  "note": "Source routes only. SDK reports 32MHz; measured A-board handoff differs. See WS53 PWM0 HIL evidence; no new register layout inferred."
+}

@@ -1,0 +1,14 @@
+// SDK 163d9150, sio_porting.c + sio_porting.h + common_def.h.
+// A shared audio divider reset release, not a proved exclusive I2S clock.
+addrmap ws53_audio_cmu_regs {
+    hisi_evidence = "SDK-source 163d9150 sio_porting_clock_enable; shared audio divider/reset; upstream frequency and runtime ownership unverified";
+    default regwidth = 32;
+    default accesswidth = 32;
+    reg {
+        name = "CMU_NEW_CFG0 partial view; preserve all other bits";
+        field {
+            sw=rw; hw=r;
+            desc="CMU_DIV_AD_RSTN_SYNC_BIT: SDK sets before I2S gate, clears before disabling gate; shared audio reset ownership required";
+        } audio_divider_reset_n[0:0];
+    } NEW_CFG0 @ 0;
+};

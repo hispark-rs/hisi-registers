@@ -1,0 +1,26 @@
+{
+  "rom_sha256": "a1ac5c03c613112f973b45bdfbfd399d3f3017b315b61d1f6b0d2a07d2ce4671",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "adma_cases": 101,
+  "accepted_length_truncations": 12,
+  "cmd53_length_cases": 6144,
+  "adma_stride": 8,
+  "adma_transfer_flags": 33,
+  "adma_max_index": 128,
+  "zero_block_count_returns_error_sentinel": true,
+  "byte_mode_zero_is_512": true,
+  "unaligned_data_pointer_accepted_by_rom": true,
+  "leaf_bytes_unmodified": true,
+  "relocated_into_qemu_ram": true,
+  "mmio_tested": false,
+  "physical_hardware_accessed": false,
+  "adma_transfer_or_drain_verified": false,
+  "qemu_commit": "2fd1b1cda2613318856f53a4b171d3cc4c0004b8",
+  "source_files": {
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/sdio/hal_sdio.h": "9f01eda40115173ba3cfa5b5097f74b859601943218fd38fab87f754f4b5ccea",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/sdio_porting.h": "7ae225b8540406e706b8d0ae40cd16da62992267ce28fe784345987fa50282cd",
+    "src/drivers/chips/ws53/rom_config/acore/acore.sym": "310ed8183820892b49a2433f2d9fb5b5d5ff2d05ea8cd7a255255bee83e0b952"
+  },
+  "evidence_class": "ROM-software-execution-in-emulator; not silicon transfer evidence",
+  "audit_script": "hisi-riscv-qemu/scripts/ws53_sdio_rom_contract.py"
+}

@@ -1,0 +1,471 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "registers": 25,
+  "field_count": 70,
+  "fields": {
+    "VERSION": {
+      "VERSION": {
+        "c_field": "version",
+        "mask": "0xff"
+      },
+      "LOOPBACK": {
+        "c_field": "loop",
+        "mask": "0x100"
+      }
+    },
+    "MODE": {
+      "MODE": {
+        "c_field": "mode",
+        "mask": "0x1"
+      },
+      "PCM_MODE": {
+        "c_field": "pcm_mode",
+        "mask": "0x2"
+      },
+      "RXWS_SELECT": {
+        "c_field": "rxws_select",
+        "mask": "0x4"
+      },
+      "EXTENDED_RECEIVE": {
+        "c_field": "ext_rec_en",
+        "mask": "0x8"
+      },
+      "CHANNELS": {
+        "c_field": "chn_num",
+        "mask": "0x30"
+      },
+      "CLK_EDGE": {
+        "c_field": "clk_edge",
+        "mask": "0x40"
+      },
+      "MASTER": {
+        "c_field": "cfg_i2s_ms_mode_sel",
+        "mask": "0x80"
+      }
+    },
+    "INTSTATUS": {
+      "RX": {
+        "c_field": "rx_intr",
+        "mask": "0x1"
+      },
+      "TX": {
+        "c_field": "tx_intr",
+        "mask": "0x2"
+      },
+      "RX_RIGHT_OVERFLOW": {
+        "c_field": "rx_right_fifo_over",
+        "mask": "0x4"
+      },
+      "RX_LEFT_OVERFLOW": {
+        "c_field": "rx_left_fifo_over",
+        "mask": "0x8"
+      },
+      "TX_RIGHT_UNDERFLOW": {
+        "c_field": "tx_right_fifo_under",
+        "mask": "0x10"
+      },
+      "TX_LEFT_UNDERFLOW": {
+        "c_field": "tx_left_fifo_under",
+        "mask": "0x20"
+      }
+    },
+    "INTCLR": {
+      "RX": {
+        "c_field": "rx_intr",
+        "mask": "0x1"
+      },
+      "TX": {
+        "c_field": "tx_intr",
+        "mask": "0x2"
+      },
+      "RX_RIGHT_OVERFLOW": {
+        "c_field": "rx_right_fifo_over",
+        "mask": "0x4"
+      },
+      "RX_LEFT_OVERFLOW": {
+        "c_field": "rx_left_fifo_over",
+        "mask": "0x8"
+      },
+      "TX_RIGHT_UNDERFLOW": {
+        "c_field": "tx_right_fifo_under",
+        "mask": "0x10"
+      },
+      "TX_LEFT_UNDERFLOW": {
+        "c_field": "tx_left_fifo_under",
+        "mask": "0x20"
+      }
+    },
+    "LEFT_TX": {
+      "DATA": {
+        "c_field": "tx_left_data",
+        "mask": "0xffffffff"
+      }
+    },
+    "RIGHT_TX": {
+      "DATA": {
+        "c_field": "tx_right_data",
+        "mask": "0xffffffff"
+      }
+    },
+    "LEFT_RX": {
+      "DATA": {
+        "c_field": "rx_left_data",
+        "mask": "0xffffffff"
+      }
+    },
+    "RIGHT_RX": {
+      "DATA": {
+        "c_field": "rx_right_data",
+        "mask": "0xffffffff"
+      }
+    },
+    "CT_SET": {
+      "TX_MERGE": {
+        "c_field": "tx_data_merge_en",
+        "mask": "0x100"
+      },
+      "RX_MERGE": {
+        "c_field": "rx_data_merge_en",
+        "mask": "0x200"
+      },
+      "TX_FIFO_DISABLE": {
+        "c_field": "tx_fifo_disable",
+        "mask": "0x400"
+      },
+      "RX_FIFO_DISABLE": {
+        "c_field": "rx_fifo_disable",
+        "mask": "0x800"
+      },
+      "TX_ENABLE": {
+        "c_field": "tx_enable",
+        "mask": "0x1000"
+      },
+      "RX_ENABLE": {
+        "c_field": "rx_enable",
+        "mask": "0x2000"
+      },
+      "INTERRUPT_ENABLE": {
+        "c_field": "intr_en",
+        "mask": "0x4000"
+      },
+      "RESET_N": {
+        "c_field": "rst_n",
+        "mask": "0x8000"
+      }
+    },
+    "CT_CLR": {
+      "TX_MERGE": {
+        "c_field": "tx_data_merge_en",
+        "mask": "0x100"
+      },
+      "RX_MERGE": {
+        "c_field": "rx_data_merge_en",
+        "mask": "0x200"
+      },
+      "TX_FIFO_DISABLE": {
+        "c_field": "tx_fifo_disable",
+        "mask": "0x400"
+      },
+      "RX_FIFO_DISABLE": {
+        "c_field": "rx_fifo_disable",
+        "mask": "0x800"
+      },
+      "TX_ENABLE": {
+        "c_field": "tx_enable",
+        "mask": "0x1000"
+      },
+      "RX_ENABLE": {
+        "c_field": "rx_enable",
+        "mask": "0x2000"
+      },
+      "INTERRUPT_ENABLE": {
+        "c_field": "intr_en",
+        "mask": "0x4000"
+      },
+      "RESET_N": {
+        "c_field": "rst_n",
+        "mask": "0x8000"
+      }
+    },
+    "FIFO_THRESHOLD": {
+      "TX": {
+        "c_field": "tx_fifo_threshold",
+        "mask": "0xff"
+      },
+      "RX": {
+        "c_field": "rx_fifo_threshold",
+        "mask": "0xff00"
+      }
+    },
+    "RX_STA": {
+      "LEFT": {
+        "c_field": "rx_left_depth",
+        "mask": "0xff"
+      },
+      "RIGHT": {
+        "c_field": "rx_right_depth",
+        "mask": "0xff00"
+      }
+    },
+    "TX_STA": {
+      "LEFT": {
+        "c_field": "tx_left_depth",
+        "mask": "0xff"
+      },
+      "RIGHT": {
+        "c_field": "tx_right_depth",
+        "mask": "0xff00"
+      }
+    },
+    "DATA_WIDTH_SET": {
+      "TX_MODE": {
+        "c_field": "tx_mode",
+        "mask": "0x7"
+      },
+      "RX_MODE": {
+        "c_field": "rx_mode",
+        "mask": "0x38"
+      }
+    },
+    "I2S_START_POS": {
+      "READ_RIGHT": {
+        "c_field": "start_post_read",
+        "mask": "0x1"
+      },
+      "WRITE_RIGHT": {
+        "c_field": "start_pos_write",
+        "mask": "0x2"
+      }
+    },
+    "I2S_POS_FLAG": {
+      "READ_RIGHT": {
+        "c_field": "start_post_read",
+        "mask": "0x1"
+      },
+      "WRITE_RIGHT": {
+        "c_field": "start_pos_write",
+        "mask": "0x2"
+      }
+    },
+    "SIGNED_EXT": {
+      "ENABLE": {
+        "c_field": "signed_ext_en",
+        "mask": "0x1"
+      }
+    },
+    "I2S_POS_MERGE_EN": {
+      "ENABLE": {
+        "c_field": "merge_en",
+        "mask": "0x1"
+      }
+    },
+    "INTMASK": {
+      "RX": {
+        "c_field": "rx_int",
+        "mask": "0x1"
+      },
+      "TX": {
+        "c_field": "tx_intr",
+        "mask": "0x2"
+      },
+      "RX_RIGHT_OVERFLOW": {
+        "c_field": "rx_right_fifo_over",
+        "mask": "0x4"
+      },
+      "RX_LEFT_OVERFLOW": {
+        "c_field": "rx_left_fifo_over",
+        "mask": "0x8"
+      },
+      "TX_RIGHT_UNDERFLOW": {
+        "c_field": "tx_right_fifo_under",
+        "mask": "0x10"
+      },
+      "TX_LEFT_UNDERFLOW": {
+        "c_field": "tx_left_fifo_under",
+        "mask": "0x20"
+      }
+    },
+    "I2S_CRG": {
+      "BCLK_DIV_ENABLE": {
+        "c_field": "i2s_bclk_div_en",
+        "mask": "0x1"
+      },
+      "CLOCK_ENABLE": {
+        "c_field": "i2s_crg_clken",
+        "mask": "0x2"
+      },
+      "BCLK_SELECT": {
+        "c_field": "i2s_bclk_sel",
+        "mask": "0x4"
+      },
+      "FS_SELECT": {
+        "c_field": "i2s_fs_sel",
+        "mask": "0x10"
+      }
+    },
+    "I2S_BCLK_DIV_NUM": {
+      "DIVIDER": {
+        "c_field": "bclk_div_num",
+        "mask": "0x7f"
+      }
+    },
+    "I2S_FS_DIV_NUM": {
+      "DIVIDER": {
+        "c_field": "fs_div_num",
+        "mask": "0x3ff"
+      }
+    },
+    "I2S_FS_DIV_RATIO_NUM": {
+      "RATIO": {
+        "c_field": "fs_div_ratio_num",
+        "mask": "0x7ff"
+      }
+    },
+    "I2S_DUAL_RX_CHN": {
+      "DATA": {
+        "c_field": "rx_data",
+        "mask": "0xffffffff"
+      }
+    },
+    "I2S_DUAL_TX_CHN": {
+      "DATA": {
+        "c_field": "tx_data",
+        "mask": "0xffffffff"
+      }
+    }
+  },
+  "additional_clock_fields": 13,
+  "width_encodings_checked_against_original_c_enum": true,
+  "clock_rmw_original_macros_preserve_upper_and_neighbor_bits": true,
+  "divider_cases": [
+    {
+      "width": 16,
+      "channels": 2,
+      "divider": 40
+    },
+    {
+      "width": 16,
+      "channels": 4,
+      "divider": 20
+    },
+    {
+      "width": 16,
+      "channels": 8,
+      "divider": 10
+    },
+    {
+      "width": 16,
+      "channels": 16,
+      "divider": 5
+    },
+    {
+      "width": 18,
+      "channels": 2,
+      "divider": 35
+    },
+    {
+      "width": 18,
+      "channels": 4,
+      "divider": 17
+    },
+    {
+      "width": 18,
+      "channels": 8,
+      "divider": 8
+    },
+    {
+      "width": 18,
+      "channels": 16,
+      "divider": 4
+    },
+    {
+      "width": 20,
+      "channels": 2,
+      "divider": 32
+    },
+    {
+      "width": 20,
+      "channels": 4,
+      "divider": 16
+    },
+    {
+      "width": 20,
+      "channels": 8,
+      "divider": 8
+    },
+    {
+      "width": 20,
+      "channels": 16,
+      "divider": 4
+    },
+    {
+      "width": 24,
+      "channels": 2,
+      "divider": 26
+    },
+    {
+      "width": 24,
+      "channels": 4,
+      "divider": 13
+    },
+    {
+      "width": 24,
+      "channels": 8,
+      "divider": 6
+    },
+    {
+      "width": 24,
+      "channels": 16,
+      "divider": 3
+    },
+    {
+      "width": 32,
+      "channels": 2,
+      "divider": 20
+    },
+    {
+      "width": 32,
+      "channels": 4,
+      "divider": 10
+    },
+    {
+      "width": 32,
+      "channels": 8,
+      "divider": 5
+    },
+    {
+      "width": 32,
+      "channels": 16,
+      "divider": 2
+    }
+  ],
+  "clock_writes": [
+    "32-bit 0x57008600 bit0 set",
+    "32-bit 0x52000040 bit2 set",
+    "32-bit 0x57008600 bit0 clear",
+    "32-bit 0x52000040 bit2 clear"
+  ],
+  "limitations": [
+    "host C layout and port evidence, not silicon",
+    "CT_SET/CLR readback and zero-write effects withheld",
+    "audio clock ownership and upstream frequency require handoff",
+    "SDK divider floors integer division before float conversion"
+  ],
+  "source_sha256": {
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151_regs_def.h": "3feeb8dff4c27170c5f297d7698f30779af28504811f2a1ff10c4645708ad8a3",
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151_regs_op.h": "6eacf03a6a781a580e0d9ab0387fadf59d9eb712809a312b745ce01b09ed2abc",
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151_regs_op.c": "ab8a86a26f7e5e85f1381f29e2756cc57eec616ed1f0504b12c4279276fde645",
+    "src/drivers/drivers/hal/sio/hal_sio_v151/hal_sio_v151.c": "35ea53bccf3e8cc5b0f99ff0cf2fab669a008de3dbde99eb0f8a1af21388fba0",
+    "src/drivers/drivers/hal/sio/CMakeLists.txt": "86a7a158cdadaab6995d4f8c8f54783d528eb984bcbc5bafcbb399db01a484c7",
+    "src/drivers/drivers/hal/sio/hal_sio.h": "af518656e64c778ca34ca3080677b829bce6afb8e07331ced6daa6fe89930ffa",
+    "src/drivers/chips/ws53/porting/sio/sio_porting.c": "39f666e8d16f5174019a80d607b728b34e7ba416056bcd6e33c2d6cbb1481024",
+    "src/drivers/chips/ws53/porting/include/sio_porting.h": "0fee4f04edc7c0c281e28375e1b99166d5b22aa28933aa2ea88c8e722acda214",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+    "src/include/common_def.h": "c8dbb8b2f994793d3a9304cfeda60f5fc40d62bb4e75a4d7fb8e04a4f30a8b6d",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/drivers/chips/ws53/porting/pwm/pwm_porting.c": "3007c81e5c56820139928d5d30622f65b4317ae8161b29ee99bd926a278383a4",
+    "src/drivers/chips/ws53/include/clock_recover.h": "4c048c3d4bc7949273e65e7f635af79b81037ca829171a72552b15eb66c05c9f"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157"
+}

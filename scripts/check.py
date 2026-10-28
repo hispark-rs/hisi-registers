@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
 from pathlib import Path
 import json
 import sys
@@ -30,8 +34,8 @@ EXPECTED = {
         "write_constraints": 6,
     },
     "WS53.experimental.svd": {
-        "peripherals": 31,
-        "interrupts": 20,
+        "peripherals": 35,
+        "interrupts": 24,
         "addresses": {
             "SYSTEM_MEMORY": 0x57030000,
             "M_CRG": 0x52000000,
@@ -47,7 +51,10 @@ EXPECTED = {
             "TSENSOR": 0x59006300,
             "SDIO": 0x52060000,
             "TRNG": 0x52024000,
+            "SPACC": 0x52010000,
+            "KM": 0x52022000,
             "EFUSE": 0x57024000,
+            "FAMA_STATUS": 0x5208F800,
             "WDT": 0x5702B000,
             "SFC_CFG": 0x53000000,
             "PWM": 0x52082000,
@@ -59,6 +66,7 @@ EXPECTED = {
             "RTC0": 0x57029100,
             "RTC1": 0x57029200,
             "I2S": 0x52030000,
+            "AUDIO_CMU": 0x57008600,
             "TIMER": 0x52002000,
             "TCXO": 0x57000200,
             "GPIO0": 0x5700C000,
@@ -66,11 +74,25 @@ EXPECTED = {
             "GPIO2": 0x57010000,
         },
         "source_arrays": 0,
-        "output_arrays": 6,
-        "cluster_arrays": 1,
-        "registers_expanded": 938,
-        "fields_expanded": 1966,
-        "write_constraints": 18,
+        "output_arrays": 14,
+        "cluster_arrays": 7,
+        # Flash mapping/read-only status adds 31 views/32 fields; the two
+        # SDK-backed MSUB word access aliases add 2 views/19 fields.
+        # WS53 SFC source audit removes five unverified legacy IRQ/reset slots
+        # (nine fields), adds seven source-defined DDR/sample layout fields.
+        # SFC clock observation adds halfword/word views of one shared slot,
+        # with the same two low-half fields and no invented frequency/reset.
+        # SDIO function1 status/enable split into fourteen ROM-proven events;
+        # retain the unknown upper status bits: net 27 additional fields.
+        # Shared SPACC HASH subset:34 source-backed views,65 fields,3 arrays.
+        # SYMC adds53 views/91 fields/3 arrays; shared error cluster interleaves
+        # SYMC and HASH, retaining old HASH accessors and absolute addresses.
+        # Shared KM keyslot/clear loader adds25 views/46 fields/one array.
+        # Restricted CCORE logic/clock release adds one WO alias and constraint.
+        # IPC adds seven views, twelve fields, two IRQs and one constraint.
+        "registers_expanded": 1097,
+        "fields_expanded": 2301,
+        "write_constraints": 22,
     },
 }
 
@@ -94,7 +116,8 @@ shared_contracts = {
     "watchdog_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "sfc_v150_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "pwm_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
-    "sio_v151_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
+    "sio_v151_regs": {"ws63": 1, "bs2x": 1},
+    "ws53_sio_v151_regs": {"ws53": 1},
     "uart_v151_basic_regs": {"ws53": 3, "ws63": 3, "bs2x": 3},
     "timer_v150_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
     "tcxo_v150_data16_regs": {"ws53": 1, "ws63": 1, "bs2x": 1},
@@ -217,6 +240,7 @@ for filename, expected in EXPECTED.items():
         assert wregs["LOCK_COMMAND"].findtext("alternateRegister") == "LOCK_STATUS"
         assert wregs["CCVR_REQUEST"].findtext("alternateRegister") == "CCVR_STATUS"
         assert wregs["WDT_EOI"].findtext("readAction") == "modifyExternal"
+        assert wregs["WDT_CNT"].findtext("readAction") == "modifyExternal"
         for name, value in (("WDT_RESTART", 0x5a5a5a5a), ("CCVR_REQUEST", 1)):
             c = wregs[name].find("fields/field/writeConstraint/range")
             assert int(c.findtext("minimum"), 0) == int(c.findtext("maximum"), 0) == value

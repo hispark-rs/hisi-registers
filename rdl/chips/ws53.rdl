@@ -5,13 +5,14 @@
 `include "../ip/i2c-v151-ws53-bs2x.rdl"
 `include "../ip/rtc-v150-ws53-bs2x.rdl"
 `include "../ip/uart-v151-basic.rdl"
-`include "../ip/sio-v151.rdl"
+`include "ws53/sio-v151.rdl"
 `include "../ip/timer-v150.rdl"
 `include "../ip/tcxo-v150-data16.rdl"
 `include "../ip/gpio-v150-basic.rdl"
 `include "ws53/system-memory.rdl"
 `include "ws53/pinctrl.rdl"
 `include "ws53/m-crg.rdl"
+`include "ws53/audio-cmu.rdl"
 `include "ws53/glb-ctl.rdl"
 `include "ws53/spi-v151-100.rdl"
 `include "ws53/mdma-v151.rdl"
@@ -19,7 +20,10 @@
 `include "ws53/tsensor.rdl"
 `include "ws53/sdio-v151.rdl"
 `include "ws53/trng.rdl"
+`include "ws53/spacc.rdl"
+`include "ws53/km.rdl"
 `include "ws53/efuse-read.rdl"
+`include "ws53/flash-map.rdl"
 
 // Minimal SDK-first WS53 integration map. Additional peripherals are added only
 // after their concrete variant and acore/control-core ownership are reconciled.
@@ -36,13 +40,14 @@ enum ws53_rtc_mode {
 enum ws53_pwm_interrupt_enable {
     Disabled = 0 { desc = "Both event outputs masked"; };
     AbnormalOnly = 1 { desc = "Enable abnormal configuration event"; };
-    PeriodEndOnly = 2 { desc = "Enable step end event"; };
+    ConfigurationLoadedOnly = 2 { desc = "Enable configuration-load notification; initial START can also assert it, not proof that a pulse block ended"; };
     AllEvents = 3 { desc = "Enable both event outputs; SDK initialization value"; };
 };
 addrmap ws53 {
     hisi_evidence = "licensed-sdk: fbb_ws53 163d9150ab94a02d09a05f623351f9facee3025e; ws53_liteos_app; acore MCU_MODE_1";
     ws53_system_memory_regs system_memory @ 0x57030000;
     ws53_m_crg_regs m_crg @ 0x52000000;
+    ws53_audio_cmu_regs audio_cmu @ 0x57008600;
     ws53_glb_ctl_regs glb_ctl @ 0x57000000;
     ws53_pinmux_mcu_regs pinmux_mcu @ 0x52008000;
     ws53_pinmux_aon_regs pinmux_aon @ 0x57036000;
@@ -55,7 +60,10 @@ addrmap ws53 {
     ws53_tsensor_regs tsensor @ 0x59006300;
     ws53_sdio_v151_regs sdio @ 0x52060000;
     ws53_trng_regs trng @ 0x52024000;
+    ws53_spacc_regs spacc @ 0x52010000;
+    ws53_km_regs km @ 0x52022000;
     ws53_efuse_read_regs efuse @ 0x57024000;
+    ws53_fama_status_regs fama_status @ 0x5208f800;
     watchdog_v151_regs #(.SDK_VIEW(true)) wdt @ 0x5702B000;
     wdt->hisi_reset_unverified = true;
     wdt->hisi_evidence = "SDK-source 163d9150 acore watchdog v151, base from acore/platform_core.h; no silicon reset or NMI route validation";
@@ -63,21 +71,35 @@ addrmap ws53 {
     wdt.WDT_RESTART.wdt_restart->hisi_write_min = 0x5a5a5a5a;
     wdt.WDT_RESTART.wdt_restart->hisi_write_max = 0x5a5a5a5a;
     wdt.WDT_STATUS.wdt_status->desc = "SDK register definition: 0 free, 1 busy";
+    wdt.WDT_CNT.wdt_cnt->onread = ruser;
+    wdt.WDT_CNT.wdt_cnt->hisi_svd_read_action = "modifyExternal";
+    wdt.WDT_CNT.wdt_cnt->desc = "Consume the valid counter snapshot; A-board observation: reading CNT clears CCVR validity. A new request issued too soon after consumption may be lost even when BUSY is zero. Read only once per valid snapshot; rearm latency and command ordering need qualification.";
+    wdt.CCVR_STATUS.valid->desc = "Snapshot valid until CNT is consumed; A-board validity remains set when CNT is not read, and clears after its read. BUSY zero does not prove that another request can be accepted.";
     wdt.WDT_EOI.wdt_eoi->onread = ruser;
     wdt.WDT_EOI.wdt_eoi->hisi_svd_read_action = "modifyExternal";
     wdt.WDT_EOI.wdt_eoi->desc = "Read returns zero and clears interrupt per SDK register comment; SDK clear helper reads then writes 1, independent write-only clear behavior unverified";
     wdt.WDT_CR.wdt_mode->desc = "0 reset on first expiry interrupt, 1 reset on second expiry interrupt; reset still gated by RST_EN";
     wdt.WDT_CR.wdt_mode->encode = ws53_wdt_expiry_mode;
-    sfc_v150_regs sfc_cfg @ 0x53000000;
+    sfc_v150_regs #(.WS53_READ_VIEW(true), .WS53_COMMAND_VIEW(true)) sfc_cfg @ 0x53000000;
+    sfc_cfg->hisi_reset_unverified = true;
+    sfc_cfg->hisi_evidence = "SDK-source 163d9150 WS53 SFC v150 command/DMA source contract plus mapping/FAPC read views; evidence/ws53-sfc-command-source-contract.json. Shared boot/control-core resource; no reset defaults, application IRQ route, DMA drain or safe ownership qualified. Legacy interrupt/reset slots absent from pinned SDK are excluded only on WS53";
+    sfc_cfg.CMD_CONFIG.start->desc = "SDK starts SPI transfer by writing 1 and polls until hardware returns 0 after transfer completion per header. Source contract uses repeated volatile reads, not a read-clear operation; silicon side effects/timing, write-while-busy and forced-clear semantics unqualified. Zero does not certify NOR WIP, cache coherence or bus drain";
+    sfc_cfg.BUS_DMA_CTRL.dma_start->desc = "SDK starts bus DMA by writing 1 and polls until hardware returns 0 after transfer completion per header. Source contract uses repeated volatile reads, not a read-clear operation; silicon side effects/timing unqualified. No abort, buffer-ownership or posted-write drain proof follows from zero";
+    sfc_cfg.BUS_DMA_MEM_SADDR.dma_mem_saddr->desc = "SDK writes caller RAM pointer as a 32-bit bus-DMA address. No supported RAM range, alias translation, cache policy or exclusive ownership is established by this register layout";
+    sfc_cfg.CMD_CONFIG.data_cnt->desc = "Six-bit length-minus-one for data-enabled commands: 1..64 bytes. Original SDK helper truncates size-1, including zero/oversize; caller validation is required. With data_en=0 this field is not a data request";
+    sfc_cfg.BUS_DMA_LEN.dma_len->desc = "Thirty-bit DMA length-minus-one; SDK helper preserves upper bits but does not validate zero/oversize. Layout is not a buffer ownership or transfer-range guarantee";
+    sfc_cfg.CMD_DATABUF_0.cmd_databuf_0->desc = "CPU command data buffer, also updated by completed reads. SDK uses ordinary volatile accesses without a source-level FIFO pop/read-clear operation; silicon side effects unverified. A previously buffered value is not a fresh Flash status/WIP observation: SDK issues a status command, waits command START, then reads this word";
     pwm_v151_regs pwm @ 0x52082000;
     pwm->hisi_reset_unverified = true;
     pwm->hisi_evidence = "SDK-source 163d9150 PWM v151 acore profile: 4 groups, 8 channels; no silicon reset, waveform or command readback verified";
     pwm.PWM_INT_MASK.pwm_int_mask->encode = ws53_pwm_interrupt_enable;
-    pwm.PWM_INT_MASK.pwm_int_mask->desc = "Event enable despite MASK name: bit0 abnormal, bit1 step end; 1 permits, 0 masks, confirmed by SDK init writing 3";
-    pwm.PWM_START0.pwm_start_0->desc = "Commit group 0 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
+    pwm.PWM_INT_MASK.pwm_int_mask->desc = "Event enable despite MASK name: bit0 abnormal, bit1 configuration load; 1 permits, 0 masks, confirmed by SDK init writing 3";
+    pwm.PWM_START0.pwm_start_0->desc = "Commit group 0 configuration with 1; do not assume synchronous acceptance. A-board2MHz finite8/16 bursts required guarding the initial enabled configuration before EN-clear;10us guard passed. Exact acceptance latency and command readback unverified; see evidence/ws53-pwm-start-hil.json";
     pwm.PWM_START1.pwm_start_1->desc = "Commit group 1 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START2.pwm_start_2->desc = "Commit group 2 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
     pwm.PWM_START3.pwm_start_3->desc = "Commit group 3 configuration with 1; SDK has no completion poll, self-clear/readback timing unverified";
+    pwm.PWM_PERIODLOAD_FLAG0.pwm_periodload_flag_0->desc = "Configuration-load notification; A-board flag=1 and count=1 during first pulse after START, before 8/16-pulse block completion. W1C via CFG_INT_CLR0 clears it; deferred stop later asserts it again. Not an unconditional block-end flag. See evidence/ws53-pwm-load-flag-hil.json";
+    pwm.PWM_PERIODCNT0.pwm_periodcnt_0->desc = "A-board finite8/16 PWM0 at2MHz: active pulse index is1-based during each100us period, then0 after deferred stop. Boundary, continuous, repeating and overflow semantics unverified; see evidence/ws53-pwm-counter-hil.json";
     pwm.PWM_START0.pwm_start_0->hisi_write_min = 1;
     pwm.PWM_START0.pwm_start_0->hisi_write_max = 1;
     pwm.PWM_START1.pwm_start_1->hisi_write_min = 1;
@@ -88,11 +110,14 @@ addrmap ws53 {
     pwm.PWM_START3.pwm_start_3->hisi_write_max = 1;
     pwm.PWM_ABNOR_STATE_CLR0.pwm_abnor_state_clr0->desc = "SDK writes observed abnormal-group bits to acknowledge their events; command readback/self-clear timing unverified";
     pwm.PWM_ABNOR_STATE_CLR1.pwm_abnor_state_clr1->desc = "SDK writes observed abnormal-count bits to acknowledge their events; command readback/self-clear timing unverified";
-    pwm.PWM_CFG_INT_CLR0.pwm_cfg_int_clr0->desc = "SDK writes channel bit to acknowledge step-end event; command readback/self-clear timing unverified";
+    pwm.PWM_CFG_INT_CLR0.pwm_cfg_int_clr0->desc = "Write channel bit to acknowledge configuration-load notification; initial START also sets this flag on A-board channel0; command readback/self-clear timing unverified";
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart0 @ 0x52081000;
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart1 @ 0x52080000;
     uart_v151_basic_regs #(.MMIO_WIDTH(32), .SDK_VIEW(true)) uart2 @ 0x57014000;
     uart0->hisi_reset_unverified = true;
+    uart0.UART_CTL.div_en->desc = "A-board: set only after RX is drained; attempted set with1/2/64 queued bytes reads back clear. Other control-bit acceptance and TX-only busy behavior unqualified.";
+    uart0.FIFO_STATUS.rx_fifo_full->desc = "A-board: asserted at64 queued RX bytes, clear at0/1/2. SDK non-PRO comment incorrectly calls this not-empty.";
+    uart0.FIFO_STATUS.rx_fifo_empty->desc = "A-board: asserted when enabled RX FIFO is empty; clear at1/2/64 bytes and after H1/H0 soft reset with FIFO disabled. SDK comment incorrectly calls this full.";
     uart0.RX_FIFO_WRITE.rx_fifo_write->sw = w;
     uart0.RX_FIFO_WRITE.rx_fifo_write->desc = "Push test data only in FIFO access mode; no read-level alias established on WS53";
     uart0.MODEM_STATUS.dcts->onread = rclr;
@@ -105,6 +130,9 @@ addrmap ws53 {
     uart0.TX_FIFO_READ.tx_fifo_read->onread = ruser;
     uart0.TX_FIFO_READ.tx_fifo_read->hisi_svd_read_action = "modifyExternal";
     uart1->hisi_reset_unverified = true;
+    uart1.UART_CTL.div_en->desc = "A-board: set only after RX is drained; attempted set with1/2/64 queued bytes reads back clear. Other control-bit acceptance and TX-only busy behavior unqualified.";
+    uart1.FIFO_STATUS.rx_fifo_full->desc = "A-board: asserted at64 queued RX bytes, clear at0/1/2. SDK non-PRO comment incorrectly calls this not-empty.";
+    uart1.FIFO_STATUS.rx_fifo_empty->desc = "A-board: asserted when enabled RX FIFO is empty; clear at1/2/64 bytes and after H1/H0 soft reset with FIFO disabled. SDK comment incorrectly calls this full.";
     uart1.RX_FIFO_WRITE.rx_fifo_write->sw = w;
     uart1.RX_FIFO_WRITE.rx_fifo_write->desc = "Push test data only in FIFO access mode; no read-level alias established on WS53";
     uart1.MODEM_STATUS.dcts->onread = rclr;
@@ -117,6 +145,9 @@ addrmap ws53 {
     uart1.TX_FIFO_READ.tx_fifo_read->onread = ruser;
     uart1.TX_FIFO_READ.tx_fifo_read->hisi_svd_read_action = "modifyExternal";
     uart2->hisi_reset_unverified = true;
+    uart2.UART_CTL.div_en->desc = "A-board: set only after RX is drained; attempted set with1/2/64 queued bytes reads back clear. Other control-bit acceptance and TX-only busy behavior unqualified.";
+    uart2.FIFO_STATUS.rx_fifo_full->desc = "A-board: asserted at64 queued RX bytes, clear at0/1/2. SDK non-PRO comment incorrectly calls this not-empty.";
+    uart2.FIFO_STATUS.rx_fifo_empty->desc = "A-board: asserted when enabled RX FIFO is empty; clear at1/2/64 bytes and after H1/H0 soft reset with FIFO disabled. SDK comment incorrectly calls this full.";
     uart2.RX_FIFO_WRITE.rx_fifo_write->sw = w;
     uart2.RX_FIFO_WRITE.rx_fifo_write->desc = "Push test data only in FIFO access mode; no read-level alias established on WS53";
     uart2.MODEM_STATUS.dcts->onread = rclr;
@@ -128,6 +159,29 @@ addrmap ws53 {
     uart2.LINE_STATUS.rx_fifo_err->desc = "Read can clear only when the errored character is at FIFO head and no later errors remain";
     uart2.TX_FIFO_READ.tx_fifo_read->onread = ruser;
     uart2.TX_FIFO_READ.tx_fifo_read->hisi_svd_read_action = "modifyExternal";
+    uart0.DIV_L.div_l->desc = "Integer divider low byte. A-board UART0/1/2 reads zero with DIV_EN clear and the programmed value when set. Setting DIV_EN while RX has queued bytes does not latch; drain RX before enabling. High-byte and divisor-write gating remain unqualified.";
+    uart0.DIV_H.div_h->desc = "Integer divider high byte. SDK opens DIV_EN before reading; high-byte hardware gating has not been established.";
+    uart0.UART_CTL.stp->desc = "Stop duration: 0=one bit; 1=one-and-a-half bits when DLEN=0 (five data bits), otherwise two bits. Source configuration semantics, not waveform timing proof.";
+    uart1.DIV_L.div_l->desc = "Integer divider low byte. A-board UART0/1/2 reads zero with DIV_EN clear and the programmed value when set. Setting DIV_EN while RX has queued bytes does not latch; drain RX before enabling. High-byte and divisor-write gating remain unqualified.";
+    uart1.DIV_H.div_h->desc = "Integer divider high byte. SDK opens DIV_EN before reading; high-byte hardware gating has not been established.";
+    uart1.UART_CTL.stp->desc = "Stop duration: 0=one bit; 1=one-and-a-half bits when DLEN=0 (five data bits), otherwise two bits. Source configuration semantics, not waveform timing proof.";
+    uart2.DIV_L.div_l->desc = "Integer divider low byte. A-board UART0/1/2 reads zero with DIV_EN clear and the programmed value when set. Setting DIV_EN while RX has queued bytes does not latch; drain RX before enabling. High-byte and divisor-write gating remain unqualified.";
+    uart2.DIV_H.div_h->desc = "Integer divider high byte. SDK opens DIV_EN before reading; high-byte hardware gating has not been established.";
+    uart2.UART_CTL.stp->desc = "Stop duration: 0=one bit; 1=one-and-a-half bits when DLEN=0 (five data bits), otherwise two bits. Source configuration semantics, not waveform timing proof.";
+    // UART2 A-board TX IRQ observation; UART0/1 reuse the source IP contract,
+    // not a claim of physical TX IRQ qualification on those instances.
+    uart0.INTR_ID.intr_id->onread = ruser;
+    uart0.INTR_ID.intr_id->hisi_svd_read_action = "modifyExternal";
+    uart0.INTR_ID.intr_id->desc = "Interrupt ID: 0=modem, 1=none, 2=TX, 4=RX, 6=line error, 7=busy, 12=RX timeout. Reading ID 2 acknowledges its TX request; UART2 observed 2 then 1 in both PTIM modes. Other causes have their own acknowledgement. UART0/1 TX read-clear behavior is not physically qualified.";
+    uart0.LINE_STATUS.thre_s->desc = "SDK: with PTIM and FIFO enabled, 1 means TX FIFO full; otherwise 1 means THR/FIFO empty. UART2 observed both polarities. This is not transmitter-shift-register completion; use TX_EMPTY_S for line drain.";
+    uart1.INTR_ID.intr_id->onread = ruser;
+    uart1.INTR_ID.intr_id->hisi_svd_read_action = "modifyExternal";
+    uart1.INTR_ID.intr_id->desc = "Interrupt ID: 0=modem, 1=none, 2=TX, 4=RX, 6=line error, 7=busy, 12=RX timeout. Reading ID 2 acknowledges its TX request; UART2 observed 2 then 1 in both PTIM modes. Other causes have their own acknowledgement. UART0/1 TX read-clear behavior is not physically qualified.";
+    uart1.LINE_STATUS.thre_s->desc = "SDK: with PTIM and FIFO enabled, 1 means TX FIFO full; otherwise 1 means THR/FIFO empty. UART2 observed both polarities. This is not transmitter-shift-register completion; use TX_EMPTY_S for line drain.";
+    uart2.INTR_ID.intr_id->onread = ruser;
+    uart2.INTR_ID.intr_id->hisi_svd_read_action = "modifyExternal";
+    uart2.INTR_ID.intr_id->desc = "Interrupt ID: 0=modem, 1=none, 2=TX, 4=RX, 6=line error, 7=busy, 12=RX timeout. Reading ID 2 acknowledges its TX request; UART2 observed 2 then 1 in both PTIM modes. Other causes have their own acknowledgement. UART0/1 TX read-clear behavior is not physically qualified.";
+    uart2.LINE_STATUS.thre_s->desc = "SDK: with PTIM and FIFO enabled, 1 means TX FIFO full; otherwise 1 means THR/FIFO empty. UART2 observed both polarities. This is not transmitter-shift-register completion; use TX_EMPTY_S for line drain.";
     uart1->hisi_svd_derived_from = "UART0";
     uart2->hisi_svd_derived_from = "UART0";
     i2c_v151_ws53_bs2x_regs #(.SDK_VIEW(true)) i2c0 @ 0x52083000;
@@ -175,10 +229,14 @@ addrmap ws53 {
     rtc1.EOI_REN.eoi->hisi_write_max = 1;
     rtc0.EOI_REN.eoi->desc = "SDK acknowledges by writing one. Header claims read-clear but driver never reads; read behavior withheld";
     rtc1.EOI_REN.eoi->desc = "SDK acknowledges by writing one. Header claims read-clear but driver never reads; read behavior withheld";
-    sio_v151_regs i2s @ 0x52030000;
+    ws53_sio_v151_regs i2s @ 0x52030000;
     timer_v150_regs #(.CHANNELS(2), .COMMON_REGS(false), .LOCAL_MASKED_STATUS(true)) timer @ 0x52002000;
     tcxo_v150_data16_regs tcxo @ 0x57000200;
     timer->hisi_reset_unverified = true;
+    // A-board CPU readback after writes: low nibble reads ones on both channels.
+    // This is not a reset value or proof of effective counting quantization.
+    timer.TIMER_LOAD_COUNT0.load_count->desc = "Full32-bit requested reload. WS53 A-board reads after writes return written_value OR 0xF; low read bits are not a retained write value. Effective sub16-tick timing and POR readback unqualified; see ws53-timer-load-hil.json";
+    timer.TIMER_LOAD_COUNT1.load_count->desc = "Full32-bit requested reload. WS53 A-board reads after writes return written_value OR 0xF; low read bits are not a retained write value. Effective sub16-tick timing and POR readback unqualified; see ws53-timer-load-hil.json";
     tcxo->hisi_reset_unverified = true;
     timer.TIMER_EOI0.eoi->desc = "Write one to acknowledge channel 0; read semantics unverified, no read API";
     timer.TIMER_EOI1.eoi->desc = "Write one to acknowledge channel 1; read semantics unverified, no read API";
@@ -204,6 +262,9 @@ addrmap ws53 {
 
     // acore/chip_core_irq.h: LOCAL_INTERRUPT0 = 26. These are absolute
     // mcause values, not offsets into a PLIC or Cortex-M vector table.
+    // ROM ipc_port_register_irq and patched handlers: 26 + channel (0,1).
+    signal { hisi_irq_number = 26; hisi_irq_owner = "M_CRG"; } APP_INT0;
+    signal { hisi_irq_number = 27; hisi_irq_owner = "M_CRG"; } APP_INT1;
     signal { hisi_irq_number = 29; hisi_irq_owner = "GPIO2"; } SGPIO_INT;
     signal { hisi_irq_number = 33; hisi_irq_owner = "GPIO1"; } GPIO_1;
     signal { hisi_irq_number = 34; hisi_irq_owner = "GPIO0"; } GPIO_0;
@@ -217,6 +278,11 @@ addrmap ws53 {
     signal { hisi_irq_number = 53; hisi_irq_owner = "TIMER"; } TIMER_0;
     signal { hisi_irq_number = 54; hisi_irq_owner = "TIMER"; } TIMER_1;
     signal { hisi_irq_number = 58; hisi_irq_owner = "MDMA"; } M_DMA;
+    // Shared SPACC gate, not a per-HASH-channel interrupt. PKE IRQ58 in the
+    // security header conflicts with MDMA and is disabled by this app profile.
+    signal { hisi_irq_number = 59; hisi_irq_owner = "SPACC"; } SEC_INT1;
+    // KM clear/common loader IRQ number only; physical delivery unqualified.
+    signal { hisi_irq_number = 61; hisi_irq_owner = "KM"; } SEC_INT3;
     signal { hisi_irq_number = 62; hisi_irq_owner = "I2C0"; } I2C_0;
     signal { hisi_irq_number = 63; hisi_irq_owner = "I2C1"; } I2C_1;
     signal { hisi_irq_number = 65; hisi_irq_owner = "SPI0"; } SPI_3;

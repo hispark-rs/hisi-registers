@@ -7,7 +7,53 @@ addrmap ws53_m_crg_regs {
     hisi_evidence = "SDK-source 163d9150 clock_recover.h and WS53 peripheral ports; shared clock control; reset values unknown";
     default regwidth = 16;
     default accesswidth = 16;
+    // IPC lives in the unused 0x20..0x3b window of this shared register bank.
+    // ROM 163d9150, A-board ROM SHA 2c88c7b2..., and libplat_patch.a ipc_patch.c.obj.
+    // Distinct command/readback views avoid RMW on ACK and SET. No reset values.
     reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_enable_all_interrupt writes full word0xffff at base+0; disable writes zero. No SDK enable-register read is evidenced: expose write view only, no RMW. Bits0/1 use the channel-mask convention as an explicit integration inference; per-bit enable/IRQ behavior remains unqualified. Other low16 bits must retain the handed-off SDK profile; upper bits unknown";
+        field {sw=w; hw=r;} channel0[0:0];
+        field {sw=w; hw=r;} channel1[1:1];
+    } IPC_RECEIVE_ENABLE @ 0x20;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_get_x2self_int_status reads word base+8, tests channel mask";
+        field {sw=r; hw=w;} channel0[0:0];
+        field {sw=r; hw=w;} channel1[1:1];
+    } IPC_RECEIVE_STATUS @ 0x28;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_clear_x2self_int writes channel mask at base+12. SDK patched ISR then executes fence and word readback before queue callback. No read/modify or autonomous reset semantics inferred";
+        field {sw=w; hw=r;} channel0[0:0];
+        field {sw=w; hw=r;} channel1[1:1];
+    } IPC_RECEIVE_ACK_COMMAND @ 0x2c;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_svd_alternate_register="IPC_RECEIVE_ACK_COMMAND";
+        hisi_evidence="ipc_patch.c.obj irq_app_int_handler_patch: fence; word read 0x5200002c. Value is discarded; do not interpret as pending, completion or cross-master drain";
+        field {sw=r; hw=w; desc="Discard-only synchronization readback; value unspecified";} unspecified[31:0];
+    } IPC_RECEIVE_ACK_SYNC @ 0x2c;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="ROM hal_ipc_clear_self2x_int is a status READ at base+16 despite its misleading name";
+        field {sw=r; hw=w;} channel0[0:0];
+        field {sw=r; hw=w;} channel1[1:1];
+    } IPC_SEND_STATUS @ 0x30;
+    reg {
+        regwidth=16; accesswidth=16;
+        hisi_evidence="SDK 163d9150 ipc_patch.c.obj hal_ipc_set_self2x_int_patch uses SH at 0x52000034 after pending test under local IRQ lock; replaces ROM SW access. Only known two-channel profile modeled";
+        field {sw=w; hw=r;} channel0[0:0];
+        field {sw=w; hw=r;} channel1[1:1];
+    } IPC_SEND_SET_COMMAND @ 0x34;
+    reg {
+        regwidth=32; accesswidth=32;
+        hisi_evidence="acore/platform_core.h HAL_IPC_SOFT_RST_N=0x52000038 and IPC_SOFT_RST_VALUE=1; main ipc_init writes complete word1. Other values, readback and reset coverage unqualified; never reset a live peer";
+        field {sw=w; hw=r; hisi_write_min=1; hisi_write_max=1;} release[31:0];
+    } IPC_RELEASE_COMMAND @ 0x38;
+    reg {
+        hisi_svd_word_view = "M_CLKEN0_WORD";
+        hisi_evidence = "SDK 163d9150: pwm_porting uses halfword access; sio_porting_clock_enable uses uapi_reg_setbit/clrbit with 32-bit unsigned int at the same address; upper bits unmodeled";
         field {sw=rw; hw=r;} mdiag_enable[1:1];
         field {sw=rw; hw=r;} i2s_enable[2:2];
         field {sw=rw; hw=r;} mtop_glue_trigger_enable[6:6];
@@ -16,6 +62,8 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r;} secure_pwm_enable[14:14];
     } M_CLKEN0 @ 0x40;
     reg {
+        hisi_svd_word_view = "M_CLKEN1_WORD";
+        hisi_evidence = "SDK 163d9150 libplat_patch.a:sdio_patch.c.obj:sdio_clock_set uses word loads/stores at M_CLKEN0/1, changing only SDIO bits11/1. Other peripheral ports retain halfword accesses; upper bits and reset values unknown. See evidence/ws53-sdio-clock-contract.json";
         field {sw=rw; hw=r;} timer_enable[0:0];
         field {sw=rw; hw=r;} sdio_ahb_enable[1:1];
         field {sw=rw; hw=r;} lsadc_apb_enable[2:2];
@@ -33,7 +81,7 @@ addrmap ws53_m_crg_regs {
         hisi_evidence = "SDK-source 163d9150 pwm_porting.c: 16-bit set enable, clear load, set divider=16, set load; clock_recover.h PWM_M_DIV3 address";
         field {sw=rw; hw=r;} enable[0:0];
         field {sw=rw; hw=r; desc="SDK explicitly clears then sets; no autonomous clearing inferred";} load[1:1];
-        field {sw=rw; hw=r; desc="SDK programs 16 and reports 32MHz; input/divider relationship not proven";} divider[6:2];
+        field {sw=rw; hw=r; desc="SDK programs 16 but reports 32MHz. A-board bounded RAM experiment measured effective counter 32MHz/divider for values 1,2,4,8,16; upstream source identity and other values remain unverified. See evidence/ws53-pwm-divider-hil.json";} divider[6:2];
     } PWM_M_DIV3 @ 0x7c;
     reg {
         hisi_evidence = "SDK-source 163d9150 uart_porting.c UART_SOFT_RST_A and uart_port_set_reset; 16-bit clear then set, debug UART bypasses reset";
@@ -41,6 +89,10 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r; desc="UART H1/application UART0 reset, active low; shared register, preserve other bits";} uart_h1_reset_n[1:1];
     } UART_SOFT_RESET @ 0x168;
     reg {
+        // Retain the historical halfword API; halfword write qualification is
+        // unresolved. SDK clock/PM helpers actually access this slot as a word.
+        hisi_svd_word_view = "MSUB_NORMAL_WORD";
+        hisi_evidence = "SDK 163d9150: clock_recover.c/acore_clock_recover.c use reg_setbit/reg_clrbit, whose chip_io.h reg() is volatile uint32_t; original halfword write qualification remains unresolved. Historical 16/32-bit SDMA gate attempts both failed readback; this view proves neither gate clearing nor bus drain. See evidence/ws53-msub-word-access.json";
         field {sw=rw; hw=r;} cpu_enable[0:0];
         field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
         field {sw=rw; hw=r;} mdma_enable[3:3];
@@ -52,6 +104,10 @@ addrmap ws53_m_crg_regs {
         field {sw=rw; hw=r;} codec_channel[9:9];
     } MSUB_NORMAL @ 0x3e0;
     reg {
+        // Same mixed-access caveat as MSUB_NORMAL; do not infer reset values,
+        // upper-half fields, successful SDMA gating or transaction completion.
+        hisi_svd_word_view = "MSUB_SLEEP_WORD";
+        hisi_evidence = "SDK 163d9150: clock_recover.c/acore_clock_recover.c use 32-bit reg_setbit/reg_clrbit; pm_sleep_porting.c also uses reg32_setbit. chip_io.h defines volatile uint32_t accesses. Original halfword write qualification remains unresolved; both historical SDMA gate widths failed. This is not a bus-drain protocol. See evidence/ws53-msub-word-access.json";
         field {sw=rw; hw=r;} cpu_enable[0:0];
         field {sw=rw; hw=r;} cpu_hclk_enable[1:1];
         field {sw=rw; hw=r;} mcu_bus_enable[2:2];
@@ -70,6 +126,12 @@ addrmap ws53_m_crg_regs {
     reg {
         field {sw=rw; hw=r; desc="SPI_BUS_0 port writes 1 to enable, 0 to disable; other fields unmodeled";} enable[0:0];
     } SPI_CLOCK @ 0x55c;
+    reg {
+        hisi_svd_word_view = "XIP_SFC_CLOCK_WORD";
+        hisi_evidence = "SDK-source 163d9150 clock_recover.c:sfc_switch_clock and flashboot_ws53/startup/main.c:boot_flash_clk_init at 0x52000570; chip_io.h word reg_setbit/reg_clrbit/readl plus halfword reg16_setbits/reg16_clrbits. Both views are the same shared clock resource; no reset, upper-bit semantics, complete frequency formula, safe live switching or ownership proven. See evidence/ws53-sfc-clock-source-contract.json";
+        field {sw=rw; hw=r; desc="SDK clears this bit before changing SOURCE_CONFIG, then sets it and optionally reads the word back. Source-level clock-enable usage only; setting it does not prove upstream clock presence or SFC readiness/drain";} enable[0:0];
+        field {sw=rw; hw=r; desc="Three-bit configuration: sfc_switch_clock(pll=true) writes 6, pll=false writes 0; FlashBoot writes 6. Other encodings and any selector/divider decomposition or frequency are unqualified; this raw field is not a safe clock configuration API";} source_config[3:1];
+    } XIP_SFC_CLOCK @ 0x570;
     reg {
         hisi_evidence = "SDK-source 163d9150 spi_porting.h u_xip_qspi_cr and spi_port_clock_enable; 16-bit RMW writes 1/0 to the nine-bit field; no divider formula established";
         field {sw=rw; hw=r;} control[8:0];

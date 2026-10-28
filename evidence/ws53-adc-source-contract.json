@@ -1,0 +1,246 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "fields": {
+    "SCAN_CONTROL": {
+      "CHANNELS": {
+        "mask": "0xff",
+        "c_field": "channel"
+      },
+      "AVERAGE": {
+        "mask": "0x300",
+        "c_field": "equ_model_sel"
+      },
+      "SAMPLE_COUNT": {
+        "mask": "0x7c00",
+        "c_field": "sample_cnt"
+      },
+      "START_COUNT": {
+        "mask": "0x7f8000",
+        "c_field": "satrt_cnt"
+      },
+      "DISCARD_COUNT": {
+        "mask": "0x3f800000",
+        "c_field": "cast_cnt"
+      }
+    },
+    "SCAN_COMMAND": {
+      "START": {
+        "mask": "0x1",
+        "c_field": "lsadc_start"
+      },
+      "STOP": {
+        "mask": "0x2",
+        "c_field": "lsadc_stop"
+      }
+    },
+    "ANALOG_CONTROL": {
+      "ANALOG_ENABLE": {
+        "mask": "0xffff",
+        "c_field": "da_lsadc_en"
+      },
+      "RESET_N": {
+        "mask": "0x10000",
+        "c_field": "da_lsadc_rstn"
+      }
+    },
+    "MANUAL_CONTROL": {
+      "CHANNEL": {
+        "mask": "0x3",
+        "c_field": "lsadc_scan_ch_man"
+      },
+      "MANUAL_SELECT": {
+        "mask": "0x4",
+        "c_field": "lsadc_scan_ch_man_sel"
+      }
+    },
+    "OFFSET_CALIBRATION": {
+      "MODE": {
+        "mask": "0x1",
+        "c_field": "offset_cali_mode"
+      },
+      "LOOP_SELECT": {
+        "mask": "0x2",
+        "c_field": "offset_cali_loop_sel"
+      },
+      "INVERSE": {
+        "mask": "0x4",
+        "c_field": "offset_cali_inverse"
+      },
+      "ACCUMULATION_CYCLE": {
+        "mask": "0x30",
+        "c_field": "offset_cali_acc_cycle_sel"
+      },
+      "RANGE": {
+        "mask": "0xc0",
+        "c_field": "offset_cali_range_sel"
+      },
+      "MANUAL_DATA": {
+        "mask": "0x3f00",
+        "c_field": "offset_cali_data_spi"
+      },
+      "DATA_INVERSE": {
+        "mask": "0x10000",
+        "c_field": "offset_cali_adc_data_inv"
+      }
+    },
+    "OFFSET_ENABLE": {
+      "ENABLE": {
+        "mask": "0x1",
+        "c_field": "offset_cali_en"
+      }
+    },
+    "OFFSET_DATA_ENABLE": {
+      "ENABLE": {
+        "mask": "0x1",
+        "c_field": "offset_data_en"
+      }
+    },
+    "OFFSET_REFRESH": {
+      "PULSE": {
+        "mask": "0x1",
+        "c_field": "offset_cali_spi_refresh"
+      }
+    },
+    "OFFSET_STATE_CLEAR": {
+      "PULSE": {
+        "mask": "0x1",
+        "c_field": "offset_cali_finish_clr"
+      }
+    },
+    "OFFSET_STATUS": {
+      "FINISHED": {
+        "mask": "0x1",
+        "c_field": "offset_cali_finish"
+      }
+    },
+    "OFFSET_RESULT": {
+      "DATA": {
+        "mask": "0x3f",
+        "c_field": "offset_cali_data"
+      },
+      "LOOP_COUNT": {
+        "mask": "0xfc0",
+        "c_field": "offset_cali_loop_cnt"
+      }
+    },
+    "CAP_CALIBRATION": {
+      "MODE": {
+        "mask": "0x1",
+        "c_field": "mode"
+      },
+      "ALGORITHM": {
+        "mask": "0x2",
+        "c_field": "alg_sel"
+      },
+      "ACCUMULATION_CYCLE": {
+        "mask": "0xc",
+        "c_field": "acc_cycle_sel"
+      },
+      "START_INDEX": {
+        "mask": "0xf0",
+        "c_field": "start_index"
+      },
+      "WEIGHT_SELECT": {
+        "mask": "0x100",
+        "c_field": "weight_sel"
+      },
+      "DAC_DELAY": {
+        "mask": "0x200",
+        "c_field": "dac_setting_dly_ctrl"
+      },
+      "MANUAL_CAP": {
+        "mask": "0xf000",
+        "c_field": "cap_selman"
+      },
+      "MANUAL_SH_ENABLE": {
+        "mask": "0x10000",
+        "c_field": "sh_en_man"
+      },
+      "MANUAL_PN_SELECT": {
+        "mask": "0x20000",
+        "c_field": "pn_sel_man"
+      }
+    },
+    "CAP_ENABLE": {
+      "ENABLE": {
+        "mask": "0x1",
+        "c_field": "en"
+      }
+    },
+    "CAP_REFRESH": {
+      "PULSE": {
+        "mask": "0x1",
+        "c_field": "spi_refresh"
+      }
+    },
+    "CAP_FINISH_CLEAR": {
+      "PULSE": {
+        "mask": "0x1",
+        "c_field": "finish_clr"
+      }
+    },
+    "GAIN_STATE_CLEAR": {
+      "PULSE": {
+        "mask": "0x1",
+        "c_field": "gain_state_clr"
+      }
+    },
+    "CAP_STATUS": {
+      "FINISHED": {
+        "mask": "0x1",
+        "c_field": "finish"
+      },
+      "ERROR": {
+        "mask": "0x100",
+        "c_field": "error"
+      }
+    },
+    "SAMPLE_DONE": {
+      "DONE": {
+        "mask": "0x1",
+        "c_field": "signal"
+      }
+    }
+  },
+  "field_checks": 41,
+  "original_c_execution": {
+    "channels": 8,
+    "ram_word_cases": 32768,
+    "offset_correction_cases": 64,
+    "sdk_timeout_returns_success": true,
+    "sdk_free_leaves_diag_enabled": true,
+    "sdk_retains_existing_cpu_trace": true,
+    "allocations": 3,
+    "frees": 2
+  },
+  "pulse_commands_checked": [
+    "OFFSET_REFRESH",
+    "OFFSET_STATE_CLEAR",
+    "CAP_REFRESH",
+    "CAP_FINISH_CLEAR",
+    "GAIN_STATE_CLEAR"
+  ],
+  "additional_trace_field_checks": 7,
+  "source_sha256": {
+    "src/drivers/drivers/hal/adc/v155/hal_adc_v155.c": "027c5fcb82c2331bd0be126d1295d832a817c3c0c37d935e3b3675fae2ebb6b4",
+    "src/drivers/drivers/hal/adc/v155/hal_adc_v155.h": "edfa16fb146b17b0198b0e7e6ad2dd6ad0a654cfd7fd417b80814bd086d3bc86",
+    "src/drivers/drivers/hal/adc/v155/hal_adc_v155_regs_def.h": "738e9edb7fcb30d06dc92b8ec25ac1b62fc1d68441413cc8dda9bca0a812df0f",
+    "src/drivers/drivers/hal/adc/v155/hal_adc_v155_regs_op.c": "7a78ef0a99376e1363075ad743903244c11027aa1be9a5e9038d08d26addd7b3",
+    "src/drivers/drivers/hal/adc/v155/hal_adc_v155_regs_op.h": "8878f5fe4a6c6aedd64b70f7d847162581f73d18ad0464edcba8dd4710513b67",
+    "src/drivers/chips/ws53/porting/adc/adc_porting.c": "28125eaf68656f79fa8e6b5c38ee5f1be42cc54863f528cb4ece3fafc2917656",
+    "src/drivers/chips/ws53/porting/include/adc_porting.h": "76687408c826ebd3e671ac34365e6e6e61c81160fa9d4c19455eec2a9c6a81e8",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/drivers/drivers/hal/adc/CMakeLists.txt": "ee06550ee3e975d1f32b33dc925a613aac8a3598ad1568611473cc256b3996a0",
+    "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+    "src/drivers/drivers/hal/cpu_trace/hal_cpu_trace.c": "edd9686b9e9429bfc4b85fafa0e17b7708f413647537b0ae7f3d39451f9fdb09",
+    "src/drivers/chips/ws53/porting/cpu_trace_acore/mcpu_trace_porting.c": "b289d7d422ffd358369fff3c1a95d39fcd62f65b6c13ce45d19cdbedf4e0ccf0"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157",
+  "limitations": [
+    "host-only source oracle, no hardware validation",
+    "no RAM-write completion or stop/drain guarantee",
+    "SDK sample end is fixed 0x20067fff, not allocation end",
+    "register byte offsets are relative to 0x52004100 for diagnostic structure",
+    "IRQ80 handler and manual sampling are placeholders"
+  ]
+}

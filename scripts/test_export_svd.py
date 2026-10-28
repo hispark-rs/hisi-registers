@@ -7,6 +7,375 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_agpio_clock_mixed_width_views(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(root / "rdl/chips/ws53.rdl", dest)
+            block = ET.parse(dest).find("./peripherals/peripheral[name='SYSTEM_MEMORY']")
+            self.assertEqual(block.findtext("baseAddress"), "0x57030000")
+            for name, width in (("GPIO_CLOCK", "16"), ("GPIO_CLOCK_WORD", "32")):
+                register = block.find(f"registers/register[name='{name}']")
+                self.assertEqual(register.findtext("addressOffset"), "0x24")
+                self.assertEqual(register.findtext("size"), width)
+                self.assertEqual(register.findtext("access"), "read-write")
+                self.assertIsNone(register.find("resetValue"))
+                self.assertEqual(register.findall(".//readAction"), [])
+                fields = register.findall("fields/field")
+                self.assertEqual([(f.findtext("name"), f.findtext("bitOffset"), f.findtext("bitWidth"))
+                                 for f in fields], [("ENABLE", "0", "1"), ("SLOW_CLOCK_SELECT", "1", "1")])
+            self.assertEqual(block.findtext("registers/register[name='GPIO_CLOCK_WORD']/alternateRegister"), "GPIO_CLOCK")
+
+    def test_ws53_ccore_domain_command_boundary(self):
+        from check_ws53_ccore_domain import validate_regressions
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / 'ws53.svd'
+            export(root / 'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_regressions(ET.parse(dest).getroot()),
+                             {'positive': 1, 'negative': 12})
+
+    def test_ws53_km_source_layout_and_command_boundaries(self):
+        import json
+        from check_ws53_km_layout import validate_layout
+        root = Path(__file__).resolve().parents[1]
+        observed = json.loads((root / 'evidence/ws53-km-layout.json').read_text())['observations']
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / 'ws53.svd'
+            export(root / 'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_layout(dest, observed), {
+                'expanded_register_views': 25, 'expanded_fields': 46, 'register_arrays': 1})
+            original = dest.read_bytes()
+            mutations = [('baseAddress', '0x52023000'), ('interrupt/value', '60'),
+                ("registers/register[name='DATA_IN[%s]']/dim", '8'),
+                ("registers/register[name='DATA_IN[%s]']/dimIncrement", '8'),
+                ("registers/register[name='DATA_IN[%s]']/access", 'read-write'),
+                ("registers/register[name='INTERRUPT_STATUS']/size", '64'),
+                ("registers/register[name='KEY_ADDRESS']/fields/field/bitWidth", '9'),
+                ("registers/register[name='REE_FLUSH_STATUS']/fields/field[name='TIMEOUT_ERROR']/bitOffset", '3'),
+                ("registers/register[name='SLOT_SELECT']/fields/field[name='HMAC']/bitOffset", '16'),
+                ("registers/register[name='SLOT_OWNER']/access", 'read-write'),
+                ("registers/register[name='CLEAR_CONTROL']/readAction", 'clear'),
+                ("registers/register[name='CLEAR_SUBMIT']/access", 'read-write'),
+                ("registers/register[name='INTERRUPT_ACK']/fields/field/modifiedWriteValues", 'oneToClear'),
+                ("registers/register[name='KEY_SECURITY']/resetValue", '0'),
+                ("registers/register[name='COMMON_LOCK']/access", 'read-write'),
+                ("registers/register[name='COMMON_UNLOCK']/resetMask", '0xffffffff'),
+                ("registers/register[name='CONTROLLER_ERROR']/access", 'read-write'),
+                ("registers/register[name='TEE_SLOT_COMMAND']/alternateRegister", 'REE_SLOT_READ'),
+                ("registers/register[name='REE_SLOT_READ']/access", 'read-write'),
+                ("registers/register[name='REE_SLOT_COMMAND']/size", '16')]
+            for path, value in mutations:
+                with self.subTest(path=path):
+                    tree = ET.fromstring(original)
+                    block = tree.find("./peripherals/peripheral[name='KM']")
+                    node = block.find(path)
+                    if node is None:
+                        parent, _, tag = path.rpartition('/')
+                        node = ET.SubElement(block.find(parent), tag)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(AssertionError):
+                        validate_layout(dest, observed)
+
+    def test_ws53_spacc_source_layout_and_command_boundaries(self):
+        import json
+        from check_ws53_spacc_layout import validate_layout
+        root = Path(__file__).resolve().parents[1]
+        observed = json.loads((root / 'evidence/ws53-spacc-layout.json').read_text())['observations']
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / 'ws53.svd'
+            export(root / 'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_layout(dest, observed), {
+                'expanded_register_views': 87, 'expanded_fields': 156, 'clusters': 6})
+            original = dest.read_bytes()
+            paths = [
+                ("baseAddress", "0x52020000"),
+                ("interrupt/value", "58"),
+                ("registers/register[name='HASH_CLEAR_ACK']/access", "read-write"),
+                ("registers/register[name='HASH_CLEAR_ACK']/alternateRegister", "HASH_LOCK"),
+                ("registers/register[name='HASH_LOCK']/resetValue", "0"),
+                ("registers/register[name='HASH_INTERRUPT_STATUS']/readAction", "clear"),
+                ("registers/register[name='HASH_INTERRUPT_ACK']/fields/field/modifiedWriteValues", "oneToClear"),
+                ("registers/register[name='INTERRUPT_ENABLE']/fields/field[name='TEE']/bitOffset", "8"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/dimIncrement", "0x80"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/dim", "3"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='SUBMIT']/access", "read-write"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='SUBMIT']/size", "16"),
+                ("registers/cluster[name='HASH_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='ALGORITHM']/bitWidth", "3"),
+                ("registers/cluster[name='HASH_STATE[%s]']/addressOffset", "0xa000"),
+                ("registers/cluster[name='HASH_ERROR[%s]']/register[name='STATUS']/access", "read-write"),
+                ("registers/register[name='SYMC_CLEAR_ACK']/access", "read-write"),
+                ("registers/register[name='SYMC_CLEAR_READ']/access", "read-write"),
+                ("registers/register[name='SYMC_CLEAR_REQUEST']/alternateRegister", "SYMC_LOCK"),
+                ("registers/register[name='SYMC_OUTPUT_INTERRUPT_ACK']/fields/field/modifiedWriteValues", "oneToClear"),
+                ("registers/register[name='SYMC_INPUT_INTERRUPT_STATUS']/readAction", "clear"),
+                ("registers/register[name='SYMC_LOCK']/resetValue", "0"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/dimIncrement", "0x80"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='KEYSLOT']/bitWidth", "4"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/register[name='KEY_CONTROL']/fields/field[name='DECRYPT']/bitOffset", "29"),
+                ("registers/cluster[name='SYMC_CHANNEL[%s]']/register[name='NODE_DEPTH']/fields/field[name='LENGTH']/bitWidth", "32"),
+                ("registers/cluster[name='SYMC_OUTPUT[%s]']/register[name='NODE_DEPTH']/addressOffset", "0x2c"),
+                ("registers/cluster[name='SYMC_OUTPUT[%s]']/register[name='SUBMIT']/access", "read-write"),
+                ("registers/cluster[name='SYMC_IV[%s]']/register[name='WORD0']/access", "read-write"),
+                ("registers/cluster[name='HASH_ERROR[%s]']/register[name='SYMC_CAUSE']/addressOffset", "8"),
+                ("registers/cluster[name='HASH_ERROR[%s]']/register[name='SYMC_STATUS']/access", "read-write"),
+            ]
+            for path, value in paths:
+                with self.subTest(path=path):
+                    tree = ET.fromstring(original)
+                    block = tree.find("./peripherals/peripheral[name='SPACC']")
+                    node = block.find(path)
+                    if node is None:
+                        parent, _, tag = path.rpartition('/')
+                        node = ET.SubElement(block.find(parent), tag)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(AssertionError):
+                        validate_layout(dest, observed)
+
+    def test_ws53_sfc_clock_views_reject_invented_layout_or_frequency(self):
+        from check_ws53_sfc_clock import validate_layout
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            layout = validate_layout(dest)
+            self.assertEqual(layout['address'], 0x52000570)
+            self.assertEqual(layout['access_widths'], [16, 32])
+            original = dest.read_bytes()
+            mutations = [
+                ('XIP_SFC_CLOCK', 'addressOffset', '0x574'),
+                ('XIP_SFC_CLOCK', 'size', '32'),
+                ('XIP_SFC_CLOCK', 'access', 'read-only'),
+                ('XIP_SFC_CLOCK', 'resetValue', '0'),
+                ('XIP_SFC_CLOCK', 'resetMask', '0xf'),
+                ('XIP_SFC_CLOCK', 'readAction', 'clear'),
+                ('XIP_SFC_CLOCK', 'fields/field/modifiedWriteValues', 'oneToClear'),
+                ('XIP_SFC_CLOCK', "fields/field[name='SOURCE_CONFIG']/bitOffset", '2'),
+                ('XIP_SFC_CLOCK', "fields/field[name='SOURCE_CONFIG']/bitWidth", '4'),
+                ('XIP_SFC_CLOCK', "fields/field[name='ENABLE']/access", 'write-only'),
+                ('XIP_SFC_CLOCK', 'fields/field/enumeratedValues', ''),
+                ('XIP_SFC_CLOCK', 'writeConstraint', ''),
+                ('XIP_SFC_CLOCK_WORD', 'alternateRegister', 'XIP_QSPI_CLOCK'),
+                ('XIP_SFC_CLOCK_WORD', 'size', '16'),
+                ('XIP_SFC_CLOCK_WORD', 'addressOffset', '0x572'),
+                ('XIP_SFC_CLOCK_WORD', 'resetValue', '0'),
+            ]
+            for name, tag, value in mutations:
+                with self.subTest(name=name, tag=tag):
+                    tree = ET.fromstring(original)
+                    reg = tree.find(f"./peripherals/peripheral[name='M_CRG']/registers/register[name='{name}']")
+                    node = reg.find(tag)
+                    if node is None:
+                        parent, _, leaf = tag.rpartition('/')
+                        node = ET.SubElement(reg.find(parent) if parent else reg, leaf)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+            for kind in ('wrong-block', 'missing-word', 'invented-upper-field'):
+                with self.subTest(kind=kind):
+                    tree = ET.fromstring(original)
+                    block = tree.find("./peripherals/peripheral[name='M_CRG']")
+                    if kind == 'wrong-block':
+                        block.find('baseAddress').text = '0x57000000'
+                    elif kind == 'missing-word':
+                        regs = block.find('registers')
+                        regs.remove(regs.find("register[name='XIP_SFC_CLOCK_WORD']"))
+                    else:
+                        reg = block.find("registers/register[name='XIP_SFC_CLOCK_WORD']")
+                        field = ET.SubElement(reg.find('fields'), 'field')
+                        for tag, value in (('name', 'UPPER'), ('bitOffset', '16'), ('bitWidth', '16'),
+                                           ('access', 'read-write')):
+                            ET.SubElement(field, tag).text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+
+    def test_ws53_sfc_command_layout_rejects_fabricated_status_contracts(self):
+        from check_ws53_sfc_contract import validate_layout
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            self.assertEqual(validate_layout(dest)['register_slots'], 28)
+            original = dest.read_bytes()
+            mutations = [
+                ('CMD_CONFIG', 'addressOffset', '0x304'),
+                ('CMD_CONFIG', 'access', 'write-only'),
+                ('CMD_CONFIG', 'readAction', 'clear'),
+                ('CMD_CONFIG', 'fields/field/modifiedWriteValues', 'oneToClear'),
+                ('CMD_CONFIG', 'resetValue', '0'),
+                ('BUS_DMA_CTRL', 'readAction', 'clear'),
+                ('BUS_DMA_CTRL', 'fields/field/access', 'write-only'),
+                ('CMD_DATABUF_0', 'readAction', 'modifyExternal'),
+                ('CMD_DATABUF_15', 'size', '16'),
+                ('CMD_INS', "fields/field[name='CMD_DDR_MODE']/bitOffset", '9'),
+                ('CMD_ADDR', 'fields/field/bitWidth', '32'),
+            ]
+            for reg_name, tag, value in mutations:
+                with self.subTest(reg=reg_name, tag=tag):
+                    tree = ET.fromstring(original)
+                    reg = tree.find(f"./peripherals/peripheral[name='SFC_CFG']/registers/register[name='{reg_name}']")
+                    node = reg.find(tag)
+                    if node is None:
+                        parent_path, _, leaf = tag.rpartition('/')
+                        node = ET.SubElement(reg.find(parent_path) if parent_path else reg, leaf)
+                    node.text = value
+                    ET.ElementTree(tree).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+            for kind in ('legacy', 'irq'):
+                tree = ET.fromstring(original)
+                block = tree.find("./peripherals/peripheral[name='SFC_CFG']")
+                if kind == 'legacy':
+                    reg = ET.SubElement(block.find('registers'), 'register')
+                    ET.SubElement(reg, 'name').text = 'INT_STATUS'
+                else:
+                    irq = ET.SubElement(block, 'interrupt')
+                    ET.SubElement(irq, 'name').text = 'SFC'
+                    ET.SubElement(irq, 'value').text = '36'
+                ET.ElementTree(tree).write(dest)
+                with self.assertRaises(ValueError):
+                    validate_layout(dest)
+
+    def test_ws53_sfc_hardware_updates_are_instance_specific(self):
+        from systemrdl import RDLCompiler
+        from systemrdl.rdltypes import AccessType
+        root = Path(__file__).resolve().parents[1]
+        for chip in ('ws53', 'ws63', 'bs2x'):
+            compiler = RDLCompiler()
+            compiler.compile_file(str(root/f'rdl/chips/{chip}.rdl'))
+            sfc = next(node for node in compiler.elaborate().top.children()
+                       if node.inst_name.lower() == 'sfc_cfg')
+            regs = {node.inst_name: node for node in sfc.children()}
+            expected = AccessType.rw if chip == 'ws53' else AccessType.r
+            for reg, field in [('CMD_CONFIG', 'start'), ('BUS_DMA_CTRL', 'dma_start'),
+                               *((f'CMD_DATABUF_{i}', f'cmd_databuf_{i}') for i in range(16))]:
+                f = regs[reg].get_child_by_name(field)
+                self.assertEqual(f.get_property('hw'), expected, (chip, reg))
+                self.assertEqual(f.get_property('sw'), AccessType.rw)
+                self.assertIsNone(f.get_property('onread'))
+                self.assertIsNone(f.get_property('onwrite'))
+            for name in ('INT_RAW_STATUS', 'INT_STATUS', 'INT_MASK', 'INT_CLEAR', 'SOFT_RST_MASK'):
+                self.assertEqual(name in regs, chip != 'ws53', (chip, name))
+
+    def test_ws53_msub_word_views_preserve_existing_halfword_contract(self):
+        from check_ws53_msub_access import validate_layout
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            layout = validate_layout(dest)
+            self.assertEqual({name: p['address'] for name, p in layout.items()},
+                             {'MSUB_NORMAL': 0x520003e0, 'MSUB_SLEEP': 0x520003e4})
+            self.assertEqual(layout['MSUB_NORMAL']['fields']['MDMA_ENABLE'], 3)
+            self.assertEqual(layout['MSUB_SLEEP']['fields']['SDMA_ENABLE'], 4)
+            original = dest.read_bytes()
+            for tag, value in (('size', '16'), ('alternateRegister', 'MSUB_SLEEP'),
+                               ('addressOffset', '0x3e2'), ('resetValue', '0')):
+                with self.subTest(tag=tag):
+                    root = ET.fromstring(original)
+                    word = root.find("./peripherals/peripheral[name='M_CRG']/registers/register[name='MSUB_NORMAL_WORD']")
+                    node = word.find(tag)
+                    if node is None:
+                        node = ET.SubElement(word, tag)
+                    node.text = value
+                    ET.ElementTree(root).write(dest)
+                    with self.assertRaises(ValueError):
+                        validate_layout(dest)
+
+    def word_view_fixture(self, reg_props='', field_props='', name='CTRL_WORD',
+                          bits=16, offset=0, tail=4, array='', evidence='source audit'):
+        properties = Path(__file__).resolve().parents[1] / 'rdl/properties.rdl'
+        return f'''`include "{properties}"
+addrmap chip {{ addrmap {{
+    reg {{ regwidth={bits}; accesswidth={bits};
+        hisi_svd_word_view="{name}"; hisi_evidence="{evidence}"; {reg_props}
+        field {{ sw=rw; hw=rw; {field_props} }} enable[2:2];
+    }} ctrl{array} @ {offset};
+    reg {{ regwidth=16; accesswidth=16; field {{ sw=rw; hw=r; }} value[15:0]; }} next @ {tail};
+}} clock @ 0x1000; }};
+'''
+
+    def test_word_view_preserves_halfword_fields_without_reset_or_new_bits(self):
+        from check_schema import validate
+        with tempfile.TemporaryDirectory() as work:
+            source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+            source.write_text(self.word_view_fixture())
+            export(source, dest)
+            regs = ET.parse(dest).findall('./peripherals/peripheral/registers/register')
+            half, word, neighbor = regs
+            self.assertEqual([r.findtext('name') for r in regs], ['CTRL', 'CTRL_WORD', 'NEXT'])
+            self.assertEqual([r.findtext('size') for r in regs], ['16', '32', '16'])
+            self.assertEqual(half.findtext('addressOffset'), word.findtext('addressOffset'))
+            self.assertEqual(word.findtext('alternateRegister'), 'CTRL')
+            self.assertEqual(ET.tostring(half.find('fields')), ET.tostring(word.find('fields')))
+            self.assertEqual(word.findtext('access'), 'read-write')
+            self.assertIsNone(word.find('resetValue'))
+            self.assertIsNone(word.find('resetMask'))
+            self.assertEqual(neighbor.findtext('addressOffset'), '0x4')
+            validate([dest])
+
+    def test_word_view_rejects_ambiguous_or_unsafe_declarations(self):
+        cases = [dict(name=''), dict(name='NEXT'), dict(name='CTRL'), dict(name='lower'),
+                 dict(bits=32), dict(bits=8), dict(offset=2, tail=8), dict(evidence=''),
+                 dict(field_props='onwrite=woclr;'), dict(field_props='onread=rclr;'),
+                 dict(reg_props='hisi_write_min=0; hisi_write_max=7;'),
+                 dict(array='[2]', tail=8), dict(field_props='reset=0;')]
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as work:
+                source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+                source.write_text(self.word_view_fixture(**case))
+                with self.assertRaisesRegex(ValueError, 'invalid word access view'):
+                    export(source, dest)
+
+    def test_word_view_rejects_neighbor_overlap_and_trailing_extension(self):
+        for tail in (2,):
+            with tempfile.TemporaryDirectory() as work:
+                source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+                source.write_text(self.word_view_fixture(tail=tail))
+                with self.assertRaisesRegex(ValueError, 'exceeds vacant slot'):
+                    export(source, dest)
+        with tempfile.TemporaryDirectory() as work:
+            source, dest = Path(work)/'test.rdl', Path(work)/'test.svd'
+            # The exporter cannot silently widen the peripheral's extent.
+            body = self.word_view_fixture()
+            body = body[:body.rindex('    reg { regwidth=16;')] + '} clock @ 0x1000; };'
+            source.write_text(body)
+            with self.assertRaisesRegex(ValueError, 'exceeds vacant slot'):
+                export(source, dest)
+
+    def test_ws53_i2s_clock_views_keep_shared_field_encodings(self):
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work)/'ws53.svd'
+            export(Path(__file__).resolve().parents[1]/'rdl/chips/ws53.rdl', dest)
+            tree = ET.parse(dest)
+            width_fields = tree.findall("./peripherals/peripheral[name='I2S']/registers/register[name='DATA_WIDTH_SET']/fields/field")
+            self.assertEqual(len(width_fields), 2)
+            for field in width_fields:
+                self.assertEqual({v.findtext('name'): int(v.findtext('value'), 0)
+                                  for v in field.findall('enumeratedValues/enumeratedValue')},
+                                 {'Bits16': 1, 'Bits18': 2, 'Bits20': 3, 'Bits24': 4, 'Bits32': 5})
+                self.assertEqual(field.findtext('writeConstraint/range/minimum'), '1')
+                self.assertEqual(field.findtext('writeConstraint/range/maximum'), '5')
+            clock = tree.find("./peripherals/peripheral[name='M_CRG']")
+            half = clock.find("registers/register[name='M_CLKEN0']")
+            word = clock.find("registers/register[name='M_CLKEN0_WORD']")
+            self.assertEqual(half.findtext('size'), '16')
+            self.assertEqual(word.findtext('size'), '32')
+            self.assertEqual(word.findtext('addressOffset'), '0x40')
+            self.assertEqual(word.findtext('alternateRegister'), 'M_CLKEN0')
+            self.assertEqual(ET.tostring(half.find('fields')), ET.tostring(word.find('fields')))
+            self.assertEqual(word.findtext("fields/field[name='I2S_ENABLE']/bitOffset"), '2')
+            cmu = tree.find("./peripherals/peripheral[name='AUDIO_CMU']")
+            self.assertEqual(cmu.findtext('baseAddress'), '0x57008600')
+            self.assertFalse(cmu.findall('interrupt'))
+            reg = cmu.find('registers/register')
+            self.assertEqual(reg.findtext('size'), '32')
+            self.assertEqual(reg.findtext('access'), 'read-write')
+            self.assertEqual(reg.findtext('fields/field/bitOffset'), '0')
+            self.assertEqual(reg.findtext('fields/field/bitWidth'), '1')
+            self.assertIsNone(reg.find('resetValue'))
+
     def test_ws53_pwm_profile_withholds_resets_and_exposes_event_enable(self):
         with tempfile.TemporaryDirectory() as work:
             dest = Path(work) / "ws53.svd"
@@ -43,7 +412,7 @@ class ExportSemantics(unittest.TestCase):
                 self.assertEqual(regs[f"PWM_{suffix}"].findtext("access"), "write-only")
             enum = regs["PWM_INT_MASK"].findall("fields/field/enumeratedValues/enumeratedValue")
             self.assertEqual({v.findtext("name"): int(v.findtext("value")) for v in enum},
-                             {"Disabled": 0, "AbnormalOnly": 1, "PeriodEndOnly": 2, "AllEvents": 3})
+                             {"Disabled": 0, "AbnormalOnly": 1, "ConfigurationLoadedOnly": 2, "AllEvents": 3})
             clocks = tree.find("./peripherals/peripheral[name='M_CRG']")
             div = clocks.find("registers/register[name='PWM_M_DIV3']")
             self.assertEqual(int(div.findtext("addressOffset"), 0), 0x7c)
@@ -128,7 +497,7 @@ class ExportSemantics(unittest.TestCase):
             self.assertEqual(regs["RX_FIFO_CNT"].findtext("fields/field/name"), "RX_FIFO_LEVEL")
             for field in ("FRAME_ERR", "PARITY_ERR", "OVERRUN_ERR"):
                 self.assertEqual(regs["LINE_STATUS"].findtext(f"fields/field[name='{field}']/readAction"), "clear")
-            for name, offset in (("RX_NOT_EMPTY", 2), ("RX_FULL", 3)):
+            for name, offset in (("RX_FIFO_FULL", 2), ("RX_FIFO_EMPTY", 3), ("UART_BUSY", 4)):
                 self.assertEqual(regs["FIFO_STATUS"].findtext(f"fields/field[name='{name}']/bitOffset"), str(offset))
             for i, base, irq in ((1, 0x52080000, 41), (2, 0x57014000, 42)):
                 derived = tree.find(f"./peripherals/peripheral[name='UART{i}']")
@@ -343,6 +712,10 @@ class ExportSemantics(unittest.TestCase):
             for reg in peripherals["SYSTEM_MEMORY"].findall("registers/register"):
                 self.assertIsNone(reg.find("resetValue"))
                 self.assertIsNone(reg.find("resetMask"))
+            core_reset = peripherals["SYSTEM_MEMORY"].find("registers/register[name='CCORE_RESET_STATUS']")
+            self.assertEqual(core_reset.findtext("addressOffset"), "0x96C")
+            self.assertEqual(core_reset.findtext("access"), "read-only")
+            self.assertEqual(core_reset.findtext("fields/field/bitWidth"), "3")
             for bank, width in enumerate((23, 12, 3)):
                 reg = peripherals[f"GPIO{bank}"].find("registers/register")
                 self.assertEqual(int(reg.findtext("fields/field/bitWidth")), width)
@@ -442,6 +815,11 @@ class ExportSemantics(unittest.TestCase):
                 self.assertEqual(r["RX[%s]"].findtext("access"), "read-only")
                 self.assertEqual(r["TX[%s]"].findtext("access"), "write-only")
                 self.assertEqual(r["STATUS"].findtext("fields/field[name='BUSY']/bitOffset"), busy)
+                self.assertEqual(r["STATUS"].findtext("readAction"), "modify")
+                cleared = {"COLLISION_OR_TX_ERROR"} if name == "SPI0" else {"TX_ERROR", "COLLISION"}
+                for field in r["STATUS"].findall("fields/field"):
+                    self.assertEqual(field.findtext("readAction"), "clear" if field.findtext("name") in cleared else None)
+                    self.assertEqual(field.findtext("access"), "read-only")
                 self.assertEqual(r["DMA_CONTROL"].findtext("fields/field[name='TX_ENABLE']/bitOffset"), tx_enable)
                 self.assertEqual(r["CLEAR_ALL"].findtext("access"), "read-only")
                 self.assertEqual(r["CLEAR_ALL"].findtext("readAction"), "clear")

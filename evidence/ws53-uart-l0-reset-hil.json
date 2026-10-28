@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "source": "src/drivers/chips/ws53/porting/uart/uart_porting.c UART_SOFT_RST_C/ UART_SOFT_RST_L0_POS",
+  "address": "0x570000b0",
+  "access_bits": 16,
+  "reset_bit": 7,
+  "active_low": true,
+  "flash_written": false,
+  "raw_elf_sha256": "42b8eab914b2b76b526a2991c72051a355029e096f1600bf8edf9a92742d9754",
+  "hal_elf_sha256": "0e122d3c4b08354fbf6cc6dd7e4475caf8540a04a316940328681c2cc0a7cd66",
+  "raw_snapshots": [
+    [
+      168,
+      0,
+      0,
+      38,
+      55,
+      2,
+      0,
+      18,
+      0,
+      1,
+      90,
+      3332,
+      224,
+      17
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      127,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      3332,
+      192,
+      1
+    ]
+  ],
+  "repeat_raw_runs": 3,
+  "repeat_hal_same_elf_qemu_runs": 3,
+  "observed": [
+    "Queued clean RX and nondefault frame/fraction/modem/scratch clear after halfword clear/set; BAUD_CTL0x37->0x7f",
+    "Release followed by10us observation margin; no minimum-width qualification",
+    "Reprogrammed internal loopback receives a fresh byte",
+    "UART0/1 nonzero scratch and frame/modem preserved; full reset halfword readback preserved",
+    "HAL rejects enabled peripheral IRQs and active TX; reset/configuration readback succeeds",
+    "HAL selects inherited Pins and console UART output resumes at configured1152008N1",
+    "Original vendor firmware restored after every run"
+  ],
+  "unqualified": [
+    "Integer divider reset defaults and nonzero DIV_H behavior",
+    "Reset while UART is actively transmitting or while DMA/IRQ operations remain live",
+    "Held-reset UART MMIO, errors or faulty reset/readback behavior on silicon",
+    "Automatic clock/pad ownership or control-core negotiation",
+    "Precise external frame timing or cold-start behavior"
+  ],
+  "reports": [
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-l0-reset-hil-01/report.json",
+      "sha256": "b3255479dc6af03b3a19d4673c1f93b51741d5f218d3a0c2e08054c694054b0b"
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-l0-reset-hil-02/report.json",
+      "sha256": "84f17e4809b0b2c5317101ea3c264cde524fcd10c6f332003a89557e98b18a69"
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-l0-reset-hil-03/report.json",
+      "sha256": "5e4b718954ecf703ffeccbde09e8ae9b8c0acc119a8c6550125916e49eb2a745"
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-l0-hal-reset-hil-01/report.json",
+      "sha256": "225a29e121950818b6c0046f594d8081a850d073086b878798fd78fd47b4bebb"
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-l0-hal-reset-hil-02/report.json",
+      "sha256": "4462525dec2bf0f3214808d1d468ccd0009328d2c82e2fd75fd6fe4ebc7a99f2"
+    },
+    {
+      "path": "../hardware/ws53/vddio-restored/uart-l0-hal-reset-hil-03/report.json",
+      "sha256": "f3ebea55072ac197ad1c49d38332226a156ed0c7fa2c459eabea1d71551424bc"
+    }
+  ]
+}

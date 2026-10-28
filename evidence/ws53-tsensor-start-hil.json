@@ -1,0 +1,221 @@
+{
+  "date": "2026-10-24",
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "probe": "23121302",
+  "uart": "5CB7019921",
+  "flash_written": false,
+  "initial_case": {
+    "name": "tsensor-restart-hil-01",
+    "elf_sha256": "0465827eda1ddce10ec11babd582a7b59c996cc581307c4885c41e1906d9a992",
+    "hardware_snapshots": [
+      [
+        65972,
+        436,
+        436,
+        436,
+        65973
+      ],
+      [
+        65973,
+        437,
+        437,
+        437,
+        65972
+      ]
+    ],
+    "qemu_snapshots": [
+      [
+        66036,
+        0,
+        0,
+        0,
+        66036
+      ],
+      [
+        66036,
+        0,
+        0,
+        0,
+        66036
+      ]
+    ],
+    "recovered": true
+  },
+  "observations": [
+    "START1 on an already READY sensor clears READY but retains CODE at immediate,32us and500us observations; READY is back by10ms. Two repetitions observed.",
+    "CODE while READY0 is stale and not valid sample data; HAL already returns None in this state.",
+    "The original checker asserted READY sequence only. Raw snapshots expose model CODE0 versus retained hardware code; strengthened regression follows.",
+    "Three strengthened same-ELF RAM runs each verify two START sequences, retained stale CODE, HAL rejection while READY0, next READY, full RAM checks and original firmware recovery. Corrected QEMU passes the same functional contract."
+  ],
+  "limits": [
+    "START self-clear/readback, stop, status writes and exact conversion timing remain unqualified.",
+    "Source has both32kHz report-period comment and temperature1MHz gate names; this does not establish physical sampling clock frequency."
+  ],
+  "strengthened_runs": [
+    {
+      "name": "tsensor-restart-fixed-hil-01",
+      "elf_sha256": "ff49ab7b364af8378406ce301be54d442e8987fb7854dfdfca2504dba14dde1d",
+      "first_ready_ticks": 148207,
+      "restart_ticks": [
+        130993,
+        124605
+      ],
+      "restart_snapshots": [
+        [
+          65971,
+          435,
+          435,
+          435,
+          65972
+        ],
+        [
+          65972,
+          436,
+          436,
+          436,
+          65972
+        ]
+      ],
+      "qemu_restart_ticks": [
+        131078,
+        131084
+      ],
+      "qemu_restart_snapshots": [
+        [
+          66036,
+          500,
+          500,
+          500,
+          66036
+        ],
+        [
+          66036,
+          500,
+          500,
+          500,
+          66036
+        ]
+      ],
+      "passed": true,
+      "recovered": true
+    },
+    {
+      "name": "tsensor-restart-fixed-hil-02",
+      "elf_sha256": "ff49ab7b364af8378406ce301be54d442e8987fb7854dfdfca2504dba14dde1d",
+      "first_ready_ticks": 148207,
+      "restart_ticks": [
+        130993,
+        124631
+      ],
+      "restart_snapshots": [
+        [
+          65972,
+          436,
+          436,
+          436,
+          65972
+        ],
+        [
+          65972,
+          436,
+          436,
+          436,
+          65972
+        ]
+      ],
+      "qemu_restart_ticks": [
+        131078,
+        131084
+      ],
+      "qemu_restart_snapshots": [
+        [
+          66036,
+          500,
+          500,
+          500,
+          66036
+        ],
+        [
+          66036,
+          500,
+          500,
+          500,
+          66036
+        ]
+      ],
+      "passed": true,
+      "recovered": true
+    },
+    {
+      "name": "tsensor-restart-fixed-hil-03",
+      "elf_sha256": "ff49ab7b364af8378406ce301be54d442e8987fb7854dfdfca2504dba14dde1d",
+      "first_ready_ticks": 148207,
+      "restart_ticks": [
+        130993,
+        124631
+      ],
+      "restart_snapshots": [
+        [
+          65972,
+          436,
+          436,
+          436,
+          65972
+        ],
+        [
+          65972,
+          436,
+          436,
+          436,
+          65972
+        ]
+      ],
+      "qemu_restart_ticks": [
+        131078,
+        131084
+      ],
+      "qemu_restart_snapshots": [
+        [
+          66036,
+          500,
+          500,
+          500,
+          66036
+        ],
+        [
+          66036,
+          500,
+          500,
+          500,
+          66036
+        ]
+      ],
+      "passed": true,
+      "recovered": true
+    }
+  ],
+  "timing": {
+    "timer_reference_hz": 32000000,
+    "physical_first_ms": 4.63146875,
+    "physical_restart_ms": [
+      [
+        4.09353125,
+        3.89390625
+      ],
+      [
+        4.09353125,
+        3.89471875
+      ],
+      [
+        4.09353125,
+        3.89471875
+      ]
+    ],
+    "qemu_restart_ms": [
+      4.0961875,
+      4.096375
+    ],
+    "precise_parity": false,
+    "interpretation": "Repeated START does not reproduce the cold first-READY delay. Second restart differs from first; no proven internal sampling phase/startup explanation and no fitted constant."
+  }
+}

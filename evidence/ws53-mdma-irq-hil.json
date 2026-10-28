@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-24",
+  "probe_serial": "23121302",
+  "uart_serial": "5CB7019921",
+  "flash_written": false,
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "pac_commit": "339f161d5be7b765f42290e5b6360aa562463dac",
+  "qemu_commit": "c66264e3a4af914ede9ea9b3370b74a139fecdb6",
+  "cases": [
+    {
+      "name": "mdma-irq-fixed-hil-01",
+      "elf_sha256": "f18006fc37a19716b4fcabfbef6236cfe6ec435e66c92f517ed971f627c4823d",
+      "physical_data_and_irq_passed": true,
+      "parity_passed": true,
+      "qemu_passed": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma-irq-fixed-hil-02",
+      "elf_sha256": "f18006fc37a19716b4fcabfbef6236cfe6ec435e66c92f517ed971f627c4823d",
+      "physical_data_and_irq_passed": true,
+      "parity_passed": true,
+      "qemu_passed": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma-irq-fixed-hil-03",
+      "elf_sha256": "f18006fc37a19716b4fcabfbef6236cfe6ec435e66c92f517ed971f627c4823d",
+      "physical_data_and_irq_passed": true,
+      "parity_passed": true,
+      "qemu_passed": true,
+      "uart_raw_equal": true,
+      "recovered": true
+    },
+    {
+      "name": "mdma-irq-hil-01",
+      "elf_sha256": "f18006fc37a19716b4fcabfbef6236cfe6ec435e66c92f517ed971f627c4823d",
+      "physical_data_and_irq_passed": true,
+      "parity_passed": false,
+      "qemu_passed": false,
+      "uart_raw_equal": false,
+      "recovered": true
+    }
+  ],
+  "observations": [
+    "Four channels each transfer17u32; source/destination/guards verified twice after halt. Buffers retained until reset.",
+    "IRQ58 delivers four recorded notifications, one for each channel; completion mask retains raw TC, unmask delivers; error-only mask does not deliver TC.",
+    "Channel1 completion clear preserves channel0 TC; writing error clear does not clear TC. Events are acknowledged only after normal-context transfer validation.",
+    "Channel3 completes while local IRQ is disabled. Clearing LOCIPCLR58 while the peripheral source remains asserted then enabling local delivery still yields IRQ58 on hardware.",
+    "Old model loses fourth notification after LOCIPCLR58; fixed model re-samples only source58 on clear. Same ELF passes three consecutive physical/QEMU rounds."
+  ],
+  "limits": [
+    "Completion interrupts tested, physical bus-error interrupt injection not performed.",
+    "No physical drain proof, safe buffer return, peripheral handshake IRQ, async/waker cancellation, SDMA or production multicore handoff qualification.",
+    "IRQ58 behavior after peripheral deassertion or trap-entry auto-clear is not inferred; IRQ72 retained-pending model remains separate.",
+    "Four-channel u32 IRQ fixture; u8/u16 data copy coverage is in the previous memory HIL, not this IRQ experiment.",
+    "No Flash/eFuse/security writes; original firmware recovered after every RAM run."
+  ],
+  "regression": {
+    "hal_host_tests": 253,
+    "positive_chip_configs": 7,
+    "negative_chip_configs": 8,
+    "legacy_qtests": 11,
+    "qemu_suite_passed": true,
+    "readback_faults_passed": true,
+    "local_actionlint_passed": true,
+    "remote_ci_run": false
+  },
+  "evidence_location": "hisi-riscv-rs/docs/plan/evidence/ws53-mdma-irq-hil-2026-10-24"
+}

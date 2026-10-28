@@ -1,0 +1,303 @@
+{
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "register_layouts": 13,
+  "field_checks": 40,
+  "channels": 8,
+  "valid_requests": 16,
+  "original_helpers": 20,
+  "original_c_execution": {
+    "helper_operations": 133430,
+    "overflow_truncation_observed": true
+  },
+  "fields": {
+    "GLOBAL.INTERRUPT_STATUS": {
+      "PENDING": {
+        "c_field": "int_st",
+        "mask": "0xff",
+        "shift": 0,
+        "width": 8
+      },
+      "TRANSFER_COMPLETE": {
+        "c_field": "int_trans_st",
+        "mask": "0xff00",
+        "shift": 8,
+        "width": 8
+      },
+      "ERROR": {
+        "c_field": "int_err_st",
+        "mask": "0xff0000",
+        "shift": 16,
+        "width": 8
+      }
+    },
+    "GLOBAL.INTERRUPT_CLEAR": {
+      "TRANSFER_COMPLETE": {
+        "c_field": "int_trans_clr",
+        "mask": "0xff",
+        "shift": 0,
+        "width": 8
+      },
+      "ERROR": {
+        "c_field": "int_err_clr",
+        "mask": "0xff00",
+        "shift": 8,
+        "width": 8
+      }
+    },
+    "GLOBAL.RAW_INTERRUPT_STATUS": {
+      "TRANSFER_COMPLETE": {
+        "c_field": "ori_int_trans_st",
+        "mask": "0xff",
+        "shift": 0,
+        "width": 8
+      },
+      "ERROR": {
+        "c_field": "ori_int_err_st",
+        "mask": "0xff00",
+        "shift": 8,
+        "width": 8
+      }
+    },
+    "GLOBAL.ENABLED_CHANNELS": {
+      "CHANNELS": {
+        "c_field": "en_chns",
+        "mask": "0xff",
+        "shift": 0,
+        "width": 8
+      }
+    },
+    "GLOBAL.BURST_REQUEST": {
+      "LAST_BURST": {
+        "c_field": "last_burst_req",
+        "mask": "0xffff",
+        "shift": 0,
+        "width": 16
+      },
+      "BURST": {
+        "c_field": "burst_req",
+        "mask": "0xffff0000",
+        "shift": 16,
+        "width": 16
+      }
+    },
+    "GLOBAL.SINGLE_REQUEST": {
+      "LAST_SINGLE": {
+        "c_field": "last_single_req",
+        "mask": "0xffff",
+        "shift": 0,
+        "width": 16
+      },
+      "SINGLE": {
+        "c_field": "single_req",
+        "mask": "0xffff0000",
+        "shift": 16,
+        "width": 16
+      }
+    },
+    "GLOBAL.CONFIGURATION": {
+      "ENABLE": {
+        "c_field": "dma_enable",
+        "mask": "0x1",
+        "shift": 0,
+        "width": 1
+      },
+      "MASTER1": {
+        "c_field": "master1",
+        "mask": "0x2",
+        "shift": 1,
+        "width": 1
+      },
+      "MASTER2": {
+        "c_field": "master2",
+        "mask": "0x4",
+        "shift": 2,
+        "width": 1
+      }
+    },
+    "GLOBAL.SYNC": {
+      "REQUESTS": {
+        "c_field": "damc_sync",
+        "mask": "0xffff",
+        "shift": 0,
+        "width": 16
+      }
+    },
+    "CHANNEL.LINKED_LIST": {
+      "MASTER": {
+        "c_field": "dmac_lm",
+        "mask": "0x1",
+        "shift": 0,
+        "width": 1
+      },
+      "ADDRESS": {
+        "c_field": "dmac_lli",
+        "mask": "0xfffffffc",
+        "shift": 2,
+        "width": 30
+      }
+    },
+    "CHANNEL.DESTINATION": {
+      "ADDRESS": {
+        "c_field": "address",
+        "mask": "0xffffffff",
+        "shift": 0,
+        "width": 32
+      }
+    },
+    "CHANNEL.CONFIGURATION": {
+      "ENABLE": {
+        "c_field": "ch_enable",
+        "mask": "0x1",
+        "shift": 0,
+        "width": 1
+      },
+      "SOURCE_REQUEST": {
+        "c_field": "src_per",
+        "mask": "0x1e",
+        "shift": 1,
+        "width": 4
+      },
+      "DESTINATION_REQUEST": {
+        "c_field": "dest_per",
+        "mask": "0x1e0",
+        "shift": 5,
+        "width": 4
+      },
+      "FLOW_CONTROL": {
+        "c_field": "fc_tt",
+        "mask": "0xe00",
+        "shift": 9,
+        "width": 3
+      },
+      "ERROR_INTERRUPT_MASK": {
+        "c_field": "int_err_mask",
+        "mask": "0x1000",
+        "shift": 12,
+        "width": 1
+      },
+      "TRANSFER_INTERRUPT_MASK": {
+        "c_field": "tc_int_mask",
+        "mask": "0x2000",
+        "shift": 13,
+        "width": 1
+      },
+      "LOCK": {
+        "c_field": "lock",
+        "mask": "0x4000",
+        "shift": 14,
+        "width": 1
+      },
+      "ACTIVE": {
+        "c_field": "active",
+        "mask": "0x8000",
+        "shift": 15,
+        "width": 1
+      },
+      "HALT": {
+        "c_field": "halt",
+        "mask": "0x10000",
+        "shift": 16,
+        "width": 1
+      }
+    },
+    "CHANNEL.SOURCE": {
+      "ADDRESS": {
+        "c_field": "address",
+        "mask": "0xffffffff",
+        "shift": 0,
+        "width": 32
+      }
+    },
+    "CHANNEL.CONTROL": {
+      "TRANSFER_SIZE": {
+        "c_field": "transfersize",
+        "mask": "0xfff",
+        "shift": 0,
+        "width": 12
+      },
+      "SOURCE_BURST": {
+        "c_field": "sbsize",
+        "mask": "0x7000",
+        "shift": 12,
+        "width": 3
+      },
+      "DESTINATION_BURST": {
+        "c_field": "dbsize",
+        "mask": "0x38000",
+        "shift": 15,
+        "width": 3
+      },
+      "SOURCE_WIDTH": {
+        "c_field": "swsize",
+        "mask": "0x1c0000",
+        "shift": 18,
+        "width": 3
+      },
+      "DESTINATION_WIDTH": {
+        "c_field": "dwsize",
+        "mask": "0xe00000",
+        "shift": 21,
+        "width": 3
+      },
+      "SOURCE_MASTER": {
+        "c_field": "src_ms_sel",
+        "mask": "0x1000000",
+        "shift": 24,
+        "width": 1
+      },
+      "DESTINATION_MASTER": {
+        "c_field": "dest_ms_sel",
+        "mask": "0x2000000",
+        "shift": 25,
+        "width": 1
+      },
+      "SOURCE_INCREMENT": {
+        "c_field": "src_inc",
+        "mask": "0x4000000",
+        "shift": 26,
+        "width": 1
+      },
+      "DESTINATION_INCREMENT": {
+        "c_field": "dest_inc",
+        "mask": "0x8000000",
+        "shift": 27,
+        "width": 1
+      },
+      "PROTECTION": {
+        "c_field": "protection",
+        "mask": "0x70000000",
+        "shift": 28,
+        "width": 3
+      },
+      "TERMINAL_INTERRUPT": {
+        "c_field": "tc_int_en",
+        "mask": "0x80000000",
+        "shift": 31,
+        "width": 1
+      }
+    }
+  },
+  "input_sha256": {
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/romable/v151/hal_dmac_v151_regs_def.h": "1c414f6c7bf2368139606277a1bd62f57f333eca33f1ed72dad2b006cf8f83d8",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/romable/v151/hal_dmac_v151_regs_op.h": "54b5d38da4bdda73ebe093a254abdd3938fab20cc16d9a5198e5312bdf033863",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/include/dma_porting.h": "e5cb6842db137e028006e726a931d2fcfdcba9ef9fb4cd8fd4c10327c20f36bb",
+    "src/drivers/chips/ws53/rom/app/drivers/chips/ws53/porting/dma/dma_porting.c": "b8105ce936dd3f4b1b5e97ea14ba2ca48db3bee46e62a2460864b6474d40a94a",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/Kconfig": "8a03999cf73e910f230c1eec899cafc11700e9c89504124de7886782c73647c2",
+    "src/drivers/chips/ws53/rom/app/drivers/drivers/hal/dma/hal_dma.c": "05ef933be08833c2beb75d6dc0b4987d0fc1cd0be9dca11484fabb0c65b49d12",
+    "src/build/config/target_config/ws53/menuconfig/acore/ws53_liteos_app.config": "84fccc9f6633a4b8663345e3e39b24f1bc4f1668bf4a52fd0a4fac85e81487d3",
+    "src/drivers/chips/ws53/include/acore/platform_core.h": "a2189dea304ae68b52e8c57e5bdc54a7b44761733e6599042d5b672fed741484",
+    "src/drivers/chips/ws53/include/acore/chip_core_irq.h": "79500053cc795a2b727ebc52be658b96293a89ac85e70e3435a7940c56ef7365",
+    "src/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/arch/riscv/include/arch/cache.h": "bf6be3e822ac6ce99619462157c38c9089659d79e48ced848fbf689c795b06e2",
+    "src/kernel/osal/src/liteos/osal_cache.c": "4ad51931281b415a5b488926330560abaf94eced5324b387a1efe15a827e526a"
+  },
+  "svd_sha256": "8da7cb000678c5f4babb7ecc9199299b580557b22ecf5768e56077b2156c4157",
+  "sdma_exposed": false,
+  "hardware_accessed": false,
+  "unknown": [
+    "physical transfer widths and bus masters",
+    "IRQ mask polarity and ACTIVE/drain timing",
+    "external clock ownership",
+    "cache attributes and maintenance completion",
+    "SDMA applicability/ownership; inactive V100 dependency is not a usable controller"
+  ]
+}

@@ -9,7 +9,9 @@ One-dimensional register arrays preserve their stride and dimensions. Imported
 legacy WS63/BS2X maps remain expanded until separately reviewed and compacted.
 """
 
+from copy import deepcopy
 from pathlib import Path
+import re
 import sys
 import xml.etree.ElementTree as ET
 
@@ -138,6 +140,7 @@ def add_side_effects(parent: ET.Element, field: FieldNode) -> None:
 
 def export_registers(parent: ET.Element, registers: list) -> None:
     regs_by_name = {r.inst_name.upper(): r for r in registers}
+    exported_names = set(regs_by_name)
 
     for reg in registers:
         if isinstance(reg, RegfileNode):
@@ -216,6 +219,44 @@ def export_registers(parent: ET.Element, registers: list) -> None:
             add_write_constraint(fxml, field)
             add_side_effects(fxml, field)
             add_enumerated_values(fxml, field)
+
+        if (word_name := reg.get_property("hisi_svd_word_view")) is not None:
+            # SDK uses both ldrh/strh and ldr/str on the same clock slot. RDL
+            # cannot overlap two RW declarations of unequal sizes; preserve
+            # one field source and emit an explicitly evidenced SVD view.
+            # Do not generalize this into arbitrary overlapping MMIO.
+            if (not re.fullmatch(r"[A-Z][A-Z0-9_]*", word_name) or
+                word_name in exported_names or reg.is_array or
+                not isinstance(reg.parent, AddrmapNode) or
+                reg.get_property("regwidth") != 16 or
+                reg.absolute_address % 4 != 0 or
+                reg.get_property("hisi_svd_alternate_register") is not None or
+                reg.get_property("hisi_write_min") is not None or
+                reg.get_property("hisi_write_max") is not None or
+                not reg.get_property("hisi_evidence") or
+                accesses != {AccessType.rw} or reset is not None or
+                any(f.get_property("onread") is not None or
+                    f.get_property("onwrite") is not None for f in reg.fields())):
+                raise ValueError(f"invalid word access view: {reg.get_path()}")
+            start = reg.raw_address_offset
+            extent = max(r.raw_address_offset + r.total_size for r in registers)
+            if start + 4 > extent or any(
+                other != reg and other.raw_address_offset < start + 4 and
+                other.raw_address_offset + other.total_size > start
+                for other in registers
+            ):
+                raise ValueError(f"word access view exceeds vacant slot: {reg.get_path()}")
+            word = deepcopy(rxml)
+            word.find("name").text = word_name
+            word.find("description").text = (
+                "32-bit little-endian access view of " + reg.inst_name.upper() +
+                "; same low-half fields, upper bits unmodeled; preserve them on RMW. " +
+                reg.get_property("hisi_evidence")
+            )
+            word.find("size").text = "32"
+            add(word, "alternateRegister", reg.inst_name.upper())
+            parent.append(word)
+            exported_names.add(word_name)
 
     for register in parent.findall("register"):
         for field in register.findall("fields/field"):

@@ -1,0 +1,1204 @@
+{
+  "control_cases": [
+    {
+      "name": "lock-ready",
+      "channel": 1,
+      "return": 0,
+      "reads": 10,
+      "clear_reads": 1,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684354576
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          8,
+          305397770
+        ],
+        [
+          1,
+          49156,
+          45052
+        ],
+        [
+          1,
+          16676,
+          537198592
+        ],
+        [
+          1,
+          16672,
+          0
+        ],
+        [
+          1,
+          16684,
+          2864434178
+        ],
+        [
+          1,
+          53284,
+          537198848
+        ],
+        [
+          1,
+          53280,
+          0
+        ],
+        [
+          1,
+          53288,
+          2864434178
+        ],
+        [
+          1,
+          16640,
+          2452925048
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-delayed",
+      "channel": 1,
+      "return": 0,
+      "reads": 13,
+      "clear_reads": 4,
+      "delay_us_calls": 3,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684354576
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          8,
+          305397770
+        ],
+        [
+          1,
+          49156,
+          45052
+        ],
+        [
+          1,
+          16676,
+          537198592
+        ],
+        [
+          1,
+          16672,
+          0
+        ],
+        [
+          1,
+          16684,
+          2864434178
+        ],
+        [
+          1,
+          53284,
+          537198848
+        ],
+        [
+          1,
+          53280,
+          0
+        ],
+        [
+          1,
+          53288,
+          2864434178
+        ],
+        [
+          1,
+          16640,
+          2452925048
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-timeout-releases-owner",
+      "channel": 1,
+      "return": -1,
+      "reads": 12006,
+      "clear_reads": 12000,
+      "delay_us_calls": 2002,
+      "delay_ms_calls": 9998,
+      "events": [
+        [
+          1,
+          32,
+          2684354576
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          32,
+          2684354560
+        ]
+      ]
+    },
+    {
+      "name": "lock-ready",
+      "channel": 1,
+      "return": 0,
+      "reads": 10,
+      "clear_reads": 1,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684354592
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          8,
+          305397770
+        ],
+        [
+          1,
+          49156,
+          45052
+        ],
+        [
+          1,
+          16676,
+          537198592
+        ],
+        [
+          1,
+          16672,
+          0
+        ],
+        [
+          1,
+          16684,
+          2864434178
+        ],
+        [
+          1,
+          53284,
+          537198848
+        ],
+        [
+          1,
+          53280,
+          0
+        ],
+        [
+          1,
+          53288,
+          2864434178
+        ],
+        [
+          1,
+          16640,
+          2452903288
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-delayed",
+      "channel": 1,
+      "return": 0,
+      "reads": 13,
+      "clear_reads": 4,
+      "delay_us_calls": 3,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684354592
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          8,
+          305397770
+        ],
+        [
+          1,
+          49156,
+          45052
+        ],
+        [
+          1,
+          16676,
+          537198592
+        ],
+        [
+          1,
+          16672,
+          0
+        ],
+        [
+          1,
+          16684,
+          2864434178
+        ],
+        [
+          1,
+          53284,
+          537198848
+        ],
+        [
+          1,
+          53280,
+          0
+        ],
+        [
+          1,
+          53288,
+          2864434178
+        ],
+        [
+          1,
+          16640,
+          2452903288
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-timeout-releases-owner",
+      "channel": 1,
+      "return": -1,
+      "reads": 12006,
+      "clear_reads": 12000,
+      "delay_us_calls": 2002,
+      "delay_ms_calls": 9998,
+      "events": [
+        [
+          1,
+          32,
+          2684354592
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          96,
+          305397770
+        ],
+        [
+          1,
+          32,
+          2684354560
+        ]
+      ]
+    },
+    {
+      "name": "lock-ready",
+      "channel": 2,
+      "return": 0,
+      "reads": 10,
+      "clear_reads": 1,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684354816
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          8,
+          305397772
+        ],
+        [
+          1,
+          49156,
+          45050
+        ],
+        [
+          1,
+          16932,
+          537198656
+        ],
+        [
+          1,
+          16928,
+          0
+        ],
+        [
+          1,
+          16940,
+          2864434178
+        ],
+        [
+          1,
+          53540,
+          537198880
+        ],
+        [
+          1,
+          53536,
+          0
+        ],
+        [
+          1,
+          53544,
+          2864434178
+        ],
+        [
+          1,
+          16896,
+          2452925048
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-delayed",
+      "channel": 2,
+      "return": 0,
+      "reads": 13,
+      "clear_reads": 4,
+      "delay_us_calls": 3,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684354816
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          8,
+          305397772
+        ],
+        [
+          1,
+          49156,
+          45050
+        ],
+        [
+          1,
+          16932,
+          537198656
+        ],
+        [
+          1,
+          16928,
+          0
+        ],
+        [
+          1,
+          16940,
+          2864434178
+        ],
+        [
+          1,
+          53540,
+          537198880
+        ],
+        [
+          1,
+          53536,
+          0
+        ],
+        [
+          1,
+          53544,
+          2864434178
+        ],
+        [
+          1,
+          16896,
+          2452925048
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-timeout-releases-owner",
+      "channel": 2,
+      "return": -1,
+      "reads": 12006,
+      "clear_reads": 12000,
+      "delay_us_calls": 2002,
+      "delay_ms_calls": 9998,
+      "events": [
+        [
+          1,
+          32,
+          2684354816
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          32,
+          2684354560
+        ]
+      ]
+    },
+    {
+      "name": "lock-ready",
+      "channel": 2,
+      "return": 0,
+      "reads": 10,
+      "clear_reads": 1,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684355072
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          8,
+          305397772
+        ],
+        [
+          1,
+          49156,
+          45050
+        ],
+        [
+          1,
+          16932,
+          537198656
+        ],
+        [
+          1,
+          16928,
+          0
+        ],
+        [
+          1,
+          16940,
+          2864434178
+        ],
+        [
+          1,
+          53540,
+          537198880
+        ],
+        [
+          1,
+          53536,
+          0
+        ],
+        [
+          1,
+          53544,
+          2864434178
+        ],
+        [
+          1,
+          16896,
+          2452903288
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-delayed",
+      "channel": 2,
+      "return": 0,
+      "reads": 13,
+      "clear_reads": 4,
+      "delay_us_calls": 3,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          2684355072
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          8,
+          305397772
+        ],
+        [
+          1,
+          49156,
+          45050
+        ],
+        [
+          1,
+          16932,
+          537198656
+        ],
+        [
+          1,
+          16928,
+          0
+        ],
+        [
+          1,
+          16940,
+          2864434178
+        ],
+        [
+          1,
+          53540,
+          537198880
+        ],
+        [
+          1,
+          53536,
+          0
+        ],
+        [
+          1,
+          53544,
+          2864434178
+        ],
+        [
+          1,
+          16896,
+          2452903288
+        ],
+        [
+          1,
+          49152,
+          0
+        ],
+        [
+          1,
+          34320,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "lock-timeout-releases-owner",
+      "channel": 2,
+      "return": -1,
+      "reads": 12006,
+      "clear_reads": 12000,
+      "delay_us_calls": 2002,
+      "delay_ms_calls": 9998,
+      "events": [
+        [
+          1,
+          32,
+          2684355072
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          96,
+          305397772
+        ],
+        [
+          1,
+          32,
+          2684354560
+        ]
+      ]
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 1,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-readback-rejected",
+      "channel": 1,
+      "return": -1,
+      "reads": 2,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          16
+        ]
+      ]
+    },
+    {
+      "name": "unlock-timeout-releases-owner",
+      "channel": 1,
+      "return": -1,
+      "reads": 6003,
+      "clear_reads": 6000,
+      "delay_us_calls": 1001,
+      "delay_ms_calls": 4999,
+      "events": [
+        [
+          1,
+          96,
+          2
+        ],
+        [
+          1,
+          32,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "unlock-other-owner",
+      "channel": 1,
+      "return": 0,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-busy",
+      "channel": 2,
+      "return": -1,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    },
+    {
+      "name": "lock-readback-rejected",
+      "channel": 2,
+      "return": -1,
+      "reads": 2,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": [
+        [
+          1,
+          32,
+          256
+        ]
+      ]
+    },
+    {
+      "name": "unlock-timeout-releases-owner",
+      "channel": 2,
+      "return": -1,
+      "reads": 6003,
+      "clear_reads": 6000,
+      "delay_us_calls": 1001,
+      "delay_ms_calls": 4999,
+      "events": [
+        [
+          1,
+          96,
+          4
+        ],
+        [
+          1,
+          32,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "unlock-other-owner",
+      "channel": 2,
+      "return": 0,
+      "reads": 1,
+      "clear_reads": 0,
+      "delay_us_calls": 0,
+      "delay_ms_calls": 0,
+      "events": []
+    }
+  ],
+  "control_case_count": 48,
+  "configuration_encodings": 1728,
+  "rejected_configurations": 16,
+  "descriptor_cases": 700,
+  "submission_cases": 128,
+  "iv_cases": 72,
+  "ack_cases": 16,
+  "attach_cases": 16,
+  "direct_key_rejections": 10,
+  "wait_cases": 8,
+  "passed": true,
+  "sdk_commit": "163d9150ab94a02d09a05f623351f9facee3025e",
+  "input_sha256": {
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_symc.c": "a78ab54657dafe5d87ddc1efb402ed3f29ffb6b9f513c66e2578c569114a72db",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.c": "ea4b2bd83921a4e59e0e239704b8a8de161c346c04aad4a2362d18688457cc42",
+    "src/drivers/drivers/driver/security_unified/drv_cipher/drv_code/crypto_drv_common.h": "beba647d1076b3d75414be9fc5111ce51c194863d2bb6051b4dbd4c13fc62888",
+    "src/drivers/chips/ws53/porting/security_unified/security_unified_porting.h": "61fa30fcf837db575d04c57a66cfe814f42f31847957b977f972694f8628018c",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/spacc/hal_spacc_reg.h": "3d4630e695abebcd0e15554c1b74465b60e681f6b5208ce8d8adc186916b5f8e",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/common_include/crypto_common_struct.h": "506ff27ca421f21849a9f23e083c816b8ce3afe0f631fc0bf9e9316c7fdff617",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/common_include/crypto_common_def.h": "e329eb399ef530fcf8e4026943f27e674f39ae5b4e688284b2debf0f8b56946f",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/common_include/crypto_symc_struct.h": "b87bedb4fcbcc95a6499ffa5b997260d129639634ef36950f49aa951adf00ce8",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/hal_include/hal_common.h": "23f37b976f331a0f76ef3c67ede71ee1ba24a0bdfc829820594ff0b306451b7a",
+    "src/drivers/drivers/hal/security_unified/hal_cipher/include/hal_include/hal_symc.h": "dffd1c13b60f1dbda50741f9dd0ff1bd4428eb9ba5b3323390e7dfc2df0b0c3a"
+  },
+  "source_functions": {
+    "inner_symc_irq_enable": "0264f10953a30dc08efc27bda78f4b8f5d0ae1c406717ec575a0f76ac4bdfa17",
+    "hal_cipher_symc_clear_channel": "ea77ad1a982eefeb5d76f1bafe1944ef79852d636ac6eeee35833519cd407f13",
+    "hal_cipher_symc_dfa_config": "d12fbd9d5bbd2d29d066b6dad81f5d985bd66cdf82dfc112d0576d7969856c6c",
+    "hal_cipher_symc_set_entry_node": "aeb69297f5f06fc21f6fd6633ee581a26b84771c8d023b8eea043dc626918807",
+    "hal_cipher_symc_lock_chn": "0e25c9b0ee76152cf7bd79a2ecb0d11d9144ee59425f321dfaf2619dfd7c54d0",
+    "hal_cipher_symc_unlock_chn": "8c622f1a3d8a071b3762cb18ac7484ad2c4fdf4db209b47b1d311c5390a1e190",
+    "hal_cipher_symc_attach": "0a1cec2f6e34c6c677bac522fe10cdac9a906bea67831bcc4fc2111e51f40b45",
+    "hal_cipher_symc_set_key": "2613ae9d41312ca248a215573614f319206db216ef5110f71c20747f92c66820",
+    "hal_cipher_symc_set_iv": "0c9acfcf5aa608ce4edcd511ef4bf8c164a8cc6d584c0081a5845dd70ec356ac",
+    "hal_cipher_symc_get_iv": "e1e824df4e50c37e756c036a0c9410fcd2f09d5de138e16a23956374ec24c17a",
+    "inner_symc_config_key_ctrl": "069cbad198bab737bb9312b4ae1493ca051fe0558c019b2d037b940cf2c0eaa9",
+    "priv_set_in_node": "fc1e67ef481ead223d1ca330dded2ef676542726b1fcd9cd98efd7b4d0ed5679",
+    "add_normal_in_node": "b927f28bd706d2251e26681ecd01f7a6073989e645b38edcccb5dac5e80a2305",
+    "hal_cipher_symc_start": "955c580043efe3a991674eb56dfd4a7e1506e8cd248b629b337cefbd9f9890cb",
+    "hal_cipher_symc_done_try": "2fd6afbfb7cf7c2ea55b6125b7dddc7979492cc8130e9f74babe3fc016a8f543",
+    "hal_cipher_symc_out_node_done_try": "e1ed4615d667e8728569c7fcbcf1cd1034bab69ba94fe78ed1fe5731589f840f",
+    "hal_wait_in_node_done": "e5064a6c0ac483ca5bbe36bce1fe9d4451856bc3d57cd92ce6479698834a7d9e",
+    "hal_wait_out_node_done": "0df7b9e88dfaae3b4a6a742a9afbed11db0645ab43ae53ccc88be75131dd0a4a",
+    "hal_cipher_symc_add_out_node": "de61fbb82dd989106882d2a0ab11b5086a00392e1dd493fa0161eab80047890f",
+    "crypto_get_value_by_index": "38c7003625a191720572415b9cc2821d291d97f64c27cb6fa8d1ac081c530c4b"
+  },
+  "descriptor_abi": "RV32IMFC ilp32f little endian",
+  "descriptor_words": [
+    515,
+    305419896,
+    536945472,
+    0,
+    287454020,
+    1432778632,
+    2578103244,
+    3723427584,
+    0,
+    305419896,
+    537015376,
+    0
+  ],
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "target_compiler": "riscv64-linux-gnu-gcc (GCC) 16.2.1 20260819 (Red Hat Cross 16.2.1-1)",
+  "hardware_accessed": false,
+  "algorithm_results_verified": false,
+  "limitations": [
+    "MMIO/cache/delay/CPU identity are host recording substitutes; no silicon or drain evidence",
+    "The configuration table accepts combinations that are not necessarily valid crypto operations",
+    "DFA and optional RAW IRQ branches are not enabled in this source exercise",
+    "Only normal input/output descriptors are exercised; no CCM/GCM compound processing",
+    "Direct set_key always fails; attach truncates a slot ID and does not own/load a key",
+    "Clear timeout releases ownership in SDK; this must not authorize Rust memory reclamation",
+    "Output pointer is published before descriptor cache flush; safe handoff must be audited independently"
+  ]
+}
