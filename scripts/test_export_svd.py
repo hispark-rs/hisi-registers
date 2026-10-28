@@ -7,6 +7,25 @@ from export_svd import export
 
 
 class ExportSemantics(unittest.TestCase):
+    def test_ws53_agpio_clock_mixed_width_views(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as work:
+            dest = Path(work) / "ws53.svd"
+            export(root / "rdl/chips/ws53.rdl", dest)
+            block = ET.parse(dest).find("./peripherals/peripheral[name='SYSTEM_MEMORY']")
+            self.assertEqual(block.findtext("baseAddress"), "0x57030000")
+            for name, width in (("GPIO_CLOCK", "16"), ("GPIO_CLOCK_WORD", "32")):
+                register = block.find(f"registers/register[name='{name}']")
+                self.assertEqual(register.findtext("addressOffset"), "0x24")
+                self.assertEqual(register.findtext("size"), width)
+                self.assertEqual(register.findtext("access"), "read-write")
+                self.assertIsNone(register.find("resetValue"))
+                self.assertEqual(register.findall(".//readAction"), [])
+                fields = register.findall("fields/field")
+                self.assertEqual([(f.findtext("name"), f.findtext("bitOffset"), f.findtext("bitWidth"))
+                                 for f in fields], [("ENABLE", "0", "1"), ("SLOW_CLOCK_SELECT", "1", "1")])
+            self.assertEqual(block.findtext("registers/register[name='GPIO_CLOCK_WORD']/alternateRegister"), "GPIO_CLOCK")
+
     def test_ws53_ccore_domain_command_boundary(self):
         from check_ws53_ccore_domain import validate_regressions
         root = Path(__file__).resolve().parents[1]

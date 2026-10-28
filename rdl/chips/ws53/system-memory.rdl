@@ -5,6 +5,17 @@
 addrmap ws53_system_memory_regs {
     hisi_evidence = "SDK source: dyn_mem.c bram_share_cfg_t/acore_idtcm_dyn_cfg/acore_dtcm_dyn_cfg; shared acore/ccore; no reset values verified";
     reg {
+        regwidth=16; accesswidth=16;
+        hisi_svd_word_view="GPIO_CLOCK_WORD";
+        hisi_evidence="SDK 163d9150 ws53_application/main.c dev_work_clock_init unconditionally uses reg16_setbit(0x57030024,0), including BOARD_ASIC. clock_recover.c and pm_porting.c also use word writes 1/3/0. Shared AGPIO/ULP clock; reset value and silicon timing are unknown. SPI23 Flash failure reaches the GPIO1 access stage while factory-initialized RAM works; this is not yet controlled gate-causality proof";
+        field {sw=rw; hw=r;
+            desc="SDK AGPIO clock enable; application initialization sets bit0 before GPIO1 use. Preserve the handed-off source and other clock bits. Shared with sleep/wakeup code; no automatic disable or exclusive ownership is implied";
+        } enable[0:0];
+        field {sw=rw; hw=r;
+            desc="SDK clock recovery writes 3 for GPIO 32K and 1 for PLL/fast source. Frequency, APB versus interrupt-clock coverage, and low-power behavior remain silicon-unqualified";
+        } slow_clock_select[1:1];
+    } GPIO_CLOCK @ 0x24;
+    reg {
         field { sw=rw; hw=r; desc="RAM6/7,8/9,10/11,12/13: 0 acore, 1 ccore"; } owner[3:0];
         field { sw=rw; hw=r; desc="One clock gate per shared RAM pair"; } clock_enable[7:4];
         field { sw=rw; hw=r; desc="Ccore shared RAM address offset"; } ccore_offset[11:8];
